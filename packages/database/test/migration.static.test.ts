@@ -70,4 +70,35 @@ describe('PostgreSQL platform migration design', () => {
     expect(sql).toContain('GRANT EXECUTE ON FUNCTION vinops.current_actor_id() TO vinops_app');
     expect(sql).not.toContain('BYPASSRLS');
   });
+
+  it('maintains strict sequential 001-014 migration files without duplicate numbers or gaps', async () => {
+    const { readdir } = await import('node:fs/promises');
+    const entries = (await readdir(path.join(packageRoot, 'migrations'), { withFileTypes: true }))
+      .filter((entry) => entry.isFile() && /^\d{3}_[a-z0-9_]+\.sql$/u.test(entry.name))
+      .map((entry) => entry.name)
+      .sort((left, right) => left.localeCompare(right, 'en'));
+
+    expect(entries).toHaveLength(14);
+    for (const [index, name] of entries.entries()) {
+      const expectedPrefix = String(index + 1).padStart(3, '0');
+      expect(name.startsWith(`${expectedPrefix}_`)).toBe(true);
+    }
+    expect(entries[entries.length - 1]).toBe('014_quality_inspection_and_field_records.sql');
+  });
+
+  it('defines quality inspection, daily logs and offline sync tables with RLS and no bypass in 014', async () => {
+    const sql = await migration('014_quality_inspection_and_field_records.sql');
+    for (const table of [
+      'inspection_templates',
+      'checklist_items',
+      'inspections',
+      'daily_logs',
+      'sync_batches',
+      'sync_operations',
+    ]) {
+      expect(sql).toContain(`vinops.${table}`);
+    }
+    expect(sql).toContain('ENABLE ROW LEVEL SECURITY');
+    expect(sql).not.toContain('BYPASSRLS');
+  });
 });

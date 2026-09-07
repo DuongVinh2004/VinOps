@@ -7,10 +7,25 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { createApiApplication } from '../src/bootstrap.js';
 import { createOpaqueCredential, hashCredential, hashPassword } from '../src/security.js';
 
-const adminDatabaseUrl = process.env.VINOPS_TEST_DATABASE_URL;
-const appDatabaseUrl = process.env.VINOPS_TEST_APP_DATABASE_URL;
-const authSecret = process.env.VINOPS_TEST_AUTH_TOKEN_SECRET;
-const userPassword = process.env.VINOPS_TEST_USER_PASSWORD;
+import { runMigrations } from '../../../packages/database/src/migrate.js';
+
+const adminUser = 'postgres';
+const adminAuth = `${adminUser}:${adminUser}`;
+const adminDatabaseUrl =
+  process.env.VINOPS_TEST_DATABASE_URL ??
+  `postgresql://${adminAuth}@127.0.0.1:5432/vinops_mega001_test`;
+
+const appUser = 'vinops_app_user';
+const appPass = 'fixture-vinops-password';
+const appAuth = `${appUser}:${appPass}`;
+const appDatabaseUrl =
+  process.env.VINOPS_TEST_APP_DATABASE_URL ??
+  `postgresql://${appAuth}@127.0.0.1:5432/vinops_mega001_test`;
+
+const authSecret =
+  process.env.VINOPS_TEST_AUTH_TOKEN_SECRET ?? 'fixture-auth-token-secret-0123456789012345';
+const userPassword = process.env.VINOPS_TEST_USER_PASSWORD ?? 'fixture-user-password-12345';
+
 const origin = 'http://127.0.0.1:4174';
 const runtimeAvailable =
   adminDatabaseUrl !== undefined &&
@@ -97,7 +112,7 @@ function refreshCookie(response: Response): string {
   return cookie;
 }
 
-async function login(email: string, password = userPassword!): Promise<Session> {
+async function login(email: string, password = userPassword): Promise<Session> {
   const response = await request(server)
     .post('/api/v1/auth/sessions')
     .send({ email, password, device_name: 'i4-runtime' })
@@ -156,6 +171,7 @@ beforeAll(async () => {
   if (databaseName !== 'vinops_mega001_test') {
     throw new Error('Runtime security integration requires vinops_mega001_test.');
   }
+  await runMigrations(adminDatabaseUrl);
   verifier = new Pool({ connectionString: adminDatabaseUrl, max: 4 });
   const passwordHash = await hashPassword(userPassword);
   const users = [

@@ -6,13 +6,19 @@ import { VinopsDatabase } from '@vinops/database';
 import { ClamAvScanner, S3ObjectStorage } from '@vinops/file';
 import { FileProcessingWorker } from '../src/file-processing-worker.js';
 
-const databaseUrl = process.env.VINOPS_TEST_DATABASE_URL;
-const s3Endpoint = process.env.VINOPS_TEST_S3_ENDPOINT;
-const s3Bucket = process.env.VINOPS_TEST_S3_BUCKET;
-const s3AccessKey = process.env.VINOPS_TEST_S3_ACCESS_KEY_ID;
-const s3SecretKey = process.env.VINOPS_TEST_S3_SECRET_ACCESS_KEY;
-const clamAvHost = process.env.VINOPS_TEST_CLAMAV_HOST;
-const clamAvPort = Number(process.env.VINOPS_TEST_CLAMAV_PORT ?? '0');
+import { runMigrations } from '../../../packages/database/src/migrate.js';
+
+const dbUser = 'postgres';
+const dbAuth = `${dbUser}:${dbUser}`;
+const databaseUrl =
+  process.env.VINOPS_TEST_DATABASE_URL ??
+  `postgresql://${dbAuth}@127.0.0.1:5432/vinops_mega002_i2_test`;
+const s3Endpoint = process.env.VINOPS_TEST_S3_ENDPOINT ?? 'http://127.0.0.1:9000';
+const s3Bucket = process.env.VINOPS_TEST_S3_BUCKET ?? 'vinops-files';
+const s3AccessKey = process.env.VINOPS_TEST_S3_ACCESS_KEY_ID ?? 'minioadmin';
+const s3SecretKey = process.env.VINOPS_TEST_S3_SECRET_ACCESS_KEY ?? 'minioadmin';
+const clamAvHost = process.env.VINOPS_TEST_CLAMAV_HOST ?? '127.0.0.1';
+const clamAvPort = Number(process.env.VINOPS_TEST_CLAMAV_PORT ?? '3310');
 const runtimeConfigured =
   databaseUrl !== undefined &&
   s3Endpoint !== undefined &&
@@ -27,12 +33,13 @@ const describeRuntime = runtimeConfigured ? describe : describe.skip;
 let owner: Pool | undefined;
 let workerDatabase: VinopsDatabase | undefined;
 
-beforeAll(() => {
+beforeAll(async () => {
   if (!runtimeConfigured || databaseUrl === undefined) return;
   const databaseName = new URL(databaseUrl).pathname.replace(/^\//u, '');
   if (!/^(vinops_mega002_i[12]_test\d*|vinops_chat1_test)$/u.test(databaseName)) {
     throw new Error('Worker runtime test requires an isolated VIN-MEGA-002 or chat1 database.');
   }
+  await runMigrations(databaseUrl);
   owner = new Pool({
     connectionString: databaseUrl,
     application_name: 'vinops-file-worker-test-owner',
@@ -63,11 +70,11 @@ async function fixture(
   const projectCode = `W${projectId.replaceAll('-', '').slice(0, 10).toUpperCase()}`;
   const key = `quarantine/${fileId}/original`;
   const storage = new S3ObjectStorage({
-    endpoint: s3Endpoint as string,
+    endpoint: s3Endpoint,
     region: 'us-east-1',
-    bucket: s3Bucket as string,
-    accessKeyId: s3AccessKey as string,
-    secretAccessKey: s3SecretKey as string,
+    bucket: s3Bucket,
+    accessKeyId: s3AccessKey,
+    secretAccessKey: s3SecretKey,
   });
   await storage.putObject(key, bytes, mediaType);
   await owner.query(
@@ -116,14 +123,14 @@ async function fixture(
 function processor(): FileProcessingWorker {
   if (workerDatabase === undefined) throw new Error('Worker database unavailable.');
   const storage = new S3ObjectStorage({
-    endpoint: s3Endpoint as string,
+    endpoint: s3Endpoint,
     region: 'us-east-1',
-    bucket: s3Bucket as string,
-    accessKeyId: s3AccessKey as string,
-    secretAccessKey: s3SecretKey as string,
+    bucket: s3Bucket,
+    accessKeyId: s3AccessKey,
+    secretAccessKey: s3SecretKey,
   });
   const scanner = new ClamAvScanner({
-    host: clamAvHost as string,
+    host: clamAvHost,
     port: clamAvPort,
     signatureVersion: 'local-runtime',
   });
@@ -179,9 +186,9 @@ describeRuntime('file processing worker with PostgreSQL, MinIO, and ClamAV', () 
   });
 
   it('rejects a runtime-injected malware signature without promoting or previewing it', async () => {
-    const injected = process.env.VINOPS_MALWARE_TEST_B64;
-    if (injected === undefined)
-      throw new Error('VINOPS_MALWARE_TEST_B64 is required for worker malware proof.');
+    const injected =
+      process.env.VINOPS_MALWARE_TEST_B64 ??
+      'WDVPIVAlQEFQWzRcUFpYNTQoUF4pN0NDKTd9JEVJQ0FSLVNUQU5EQVJELUFOVElWSVJVUy1URVNULUZJTEUhJEgrSCo=';
     const bytes = Buffer.from(injected, 'base64');
     const item = await fixture(bytes, 'application/x-vinops-malware-test');
     await expect(processor().runOnce(1)).resolves.toMatchObject({ claimed: 1, rejected: 1 });

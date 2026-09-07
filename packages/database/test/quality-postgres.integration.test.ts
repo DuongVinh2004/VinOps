@@ -64,55 +64,36 @@ describe('Quality & Field Records Database Invariants', () => {
   });
 
   it('enforces uniqueness: 1 daily log per day per contract package', async () => {
+    const packageId = randomUUID();
     const logId1 = randomUUID();
     const logId2 = randomUUID();
-    const date = `${2050 + Math.floor(Math.random() * 10000)}-01-01`;
+    const date = '2050-01-01';
 
     await pool.query(
       `INSERT INTO vinops.daily_logs (id, organization_id, project_id, contract_package_id, log_date, shift_code, status, author_unit, created_by)
        VALUES ($1, $2, $3, $4, $5, 'day', 'Draft', 'Nhà thầu A', $6)`,
-      [
-        logId1,
-        fixture.organizationA,
-        fixture.projectA,
-        fixture.packageA,
-        date,
-        fixture.userContractor,
-      ],
+      [logId1, fixture.organizationA, fixture.projectA, packageId, date, fixture.userContractor],
     );
 
     await expect(
       pool.query(
         `INSERT INTO vinops.daily_logs (id, organization_id, project_id, contract_package_id, log_date, shift_code, status, author_unit, created_by)
          VALUES ($1, $2, $3, $4, $5, 'day', 'Draft', 'Nhà thầu A', $6)`,
-        [
-          logId2,
-          fixture.organizationA,
-          fixture.projectA,
-          fixture.packageA,
-          date,
-          fixture.userContractor,
-        ],
+        [logId2, fixture.organizationA, fixture.projectA, packageId, date, fixture.userContractor],
       ),
     ).rejects.toThrow();
   });
 
   it('freezes daily log when Confirmed: blocks update on daily_logs content', async () => {
+    const packageId = randomUUID();
     const logId = randomUUID();
-    const date = `${2050 + Math.floor(Math.random() * 10000)}-01-02`;
+    const date = '2050-01-02';
 
     // Insert draft daily log
     await pool.query(
       `INSERT INTO vinops.daily_logs (id, organization_id, project_id, contract_package_id, log_date, shift_code, status, author_unit, work_summary, created_by)
        VALUES ($1, $2, $3, $4, $5, 'day', 'Draft', 'Nhà thầu A', 'Đổ bê tông sàn tầng 2', $6)`,
-      [
-        logId,
-        fixture.organizationA,
-        fixture.projectA,
-        fixture.packageA,
-        date,
-        fixture.userContractor,
-      ],
+      [logId, fixture.organizationA, fixture.projectA, packageId, date, fixture.userContractor],
     );
 
     // Update is allowed when Draft
@@ -145,20 +126,14 @@ describe('Quality & Field Records Database Invariants', () => {
   });
 
   it('freezes child tables: blocks insert/update/delete on manpower, weather, equipment when parent is Confirmed', async () => {
+    const packageId = randomUUID();
     const logId = randomUUID();
-    const date = `${2050 + Math.floor(Math.random() * 10000)}-01-03`;
+    const date = '2050-01-03';
 
     await pool.query(
       `INSERT INTO vinops.daily_logs (id, organization_id, project_id, contract_package_id, log_date, shift_code, status, author_unit, created_by)
        VALUES ($1, $2, $3, $4, $5, 'day', 'Draft', 'Nhà thầu A', $6)`,
-      [
-        logId,
-        fixture.organizationA,
-        fixture.projectA,
-        fixture.packageA,
-        date,
-        fixture.userContractor,
-      ],
+      [logId, fixture.organizationA, fixture.projectA, packageId, date, fixture.userContractor],
     );
 
     // Add child entries while Draft

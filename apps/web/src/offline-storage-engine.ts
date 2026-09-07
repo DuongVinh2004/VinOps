@@ -10,13 +10,23 @@ export type OfflineQueueItem = {
   client_created_at: string;
 };
 
+export type CachedGpsLocation = {
+  latitude: number;
+  longitude: number;
+  accuracy?: number;
+  timestamp: string;
+};
+
 export class OfflineStorageEngine {
   private static readonly STORAGE_KEY = 'vinops_offline_queue';
   private static readonly CACHE_LOGS_KEY = 'vinops_cached_daily_logs';
   private static readonly CACHE_INSPECTIONS_KEY = 'vinops_cached_inspections';
+  private static readonly CACHE_GPS_KEY = 'vinops_cached_gps';
   private inMemoryQueue: OfflineQueueItem[] = [];
   private inMemoryLogs: Record<string, unknown[]> = {};
   private inMemoryInspections: Record<string, unknown[]> = {};
+  private inMemoryGps: Record<string, CachedGpsLocation> = {};
+  private isSyncing = false;
 
   constructor(
     private readonly deviceId: string = 'web-device-' + Math.random().toString(36).slice(2),
@@ -127,37 +137,137 @@ export class OfflineStorageEngine {
     return this.inMemoryInspections[projectId] ?? [];
   }
 
+  cacheGpsLocation(entityId: string, location: CachedGpsLocation): void {
+    const storage = this.getStorage();
+    if (storage) {
+      const existing = this.extractAllCachedGpsLocations();
+      existing[entityId] = location;
+      storage.setItem(OfflineStorageEngine.CACHE_GPS_KEY, JSON.stringify(existing));
+    } else {
+      this.inMemoryGps[entityId] = location;
+    }
+  }
+
+  getCachedGpsLocation(entityId: string): CachedGpsLocation | null {
+    const storage = this.getStorage();
+    if (storage) {
+      const raw = storage.getItem(OfflineStorageEngine.CACHE_GPS_KEY);
+      if (!raw) return null;
+      try {
+        const parsed = JSON.parse(raw) as Record<string, CachedGpsLocation>;
+        return parsed[entityId] ?? null;
+      } catch {
+        return null;
+      }
+    }
+    return this.inMemoryGps[entityId] ?? null;
+  }
+
+  extractAllCachedGpsLocations(): Record<string, CachedGpsLocation> {
+    const storage = this.getStorage();
+    if (storage) {
+      const raw = storage.getItem(OfflineStorageEngine.CACHE_GPS_KEY);
+      if (!raw) return {};
+      try {
+        return JSON.parse(raw) as Record<string, CachedGpsLocation>;
+      } catch {
+        return {};
+      }
+    }
+    return { ...this.inMemoryGps };
+  }
+
+  extractGpsFromPendingOperations(): Array<{
+    entityId: string;
+    gps: { latitude: number; longitude: number; accuracy?: number };
+  }> {
+    const pending = this.getPendingOperations();
+    const result: Array<{
+      entityId: string;
+      gps: { latitude: number; longitude: number; accuracy?: number };
+    }> = [];
+
+    for (const op of pending) {
+      const payload = op.payload;
+      if (!payload) continue;
+
+      let lat: number | undefined;
+      let lng: number | undefined;
+      let acc: number | undefined;
+
+      if (typeof payload.gps_latitude === 'number' && typeof payload.gps_longitude === 'number') {
+        lat = payload.gps_latitude;
+        lng = payload.gps_longitude;
+        acc = typeof payload.gps_accuracy === 'number' ? payload.gps_accuracy : undefined;
+      } else if (typeof payload.gps_lat === 'number' && typeof payload.gps_lng === 'number') {
+        lat = payload.gps_lat;
+        lng = payload.gps_lng;
+        acc = typeof payload.gps_accuracy === 'number' ? payload.gps_accuracy : undefined;
+      } else if (
+        typeof payload.gps === 'object' &&
+        payload.gps !== null &&
+        'lat' in payload.gps &&
+        'lng' in payload.gps
+      ) {
+        const gpsObj = payload.gps as { lat: unknown; lng: unknown; accuracy?: unknown };
+        if (typeof gpsObj.lat === 'number' && typeof gpsObj.lng === 'number') {
+          lat = gpsObj.lat;
+          lng = gpsObj.lng;
+          acc = typeof gpsObj.accuracy === 'number' ? gpsObj.accuracy : undefined;
+        }
+      }
+
+      if (lat !== undefined && lng !== undefined) {
+        result.push({
+          entityId: op.entity_temp_id,
+          gps: { latitude: lat, longitude: lng, ...(acc !== undefined ? { accuracy: acc } : {}) },
+        });
+      }
+    }
+
+    return result;
+  }
+
   async flushSyncQueue(
     client: VinopsApiClient,
     projectId: string,
-  ): Promise<{ syncedCount: number; conflictCount: number }> {
+  ): Promise<{ syncedCount: number; conflictCount: number; inFlight?: boolean }> {
+    if (this.isSyncing) {
+      return { syncedCount: 0, conflictCount: 0, inFlight: true };
+    }
+
     const pending = this.getPendingOperations();
     if (pending.length === 0) {
       return { syncedCount: 0, conflictCount: 0 };
     }
 
-    const payload = {
-      device_id: this.deviceId,
-      operations: pending,
-    };
+    this.isSyncing = true;
+    try {
+      const payload = {
+        device_id: this.deviceId,
+        operations: pending,
+      };
 
-    const res = (await client.syncOfflineBatch(projectId, payload)) as {
-      applied_count: number;
-      conflict_count: number;
-      operations?: Array<{ operation_id: string; status: string }>;
-    };
+      const res = (await client.syncOfflineBatch(projectId, payload)) as {
+        applied_count: number;
+        conflict_count: number;
+        operations?: Array<{ operation_id: string; status: string }>;
+      };
 
-    const appliedIds = (res.operations ?? [])
-      .filter((op) => op.status === 'applied')
-      .map((op) => op.operation_id);
+      const appliedIds = (res.operations ?? [])
+        .filter((op) => op.status === 'applied')
+        .map((op) => op.operation_id);
 
-    if (appliedIds.length > 0) {
-      this.removeOperations(appliedIds);
+      if (appliedIds.length > 0) {
+        this.removeOperations(appliedIds);
+      }
+
+      return {
+        syncedCount: res.applied_count ?? 0,
+        conflictCount: res.conflict_count ?? 0,
+      };
+    } finally {
+      this.isSyncing = false;
     }
-
-    return {
-      syncedCount: res.applied_count ?? 0,
-      conflictCount: res.conflict_count ?? 0,
-    };
   }
 }

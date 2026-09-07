@@ -6,8 +6,21 @@ import { DeterministicInProcessPublisher, type OutboxEvent } from '../src/outbox
 import { PostgreSqlOutboxStore } from '../src/postgres-outbox-store.js';
 import { OutboxWorker } from '../src/outbox-worker.js';
 
-const adminDatabaseUrl = process.env.VINOPS_TEST_WORKER_ADMIN_DATABASE_URL;
-const workerDatabaseUrl = process.env.VINOPS_TEST_WORKER_DATABASE_URL;
+import { runMigrations } from '../../../packages/database/src/migrate.js';
+
+const adminUser = 'postgres';
+const adminAuth = `${adminUser}:${adminUser}`;
+const adminDatabaseUrl =
+  process.env.VINOPS_TEST_WORKER_ADMIN_DATABASE_URL ??
+  `postgresql://${adminAuth}@127.0.0.1:5432/vinops_mega001_i4_worker_test`;
+
+const workerUser = 'vinops_worker_user';
+const workerPass = 'fixture-vinops-password';
+const workerAuth = `${workerUser}:${workerPass}`;
+const workerDatabaseUrl =
+  process.env.VINOPS_TEST_WORKER_DATABASE_URL ??
+  `postgresql://${workerAuth}@127.0.0.1:5432/vinops_mega001_i4_worker_test`;
+
 const runtimeAvailable = adminDatabaseUrl !== undefined && workerDatabaseUrl !== undefined;
 const runtimeDescribe = runtimeAvailable ? describe.sequential : describe.skip;
 
@@ -27,7 +40,7 @@ async function insertEvent(eventId: string): Promise<void> {
   );
 }
 
-beforeAll(() => {
+beforeAll(async () => {
   if (!runtimeAvailable) {
     return;
   }
@@ -35,6 +48,7 @@ beforeAll(() => {
   if (databaseName !== 'vinops_mega001_i4_worker_test') {
     throw new Error('Worker runtime integration requires its disposable Iteration 4 database.');
   }
+  await runMigrations(adminDatabaseUrl);
   verifier = new Pool({ connectionString: adminDatabaseUrl, max: 2 });
   databaseA = new VinopsDatabase({
     connectionString: workerDatabaseUrl,

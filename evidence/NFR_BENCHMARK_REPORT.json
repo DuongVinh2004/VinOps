@@ -1,0 +1,27 @@
+{
+  "timestamp": "2026-09-07T13:24:15.008Z",
+  "batchSync50Mutations": {
+    "mutationCount": 50,
+    "elapsedMs": 26.06,
+    "targetMs": 500,
+    "pass": true
+  },
+  "kanbanRender50Issues": {
+    "issueCount": 50,
+    "elapsedMs": 137.94,
+    "targetMs": 500,
+    "pass": true
+  },
+  "dailyLogRender": {
+    "elapsedMs": 84.47,
+    "targetMs": 500,
+    "pass": true
+  },
+  "viteBundleSize": {
+    "html": "0.39 kB (gzip: 0.26 kB)",
+    "css": "7.46 kB (gzip: 2.34 kB)",
+    "js": "378.41 kB (gzip: 107.49 kB)",
+    "jsTargetKb": 1000,
+    "pass": true
+  }
+}

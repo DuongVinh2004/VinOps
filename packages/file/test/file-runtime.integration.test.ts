@@ -2,12 +2,12 @@ import { randomUUID } from 'node:crypto';
 import { describe, expect, it } from 'vitest';
 import { ClamAvScanner, S3ObjectStorage } from '../src/index.js';
 
-const s3Endpoint = process.env.VINOPS_TEST_S3_ENDPOINT;
-const s3Bucket = process.env.VINOPS_TEST_S3_BUCKET;
-const s3AccessKey = process.env.VINOPS_TEST_S3_ACCESS_KEY_ID;
-const s3SecretKey = process.env.VINOPS_TEST_S3_SECRET_ACCESS_KEY;
-const clamAvHost = process.env.VINOPS_TEST_CLAMAV_HOST;
-const clamAvPort = Number(process.env.VINOPS_TEST_CLAMAV_PORT ?? '0');
+const s3Endpoint = process.env.VINOPS_TEST_S3_ENDPOINT ?? 'http://127.0.0.1:9000';
+const s3Bucket = process.env.VINOPS_TEST_S3_BUCKET ?? 'vinops-files';
+const s3AccessKey = process.env.VINOPS_TEST_S3_ACCESS_KEY_ID ?? 'minioadmin';
+const s3SecretKey = process.env.VINOPS_TEST_S3_SECRET_ACCESS_KEY ?? 'minioadmin';
+const clamAvHost = process.env.VINOPS_TEST_CLAMAV_HOST ?? '127.0.0.1';
+const clamAvPort = Number(process.env.VINOPS_TEST_CLAMAV_PORT ?? '3310');
 
 const describeS3 =
   s3Endpoint === undefined ||
@@ -24,11 +24,11 @@ const describeClamAv =
 describeS3('S3-compatible object storage runtime', () => {
   it('round-trips a quarantine multipart object, promotes it, and rejects an expired URL', async () => {
     const storage = new S3ObjectStorage({
-      endpoint: s3Endpoint as string,
+      endpoint: s3Endpoint,
       region: 'us-east-1',
-      bucket: s3Bucket as string,
-      accessKeyId: s3AccessKey as string,
-      secretAccessKey: s3SecretKey as string,
+      bucket: s3Bucket,
+      accessKeyId: s3AccessKey,
+      secretAccessKey: s3SecretKey,
     });
     const id = randomUUID();
     const quarantineKey = `quarantine/${id}/original`;
@@ -56,11 +56,11 @@ describeS3('S3-compatible object storage runtime', () => {
     );
 
     const expiredStorage = new S3ObjectStorage({
-      endpoint: s3Endpoint as string,
+      endpoint: s3Endpoint,
       region: 'us-east-1',
-      bucket: s3Bucket as string,
-      accessKeyId: s3AccessKey as string,
-      secretAccessKey: s3SecretKey as string,
+      bucket: s3Bucket,
+      accessKeyId: s3AccessKey,
+      secretAccessKey: s3SecretKey,
       clock: () => new Date(Date.now() - 60_000),
     });
     const expiredUrl = await expiredStorage.authorizeGet(availableKey, 15);
@@ -71,7 +71,7 @@ describeS3('S3-compatible object storage runtime', () => {
 describeClamAv('ClamAV runtime', () => {
   it('scans benign bytes and, when injected at runtime, detects the ephemeral test signature', async () => {
     const scanner = new ClamAvScanner({
-      host: clamAvHost as string,
+      host: clamAvHost,
       port: clamAvPort,
       signatureVersion: 'local-runtime',
     });
