@@ -90,3 +90,51 @@ export declare function buildDrawingQrPayload(input: {
     signature: string;
     issuedAt: string;
 }): string;
+export type DrawingQrVerificationResult = {
+    valid: boolean;
+    transmittalId?: string;
+    documentCode?: string;
+    revisionCode?: string;
+    shaPrefix?: string;
+    sigPrefix?: string;
+    issuedAt?: string;
+    error?: string;
+};
+export declare function parseDrawingQrPayload(token: string): DrawingQrVerificationResult;
+export declare function buildTransmittalPackageManifest(input: {
+    transmittalId: string;
+    transmittalNumber: string;
+    title: string;
+    projectId: string;
+    issuedAt: string;
+    signature: string;
+    items: readonly {
+        documentId: string;
+        documentCode: string;
+        documentTitle: string;
+        revisionId: string;
+        revisionCode: string;
+        fileSha256: string;
+        filename: string;
+    }[];
+}): {
+    schemaVersion: '1.0';
+    iso19650Stage: 'PUBLISHED';
+    packageId: string;
+    packageNumber: string;
+    projectId: string;
+    issuedAt: string;
+    signatureHmacSha256: string;
+    totalDocuments: number;
+    documents: readonly {
+        documentId: string;
+        code: string;
+        title: string;
+        revisionId: string;
+        revisionCode: string;
+        sha256: string;
+        filename: string;
+        qrPayload: string;
+    }[];
+};
+

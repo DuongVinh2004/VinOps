@@ -260,3 +260,60 @@ export function buildDrawingQrPayload(input) {
     };
     return Buffer.from(JSON.stringify(data)).toString('base64url');
 }
+export function parseDrawingQrPayload(token) {
+    try {
+        const raw = Buffer.from(token, 'base64url').toString('utf8');
+        const parsed = JSON.parse(raw);
+        if (
+            typeof parsed.tId !== 'string' ||
+            typeof parsed.doc !== 'string' ||
+            typeof parsed.rev !== 'string' ||
+            typeof parsed.sha !== 'string' ||
+            typeof parsed.sig !== 'string' ||
+            typeof parsed.iat !== 'string'
+        ) {
+            return { valid: false, error: 'INVALID_PAYLOAD_STRUCTURE' };
+        }
+        return {
+            valid: true,
+            transmittalId: parsed.tId,
+            documentCode: parsed.doc,
+            revisionCode: parsed.rev,
+            shaPrefix: parsed.sha,
+            sigPrefix: parsed.sig,
+            issuedAt: parsed.iat,
+        };
+    } catch {
+        return { valid: false, error: 'DECODE_FAILED' };
+    }
+}
+export function buildTransmittalPackageManifest(input) {
+    return {
+        schemaVersion: '1.0',
+        iso19650Stage: 'PUBLISHED',
+        packageId: input.transmittalId,
+        packageNumber: input.transmittalNumber,
+        projectId: input.projectId,
+        issuedAt: input.issuedAt,
+        signatureHmacSha256: input.signature,
+        totalDocuments: input.items.length,
+        documents: input.items.map((item) => ({
+            documentId: item.documentId,
+            code: item.documentCode,
+            title: item.documentTitle,
+            revisionId: item.revisionId,
+            revisionCode: item.revisionCode,
+            sha256: item.fileSha256,
+            filename: item.filename,
+            qrPayload: buildDrawingQrPayload({
+                transmittalId: input.transmittalId,
+                documentCode: item.documentCode,
+                revisionCode: item.revisionCode,
+                fileSha256: item.fileSha256,
+                signature: input.signature,
+                issuedAt: input.issuedAt,
+            }),
+        })),
+    };
+}
+

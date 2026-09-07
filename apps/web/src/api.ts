@@ -847,6 +847,22 @@ export class VinopsApiClient {
     );
   }
 
+  async getTransmittalManifest(transmittalId: string): Promise<JsonRecord> {
+    return asRecord(
+      await this.request<unknown>(`transmittals/${encodeURIComponent(transmittalId)}/manifest`),
+    );
+  }
+
+  async verifyDrawingToken(token: string): Promise<JsonRecord> {
+    return asRecord(
+      await this.request<unknown>(
+        `drawings/verify?token=${encodeURIComponent(token)}`,
+        {},
+        { authenticated: false },
+      ),
+    );
+  }
+
   async setDocumentArchived(
     documentId: string,
     archived: boolean,

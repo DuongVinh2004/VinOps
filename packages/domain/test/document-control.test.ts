@@ -10,10 +10,12 @@ import {
   assertSingleCurrentRevision,
   assertWithdrawAllowed,
   buildDrawingQrPayload,
+  buildTransmittalPackageManifest,
   DomainError,
   evaluateReviewRoute,
   generateTransmittalSignature,
   normalizeContextKey,
+  parseDrawingQrPayload,
   revisionTransitionTarget,
   signedUrlExpiry,
 } from '../src/index.js';
@@ -207,5 +209,38 @@ describe('Document Control domain invariants', () => {
     expect(decoded.tId).toBe('t-001');
     expect(decoded.doc).toBe('DWG-001');
     expect(decoded.rev).toBe('P01');
+
+    const parsed = parseDrawingQrPayload(qr);
+    expect(parsed.valid).toBe(true);
+    expect(parsed.documentCode).toBe('DWG-001');
+    expect(parsed.revisionCode).toBe('P01');
+    expect(parsed.transmittalId).toBe('t-001');
+
+    const invalidParse = parseDrawingQrPayload('not-valid-base64-json');
+    expect(invalidParse.valid).toBe(false);
+
+    const manifest = buildTransmittalPackageManifest({
+      transmittalId: 't-001',
+      transmittalNumber: 'TR-001',
+      title: 'Structural Package',
+      projectId: 'p-001',
+      issuedAt: '2026-09-07T12:00:00Z',
+      signature,
+      items: [
+        {
+          documentId: 'd-001',
+          documentCode: 'DWG-001',
+          documentTitle: 'Foundation Plan',
+          revisionId: 'r-001',
+          revisionCode: 'P01',
+          fileSha256: hash,
+          filename: 'foundation.pdf',
+        },
+      ],
+    });
+    expect(manifest.iso19650Stage).toBe('PUBLISHED');
+    expect(manifest.totalDocuments).toBe(1);
+    expect(manifest.documents[0]?.code).toBe('DWG-001');
+    expect(manifest.documents[0]?.qrPayload).toBeDefined();
   });
 });

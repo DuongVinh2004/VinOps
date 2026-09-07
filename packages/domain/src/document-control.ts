@@ -415,3 +415,114 @@ export function buildDrawingQrPayload(input: {
   };
   return Buffer.from(JSON.stringify(data)).toString('base64url');
 }
+
+export type DrawingQrVerificationResult = {
+  valid: boolean;
+  transmittalId?: string;
+  documentCode?: string;
+  revisionCode?: string;
+  shaPrefix?: string;
+  sigPrefix?: string;
+  issuedAt?: string;
+  error?: string;
+};
+
+export function parseDrawingQrPayload(token: string): DrawingQrVerificationResult {
+  try {
+    const raw = Buffer.from(token, 'base64url').toString('utf8');
+    const parsed = JSON.parse(raw) as {
+      tId?: unknown;
+      doc?: unknown;
+      rev?: unknown;
+      sha?: unknown;
+      sig?: unknown;
+      iat?: unknown;
+    };
+    if (
+      typeof parsed.tId !== 'string' ||
+      typeof parsed.doc !== 'string' ||
+      typeof parsed.rev !== 'string' ||
+      typeof parsed.sha !== 'string' ||
+      typeof parsed.sig !== 'string' ||
+      typeof parsed.iat !== 'string'
+    ) {
+      return { valid: false, error: 'INVALID_PAYLOAD_STRUCTURE' };
+    }
+    return {
+      valid: true,
+      transmittalId: parsed.tId,
+      documentCode: parsed.doc,
+      revisionCode: parsed.rev,
+      shaPrefix: parsed.sha,
+      sigPrefix: parsed.sig,
+      issuedAt: parsed.iat,
+    };
+  } catch {
+    return { valid: false, error: 'DECODE_FAILED' };
+  }
+}
+
+export function buildTransmittalPackageManifest(input: {
+  transmittalId: string;
+  transmittalNumber: string;
+  title: string;
+  projectId: string;
+  issuedAt: string;
+  signature: string;
+  items: readonly {
+    documentId: string;
+    documentCode: string;
+    documentTitle: string;
+    revisionId: string;
+    revisionCode: string;
+    fileSha256: string;
+    filename: string;
+  }[];
+}): {
+  schemaVersion: '1.0';
+  iso19650Stage: 'PUBLISHED';
+  packageId: string;
+  packageNumber: string;
+  projectId: string;
+  issuedAt: string;
+  signatureHmacSha256: string;
+  totalDocuments: number;
+  documents: readonly {
+    documentId: string;
+    code: string;
+    title: string;
+    revisionId: string;
+    revisionCode: string;
+    sha256: string;
+    filename: string;
+    qrPayload: string;
+  }[];
+} {
+  return {
+    schemaVersion: '1.0',
+    iso19650Stage: 'PUBLISHED',
+    packageId: input.transmittalId,
+    packageNumber: input.transmittalNumber,
+    projectId: input.projectId,
+    issuedAt: input.issuedAt,
+    signatureHmacSha256: input.signature,
+    totalDocuments: input.items.length,
+    documents: input.items.map((item) => ({
+      documentId: item.documentId,
+      code: item.documentCode,
+      title: item.documentTitle,
+      revisionId: item.revisionId,
+      revisionCode: item.revisionCode,
+      sha256: item.fileSha256,
+      filename: item.filename,
+      qrPayload: buildDrawingQrPayload({
+        transmittalId: input.transmittalId,
+        documentCode: item.documentCode,
+        revisionCode: item.revisionCode,
+        fileSha256: item.fileSha256,
+        signature: input.signature,
+        issuedAt: input.issuedAt,
+      }),
+    })),
+  };
+}

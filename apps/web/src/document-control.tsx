@@ -559,6 +559,8 @@ export function DocumentControlScreen({ client, project, members }: Props) {
                   })
                 }
               />
+
+              <DrawingQrVerifierCard client={client} busy={busy} />
             </>
           ) : null}
         </div>
@@ -1652,6 +1654,25 @@ function TransmittalForm({
                   : 'Verified'}
             </code>
           </p>
+          <button
+            type="button"
+            className="secondary-btn"
+            style={{ marginBottom: '0.75rem' }}
+            onClick={() => {
+              const blob = new Blob([JSON.stringify(snapshot, null, 2)], {
+                type: 'application/json',
+              });
+              const url = URL.createObjectURL(blob);
+              const a = document.createElement('a');
+              const packageCode = typeof snapshot.code === 'string' ? snapshot.code : 'package';
+              a.href = url;
+              a.download = `transmittal-manifest-${packageCode}.json`;
+              a.click();
+              URL.revokeObjectURL(url);
+            }}
+          >
+            Download Package Manifest (.json)
+          </button>
           {Array.isArray(snapshot.items) && (
             <div>
               <table className="document-table">
@@ -1696,5 +1717,97 @@ function TransmittalForm({
         </div>
       )}
     </form>
+  );
+}
+
+type DrawingVerifyResult = {
+  valid?: boolean;
+  legal_status?: string;
+  status?: string;
+  message?: string;
+  document_code?: string;
+  document_title?: string;
+  revision_code?: string;
+  revision_status?: string;
+  is_current?: boolean;
+};
+
+function DrawingQrVerifierCard({ client, busy }: { client: VinopsApiClient; busy: boolean }) {
+  const [tokenInput, setTokenInput] = useState('');
+  const [result, setResult] = useState<DrawingVerifyResult | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  async function handleVerify(e: FormEvent) {
+    e.preventDefault();
+    if (!tokenInput.trim()) return;
+    setLoading(true);
+    setError(null);
+    setResult(null);
+    try {
+      const res = (await client.verifyDrawingToken(tokenInput.trim())) as DrawingVerifyResult;
+      setResult(res);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Verification request failed');
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return (
+    <article className="content-card drawing-verifier-card">
+      <h3>Field QR Drawing Legality Verifier</h3>
+      <p className="muted-copy">
+        Scan or paste the drawing QR verification payload to confirm live validity before
+        construction.
+      </p>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          void handleVerify(e);
+        }}
+        className="action-row"
+      >
+        <input
+          placeholder="Paste QR payload token (base64url)..."
+          value={tokenInput}
+          onChange={(e) => setTokenInput(e.target.value)}
+          style={{ flex: 1 }}
+        />
+        <button type="submit" disabled={busy || loading || !tokenInput.trim()}>
+          {loading ? 'Verifying…' : 'Verify Legality'}
+        </button>
+      </form>
+      {error && <p className="operation-message">{error}</p>}
+      {result && (
+        <div className="verifier-result-box" style={{ marginTop: '1rem' }}>
+          <h4>Verification Result</h4>
+          <p>
+            <strong>Status:</strong>{' '}
+            <span
+              className={
+                result.legal_status === 'VALID_FOR_CONSTRUCTION'
+                  ? 'badge-iso badge-iso-published'
+                  : 'badge-iso badge-iso-archived'
+              }
+            >
+              {result.legal_status ?? result.status ?? 'UNKNOWN'}
+            </span>
+          </p>
+          {result.document_code && (
+            <p>
+              <strong>Document:</strong> {result.document_code} — {result.document_title ?? ''}
+            </p>
+          )}
+          {result.revision_code && (
+            <p>
+              <strong>Revision:</strong> {result.revision_code} ({result.revision_status ?? ''})
+              {result.is_current ? ' [CURRENT]' : ' [NOT CURRENT / OUTDATED]'}
+            </p>
+          )}
+          {result.message && <p className="muted-copy">{result.message}</p>}
+        </div>
+      )}
+    </article>
   );
 }

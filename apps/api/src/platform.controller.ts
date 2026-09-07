@@ -1053,6 +1053,30 @@ export class PlatformController {
     );
   }
 
+  @Get('transmittals/:transmittalId/manifest')
+  async transmittalManifest(
+    @Param('transmittalId') transmittalId: string,
+    @Req() request: Request,
+  ): Promise<unknown> {
+    return this.documents.getTransmittalManifest(
+      await this.identity(request),
+      transmittalId,
+      request.vinopsCorrelationId,
+    );
+  }
+
+  @Get('drawings/verify')
+  async verifyDrawing(@Query('token') token?: string): Promise<unknown> {
+    if (!token || typeof token !== 'string') {
+      return {
+        valid: false,
+        status: 'TOKEN_REQUIRED',
+        message: 'Token query parameter is required.',
+      };
+    }
+    return this.documents.verifyDrawingToken(token);
+  }
+
   @Post('documents/:documentId/archive')
   @HttpCode(200)
   async archiveDocument(

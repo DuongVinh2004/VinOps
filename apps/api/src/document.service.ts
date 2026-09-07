@@ -15,7 +15,9 @@ import {
   parseExpectedVersion,
   revisionTransitionTarget,
   buildDrawingQrPayload,
+  buildTransmittalPackageManifest,
   generateTransmittalSignature,
+  parseDrawingQrPayload,
   type FileStatus,
   type ReviewAssignmentSnapshot,
   type ReviewDecision,
@@ -1302,6 +1304,112 @@ export class DocumentService implements OnModuleDestroy {
       }
       throw error;
     }
+  }
+
+  async getTransmittalManifest(
+    identity: RequestIdentity,
+    transmittalId: string,
+    correlationId: string,
+  ): Promise<JsonRecord> {
+    const detail = await this.transmittalDetail(identity, transmittalId, correlationId);
+    const items = ((detail.items as JsonRecord[]) ?? []).map((item) => ({
+      documentId: String(item.document_id),
+      documentCode: String(item.document_code_snapshot),
+      documentTitle: String(item.document_title_snapshot),
+      revisionId: String(item.revision_id),
+      revisionCode: String(item.revision_code_snapshot),
+      fileSha256: String(item.file_sha256_snapshot),
+      filename: `${String(item.document_code_snapshot)}_${String(item.revision_code_snapshot)}.pdf`,
+    }));
+    return buildTransmittalPackageManifest({
+      transmittalId: String(detail.id),
+      transmittalNumber: String(detail.code),
+      title: String(detail.purpose),
+      projectId: String(detail.project_id),
+      issuedAt: String(detail.issued_at),
+      signature: String(detail.snapshot_sha256),
+      items,
+    });
+  }
+
+  async verifyDrawingToken(token: string): Promise<JsonRecord> {
+    const parsed = parseDrawingQrPayload(token);
+    if (!parsed.valid) {
+      return {
+        valid: false,
+        status: 'INVALID_TOKEN',
+        message: 'QR code payload could not be decoded or is structurally malformed.',
+        error: parsed.error,
+      };
+    }
+    const rows = await this.requireDatabase().withTransaction(
+      { actorUserId: '00000000-0000-0000-0000-000000000000', correlationId: randomUUID() },
+      async (transaction) => {
+        return transaction.query<{
+          doc_id: string;
+          doc_code: string;
+          doc_title: string;
+          rev_id: string;
+          rev_code: string;
+          rev_status: string;
+          is_current: boolean;
+          file_sha256: string | null;
+        }>(
+          `SELECT d.id AS doc_id,
+                  d.code AS doc_code,
+                  d.title AS doc_title,
+                  r.id AS rev_id,
+                  r.revision_code AS rev_code,
+                  r.status AS rev_status,
+                  (cr.revision_id = r.id) AS is_current,
+                  f.sha256 AS file_sha256
+             FROM vinops.documents d
+             JOIN vinops.document_revisions r ON r.document_id = d.id
+        LEFT JOIN vinops.document_current_revisions cr ON cr.document_id = d.id
+        LEFT JOIN vinops.document_revision_current_files rf ON rf.revision_id = r.id
+        LEFT JOIN vinops.revision_file_versions f ON f.id = rf.revision_file_version_id
+            WHERE d.code = $1 AND r.revision_code = $2
+            LIMIT 1`,
+          [parsed.documentCode, parsed.revisionCode],
+        );
+      },
+    );
+    if (rows.length === 0) {
+      return {
+        valid: false,
+        status: 'NOT_FOUND',
+        message: 'Document revision referenced by QR code does not exist.',
+        parsed,
+      };
+    }
+    const record = rows[0]!;
+    let legalStatus:
+      'VALID_FOR_CONSTRUCTION' | 'SUPERSEDED_DO_NOT_USE' | 'WITHDRAWN_REVOKED' | 'UNAPPROVED_WIP';
+    if (record.rev_status === 'Withdrawn') {
+      legalStatus = 'WITHDRAWN_REVOKED';
+    } else if (record.is_current && record.rev_status === 'Published') {
+      legalStatus = 'VALID_FOR_CONSTRUCTION';
+    } else if (record.rev_status === 'Superseded' || !record.is_current) {
+      legalStatus = 'SUPERSEDED_DO_NOT_USE';
+    } else {
+      legalStatus = 'UNAPPROVED_WIP';
+    }
+    return {
+      valid: legalStatus === 'VALID_FOR_CONSTRUCTION',
+      legal_status: legalStatus,
+      document_id: record.doc_id,
+      document_code: record.doc_code,
+      document_title: record.doc_title,
+      revision_id: record.rev_id,
+      revision_code: record.rev_code,
+      revision_status: record.rev_status,
+      is_current: record.is_current,
+      sha_prefix_match: record.file_sha256
+        ? record.file_sha256.startsWith(parsed.shaPrefix ?? '')
+        : false,
+      transmittal_id: parsed.transmittalId,
+      issued_at: parsed.issuedAt,
+    };
   }
 
   async setDocumentArchived(
