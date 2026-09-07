@@ -64,6 +64,20 @@ tags:
     description: Immutable controlled-distribution snapshots.
   - name: Audit
     description: Redacted audit timeline under the caller's resource scope.
+  - name: FieldIssues
+    description: Field issue quick-create, triage, lifecycle, and comments.
+  - name: RFI
+    description: Request for information lifecycle, official response pipeline, and SLA tracking.
+  - name: Submittals
+    description: Submittal review engine, material samples, and shop drawings.
+  - name: Quality
+    description: Quality inspections, checklist items, findings, and CAR under ND 207/2026/ND-CP.
+  - name: Acceptance
+    description: 3-party acceptance records (Contractor, Supervisor, PMU) under ND 207/2026/ND-CP and TT 32/2026/TT-BXD.
+  - name: DailyLogs
+    description: Electronic daily construction logs, manpower, equipment, and GPS weather recording.
+  - name: OfflineSync
+    description: Offline ledger ingestion and synchronization protocol for field devices.
 security:
   - bearerAuth: []
 paths:
@@ -1674,6 +1688,1268 @@ paths:
           $ref: '#/components/responses/Conflict'
         '422':
           $ref: '#/components/responses/Validation'
+  /projects/{projectId}/issues:
+    get:
+      operationId: listFieldIssues
+      tags:
+        - FieldIssues
+      summary: List field issues for a project
+      parameters:
+        - $ref: '#/components/parameters/ProjectId'
+        - name: status
+          in: query
+          schema:
+            type: string
+        - name: severity
+          in: query
+          schema:
+            type: string
+        - name: location_node_id
+          in: query
+          schema:
+            type: string
+            format: uuid
+        - name: work_node_id
+          in: query
+          schema:
+            type: string
+            format: uuid
+        - name: contractor_organization_id
+          in: query
+          schema:
+            type: string
+            format: uuid
+        - $ref: '#/components/parameters/Cursor'
+        - $ref: '#/components/parameters/PageSize'
+      responses:
+        '200':
+          description: Success
+          headers:
+            X-Correlation-ID:
+              $ref: '#/components/headers/CorrelationId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FieldIssueList'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    post:
+      operationId: quickCreateFieldIssue
+      tags:
+        - FieldIssues
+      summary: Quick-create a field issue with GPS and photos
+      parameters:
+        - $ref: '#/components/parameters/ProjectId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FieldIssueCreate'
+      responses:
+        '201':
+          description: Created
+          headers:
+            X-Correlation-ID:
+              $ref: '#/components/headers/CorrelationId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FieldIssue'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/Validation'
+  /projects/{projectId}/issues/{issueId}:
+    get:
+      operationId: getFieldIssue
+      tags:
+        - FieldIssues
+      summary: Get field issue details
+      parameters:
+        - $ref: '#/components/parameters/ProjectId'
+        - $ref: '#/components/parameters/IssueId'
+      responses:
+        '200':
+          description: Success
+          headers:
+            X-Correlation-ID:
+              $ref: '#/components/headers/CorrelationId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FieldIssue'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/ResourceNotVisible'
+  /projects/{projectId}/issues/{issueId}/transitions:
+    post:
+      operationId: transitionFieldIssue
+      tags:
+        - FieldIssues
+      summary: Transition field issue lifecycle state
+      parameters:
+        - $ref: '#/components/parameters/ProjectId'
+        - $ref: '#/components/parameters/IssueId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FieldIssueTransition'
+      responses:
+        '200':
+          description: Success
+          headers:
+            X-Correlation-ID:
+              $ref: '#/components/headers/CorrelationId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FieldIssue'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '409':
+          $ref: '#/components/responses/Conflict'
+  /projects/{projectId}/issues/{issueId}/comments:
+    post:
+      operationId: createIssueComment
+      tags:
+        - FieldIssues
+      summary: Add a comment to a field issue
+      parameters:
+        - $ref: '#/components/parameters/ProjectId'
+        - $ref: '#/components/parameters/IssueId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IssueCommentCreate'
+      responses:
+        '201':
+          description: Created
+          headers:
+            X-Correlation-ID:
+              $ref: '#/components/headers/CorrelationId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IssueComment'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /projects/{projectId}/issues/{issueId}/escalate-to-rfi:
+    post:
+      operationId: escalateIssueToRfi
+      tags:
+        - FieldIssues
+      summary: Escalate a field issue into an official technical RFI
+      parameters:
+        - $ref: '#/components/parameters/ProjectId'
+        - $ref: '#/components/parameters/IssueId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IssueEscalateToRfi'
+      responses:
+        '201':
+          description: Created RFI
+          headers:
+            X-Correlation-ID:
+              $ref: '#/components/headers/CorrelationId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RfiRequest'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '409':
+          $ref: '#/components/responses/Conflict'
+  /projects/{projectId}/rfis:
+    get:
+      operationId: listRfiRequests
+      tags:
+        - RFI
+      summary: List RFIs for a project
+      parameters:
+        - $ref: '#/components/parameters/ProjectId'
+        - name: status
+          in: query
+          schema:
+            type: string
+        - name: ball_in_court_organization_id
+          in: query
+          schema:
+            type: string
+            format: uuid
+        - $ref: '#/components/parameters/Cursor'
+        - $ref: '#/components/parameters/PageSize'
+      responses:
+        '200':
+          description: Success
+          headers:
+            X-Correlation-ID:
+              $ref: '#/components/headers/CorrelationId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RfiRequestList'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    post:
+      operationId: createRfiRequest
+      tags:
+        - RFI
+      summary: Create an RFI
+      parameters:
+        - $ref: '#/components/parameters/ProjectId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RfiRequestCreate'
+      responses:
+        '201':
+          description: Created
+          headers:
+            X-Correlation-ID:
+              $ref: '#/components/headers/CorrelationId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RfiRequest'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /projects/{projectId}/rfis/{rfiId}:
+    get:
+      operationId: getRfiRequest
+      tags:
+        - RFI
+      summary: Get RFI detail with answers and documents
+      parameters:
+        - $ref: '#/components/parameters/ProjectId'
+        - $ref: '#/components/parameters/RfiId'
+      responses:
+        '200':
+          description: Success
+          headers:
+            X-Correlation-ID:
+              $ref: '#/components/headers/CorrelationId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RfiRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/ResourceNotVisible'
+  /projects/{projectId}/rfis/{rfiId}/transitions:
+    post:
+      operationId: transitionRfiRequest
+      tags:
+        - RFI
+      summary: Transition RFI state
+      parameters:
+        - $ref: '#/components/parameters/ProjectId'
+        - $ref: '#/components/parameters/RfiId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RfiTransition'
+      responses:
+        '200':
+          description: Success
+          headers:
+            X-Correlation-ID:
+              $ref: '#/components/headers/CorrelationId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RfiRequest'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '409':
+          $ref: '#/components/responses/Conflict'
+  /projects/{projectId}/rfis/{rfiId}/responses:
+    post:
+      operationId: createRfiResponse
+      tags:
+        - RFI
+      summary: Submit clarification or official response with revised document attachment
+      parameters:
+        - $ref: '#/components/parameters/ProjectId'
+        - $ref: '#/components/parameters/RfiId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RfiResponseCreate'
+      responses:
+        '201':
+          description: Created
+          headers:
+            X-Correlation-ID:
+              $ref: '#/components/headers/CorrelationId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RfiResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /projects/{projectId}/submittals:
+    get:
+      operationId: listSubmittals
+      tags:
+        - Submittals
+      summary: List submittals for a project
+      parameters:
+        - $ref: '#/components/parameters/ProjectId'
+        - name: status
+          in: query
+          schema:
+            type: string
+        - name: submittal_type
+          in: query
+          schema:
+            type: string
+        - $ref: '#/components/parameters/Cursor'
+        - $ref: '#/components/parameters/PageSize'
+      responses:
+        '200':
+          description: Success
+          headers:
+            X-Correlation-ID:
+              $ref: '#/components/headers/CorrelationId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubmittalList'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    post:
+      operationId: createSubmittal
+      tags:
+        - Submittals
+      summary: Create a submittal
+      parameters:
+        - $ref: '#/components/parameters/ProjectId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubmittalCreate'
+      responses:
+        '201':
+          description: Created
+          headers:
+            X-Correlation-ID:
+              $ref: '#/components/headers/CorrelationId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Submittal'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /projects/{projectId}/submittals/{submittalId}:
+    get:
+      operationId: getSubmittal
+      tags:
+        - Submittals
+      summary: Get submittal details with items and review timeline
+      parameters:
+        - $ref: '#/components/parameters/ProjectId'
+        - $ref: '#/components/parameters/SubmittalId'
+      responses:
+        '200':
+          description: Success
+          headers:
+            X-Correlation-ID:
+              $ref: '#/components/headers/CorrelationId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Submittal'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/ResourceNotVisible'
+  /projects/{projectId}/submittals/{submittalId}/transitions:
+    post:
+      operationId: transitionSubmittal
+      tags:
+        - Submittals
+      summary: Transition submittal state
+      parameters:
+        - $ref: '#/components/parameters/ProjectId'
+        - $ref: '#/components/parameters/SubmittalId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubmittalTransition'
+      responses:
+        '200':
+          description: Success
+          headers:
+            X-Correlation-ID:
+              $ref: '#/components/headers/CorrelationId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Submittal'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '409':
+          $ref: '#/components/responses/Conflict'
+  /projects/{projectId}/submittals/{submittalId}/reviews:
+    post:
+      operationId: createSubmittalReview
+      tags:
+        - Submittals
+      summary: Submit a review decision in maker-checker workflow
+      parameters:
+        - $ref: '#/components/parameters/ProjectId'
+        - $ref: '#/components/parameters/SubmittalId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubmittalReviewCreate'
+      responses:
+        '201':
+          description: Created review
+          headers:
+            X-Correlation-ID:
+              $ref: '#/components/headers/CorrelationId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubmittalReview'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /projects/{projectId}/inspection-templates:
+    post:
+      operationId: createInspectionTemplate
+      tags:
+        - Quality
+      summary: Create inspection template
+      parameters:
+        - $ref: '#/components/parameters/ProjectId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InspectionTemplateCreate'
+      responses:
+        '201':
+          description: Created
+          headers:
+            X-Correlation-ID:
+              $ref: '#/components/headers/CorrelationId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InspectionTemplate'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    get:
+      operationId: listInspectionTemplates
+      tags:
+        - Quality
+      summary: List inspection templates
+      parameters:
+        - $ref: '#/components/parameters/ProjectId'
+        - $ref: '#/components/parameters/Cursor'
+        - $ref: '#/components/parameters/PageSize'
+      responses:
+        '200':
+          description: OK
+          headers:
+            X-Correlation-ID:
+              $ref: '#/components/headers/CorrelationId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InspectionTemplateList'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /projects/{projectId}/inspections:
+    post:
+      operationId: createInspection
+      tags:
+        - Quality
+      summary: Create inspection
+      parameters:
+        - $ref: '#/components/parameters/ProjectId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InspectionCreate'
+      responses:
+        '201':
+          description: Created
+          headers:
+            X-Correlation-ID:
+              $ref: '#/components/headers/CorrelationId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Inspection'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    get:
+      operationId: listInspections
+      tags:
+        - Quality
+      summary: List inspections
+      parameters:
+        - $ref: '#/components/parameters/ProjectId'
+        - $ref: '#/components/parameters/Cursor'
+        - $ref: '#/components/parameters/PageSize'
+      responses:
+        '200':
+          description: OK
+          headers:
+            X-Correlation-ID:
+              $ref: '#/components/headers/CorrelationId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InspectionList'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /inspections/{inspectionId}:
+    get:
+      operationId: getInspection
+      tags:
+        - Quality
+      summary: Get inspection detail
+      parameters:
+        - $ref: '#/components/parameters/InspectionId'
+      responses:
+        '200':
+          description: OK
+          headers:
+            X-Correlation-ID:
+              $ref: '#/components/headers/CorrelationId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Inspection'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /inspections/{inspectionId}/results/{itemKey}:
+    put:
+      operationId: saveInspectionResult
+      tags:
+        - Quality
+      summary: Save inspection item result
+      parameters:
+        - $ref: '#/components/parameters/InspectionId'
+        - $ref: '#/components/parameters/ItemKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InspectionResultSave'
+      responses:
+        '200':
+          description: OK
+          headers:
+            X-Correlation-ID:
+              $ref: '#/components/headers/CorrelationId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InspectionResult'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /inspections/{inspectionId}/findings:
+    post:
+      operationId: createInspectionFinding
+      tags:
+        - Quality
+      summary: Create finding for inspection
+      parameters:
+        - $ref: '#/components/parameters/InspectionId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InspectionFindingCreate'
+      responses:
+        '201':
+          description: Created
+          headers:
+            X-Correlation-ID:
+              $ref: '#/components/headers/CorrelationId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InspectionFinding'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /findings/{findingId}/corrections:
+    post:
+      operationId: submitCorrectiveAction
+      tags:
+        - Quality
+      summary: Submit corrective action
+      parameters:
+        - $ref: '#/components/parameters/FindingId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CorrectiveActionCreate'
+      responses:
+        '201':
+          description: Created
+          headers:
+            X-Correlation-ID:
+              $ref: '#/components/headers/CorrelationId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CorrectiveAction'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /findings/{findingId}/transitions:
+    post:
+      operationId: transitionFinding
+      tags:
+        - Quality
+      summary: Transition finding (Verify/Close/Reject with SoD)
+      parameters:
+        - $ref: '#/components/parameters/FindingId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FindingTransitionCreate'
+      responses:
+        '200':
+          description: OK
+          headers:
+            X-Correlation-ID:
+              $ref: '#/components/headers/CorrelationId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InspectionFinding'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /projects/{projectId}/acceptance-records:
+    post:
+      operationId: createAcceptanceRecord
+      tags:
+        - Acceptance
+      summary: Create 3-party acceptance record under ND 207/2026/ND-CP
+      parameters:
+        - $ref: '#/components/parameters/ProjectId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AcceptanceRecordCreate'
+      responses:
+        '201':
+          description: Created
+          headers:
+            X-Correlation-ID:
+              $ref: '#/components/headers/CorrelationId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AcceptanceRecord'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+    get:
+      operationId: listAcceptanceRecords
+      tags:
+        - Acceptance
+      summary: List acceptance records
+      parameters:
+        - $ref: '#/components/parameters/ProjectId'
+        - $ref: '#/components/parameters/Cursor'
+        - $ref: '#/components/parameters/PageSize'
+      responses:
+        '200':
+          description: OK
+          headers:
+            X-Correlation-ID:
+              $ref: '#/components/headers/CorrelationId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AcceptanceRecordList'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /acceptance-records/{acceptanceRecordId}:
+    get:
+      operationId: getAcceptanceRecord
+      tags:
+        - Acceptance
+      summary: Get acceptance record detail
+      parameters:
+        - $ref: '#/components/parameters/AcceptanceRecordId'
+      responses:
+        '200':
+          description: OK
+          headers:
+            X-Correlation-ID:
+              $ref: '#/components/headers/CorrelationId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AcceptanceRecord'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /acceptance-records/{acceptanceRecordId}/sign-contractor:
+    post:
+      operationId: signAcceptanceContractor
+      tags:
+        - Acceptance
+      summary: Sign acceptance record by Contractor
+      parameters:
+        - $ref: '#/components/parameters/AcceptanceRecordId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AcceptanceSignInput'
+      responses:
+        '200':
+          description: OK
+          headers:
+            X-Correlation-ID:
+              $ref: '#/components/headers/CorrelationId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AcceptanceRecord'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /acceptance-records/{acceptanceRecordId}/sign-supervisor:
+    post:
+      operationId: signAcceptanceSupervisor
+      tags:
+        - Acceptance
+      summary: Sign acceptance record by Supervisor (TVGS)
+      parameters:
+        - $ref: '#/components/parameters/AcceptanceRecordId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AcceptanceSignInput'
+      responses:
+        '200':
+          description: OK
+          headers:
+            X-Correlation-ID:
+              $ref: '#/components/headers/CorrelationId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AcceptanceRecord'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /acceptance-records/{acceptanceRecordId}/sign-pmu:
+    post:
+      operationId: signAcceptancePmu
+      tags:
+        - Acceptance
+      summary: Sign acceptance record by PMU (Ban QLDA)
+      parameters:
+        - $ref: '#/components/parameters/AcceptanceRecordId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AcceptanceSignInput'
+      responses:
+        '200':
+          description: OK
+          headers:
+            X-Correlation-ID:
+              $ref: '#/components/headers/CorrelationId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AcceptanceRecord'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /projects/{projectId}/daily-logs:
+    post:
+      operationId: createDailyLog
+      tags:
+        - DailyLogs
+      summary: Create daily log (unique 1 log/day/package)
+      parameters:
+        - $ref: '#/components/parameters/ProjectId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DailyLogCreate'
+      responses:
+        '201':
+          description: Created
+          headers:
+            X-Correlation-ID:
+              $ref: '#/components/headers/CorrelationId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DailyLog'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+    get:
+      operationId: listDailyLogs
+      tags:
+        - DailyLogs
+      summary: List daily logs
+      parameters:
+        - $ref: '#/components/parameters/ProjectId'
+        - $ref: '#/components/parameters/Cursor'
+        - $ref: '#/components/parameters/PageSize'
+      responses:
+        '200':
+          description: OK
+          headers:
+            X-Correlation-ID:
+              $ref: '#/components/headers/CorrelationId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DailyLogList'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /daily-logs/{dailyLogId}:
+    get:
+      operationId: getDailyLog
+      tags:
+        - DailyLogs
+      summary: Get daily log detail
+      parameters:
+        - $ref: '#/components/parameters/DailyLogId'
+      responses:
+        '200':
+          description: OK
+          headers:
+            X-Correlation-ID:
+              $ref: '#/components/headers/CorrelationId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DailyLog'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+    put:
+      operationId: updateDailyLog
+      tags:
+        - DailyLogs
+      summary: Update daily log content (blocked if Confirmed)
+      parameters:
+        - $ref: '#/components/parameters/DailyLogId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DailyLogUpdate'
+      responses:
+        '200':
+          description: OK
+          headers:
+            X-Correlation-ID:
+              $ref: '#/components/headers/CorrelationId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DailyLog'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /daily-logs/{dailyLogId}/manpower:
+    post:
+      operationId: saveDailyManpower
+      tags:
+        - DailyLogs
+      summary: Add or replace manpower entries (blocked if Confirmed)
+      parameters:
+        - $ref: '#/components/parameters/DailyLogId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DailyManpowerCreate'
+      responses:
+        '200':
+          description: OK
+          headers:
+            X-Correlation-ID:
+              $ref: '#/components/headers/CorrelationId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DailyLog'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /daily-logs/{dailyLogId}/equipment:
+    post:
+      operationId: saveDailyEquipment
+      tags:
+        - DailyLogs
+      summary: Add or replace equipment entries (blocked if Confirmed)
+      parameters:
+        - $ref: '#/components/parameters/DailyLogId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DailyEquipmentCreate'
+      responses:
+        '200':
+          description: OK
+          headers:
+            X-Correlation-ID:
+              $ref: '#/components/headers/CorrelationId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DailyLog'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /daily-logs/{dailyLogId}/weather:
+    post:
+      operationId: saveDailyWeather
+      tags:
+        - DailyLogs
+      summary: Add or replace weather entries (blocked if Confirmed)
+      parameters:
+        - $ref: '#/components/parameters/DailyLogId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DailyWeatherCreate'
+      responses:
+        '200':
+          description: OK
+          headers:
+            X-Correlation-ID:
+              $ref: '#/components/headers/CorrelationId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DailyLog'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /daily-logs/{dailyLogId}/crawl-weather:
+    post:
+      operationId: crawlDailyWeather
+      tags:
+        - DailyLogs
+      summary: Auto-crawl weather by GPS coordinates
+      parameters:
+        - $ref: '#/components/parameters/DailyLogId'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WeatherCrawlInput'
+      responses:
+        '200':
+          description: OK
+          headers:
+            X-Correlation-ID:
+              $ref: '#/components/headers/CorrelationId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DailyLog'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /daily-logs/{dailyLogId}/sign-site-manager:
+    post:
+      operationId: signDailyLogSiteManager
+      tags:
+        - DailyLogs
+      summary: Sign daily log by Site Manager (Chỉ huy trưởng)
+      parameters:
+        - $ref: '#/components/parameters/DailyLogId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DailyLogSignInput'
+      responses:
+        '200':
+          description: OK
+          headers:
+            X-Correlation-ID:
+              $ref: '#/components/headers/CorrelationId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DailyLog'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /daily-logs/{dailyLogId}/sign-supervisor:
+    post:
+      operationId: signDailyLogSupervisor
+      tags:
+        - DailyLogs
+      summary: Sign daily log by Supervisor (TVGS) - Confirms and freezes log
+      parameters:
+        - $ref: '#/components/parameters/DailyLogId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DailyLogSignInput'
+      responses:
+        '200':
+          description: OK
+          headers:
+            X-Correlation-ID:
+              $ref: '#/components/headers/CorrelationId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DailyLog'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /projects/{projectId}/sync/batches:
+    post:
+      operationId: ingestOfflineBatch
+      tags:
+        - OfflineSync
+      summary: Bulk ingest offline ledger operations
+      parameters:
+        - $ref: '#/components/parameters/ProjectId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SyncBatchCreate'
+      responses:
+        '200':
+          description: OK
+          headers:
+            X-Correlation-ID:
+              $ref: '#/components/headers/CorrelationId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SyncBatchResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /projects/{projectId}/changes:
+    get:
+      operationId: getProjectChanges
+      tags:
+        - OfflineSync
+      summary: Incremental sync change feed
+      parameters:
+        - $ref: '#/components/parameters/ProjectId'
+        - $ref: '#/components/parameters/Cursor'
+      responses:
+        '200':
+          description: OK
+          headers:
+            X-Correlation-ID:
+              $ref: '#/components/headers/CorrelationId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChangeFeedResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /projects/{projectId}/exports/as-built-dossier:
+    post:
+      operationId: createAsBuiltDossier
+      tags:
+        - Quality
+      summary: Create sealed as-built dossier ZIP package
+      parameters:
+        - $ref: '#/components/parameters/ProjectId'
+      responses:
+        '201':
+          description: Created
+          headers:
+            X-Correlation-ID:
+              $ref: '#/components/headers/CorrelationId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AsBuiltDossierResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
 components:
   securitySchemes:
     bearerAuth:
@@ -1743,6 +3019,61 @@ components:
       schema:
         type: string
         format: uuid
+    IssueId:
+      name: issueId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    RfiId:
+      name: rfiId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    SubmittalId:
+      name: submittalId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    InspectionId:
+      name: inspectionId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    FindingId:
+      name: findingId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    AcceptanceRecordId:
+      name: acceptanceRecordId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    DailyLogId:
+      name: dailyLogId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    ItemKey:
+      name: itemKey
+      in: path
+      required: true
+      schema:
+        type: string
     ProjectContextKind:
       name: kind
       in: path
@@ -3890,3 +5221,1702 @@ components:
             $ref: '#/components/schemas/AuditEvent'
         page:
           $ref: '#/components/schemas/PageMeta'
+    GpsCoordinates:
+      type: object
+      required:
+        - latitude
+        - longitude
+      properties:
+        latitude:
+          type: number
+          minimum: -90
+          maximum: 90
+        longitude:
+          type: number
+          minimum: -180
+          maximum: 180
+        accuracy_meters:
+          type: number
+          minimum: 0
+    FieldIssueCreate:
+      type: object
+      required:
+        - code
+        - title
+        - description
+        - category
+        - severity
+      properties:
+        code:
+          type: string
+          minLength: 1
+          maxLength: 60
+        title:
+          type: string
+          minLength: 1
+          maxLength: 255
+        description:
+          type: string
+        category:
+          type: string
+        severity:
+          type: string
+          enum: [low, medium, high, critical]
+        location_node_id:
+          type: string
+          format: uuid
+        work_node_id:
+          type: string
+          format: uuid
+        contractor_organization_id:
+          type: string
+          format: uuid
+        suggested_contractor_organization_id:
+          type: string
+          format: uuid
+        assigned_to_user_id:
+          type: string
+          format: uuid
+        gps:
+          $ref: '#/components/schemas/GpsCoordinates'
+        due_at:
+          type: string
+          format: date-time
+        attachment_file_ids:
+          type: array
+          items:
+            type: string
+            format: uuid
+    FieldIssueTransition:
+      type: object
+      required:
+        - action
+      properties:
+        action:
+          type: string
+          enum: [triage, assign, start_progress, resolve, close, reopen]
+        assigned_to_user_id:
+          type: string
+          format: uuid
+        contractor_organization_id:
+          type: string
+          format: uuid
+        comment:
+          type: string
+    FieldIssue:
+      type: object
+      required:
+        - id
+        - project_id
+        - organization_id
+        - code
+        - title
+        - description
+        - category
+        - severity
+        - status
+        - version
+        - created_by
+        - created_at
+        - updated_at
+      properties:
+        id:
+          type: string
+          format: uuid
+        project_id:
+          type: string
+          format: uuid
+        organization_id:
+          type: string
+          format: uuid
+        code:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        category:
+          type: string
+        severity:
+          type: string
+          enum: [low, medium, high, critical]
+        status:
+          type: string
+          enum: [Open, Under Triage, Assigned, In Progress, Resolved, Closed]
+        location_node_id:
+          type: string
+          format: uuid
+        work_node_id:
+          type: string
+          format: uuid
+        contractor_organization_id:
+          type: string
+          format: uuid
+        suggested_contractor_organization_id:
+          type: string
+          format: uuid
+        assigned_to_user_id:
+          type: string
+          format: uuid
+        gps_latitude:
+          type: number
+        gps_longitude:
+          type: number
+        gps_accuracy_meters:
+          type: number
+        due_at:
+          type: string
+          format: date-time
+        resolved_at:
+          type: string
+          format: date-time
+        closed_at:
+          type: string
+          format: date-time
+        escalated_to_rfi_id:
+          type: string
+          format: uuid
+        version:
+          type: string
+        created_by:
+          type: string
+          format: uuid
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        attachments:
+          type: array
+          items:
+            $ref: '#/components/schemas/IssueAttachment'
+        comments:
+          type: array
+          items:
+            $ref: '#/components/schemas/IssueComment'
+    FieldIssueList:
+      type: object
+      required:
+        - items
+        - page
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldIssue'
+        page:
+          $ref: '#/components/schemas/PageMeta'
+    IssueAttachment:
+      type: object
+      required:
+        - id
+        - issue_id
+        - file_id
+        - attachment_type
+        - created_at
+      properties:
+        id:
+          type: string
+          format: uuid
+        issue_id:
+          type: string
+          format: uuid
+        file_id:
+          type: string
+          format: uuid
+        attachment_type:
+          type: string
+          enum: [site_photo, evidence, document, resolution_photo]
+        caption:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+    IssueCommentCreate:
+      type: object
+      required:
+        - content
+      properties:
+        content:
+          type: string
+          minLength: 1
+    IssueComment:
+      type: object
+      required:
+        - id
+        - issue_id
+        - author_user_id
+        - content
+        - created_at
+      properties:
+        id:
+          type: string
+          format: uuid
+        issue_id:
+          type: string
+          format: uuid
+        author_user_id:
+          type: string
+          format: uuid
+        content:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+    IssueEscalateToRfi:
+      type: object
+      required:
+        - rfi_code
+        - title
+        - question
+        - requesting_partner_organization_id
+      properties:
+        rfi_code:
+          type: string
+        title:
+          type: string
+        question:
+          type: string
+        suggested_solution:
+          type: string
+        priority:
+          type: string
+          enum: [low, normal, high, urgent]
+        requesting_partner_organization_id:
+          type: string
+          format: uuid
+        responding_partner_organization_id:
+          type: string
+          format: uuid
+        sla_business_days:
+          type: integer
+          default: 5
+    RfiRequestCreate:
+      type: object
+      required:
+        - code
+        - title
+        - question
+        - requesting_partner_organization_id
+      properties:
+        code:
+          type: string
+        title:
+          type: string
+        question:
+          type: string
+        suggested_solution:
+          type: string
+        priority:
+          type: string
+          enum: [low, normal, high, urgent]
+          default: normal
+        location_node_id:
+          type: string
+          format: uuid
+        work_node_id:
+          type: string
+          format: uuid
+        document_id:
+          type: string
+          format: uuid
+        requesting_partner_organization_id:
+          type: string
+          format: uuid
+        responding_partner_organization_id:
+          type: string
+          format: uuid
+        source_issue_id:
+          type: string
+          format: uuid
+        sla_business_days:
+          type: integer
+          default: 5
+    RfiTransition:
+      type: object
+      required:
+        - action
+      properties:
+        action:
+          type: string
+          enum:
+            [
+              submit,
+              start_review,
+              request_clarification,
+              provide_clarification,
+              answer_official,
+              close,
+              reopen,
+            ]
+        comment:
+          type: string
+    RfiResponseCreate:
+      type: object
+      required:
+        - response_type
+        - content
+      properties:
+        response_type:
+          type: string
+          enum: [clarification_request, clarification_answer, official_answer]
+        content:
+          type: string
+        revised_document_id:
+          type: string
+          format: uuid
+        revised_document_revision_id:
+          type: string
+          format: uuid
+        file_id:
+          type: string
+          format: uuid
+    RfiResponse:
+      type: object
+      required:
+        - id
+        - rfi_id
+        - response_type
+        - content
+        - author_user_id
+        - created_at
+      properties:
+        id:
+          type: string
+          format: uuid
+        rfi_id:
+          type: string
+          format: uuid
+        response_type:
+          type: string
+          enum: [clarification_request, clarification_answer, official_answer]
+        content:
+          type: string
+        author_user_id:
+          type: string
+          format: uuid
+        author_partner_organization_id:
+          type: string
+          format: uuid
+        revised_document_id:
+          type: string
+          format: uuid
+        revised_document_revision_id:
+          type: string
+          format: uuid
+        file_id:
+          type: string
+          format: uuid
+        created_at:
+          type: string
+          format: date-time
+    RfiRequest:
+      type: object
+      required:
+        - id
+        - project_id
+        - organization_id
+        - code
+        - title
+        - question
+        - status
+        - requesting_partner_organization_id
+        - version
+        - created_by
+        - created_at
+        - updated_at
+      properties:
+        id:
+          type: string
+          format: uuid
+        project_id:
+          type: string
+          format: uuid
+        organization_id:
+          type: string
+          format: uuid
+        code:
+          type: string
+        title:
+          type: string
+        question:
+          type: string
+        suggested_solution:
+          type: string
+        status:
+          type: string
+          enum: [Draft, Submitted, Under Review, Clarification Required, Official Answered, Closed]
+        priority:
+          type: string
+          enum: [low, normal, high, urgent]
+        location_node_id:
+          type: string
+          format: uuid
+        work_node_id:
+          type: string
+          format: uuid
+        document_id:
+          type: string
+          format: uuid
+        requesting_partner_organization_id:
+          type: string
+          format: uuid
+        responding_partner_organization_id:
+          type: string
+          format: uuid
+        ball_in_court_organization_id:
+          type: string
+          format: uuid
+        source_issue_id:
+          type: string
+          format: uuid
+        sla_business_days:
+          type: integer
+        submitted_at:
+          type: string
+          format: date-time
+        due_at:
+          type: string
+          format: date-time
+        answered_at:
+          type: string
+          format: date-time
+        closed_at:
+          type: string
+          format: date-time
+        sla_status:
+          type: string
+          enum: [ok, warning_48h, warning_24h, breached]
+        sla_hours_remaining:
+          type: number
+        version:
+          type: string
+        created_by:
+          type: string
+          format: uuid
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        responses:
+          type: array
+          items:
+            $ref: '#/components/schemas/RfiResponse'
+    RfiRequestList:
+      type: object
+      required:
+        - items
+        - page
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/RfiRequest'
+        page:
+          $ref: '#/components/schemas/PageMeta'
+    SubmittalItemCreate:
+      type: object
+      required:
+        - item_number
+        - description
+      properties:
+        item_number:
+          type: integer
+        description:
+          type: string
+        manufacturer:
+          type: string
+        model_or_grade:
+          type: string
+        sample_quantity:
+          type: integer
+          default: 1
+        physical_sample_received:
+          type: boolean
+          default: false
+        document_id:
+          type: string
+          format: uuid
+        file_id:
+          type: string
+          format: uuid
+    SubmittalItem:
+      type: object
+      required:
+        - id
+        - submittal_id
+        - item_number
+        - description
+        - sample_quantity
+        - physical_sample_received
+        - created_at
+      properties:
+        id:
+          type: string
+          format: uuid
+        submittal_id:
+          type: string
+          format: uuid
+        item_number:
+          type: integer
+        description:
+          type: string
+        manufacturer:
+          type: string
+        model_or_grade:
+          type: string
+        sample_quantity:
+          type: integer
+        physical_sample_received:
+          type: boolean
+        document_id:
+          type: string
+          format: uuid
+        file_id:
+          type: string
+          format: uuid
+        created_at:
+          type: string
+          format: date-time
+    SubmittalCreate:
+      type: object
+      required:
+        - code
+        - title
+        - submittal_type
+        - maker_partner_organization_id
+      properties:
+        code:
+          type: string
+        title:
+          type: string
+        submittal_type:
+          type: string
+          enum: [material_sample, shop_drawing, method_statement, product_data, other]
+        maker_partner_organization_id:
+          type: string
+          format: uuid
+        lead_contractor_partner_organization_id:
+          type: string
+          format: uuid
+        consultant_partner_organization_id:
+          type: string
+          format: uuid
+        location_node_id:
+          type: string
+          format: uuid
+        work_node_id:
+          type: string
+          format: uuid
+        specification_document_id:
+          type: string
+          format: uuid
+        drawing_document_id:
+          type: string
+          format: uuid
+        sla_business_days:
+          type: integer
+          default: 7
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubmittalItemCreate'
+    SubmittalTransition:
+      type: object
+      required:
+        - action
+      properties:
+        action:
+          type: string
+          enum:
+            [
+              submit,
+              start_review,
+              approve,
+              approve_with_comments,
+              request_revision,
+              reject,
+              close,
+              resubmit,
+            ]
+        comment:
+          type: string
+    SubmittalReviewCreate:
+      type: object
+      required:
+        - stage
+        - decision
+        - comments
+      properties:
+        stage:
+          type: string
+          enum: [checker, consultant_lead, owner_final]
+        decision:
+          type: string
+          enum: [Approved, Approved with Comments, Revise and Resubmit, Rejected]
+        comments:
+          type: string
+        attached_file_id:
+          type: string
+          format: uuid
+    SubmittalReview:
+      type: object
+      required:
+        - id
+        - submittal_id
+        - stage
+        - reviewer_user_id
+        - decision
+        - comments
+        - reviewed_at
+      properties:
+        id:
+          type: string
+          format: uuid
+        submittal_id:
+          type: string
+          format: uuid
+        stage:
+          type: string
+          enum: [checker, consultant_lead, owner_final]
+        reviewer_user_id:
+          type: string
+          format: uuid
+        reviewer_partner_organization_id:
+          type: string
+          format: uuid
+        decision:
+          type: string
+          enum: [Approved, Approved with Comments, Revise and Resubmit, Rejected]
+        comments:
+          type: string
+        attached_file_id:
+          type: string
+          format: uuid
+        reviewed_at:
+          type: string
+          format: date-time
+    Submittal:
+      type: object
+      required:
+        - id
+        - project_id
+        - organization_id
+        - code
+        - title
+        - submittal_type
+        - status
+        - maker_partner_organization_id
+        - version
+        - created_by
+        - created_at
+        - updated_at
+      properties:
+        id:
+          type: string
+          format: uuid
+        project_id:
+          type: string
+          format: uuid
+        organization_id:
+          type: string
+          format: uuid
+        code:
+          type: string
+        title:
+          type: string
+        submittal_type:
+          type: string
+          enum: [material_sample, shop_drawing, method_statement, product_data, other]
+        status:
+          type: string
+          enum:
+            [
+              Draft,
+              Submitted,
+              Under Review,
+              Approved,
+              Approved with Comments,
+              Revise and Resubmit,
+              Rejected,
+              Closed,
+            ]
+        maker_partner_organization_id:
+          type: string
+          format: uuid
+        lead_contractor_partner_organization_id:
+          type: string
+          format: uuid
+        consultant_partner_organization_id:
+          type: string
+          format: uuid
+        ball_in_court_organization_id:
+          type: string
+          format: uuid
+        location_node_id:
+          type: string
+          format: uuid
+        work_node_id:
+          type: string
+          format: uuid
+        specification_document_id:
+          type: string
+          format: uuid
+        drawing_document_id:
+          type: string
+          format: uuid
+        submitted_at:
+          type: string
+          format: date-time
+        due_at:
+          type: string
+          format: date-time
+        sla_business_days:
+          type: integer
+        sla_status:
+          type: string
+          enum: [ok, warning_48h, warning_24h, breached]
+        version:
+          type: string
+        created_by:
+          type: string
+          format: uuid
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubmittalItem'
+        reviews:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubmittalReview'
+    SubmittalList:
+      type: object
+      required:
+        - items
+        - page
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Submittal'
+        page:
+          $ref: '#/components/schemas/PageMeta'
+    InspectionTemplateCreate:
+      type: object
+      required:
+        - code
+        - name
+      properties:
+        code:
+          type: string
+          minLength: 1
+          maxLength: 120
+        name:
+          type: string
+          minLength: 1
+          maxLength: 300
+        category:
+          type: string
+        checklist_items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChecklistItemCreate'
+    ChecklistItemCreate:
+      type: object
+      required:
+        - item_key
+        - title
+      properties:
+        item_key:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        sequence:
+          type: integer
+        is_mandatory:
+          type: boolean
+        requires_evidence:
+          type: boolean
+        criterion_type:
+          type: string
+          enum: [pass_fail, measurement, text]
+        unit:
+          type: string
+        min_value:
+          type: number
+        max_value:
+          type: number
+    ChecklistItem:
+      type: object
+      required:
+        - id
+        - item_key
+        - title
+      properties:
+        id:
+          type: string
+          format: uuid
+        item_key:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        sequence:
+          type: integer
+        is_mandatory:
+          type: boolean
+        requires_evidence:
+          type: boolean
+        criterion_type:
+          type: string
+        unit:
+          type: string
+        min_value:
+          type: number
+        max_value:
+          type: number
+    InspectionTemplate:
+      type: object
+      required:
+        - id
+        - project_id
+        - code
+        - name
+        - status
+        - version
+      properties:
+        id:
+          type: string
+          format: uuid
+        project_id:
+          type: string
+          format: uuid
+        code:
+          type: string
+        name:
+          type: string
+        status:
+          type: string
+          enum: [Draft, Published, Archived]
+        category:
+          type: string
+        version:
+          type: string
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChecklistItem'
+    InspectionTemplateList:
+      type: object
+      required:
+        - items
+        - page
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/InspectionTemplate'
+        page:
+          $ref: '#/components/schemas/PageMeta'
+    InspectionCreate:
+      type: object
+      required:
+        - code
+        - title
+      properties:
+        code:
+          type: string
+        title:
+          type: string
+        template_id:
+          type: string
+          format: uuid
+        location_id:
+          type: string
+          format: uuid
+        work_item_id:
+          type: string
+          format: uuid
+        inspection_date:
+          type: string
+          format: date
+        notes:
+          type: string
+    InspectionResultSave:
+      type: object
+      required:
+        - result
+      properties:
+        result:
+          type: string
+          enum: [Pass, Fail, NA, Pending]
+        value_decimal:
+          type: number
+        unit:
+          type: string
+        notes:
+          type: string
+        evidence_file_ids:
+          type: array
+          items:
+            type: string
+            format: uuid
+    InspectionResult:
+      type: object
+      required:
+        - id
+        - inspection_id
+        - item_key
+        - result
+      properties:
+        id:
+          type: string
+          format: uuid
+        inspection_id:
+          type: string
+          format: uuid
+        item_key:
+          type: string
+        result:
+          type: string
+        value_decimal:
+          type: number
+        unit:
+          type: string
+        notes:
+          type: string
+        evidence_file_ids:
+          type: array
+          items:
+            type: string
+            format: uuid
+        recorded_at:
+          type: string
+          format: date-time
+    InspectionFindingCreate:
+      type: object
+      required:
+        - code
+        - description
+      properties:
+        code:
+          type: string
+        description:
+          type: string
+        severity:
+          type: string
+          enum: [Low, Medium, High, Critical]
+        location_detail:
+          type: string
+        owner_id:
+          type: string
+          format: uuid
+        due_at:
+          type: string
+          format: date-time
+    InspectionFinding:
+      type: object
+      required:
+        - id
+        - project_id
+        - code
+        - severity
+        - status
+        - description
+        - version
+      properties:
+        id:
+          type: string
+          format: uuid
+        project_id:
+          type: string
+          format: uuid
+        inspection_id:
+          type: string
+          format: uuid
+        code:
+          type: string
+        severity:
+          type: string
+        status:
+          type: string
+          enum: [Open, Pending Verification, Resolved, Closed, Waived]
+        description:
+          type: string
+        location_detail:
+          type: string
+        owner_id:
+          type: string
+          format: uuid
+        due_at:
+          type: string
+          format: date-time
+        version:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        corrections:
+          type: array
+          items:
+            $ref: '#/components/schemas/CorrectiveAction'
+    CorrectiveActionCreate:
+      type: object
+      required:
+        - description
+      properties:
+        description:
+          type: string
+        evidence_file_ids:
+          type: array
+          items:
+            type: string
+            format: uuid
+    CorrectiveAction:
+      type: object
+      required:
+        - id
+        - finding_id
+        - attempt_no
+        - description
+        - performer_id
+        - status
+      properties:
+        id:
+          type: string
+          format: uuid
+        finding_id:
+          type: string
+          format: uuid
+        attempt_no:
+          type: integer
+        description:
+          type: string
+        performer_id:
+          type: string
+          format: uuid
+        status:
+          type: string
+          enum: [Submitted, Verified, Rejected]
+        submitted_at:
+          type: string
+          format: date-time
+        verified_by:
+          type: string
+          format: uuid
+        verified_at:
+          type: string
+          format: date-time
+        rejection_reason:
+          type: string
+        evidence_file_ids:
+          type: array
+          items:
+            type: string
+            format: uuid
+    FindingTransitionCreate:
+      type: object
+      required:
+        - action
+      properties:
+        action:
+          type: string
+          enum: [verify, reject, waive, close]
+        reason:
+          type: string
+    Inspection:
+      type: object
+      required:
+        - id
+        - project_id
+        - code
+        - title
+        - status
+        - version
+      properties:
+        id:
+          type: string
+          format: uuid
+        project_id:
+          type: string
+          format: uuid
+        template_id:
+          type: string
+          format: uuid
+        code:
+          type: string
+        title:
+          type: string
+        status:
+          type: string
+          enum: [Draft, In Progress, Completed, Accepted, Rejected, Cancelled]
+        inspector_id:
+          type: string
+          format: uuid
+        location_id:
+          type: string
+          format: uuid
+        work_item_id:
+          type: string
+          format: uuid
+        inspection_date:
+          type: string
+          format: date
+        attempt_no:
+          type: integer
+        notes:
+          type: string
+        version:
+          type: string
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/InspectionResult'
+        findings:
+          type: array
+          items:
+            $ref: '#/components/schemas/InspectionFinding'
+    InspectionList:
+      type: object
+      required:
+        - items
+        - page
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Inspection'
+        page:
+          $ref: '#/components/schemas/PageMeta'
+    AcceptanceRecordCreate:
+      type: object
+      required:
+        - code
+      properties:
+        code:
+          type: string
+        inspection_id:
+          type: string
+          format: uuid
+        record_type:
+          type: string
+          enum: [work_acceptance, stage_acceptance, completion_acceptance]
+        legal_basis:
+          type: string
+        result:
+          type: string
+          enum: [Accepted, Rejected, Conditional]
+        conditions_notes:
+          type: string
+    AcceptanceSignInput:
+      type: object
+      required:
+        - signature_data
+      properties:
+        signature_data:
+          type: string
+        notes:
+          type: string
+    AcceptanceRecord:
+      type: object
+      required:
+        - id
+        - project_id
+        - code
+        - record_type
+        - legal_basis
+        - result
+        - status
+        - version
+      properties:
+        id:
+          type: string
+          format: uuid
+        project_id:
+          type: string
+          format: uuid
+        inspection_id:
+          type: string
+          format: uuid
+        code:
+          type: string
+        record_type:
+          type: string
+        legal_basis:
+          type: string
+        result:
+          type: string
+        status:
+          type: string
+          enum: [Draft, Contractor Signed, Supervisor Signed, Completed, Rejected]
+        contractor_signed_by:
+          type: string
+          format: uuid
+        contractor_signed_at:
+          type: string
+          format: date-time
+        contractor_signature_data:
+          type: string
+        supervisor_signed_by:
+          type: string
+          format: uuid
+        supervisor_signed_at:
+          type: string
+          format: date-time
+        supervisor_signature_data:
+          type: string
+        pmu_signed_by:
+          type: string
+          format: uuid
+        pmu_signed_at:
+          type: string
+          format: date-time
+        pmu_signature_data:
+          type: string
+        conditions_notes:
+          type: string
+        version:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+    AcceptanceRecordList:
+      type: object
+      required:
+        - items
+        - page
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/AcceptanceRecord'
+        page:
+          $ref: '#/components/schemas/PageMeta'
+    DailyLogCreate:
+      type: object
+      required:
+        - contract_package_id
+        - log_date
+      properties:
+        contract_package_id:
+          type: string
+          format: uuid
+        log_date:
+          type: string
+          format: date
+        shift_code:
+          type: string
+        author_unit:
+          type: string
+        work_summary:
+          type: string
+        notes:
+          type: string
+    DailyLogUpdate:
+      type: object
+      properties:
+        work_summary:
+          type: string
+        notes:
+          type: string
+        author_unit:
+          type: string
+    DailyLogSignInput:
+      type: object
+      required:
+        - signature_data
+      properties:
+        signature_data:
+          type: string
+        notes:
+          type: string
+    DailyManpowerCreate:
+      type: object
+      required:
+        - items
+      properties:
+        items:
+          type: array
+          items:
+            type: object
+            required:
+              - trade_or_subcontractor
+              - headcount
+            properties:
+              trade_or_subcontractor:
+                type: string
+              skill_level:
+                type: string
+              headcount:
+                type: integer
+              hours_worked:
+                type: number
+              notes:
+                type: string
+    DailyManpower:
+      type: object
+      required:
+        - id
+        - trade_or_subcontractor
+        - headcount
+      properties:
+        id:
+          type: string
+          format: uuid
+        trade_or_subcontractor:
+          type: string
+        skill_level:
+          type: string
+        headcount:
+          type: integer
+        hours_worked:
+          type: number
+        notes:
+          type: string
+    DailyEquipmentCreate:
+      type: object
+      required:
+        - items
+      properties:
+        items:
+          type: array
+          items:
+            type: object
+            required:
+              - equipment_name
+              - quantity
+            properties:
+              equipment_name:
+                type: string
+              equipment_type:
+                type: string
+              quantity:
+                type: integer
+              hours_worked:
+                type: number
+              operational_status:
+                type: string
+              notes:
+                type: string
+    DailyEquipment:
+      type: object
+      required:
+        - id
+        - equipment_name
+        - quantity
+      properties:
+        id:
+          type: string
+          format: uuid
+        equipment_name:
+          type: string
+        equipment_type:
+          type: string
+        quantity:
+          type: integer
+        hours_worked:
+          type: number
+        operational_status:
+          type: string
+        notes:
+          type: string
+    DailyWeatherCreate:
+      type: object
+      required:
+        - items
+      properties:
+        items:
+          type: array
+          items:
+            type: object
+            required:
+              - time_of_day
+              - temperature_c
+            properties:
+              time_of_day:
+                type: string
+                enum: [morning, noon, afternoon]
+              temperature_c:
+                type: number
+              weather_condition:
+                type: string
+              rainfall_mm:
+                type: number
+              wind_force:
+                type: string
+              gps_lat:
+                type: number
+              gps_lng:
+                type: number
+              source:
+                type: string
+              notes:
+                type: string
+    DailyWeather:
+      type: object
+      required:
+        - id
+        - time_of_day
+        - temperature_c
+      properties:
+        id:
+          type: string
+          format: uuid
+        time_of_day:
+          type: string
+        temperature_c:
+          type: number
+        weather_condition:
+          type: string
+        rainfall_mm:
+          type: number
+        wind_force:
+          type: string
+        gps_lat:
+          type: number
+        gps_lng:
+          type: number
+        source:
+          type: string
+        notes:
+          type: string
+        recorded_at:
+          type: string
+          format: date-time
+    WeatherCrawlInput:
+      type: object
+      properties:
+        gps_lat:
+          type: number
+        gps_lng:
+          type: number
+    DailyLog:
+      type: object
+      required:
+        - id
+        - project_id
+        - contract_package_id
+        - log_date
+        - status
+        - version
+      properties:
+        id:
+          type: string
+          format: uuid
+        project_id:
+          type: string
+          format: uuid
+        contract_package_id:
+          type: string
+          format: uuid
+        log_date:
+          type: string
+          format: date
+        shift_code:
+          type: string
+        status:
+          type: string
+          enum: [Draft, Submitted, Confirmed, Amended]
+        author_unit:
+          type: string
+        work_summary:
+          type: string
+        notes:
+          type: string
+        site_manager_signed_by:
+          type: string
+          format: uuid
+        site_manager_signed_at:
+          type: string
+          format: date-time
+        site_manager_signature_data:
+          type: string
+        supervisor_signed_by:
+          type: string
+          format: uuid
+        supervisor_signed_at:
+          type: string
+          format: date-time
+        supervisor_signature_data:
+          type: string
+        version:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        manpower:
+          type: array
+          items:
+            $ref: '#/components/schemas/DailyManpower'
+        equipment:
+          type: array
+          items:
+            $ref: '#/components/schemas/DailyEquipment'
+        weather:
+          type: array
+          items:
+            $ref: '#/components/schemas/DailyWeather'
+    DailyLogList:
+      type: object
+      required:
+        - items
+        - page
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/DailyLog'
+        page:
+          $ref: '#/components/schemas/PageMeta'
+    SyncOperationInput:
+      type: object
+      required:
+        - operation_id
+        - entity_type
+        - entity_temp_id
+        - command
+        - base_version
+        - payload
+        - client_created_at
+      properties:
+        operation_id:
+          type: string
+          format: uuid
+        entity_type:
+          type: string
+        entity_temp_id:
+          type: string
+        command:
+          type: string
+        base_version:
+          type: integer
+        payload:
+          type: object
+        payload_hash:
+          type: string
+        client_created_at:
+          type: string
+          format: date-time
+        dependency_ids:
+          type: array
+          items:
+            type: string
+    SyncBatchCreate:
+      type: object
+      required:
+        - device_id
+        - operations
+      properties:
+        device_id:
+          type: string
+          format: uuid
+        operations:
+          type: array
+          items:
+            $ref: '#/components/schemas/SyncOperationInput'
+    SyncOperationResult:
+      type: object
+      required:
+        - operation_id
+        - status
+      properties:
+        operation_id:
+          type: string
+          format: uuid
+        status:
+          type: string
+          enum: [applied, conflict, rejected, failed]
+        canonical_id:
+          type: string
+          format: uuid
+        canonical_version:
+          type: integer
+        error_code:
+          type: string
+        conflict_details:
+          type: object
+    SyncBatchResponse:
+      type: object
+      required:
+        - batch_id
+        - status
+        - operations
+      properties:
+        batch_id:
+          type: string
+          format: uuid
+        status:
+          type: string
+        operation_count:
+          type: integer
+        applied_count:
+          type: integer
+        conflict_count:
+          type: integer
+        operations:
+          type: array
+          items:
+            $ref: '#/components/schemas/SyncOperationResult'
+    ChangeFeedResponse:
+      type: object
+      required:
+        - changes
+      properties:
+        changes:
+          type: array
+          items:
+            type: object
+            required:
+              - entity_type
+              - entity_id
+              - version
+              - action
+            properties:
+              entity_type:
+                type: string
+              entity_id:
+                type: string
+                format: uuid
+              version:
+                type: integer
+              action:
+                type: string
+              data:
+                type: object
+        next_cursor:
+          type: string
+    AsBuiltDossierResponse:
+      type: object
+      required:
+        - project_id
+        - package_name
+        - sha256
+        - size_bytes
+        - manifest
+      properties:
+        project_id:
+          type: string
+          format: uuid
+        package_name:
+          type: string
+        sha256:
+          type: string
+        size_bytes:
+          type: integer
+        generated_at:
+          type: string
+          format: date-time
+        manifest:
+          type: object

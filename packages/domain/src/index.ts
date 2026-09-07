@@ -241,4 +241,9 @@ export function parseExpectedVersion(value: string | undefined): bigint {
 }
 
 export * from './document-control.js';
+export * from './field-issues/index.js';
+export * from './rfx/index.js';
+export * from './quality/quality-standards.js';
+export * from './field-records/daily-log-domain.js';
+export * from './sync/offline-conflict.js';
 export { DomainError } from './errors.js';
