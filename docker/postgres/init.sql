@@ -30,3 +30,7 @@ SELECT 'CREATE DATABASE vinops_mega001_test' WHERE NOT EXISTS (SELECT FROM pg_da
 SELECT 'CREATE DATABASE vinops_mega001_i4_worker_test' WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = 'vinops_mega001_i4_worker_test')\gexec
 SELECT 'CREATE DATABASE vinops_mega002_i1_test' WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = 'vinops_mega002_i1_test')\gexec
 SELECT 'CREATE DATABASE vinops_mega002_i2_test' WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = 'vinops_mega002_i2_test')\gexec
+SELECT 'CREATE DATABASE vinops_chat1_test' WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = 'vinops_chat1_test')\gexec
+SELECT 'CREATE DATABASE vinops_chat2_test' WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = 'vinops_chat2_test')\gexec
+SELECT 'CREATE DATABASE vinops_chat3_test' WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = 'vinops_chat3_test')\gexec
+

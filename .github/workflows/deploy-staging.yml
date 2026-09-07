@@ -42,6 +42,13 @@ jobs:
           node --version
           pnpm --version
 
+      - name: Start integration test services
+        run: |
+          docker compose up -d --wait --wait-timeout 120 postgres clamav
+          docker compose up -d minio
+          docker compose up minio-init
+          docker compose ps
+
       - name: Install dependencies from lockfile
         run: pnpm install --frozen-lockfile
 
@@ -50,6 +57,10 @@ jobs:
 
       - name: Verify zero high/critical dependency advisories
         run: pnpm audit --audit-level high
+
+      - name: Stop integration test services
+        if: always()
+        run: docker compose down -v
 
   build-images:
     name: Build Multi-stage Production Docker Images
