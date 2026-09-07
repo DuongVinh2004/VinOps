@@ -30,8 +30,8 @@ let workerDatabase: VinopsDatabase | undefined;
 beforeAll(() => {
   if (!runtimeConfigured || databaseUrl === undefined) return;
   const databaseName = new URL(databaseUrl).pathname.replace(/^\//u, '');
-  if (!/^vinops_mega002_i[12]_test\d*$/u.test(databaseName)) {
-    throw new Error('Worker runtime test requires an isolated VIN-MEGA-002 database.');
+  if (!/^(vinops_mega002_i[12]_test\d*|vinops_chat1_test)$/u.test(databaseName)) {
+    throw new Error('Worker runtime test requires an isolated VIN-MEGA-002 or chat1 database.');
   }
   owner = new Pool({
     connectionString: databaseUrl,
