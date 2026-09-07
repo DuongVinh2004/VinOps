@@ -9,6 +9,7 @@ import { createOutboxPoller, type OutboxPoller } from './outbox-poller.js';
 import { createFileProcessingPoller, type FileProcessingPoller } from './file-processing-poller.js';
 import { FileProcessingWorker } from './file-processing-worker.js';
 import { createDocumentEventHandlers } from './document-event-handler.js';
+import { createBimEventHandlers } from './bim/bim-event-handler.js';
 import { DeterministicInProcessPublisher } from './outbox-publisher.js';
 import { OutboxWorker } from './outbox-worker.js';
 import { PostgreSqlOutboxStore } from './postgres-outbox-store.js';
@@ -64,9 +65,10 @@ function createOptionalWorkerRuntime(
     runtimeRole: 'vinops_worker',
   });
   const documentHandlers = createDocumentEventHandlers(logger);
+  const bimHandlers = createBimEventHandlers(database, undefined, logger);
   const worker = new OutboxWorker(
     new PostgreSqlOutboxStore(database),
-    new DeterministicInProcessPublisher([documentHandlers.handler]),
+    new DeterministicInProcessPublisher([documentHandlers.handler, bimHandlers.handler]),
     logger,
     { workerName: config.VINOPS_WORKER_NAME },
   );

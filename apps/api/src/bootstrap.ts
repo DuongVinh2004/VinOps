@@ -19,6 +19,7 @@ export async function createApiApplication(
   const app = await NestFactory.create(AppModule.register(config), {
     bufferLogs: false,
     logger: new NestStructuredLogger(logger),
+    abortOnError: false,
   });
   const allowedOrigins = parseAllowedOrigins(config.VINOPS_ALLOWED_ORIGINS);
   app.enableCors({

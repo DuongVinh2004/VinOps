@@ -113,3 +113,5 @@ export function loadWorkerConfig(environment: NodeJS.ProcessEnv): WorkerConfig {
 export function loadWebConfig(environment: Record<string, unknown>): WebConfig {
   return webSchema.parse(environment);
 }
+
+export * from './redis.config.js';

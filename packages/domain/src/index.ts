@@ -246,4 +246,37 @@ export * from './rfx/index.js';
 export * from './quality/quality-standards.js';
 export * from './field-records/daily-log-domain.js';
 export * from './sync/offline-conflict.js';
+export * from './ai/defect-detection-types.js';
+export * from './pki/document-hasher.js';
+export * from './pki/signing-workflow-state-machine.js';
+export {
+  bimModelStates,
+  type BimModelState,
+  bimModelActions,
+  type BimModelAction,
+  bimCanTransition,
+  bimValidActions,
+  nextBimState,
+  type BimDiscipline,
+  type BimEntityType,
+} from './bim/bim-model-state-machine.js';
+export {
+  vector3Schema,
+  type Vector3,
+  ifcGuidSchema,
+  cameraSchema,
+  type CameraData,
+  clippingPlaneSchema,
+  type ClippingPlane,
+  bcfCameraSchema,
+  bcfClippingPlaneSchema,
+  bcfViewpointSchema,
+  type BcfViewpoint,
+  validateBcfViewpoint,
+  safeValidateBcfViewpoint,
+} from './bim/bcf-viewpoint-schema.js';
+export * as bim from './bim/index.js';
+export * from './gis/vn2000-converter.js';
+export * from './gis/geojson-validator.js';
+export * from './realtime/realtime-events.js';
 export { DomainError } from './errors.js';

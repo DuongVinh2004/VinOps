@@ -17,7 +17,11 @@ export default defineConfig({
     },
   },
   test: {
-    include: ['apps/*/test/**/*.test.{ts,tsx}', 'packages/*/test/**/*.test.ts'],
+    include: [
+      'apps/*/test/**/*.{test,spec,e2e-spec}.{ts,tsx}',
+      'packages/*/test/**/*.{test,spec}.ts',
+      'packages/*/src/**/__tests__/**/*.{test,spec}.ts',
+    ],
     setupFiles: ['apps/web/test/setup.ts'],
     testTimeout: 15_000,
   },

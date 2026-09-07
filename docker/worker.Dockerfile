@@ -49,6 +49,10 @@ COPY --from=builder /app/packages ./packages
 COPY --from=builder /app/apps/worker/package.json ./apps/worker/
 COPY --from=builder /app/apps/worker/dist ./apps/worker/dist
 
+# Ensure web-ifc WASM binaries are available in root and dist for runtime resolution
+RUN mkdir -p /app/wasm && \
+    find /app/node_modules -name "web-ifc*.wasm" -exec cp {} /app/apps/worker/dist/ \; 2>/dev/null || true
+
 # Secure container: run as non-root user 'node'
 USER node
 
