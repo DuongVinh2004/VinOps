@@ -1,0 +1,255 @@
+{
+  "expected_matrix_sha256": "10da18fe95aaddd84998a674c9ca00f43da710590a781aeb57406a450294fe0a",
+  "routes": [
+    {
+      "route": "addAnnotation",
+      "expected": 600,
+      "executed": 600,
+      "unexpected": 0,
+      "duplicate_results": 0,
+      "status_counts": {
+        "401": 40,
+        "404": 560
+      },
+      "missing_leakage_assertions": 0,
+      "missing_side_effect_assertions": 0
+    },
+    {
+      "route": "addReviewComment",
+      "expected": 600,
+      "executed": 600,
+      "unexpected": 0,
+      "duplicate_results": 0,
+      "status_counts": {
+        "401": 40,
+        "404": 560
+      },
+      "missing_leakage_assertions": 0,
+      "missing_side_effect_assertions": 0
+    },
+    {
+      "route": "archiveDocument",
+      "expected": 600,
+      "executed": 600,
+      "unexpected": 0,
+      "duplicate_results": 0,
+      "status_counts": {
+        "401": 40,
+        "404": 560
+      },
+      "missing_leakage_assertions": 0,
+      "missing_side_effect_assertions": 0
+    },
+    {
+      "route": "authorizeUploadPart",
+      "expected": 600,
+      "executed": 600,
+      "unexpected": 0,
+      "duplicate_results": 0,
+      "status_counts": {
+        "401": 40,
+        "404": 560
+      },
+      "missing_leakage_assertions": 0,
+      "missing_side_effect_assertions": 0
+    },
+    {
+      "route": "completeUpload",
+      "expected": 600,
+      "executed": 600,
+      "unexpected": 0,
+      "duplicate_results": 0,
+      "status_counts": {
+        "401": 40,
+        "404": 560
+      },
+      "missing_leakage_assertions": 0,
+      "missing_side_effect_assertions": 0
+    },
+    {
+      "route": "createDocument",
+      "expected": 600,
+      "executed": 600,
+      "unexpected": 0,
+      "duplicate_results": 0,
+      "status_counts": {
+        "201": 70,
+        "401": 40,
+        "403": 50,
+        "404": 440
+      },
+      "missing_leakage_assertions": 0,
+      "missing_side_effect_assertions": 0
+    },
+    {
+      "route": "createRevision",
+      "expected": 600,
+      "executed": 600,
+      "unexpected": 0,
+      "duplicate_results": 0,
+      "status_counts": {
+        "401": 40,
+        "404": 560
+      },
+      "missing_leakage_assertions": 0,
+      "missing_side_effect_assertions": 0
+    },
+    {
+      "route": "createTransmittal",
+      "expected": 600,
+      "executed": 600,
+      "unexpected": 0,
+      "duplicate_results": 0,
+      "status_counts": {
+        "401": 40,
+        "403": 50,
+        "404": 510
+      },
+      "missing_leakage_assertions": 0,
+      "missing_side_effect_assertions": 0
+    },
+    {
+      "route": "disposeReviewComment",
+      "expected": 600,
+      "executed": 600,
+      "unexpected": 0,
+      "duplicate_results": 0,
+      "status_counts": {
+        "401": 40,
+        "404": 560
+      },
+      "missing_leakage_assertions": 0,
+      "missing_side_effect_assertions": 0
+    },
+    {
+      "route": "documentDetail",
+      "expected": 600,
+      "executed": 600,
+      "unexpected": 0,
+      "duplicate_results": 0,
+      "status_counts": {
+        "401": 40,
+        "404": 560
+      },
+      "missing_leakage_assertions": 0,
+      "missing_side_effect_assertions": 0
+    },
+    {
+      "route": "documentRevisionHistory",
+      "expected": 600,
+      "executed": 600,
+      "unexpected": 0,
+      "duplicate_results": 0,
+      "status_counts": {
+        "401": 40,
+        "404": 560
+      },
+      "missing_leakage_assertions": 0,
+      "missing_side_effect_assertions": 0
+    },
+    {
+      "route": "downloadRevision",
+      "expected": 600,
+      "executed": 600,
+      "unexpected": 0,
+      "duplicate_results": 0,
+      "status_counts": {
+        "401": 40,
+        "404": 560
+      },
+      "missing_leakage_assertions": 0,
+      "missing_side_effect_assertions": 0
+    },
+    {
+      "route": "listDocuments",
+      "expected": 600,
+      "executed": 600,
+      "unexpected": 0,
+      "duplicate_results": 0,
+      "status_counts": {
+        "200": 120,
+        "401": 40,
+        "404": 440
+      },
+      "missing_leakage_assertions": 0,
+      "missing_side_effect_assertions": 0
+    },
+    {
+      "route": "previewRevision",
+      "expected": 600,
+      "executed": 600,
+      "unexpected": 0,
+      "duplicate_results": 0,
+      "status_counts": {
+        "401": 40,
+        "404": 560
+      },
+      "missing_leakage_assertions": 0,
+      "missing_side_effect_assertions": 0
+    },
+    {
+      "route": "restoreDocument",
+      "expected": 600,
+      "executed": 600,
+      "unexpected": 0,
+      "duplicate_results": 0,
+      "status_counts": {
+        "401": 40,
+        "404": 560
+      },
+      "missing_leakage_assertions": 0,
+      "missing_side_effect_assertions": 0
+    },
+    {
+      "route": "reviewInbox",
+      "expected": 600,
+      "executed": 600,
+      "unexpected": 0,
+      "duplicate_results": 0,
+      "status_counts": {
+        "200": 120,
+        "401": 40,
+        "404": 440
+      },
+      "missing_leakage_assertions": 0,
+      "missing_side_effect_assertions": 0
+    },
+    {
+      "route": "transitionRevision",
+      "expected": 600,
+      "executed": 600,
+      "unexpected": 0,
+      "duplicate_results": 0,
+      "status_counts": {
+        "401": 40,
+        "404": 560
+      },
+      "missing_leakage_assertions": 0,
+      "missing_side_effect_assertions": 0
+    },
+    {
+      "route": "transmittalDetail",
+      "expected": 600,
+      "executed": 600,
+      "unexpected": 0,
+      "duplicate_results": 0,
+      "status_counts": {
+        "401": 40,
+        "404": 560
+      },
+      "missing_leakage_assertions": 0,
+      "missing_side_effect_assertions": 0
+    }
+  ],
+  "totals": {
+    "routes": 18,
+    "expected": 10800,
+    "executed": 10800,
+    "uncovered": 0,
+    "unexpected": 0,
+    "duplicate_results": 0,
+    "source_mismatch": 0,
+    "semantic_mismatch": 0,
+    "failed_shards": 0
+  }
+}

@@ -1,0 +1,104 @@
+diff --git a/packages/config/test/secret-scan.test.ts b/packages/config/test/secret-scan.test.ts
+new file mode 100644
+index 0000000..d5fcf33
+--- /dev/null
++++ b/packages/config/test/secret-scan.test.ts
+@@ -0,0 +1,56 @@
++import { mkdtempSync, mkdirSync, rmSync, writeFileSync } from 'node:fs';
++import { tmpdir } from 'node:os';
++import path from 'node:path';
++import { spawnSync } from 'node:child_process';
++import { describe, expect, it } from 'vitest';
++
++const scanner = path.resolve(process.cwd(), 'scripts/secret-scan.mjs');
++
++function scanFixture(files: Readonly<Record<string, string>>) {
++  const root = mkdtempSync(path.join(tmpdir(), 'vinops-secret-scan-'));
++  try {
++    for (const [relativePath, content] of Object.entries(files)) {
++      const absolutePath = path.join(root, relativePath);
++      mkdirSync(path.dirname(absolutePath), { recursive: true });
++      writeFileSync(absolutePath, content, 'utf8');
++    }
++    return spawnSync(process.execPath, [scanner], {
++      encoding: 'utf8',
++      env: { ...process.env, VINOPS_SECRET_SCAN_ROOT: root },
++    });
++  } finally {
++    rmSync(root, { force: true, recursive: true });
++  }
++}
++
++describe('repository secret scanner', () => {
++  it('scans clean evidence text and rejects each isolated credential canary', () => {
++    const clean = scanFixture({
++      'evidence/VIN-MEGA-002/result.json': JSON.stringify({ password: 'test-only' }),
++      'src/config.ts': "export const mode = 'test';\n",
++    });
++    expect(clean.status).toBe(0);
++    expect(clean.stdout).toContain('2 text file(s) scanned');
++
++    const canaries = [
++      ['evidence/VIN-MEGA-002/result.ndjson', `{"key":"${'AK' + 'IA' + 'A'.repeat(16)}"}`],
++      ['evidence/VIN-MEGA-002/source.delta.patch', `+token=${'gh' + 'p_' + 'B'.repeat(36)}`],
++      ['src/config.ts', `export const api_${'key'} = "${'C'.repeat(20)}";`],
++    ] as const;
++    for (const [relativePath, content] of canaries) {
++      const result = scanFixture({ [relativePath]: content });
++      expect(result.status, relativePath).not.toBe(0);
++      expect(result.stderr, relativePath).toContain('Secret scan rejected');
++    }
++  });
++
++  it('fails when the configured scan root cannot be read', () => {
++    const missingRoot = path.join(tmpdir(), `vinops-secret-scan-missing-${process.pid}`);
++    const result = spawnSync(process.execPath, [scanner], {
++      encoding: 'utf8',
++      env: { ...process.env, VINOPS_SECRET_SCAN_ROOT: missingRoot },
++    });
++    expect(result.status).not.toBe(0);
++    expect(result.stderr).toContain('Secret scan could not complete');
++  });
++});
+diff --git a/scripts/secret-scan.mjs b/scripts/secret-scan.mjs
+index ff0ea3e..85b704d 100644
+--- a/scripts/secret-scan.mjs
++++ b/scripts/secret-scan.mjs
+@@ -3,7 +3,9 @@ import path from 'node:path';
+ import { fileURLToPath } from 'node:url';
+ 
+ const scriptDirectory = path.dirname(fileURLToPath(import.meta.url));
+-const repositoryRoot = path.resolve(scriptDirectory, '..');
++const repositoryRoot = process.env.VINOPS_SECRET_SCAN_ROOT
++  ? path.resolve(process.env.VINOPS_SECRET_SCAN_ROOT)
++  : path.resolve(scriptDirectory, '..');
+ 
+ const excludedDirectories = new Set([
+   '.cache',
+@@ -19,9 +21,6 @@ const excludedDirectories = new Set([
+   'build',
+   'coverage',
+   'dist',
+-  // Generated task evidence contains intentionally synthetic local credentials;
+-  // production source remains fully covered by this scan.
+-  'evidence',
+   'node_modules',
+   'storybook-static',
+ ]);
+@@ -70,6 +69,16 @@ const credentialAssignment =
+ 
+ function isPlaceholder(value) {
+   const normalized = value.trim().toLowerCase();
++  // Deterministic, local-only VIN-MEGA-002 fixture values retained in historical
++  // evidence. Keep this allowlist exact so other evidence credentials still fail.
++  if (
++    normalized === '***' ||
++    normalized === 'vinops-i6-local-secret' ||
++    normalized === 'vinops-mega002!' ||
++    normalized === 'vinops-owner-local'
++  ) {
++    return true;
++  }
+   if (/^(?:<[^>]+>|\[[^\]]+\]|\$\{[^}]+\})$/.test(normalized)) {
+     return true;
+   }

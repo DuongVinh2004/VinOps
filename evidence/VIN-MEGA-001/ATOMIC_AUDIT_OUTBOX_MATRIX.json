@@ -1,0 +1,10 @@
+{
+  "checkpoint": "VIN-MEGA-001",
+  "iteration": 4,
+  "status": "PASS",
+  "injection": "task-database trigger raises after organization insert when audit insert is attempted",
+  "http_result": 500,
+  "post_transaction": { "entity_count": 0, "matching_audit_count": 0, "outbox_count_delta": 0 },
+  "atomic_boundary": "single PostgreSQL transaction",
+  "synthetic_only": true
+}

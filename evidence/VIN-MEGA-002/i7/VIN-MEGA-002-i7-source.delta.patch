@@ -1,0 +1,144 @@
+diff --git a/evidence/VIN-MEGA-002/review-source/apps/api/src/platform.controller.ts b/apps/api/src/platform.controller.ts
+index e957ef2..bbe08fc 100644
+--- a/evidence/VIN-MEGA-002/review-source/apps/api/src/platform.controller.ts
++++ b/apps/api/src/platform.controller.ts
+@@ -781,6 +781,7 @@ export class PlatformController {
+     @Body() body: unknown,
+     @Req() request: Request,
+   ): Promise<unknown> {
++    const identity = await this.identity(request);
+     const input = bodyRecord(body);
+     allowKeys(input, ['completed_parts', 'size_bytes', 'sha256']);
+     const parts = nonEmptyRecordArray(input, 'completed_parts').map((part) => {
+@@ -791,7 +792,7 @@ export class PlatformController {
+       };
+     });
+     return this.documents.completeUpload(
+-      await this.identity(request),
++      identity,
+       uploadSessionId,
+       parts,
+       requiredNumber(input, 'size_bytes'),
+diff --git a/evidence/VIN-MEGA-002/review-source/apps/api/src/document.service.ts b/apps/api/src/document.service.ts
+index aca985b..c94a3ea 100644
+--- a/evidence/VIN-MEGA-002/review-source/apps/api/src/document.service.ts
++++ b/apps/api/src/document.service.ts
+@@ -1231,28 +1231,39 @@ export class DocumentService implements OnModuleDestroy {
+     transmittalId: string,
+     correlationId: string,
+   ): Promise<JsonRecord> {
+-    return this.transaction(identity, correlationId, async (transaction) => {
+-      const rows = await transaction.query<JsonRecord>(
+-        `SELECT id, project_id, code, purpose, status, created_by, created_at,
+-                issued_at, snapshot_sha256, version::text
+-           FROM vinops.transmittals WHERE id = $1::uuid`,
+-        [transmittalId],
+-      );
+-      const transmittal = this.one(rows);
+-      const items = await transaction.query<JsonRecord>(
+-        `SELECT document_id, revision_id, context_key, document_code_snapshot,
+-                document_title_snapshot, revision_code_snapshot, file_sha256_snapshot
+-           FROM vinops.transmittal_items WHERE transmittal_id = $1::uuid ORDER BY created_at, id`,
+-        [transmittalId],
+-      );
+-      const recipients = await transaction.query<JsonRecord>(
+-        `SELECT id, recipient_type, recipient_reference, recipient_name_snapshot,
+-                recipient_address_snapshot, sent_at
+-           FROM vinops.transmittal_recipients WHERE transmittal_id = $1::uuid ORDER BY created_at, id`,
+-        [transmittalId],
+-      );
+-      return { ...transmittal, items, recipients };
+-    });
++    try {
++      return await this.transaction(identity, correlationId, async (transaction) => {
++        const rows = await transaction.query<JsonRecord>(
++          `SELECT id, project_id, code, purpose, status, created_by, created_at,
++                  issued_at, snapshot_sha256, version::text
++             FROM vinops.transmittals WHERE id = $1::uuid`,
++          [transmittalId],
++        );
++        const transmittal = this.one(rows);
++        const items = await transaction.query<JsonRecord>(
++          `SELECT document_id, revision_id, context_key, document_code_snapshot,
++                  document_title_snapshot, revision_code_snapshot, file_sha256_snapshot
++             FROM vinops.transmittal_items WHERE transmittal_id = $1::uuid ORDER BY created_at, id`,
++          [transmittalId],
++        );
++        const recipients = await transaction.query<JsonRecord>(
++          `SELECT id, recipient_type, recipient_reference, recipient_name_snapshot,
++                  recipient_address_snapshot, sent_at
++             FROM vinops.transmittal_recipients WHERE transmittal_id = $1::uuid ORDER BY created_at, id`,
++          [transmittalId],
++        );
++        return { ...transmittal, items, recipients };
++      });
++    } catch (error) {
++      if (
++        error !== null &&
++        typeof error === 'object' &&
++        (error as { code?: string }).code === '42P17'
++      ) {
++        throw new PlatformError('RESOURCE_NOT_VISIBLE', 'errors.resourceNotVisible', 404, false);
++      }
++      throw error;
++    }
+   }
+ 
+   async setDocumentArchived(
+diff --git a/apps/api/test/document-boundary.integration.test.ts b/apps/api/test/document-boundary.integration.test.ts
+new file mode 100644
+index 0000000..c07333e
+--- /dev/null
++++ b/apps/api/test/document-boundary.integration.test.ts
+@@ -0,0 +1,51 @@
++import { describe, expect, it } from 'vitest';
++
++const api = process.env.VINOPS_I7_API_URL;
++const enabled = api !== undefined && api.length > 0;
++const suite = enabled ? describe : describe.skip;
++
++suite('i7 original HTTP document-control boundaries', () => {
++  it('resolves identity before complete-upload body validation', async () => {
++    const response = await fetch(
++      `${api}/api/v1/upload-sessions/00000000-0000-4000-8000-000000000921/complete`,
++      {
++        method: 'POST',
++        headers: { 'content-type': 'application/json', 'idempotency-key': 'i7-regression-unauth' },
++        body: JSON.stringify({ malformed: true }),
++      },
++    );
++    expect(response.status).toBe(401);
++  });
++
++  it('keeps authenticated malformed upload validation at 422 and maps transmittal RLS boundary to 404', async () => {
++    const login = await fetch(`${api}/api/v1/auth/sessions`, {
++      method: 'POST',
++      headers: { 'content-type': 'application/json' },
++      body: JSON.stringify({
++        email: 'owner@vinops.test',
++        password: 'VinOps-Mega002!',
++        device_name: 'i7-regression',
++      }),
++    });
++    expect(login.status).toBe(200);
++    const token = String((await login.json()).access_token);
++    const malformed = await fetch(
++      `${api}/api/v1/upload-sessions/00000000-0000-4000-8000-000000000921/complete`,
++      {
++        method: 'POST',
++        headers: {
++          'content-type': 'application/json',
++          authorization: `Bearer ${token}`,
++          'idempotency-key': 'i7-regression-auth',
++        },
++        body: JSON.stringify({ malformed: true }),
++      },
++    );
++    expect(malformed.status).toBe(422);
++    const transmittal = await fetch(
++      `${api}/api/v1/transmittals/00000000-0000-4000-8000-000000000941`,
++      { headers: { authorization: `Bearer ${token}` } },
++    );
++    expect(transmittal.status).toBe(404);
++  });
++});

@@ -1,0 +1,32 @@
+{
+  "checkpoint": "VIN-MEGA-001",
+  "artifact_status": "PRELIMINARY_CONTRACT_MAPPING",
+  "recorded_on": "2026-07-30",
+  "base_path": "/api/v1",
+  "source_of_candidate_contract": "packages/contracts/openapi/vinops.openapi.yaml",
+  "controller": "apps/api/src/platform.controller.ts",
+  "platform_route_groups": [
+    "auth/sessions, auth/refresh and password-reset operations",
+    "organizations, organization members and organization projects",
+    "project detail and lifecycle transitions",
+    "project invitations and acceptance/revocation",
+    "project members",
+    "project context and CSV import preview/commit",
+    "delegations",
+    "break-glass request, approval and session"
+  ],
+  "cross_cutting_candidate_contracts": [
+    "Idempotency-Key is read for material mutation routes.",
+    "x-correlation-id is accepted by the API boundary.",
+    "x-csrf-token and Origin participate in refresh validation.",
+    "Error filter emits code, message_key, correlation_id and retryable fields."
+  ],
+  "static_observation": "OpenAPI candidate includes platform routes and also contains future vertical route material. This summary does not claim implementation of routes outside VIN-MEGA-001 scope.",
+  "contract_verification": {
+    "command_required": "corepack pnpm@11.15.1 run contracts:verify",
+    "status_at_artifact_creation": "NOT_RECORDED_FOR_THIS_ARTIFACT",
+    "required_follow_up": "Regenerate/check the typed contract and record final command evidence after concurrent contract work is complete."
+  },
+  "runtime_api_proof": "NOT_RUN",
+  "runtime_status": "BLOCKED_RUNTIME"
+}

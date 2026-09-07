@@ -1,0 +1,19 @@
+{
+  "status": "PASS",
+  "valid_file_id": "23cfc899-dd5e-4091-b8dd-f99738d36855",
+  "final_state": {
+    "attempt": 1,
+    "file_status": "Available",
+    "failure_code": null,
+    "actual_size_bytes": "75",
+    "actual_sha256": "57c7edb8c8204343707095e0a41b1bacae3f35e0e6955ec94507ef3fccb76df6",
+    "available_object_key": "available/23cfc899-dd5e-4091-b8dd-f99738d36855/original",
+    "job_status": "Completed",
+    "attempts": 1,
+    "last_error_code": null,
+    "scan_count": 1,
+    "derivative_count": 1,
+    "outbox_count": 2
+  },
+  "final_state_sha256": "fb722d2aeaf6109a4b5da94abbcddb7a2da7fdbe27a499ba8fd6bbd63e432d26"
+}

@@ -1,0 +1,274 @@
+{
+  "checkpoint_id": "VIN-MEGA-001",
+  "title": "Platform Foundation and Tenant Security",
+  "source_precedence": [
+    "PRSS v3.1 Approved Provisional Baseline",
+    "Approved Change Requests CR-001 and CR-002",
+    "Architecture/Design v1.0",
+    "OpenAPI v1 Candidate",
+    "Repository implementation"
+  ],
+  "contract_status": "candidate",
+  "runtime_proof_status": "requires_real_postgresql",
+  "verification_layers": {
+    "automated_code_contract": [
+      "packages/contracts/test/contract.test.ts",
+      "packages/domain/test/domain.test.ts",
+      "apps/api/test/security.test.ts",
+      "apps/api/test/api.test.ts"
+    ],
+    "real_postgresql_required": "packages/database/test/postgres.integration.test.ts",
+    "rule": "Only a real PostgreSQL execution of the conditional integration suite can prove migration, constraints, transaction atomicity, and RLS. It is UNVERIFIED until runtime evidence exists.",
+    "api_behavioral_proof": {
+      "status": "UNVERIFIED",
+      "reason": "apps/api/test/api.test.ts covers API foundation behavior only: liveness/readiness, correlation-ID normalization, and a safe dependency-error response. No automated platform-command API behavioral suite exists yet."
+    }
+  },
+  "requirements": [
+    {
+      "id": "PRSS-3.3-6-TRACEABILITY",
+      "source": ["PRSS Section 3.3", "PRSS Section 6"],
+      "outcome": "Traceable commands and safe errors/logs without credentials or cross-tenant metadata.",
+      "api": ["shared Error", "shared X-Correlation-ID", "Idempotency-Key", "PageMeta"],
+      "entities": ["audit_events", "outbox_events", "idempotency_keys"],
+      "automated_tests": [
+        "packages/contracts/test/contract.test.ts",
+        "apps/api/test/security.test.ts",
+        "apps/api/test/api.test.ts"
+      ],
+      "api_behavioral_proof": "UNVERIFIED beyond the API-foundation safe-error and correlation checks.",
+      "runtime_tests": ["TC-MEGA-001-19 audit denial/redaction"],
+      "runtime_status": "UNVERIFIED",
+      "acceptance": ["AC-08", "AC-09"]
+    },
+    {
+      "id": "PRSS-7-15.1-IAM",
+      "source": ["PRSS Section 7", "PRSS Section 15.1"],
+      "outcome": "Authorization intersects tenant membership, project membership, action, scope, and separation-of-duty policy.",
+      "api": [
+        "/organizations/{organizationId}/members",
+        "/projects/{projectId}/members",
+        "/project-members/{membershipId}"
+      ],
+      "entities": ["organization_members", "project_members", "member_scopes"],
+      "automated_tests": ["packages/domain/test/domain.test.ts"],
+      "api_behavioral_proof": "UNVERIFIED",
+      "runtime_tests": [
+        "TC-MEGA-001-02 cross-scope",
+        "TC-MEGA-001-05 self-escalation",
+        "packages/database/test/postgres.integration.test.ts"
+      ],
+      "runtime_status": "UNVERIFIED",
+      "acceptance": ["AC-04", "AC-05", "AC-06"]
+    },
+    {
+      "id": "PRSS-12-PROJECT-CONTEXT",
+      "source": ["PRSS Section 12"],
+      "outcome": "Project Context records are scoped, tree-safe, and archived rather than hard-deleted.",
+      "api": ["/projects/{projectId}/context", "/projects/{projectId}/context/{kind}"],
+      "entities": [
+        "partner_organizations",
+        "project_calendars",
+        "numbering_profiles",
+        "numbering_counters",
+        "location_nodes",
+        "work_nodes",
+        "location_work_links",
+        "disciplines",
+        "document_classifications"
+      ],
+      "automated_tests": ["packages/domain/test/domain.test.ts"],
+      "api_behavioral_proof": "UNVERIFIED",
+      "runtime_tests": [
+        "TC-MEGA-001-06 partner metadata",
+        "TC-MEGA-001-14 tree constraints",
+        "packages/database/test/postgres.integration.test.ts"
+      ],
+      "runtime_status": "UNVERIFIED",
+      "acceptance": ["AC-07"]
+    },
+    {
+      "id": "PRSS-13-CONTEXT-IMPORT",
+      "source": ["PRSS Section 13"],
+      "outcome": "CSV preview validates without mutation, and idempotent commit exposes safe row errors.",
+      "api": [
+        "/projects/{projectId}/context-imports/preview",
+        "/projects/{projectId}/context-imports/{importId}/commit"
+      ],
+      "entities": ["context_imports", "idempotency_keys", "audit_events", "outbox_events"],
+      "automated_tests": [],
+      "api_behavioral_proof": "UNVERIFIED",
+      "runtime_tests": [
+        "TC-MEGA-001-15 CSV retry/row errors",
+        "packages/database/test/postgres.integration.test.ts"
+      ],
+      "runtime_status": "UNVERIFIED",
+      "acceptance": ["AC-07", "AC-08"]
+    },
+    {
+      "id": "PRSS-14.1-AUTH",
+      "source": ["PRSS Section 14.1", "CR-002"],
+      "outcome": "Protected login, rotation/reuse response, revocation, CSRF/CORS, and non-enumerating single-use reset.",
+      "api": [
+        "/auth/sessions",
+        "/auth/refresh",
+        "/auth/password-resets",
+        "/auth/password-resets/confirm"
+      ],
+      "entities": [
+        "users",
+        "auth_sessions",
+        "refresh_token_families",
+        "refresh_token_credentials",
+        "password_reset_credentials"
+      ],
+      "automated_tests": [
+        "apps/api/test/security.test.ts",
+        "packages/contracts/test/contract.test.ts"
+      ],
+      "api_behavioral_proof": "UNVERIFIED beyond the safe dependency-error response covered by apps/api/test/api.test.ts.",
+      "runtime_tests": [
+        "TC-MEGA-001-16 refresh reuse",
+        "TC-MEGA-001-17 reset single-use",
+        "TC-MEGA-001-18 CSRF/CORS",
+        "packages/database/test/postgres.integration.test.ts"
+      ],
+      "runtime_status": "UNVERIFIED",
+      "acceptance": ["AC-03"]
+    },
+    {
+      "id": "PRSS-14.2-TENANT-CONTEXT",
+      "source": ["PRSS Section 14.2", "Design Section 11"],
+      "outcome": "Organization and project context are server-derived; caller identifiers never grant access.",
+      "api": [
+        "/organizations",
+        "/organizations/{organizationId}/projects",
+        "/projects/{projectId}",
+        "/projects/{projectId}/context"
+      ],
+      "entities": ["organizations", "organization_members", "projects", "project_members"],
+      "automated_tests": [],
+      "api_behavioral_proof": "UNVERIFIED",
+      "runtime_tests": [
+        "TC-MEGA-001-01 cross-tenant UUID",
+        "TC-MEGA-001-20 RLS missing predicate",
+        "packages/database/test/postgres.integration.test.ts"
+      ],
+      "runtime_status": "UNVERIFIED",
+      "acceptance": ["AC-02", "AC-05"]
+    },
+    {
+      "id": "PRSS-15.1-MEMBERSHIP-LIFECYCLE",
+      "source": ["PRSS Section 15.1"],
+      "outcome": "Invitation and membership changes immediately remove authority while preserving attribution.",
+      "api": [
+        "/projects/{projectId}/invitations",
+        "/invitations/{token}/accept",
+        "/projects/{projectId}/invitations/{invitationId}",
+        "/project-members/{membershipId}"
+      ],
+      "entities": ["invitations", "project_members", "member_scopes", "auth_sessions"],
+      "automated_tests": ["packages/domain/test/domain.test.ts"],
+      "api_behavioral_proof": "UNVERIFIED",
+      "runtime_tests": [
+        "TC-MEGA-001-03 invitation expiry",
+        "TC-MEGA-001-04 membership ended",
+        "packages/database/test/postgres.integration.test.ts"
+      ],
+      "runtime_status": "UNVERIFIED",
+      "acceptance": ["AC-04", "AC-05"]
+    },
+    {
+      "id": "PRSS-16.1-COMMAND-ATOMICITY",
+      "source": ["PRSS Section 16.1", "Design Section 7.3", "Design Section 11"],
+      "outcome": "Versioned, idempotent commands atomically record state, audit, and outbox outcomes.",
+      "api": [
+        "expected_version",
+        "Idempotency-Key",
+        "/projects/{projectId}/transitions",
+        "/projects/{projectId}/context-imports/{importId}/commit"
+      ],
+      "entities": ["entity_transitions", "idempotency_keys", "audit_events", "outbox_events"],
+      "automated_tests": [],
+      "api_behavioral_proof": "UNVERIFIED",
+      "runtime_tests": [
+        "TC-MEGA-001-09 concurrency",
+        "TC-MEGA-001-10 idempotent retry",
+        "TC-MEGA-001-11 key reuse",
+        "packages/database/test/postgres.integration.test.ts"
+      ],
+      "runtime_status": "UNVERIFIED",
+      "acceptance": ["AC-06", "AC-08"]
+    },
+    {
+      "id": "PRSS-16.2-PROJECT-LIFECYCLE",
+      "source": ["PRSS Section 16.2"],
+      "outcome": "Projects begin in Setup and use only approved lifecycle commands.",
+      "api": ["/organizations/{organizationId}/projects", "/projects/{projectId}/transitions"],
+      "entities": ["projects", "entity_transitions"],
+      "automated_tests": ["packages/domain/test/domain.test.ts"],
+      "api_behavioral_proof": "UNVERIFIED",
+      "runtime_tests": ["TC-MEGA-001-12 activation guard", "TC-MEGA-001-13 suspended mutation"],
+      "runtime_status": "UNVERIFIED",
+      "acceptance": ["AC-06"]
+    },
+    {
+      "id": "PRSS-16.3-INVITATION",
+      "source": ["PRSS Section 16.3"],
+      "outcome": "Hashed, expiring invitations create membership only after valid acceptance.",
+      "api": [
+        "/projects/{projectId}/invitations",
+        "/invitations/{token}/accept",
+        "/projects/{projectId}/invitations/{invitationId}"
+      ],
+      "entities": ["invitations", "project_members", "member_scopes"],
+      "automated_tests": [],
+      "api_behavioral_proof": "UNVERIFIED",
+      "runtime_tests": [
+        "TC-MEGA-001-03 invitation expiry",
+        "TC-MEGA-001-10 idempotent acceptance",
+        "packages/database/test/postgres.integration.test.ts"
+      ],
+      "runtime_status": "UNVERIFIED",
+      "acceptance": ["AC-04", "AC-05"]
+    },
+    {
+      "id": "PRSS-18-20-24-32-CONTROLS",
+      "source": ["PRSS Sections 18-20", "PRSS Sections 24-32"],
+      "outcome": "Audit, correlation, pagination, validation, retry, and authorization controls are observable without secret disclosure.",
+      "api": ["/projects/{projectId}/audit-events", "shared Error", "PageMeta", "Retry-After"],
+      "entities": ["audit_events", "outbox_events", "idempotency_keys"],
+      "automated_tests": [
+        "packages/contracts/test/contract.test.ts",
+        "apps/api/test/security.test.ts",
+        "apps/api/test/api.test.ts"
+      ],
+      "api_behavioral_proof": "UNVERIFIED beyond the API-foundation safe-error and correlation checks.",
+      "runtime_tests": ["TC-MEGA-001-19 denial audit/redaction"],
+      "runtime_status": "UNVERIFIED",
+      "acceptance": ["AC-05", "AC-08", "AC-09"]
+    },
+    {
+      "id": "PRSS-35-39-ASM-OQ",
+      "source": ["PRSS Sections 35-39", "ASM-001..012", "OQ-001..014"],
+      "outcome": "Provisional assumptions and unverified runtime limits remain explicit.",
+      "api": ["OpenAPI Candidate metadata", "x-vinops-response-invariants"],
+      "entities": ["all VIN-MEGA-001 entities"],
+      "automated_tests": ["packages/contracts/test/contract.test.ts"],
+      "runtime_tests": ["final evidence matrices"],
+      "runtime_status": "UNVERIFIED",
+      "acceptance": ["AC-09", "AC-12"]
+    }
+  ],
+  "out_of_scope_candidate": {
+    "checkpoint": "VIN-MEGA-002",
+    "paths": [
+      "/projects/{projectId}/documents",
+      "/documents/{documentId}",
+      "/documents/{documentId}/revisions",
+      "/revisions/{revisionId}/transitions",
+      "/revisions/{revisionId}/download"
+    ],
+    "statement": "Preserved OpenAPI Candidate paths only; they are not implementation claims or Mega-001 acceptance evidence."
+  }
+}

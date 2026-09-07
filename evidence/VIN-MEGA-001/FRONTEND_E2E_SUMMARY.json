@@ -1,0 +1,28 @@
+{
+  "checkpoint": "VIN-MEGA-001",
+  "artifact_status": "PRELIMINARY_FRONTEND_SUMMARY",
+  "recorded_on": "2026-07-30",
+  "implemented_candidate_surface": [
+    "Sign-in form and sign-out path",
+    "Server-authorized organization/project switchers",
+    "Organization, project, members, settings, LBS and WBS views",
+    "Loading, empty, denied, suspended, archived and retry/error presentation states",
+    "API client boundary with in-memory access/CSRF state and credentialed refresh fetch"
+  ],
+  "static_anchors": [
+    "apps/web/src/app.tsx",
+    "apps/web/src/api.ts",
+    "apps/web/src/app.css",
+    "apps/web/test/web.test.tsx"
+  ],
+  "browser_e2e_runner": "No browser E2E runtime result is recorded in this artifact.",
+  "api_integration_runtime": "NOT_RUN",
+  "required_future_observation": [
+    "Run the web client against the task-owned API and PostgreSQL runtime.",
+    "Verify Bearer token remains in memory, refresh uses credentials: include and browser storage contains no credentials.",
+    "Verify server-side tenant/authorization changes become denied/empty/error presentation without client-side data disclosure.",
+    "Verify project-state and invitation/membership interactions against real API responses."
+  ],
+  "runtime_status": "BLOCKED_RUNTIME",
+  "reason": "Docker/PostgreSQL/API runtime was not available; component/source inspection is not browser E2E evidence."
+}

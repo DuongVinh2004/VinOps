@@ -1,0 +1,19 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": false,
+    "composite": true,
+    "rootDir": "src",
+    "outDir": "dist",
+    "tsBuildInfoFile": "dist/worker.tsbuildinfo"
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": ["test"],
+  "references": [
+    { "path": "../../packages/config/tsconfig.build.json" },
+    { "path": "../../packages/database/tsconfig.build.json" },
+    { "path": "../../packages/domain/tsconfig.build.json" },
+    { "path": "../../packages/file/tsconfig.build.json" },
+    { "path": "../../packages/observability/tsconfig.build.json" }
+  ]
+}

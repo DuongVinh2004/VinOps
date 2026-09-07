@@ -1,0 +1,27 @@
+{
+  "result": "PASS_WITH_SKIPS",
+  "full_regression": {
+    "passed": 49,
+    "skipped": 16,
+    "failed": 0
+  },
+  "focused_runtime": {
+    "passed": 9,
+    "skipped": 0,
+    "failed": 0
+  },
+  "web_browser": "PASS",
+  "typecheck": "PASS",
+  "builds": "API/worker/web PASS",
+  "skipped_required_runtime": [
+    "baseline VIN-MEGA-001 runtime-security integration is scoped to its original database name"
+  ],
+  "commands": [
+    "pnpm test",
+    "pnpm --recursive --sort run typecheck",
+    "pnpm exec tsc -b --pretty false",
+    "vitest document-postgres/file-runtime/file-processing with task containers",
+    "migration runner 10/10",
+    "format/lint/contracts/architecture/secret/license/git diff --check"
+  ]
+}

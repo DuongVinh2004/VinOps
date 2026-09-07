@@ -1,0 +1,55 @@
+{
+  "checkpoint": "VIN-MEGA-001",
+  "artifact_status": "PRELIMINARY_STATIC_MIGRATION_EVIDENCE",
+  "recorded_on": "2026-07-30",
+  "database": "PostgreSQL only; no SQLite or in-memory substitute is accepted for tenant/RLS proof.",
+  "migration_runner": {
+    "source": "packages/database/src/migrate.ts",
+    "static_controls": [
+      "transaction advisory lock",
+      "migration checksum recording",
+      "checksum-drift refusal",
+      "migration-set verification",
+      "minimum protected-table count verification"
+    ]
+  },
+  "migration_files": [
+    {
+      "name": "001_platform_foundation.sql",
+      "path": "packages/database/migrations/001_platform_foundation.sql",
+      "sha256": "920C16C01026DD4D5C4A7FDAC67B2DAD68EF7E7A78165EBF477DEEF0C3FFDF1E",
+      "static_table_count": 29,
+      "runtime_apply": "NOT_RUN"
+    },
+    {
+      "name": "002_tenant_rls.sql",
+      "path": "packages/database/migrations/002_tenant_rls.sql",
+      "sha256": "3C00A7765D616F36D044254C149AA7321CF0D2AB3E606968FB53D79B005FC826",
+      "static_policy_count": 29,
+      "runtime_apply": "NOT_RUN"
+    }
+  ],
+  "seed": {
+    "source": "packages/database/src/seed.ts",
+    "static_guard": "Seed execution rejects database names other than vinops_mega001 or vinops_mega001_test.",
+    "runtime_seed": "NOT_RUN"
+  },
+  "runtime_commands_required": [
+    "corepack pnpm@11.15.1 --filter @vinops/database build",
+    "VINOPS_DATABASE_URL=<redacted-task-owned-url> corepack pnpm@11.15.1 --filter @vinops/database migrate",
+    "VINOPS_DATABASE_URL=<redacted-task-owned-url> corepack pnpm@11.15.1 --filter @vinops/database migration:verify",
+    "VINOPS_DATABASE_URL=<redacted-task-owned-url> corepack pnpm@11.15.1 --filter @vinops/database seed"
+  ],
+  "rollback_strategy": {
+    "mode": "forward-only",
+    "unsafe_actions_not_authorized": [
+      "DROP schema",
+      "DROP table",
+      "DROP role",
+      "volume deletion"
+    ],
+    "approved_path_if_reversal_is_needed": "Use a reviewed forward corrective migration or an environment-owner approved pre-migration backup/snapshot."
+  },
+  "runtime_status": "BLOCKED_RUNTIME",
+  "blocker": "Docker daemon was unavailable on the single permitted docker version check; no PostgreSQL migration, verification or seed command was run."
+}

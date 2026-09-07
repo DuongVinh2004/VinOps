@@ -1,0 +1,302 @@
+{
+  "fields": [
+    {
+      "field": "document_title_name",
+      "source": "apps/web/src/document-control.tsx",
+      "render_context": "document list/detail"
+    },
+    {
+      "field": "filename",
+      "source": "apps/web/src/document-control.tsx",
+      "render_context": "revision history"
+    },
+    {
+      "field": "revision_metadata_purpose",
+      "source": "apps/web/src/document-control.tsx",
+      "render_context": "revision detail"
+    },
+    {
+      "field": "review_comment",
+      "source": "apps/web/src/document-control.tsx",
+      "render_context": "review comments"
+    },
+    {
+      "field": "disposition",
+      "source": "apps/web/src/document-control.tsx",
+      "render_context": "comment dispositions"
+    },
+    {
+      "field": "annotation_text_label",
+      "source": "apps/web/src/document-control.tsx",
+      "render_context": "annotation surface"
+    },
+    {
+      "field": "transmittal_text",
+      "source": "apps/web/src/document-control.tsx",
+      "render_context": "transmittal snapshot"
+    },
+    {
+      "field": "document_code",
+      "source": "apps/web/src/document-control.tsx",
+      "render_context": "document list/detail"
+    }
+  ],
+  "payload_families": [
+    "element/event handlers",
+    "SVG payload",
+    "script-boundary text",
+    "javascript URL",
+    "data URL",
+    "encoded variants"
+  ],
+  "expected_cases": 48,
+  "executed_cases": 2,
+  "uncovered": 46,
+  "coverage_gate": "UNVERIFIED",
+  "rows": [
+    {
+      "field": "document_title_name",
+      "family": "element/event handlers",
+      "expected": "inert text/no executable DOM/no dialog/no sentinel mutation/no canary request/no unsafe URL/no signed-file request"
+    },
+    {
+      "field": "document_title_name",
+      "family": "SVG payload",
+      "expected": "inert text/no executable DOM/no dialog/no sentinel mutation/no canary request/no unsafe URL/no signed-file request"
+    },
+    {
+      "field": "document_title_name",
+      "family": "script-boundary text",
+      "expected": "inert text/no executable DOM/no dialog/no sentinel mutation/no canary request/no unsafe URL/no signed-file request"
+    },
+    {
+      "field": "document_title_name",
+      "family": "javascript URL",
+      "expected": "inert text/no executable DOM/no dialog/no sentinel mutation/no canary request/no unsafe URL/no signed-file request"
+    },
+    {
+      "field": "document_title_name",
+      "family": "data URL",
+      "expected": "inert text/no executable DOM/no dialog/no sentinel mutation/no canary request/no unsafe URL/no signed-file request"
+    },
+    {
+      "field": "document_title_name",
+      "family": "encoded variants",
+      "expected": "inert text/no executable DOM/no dialog/no sentinel mutation/no canary request/no unsafe URL/no signed-file request"
+    },
+    {
+      "field": "filename",
+      "family": "element/event handlers",
+      "expected": "inert text/no executable DOM/no dialog/no sentinel mutation/no canary request/no unsafe URL/no signed-file request"
+    },
+    {
+      "field": "filename",
+      "family": "SVG payload",
+      "expected": "inert text/no executable DOM/no dialog/no sentinel mutation/no canary request/no unsafe URL/no signed-file request"
+    },
+    {
+      "field": "filename",
+      "family": "script-boundary text",
+      "expected": "inert text/no executable DOM/no dialog/no sentinel mutation/no canary request/no unsafe URL/no signed-file request"
+    },
+    {
+      "field": "filename",
+      "family": "javascript URL",
+      "expected": "inert text/no executable DOM/no dialog/no sentinel mutation/no canary request/no unsafe URL/no signed-file request"
+    },
+    {
+      "field": "filename",
+      "family": "data URL",
+      "expected": "inert text/no executable DOM/no dialog/no sentinel mutation/no canary request/no unsafe URL/no signed-file request"
+    },
+    {
+      "field": "filename",
+      "family": "encoded variants",
+      "expected": "inert text/no executable DOM/no dialog/no sentinel mutation/no canary request/no unsafe URL/no signed-file request"
+    },
+    {
+      "field": "revision_metadata_purpose",
+      "family": "element/event handlers",
+      "expected": "inert text/no executable DOM/no dialog/no sentinel mutation/no canary request/no unsafe URL/no signed-file request"
+    },
+    {
+      "field": "revision_metadata_purpose",
+      "family": "SVG payload",
+      "expected": "inert text/no executable DOM/no dialog/no sentinel mutation/no canary request/no unsafe URL/no signed-file request"
+    },
+    {
+      "field": "revision_metadata_purpose",
+      "family": "script-boundary text",
+      "expected": "inert text/no executable DOM/no dialog/no sentinel mutation/no canary request/no unsafe URL/no signed-file request"
+    },
+    {
+      "field": "revision_metadata_purpose",
+      "family": "javascript URL",
+      "expected": "inert text/no executable DOM/no dialog/no sentinel mutation/no canary request/no unsafe URL/no signed-file request"
+    },
+    {
+      "field": "revision_metadata_purpose",
+      "family": "data URL",
+      "expected": "inert text/no executable DOM/no dialog/no sentinel mutation/no canary request/no unsafe URL/no signed-file request"
+    },
+    {
+      "field": "revision_metadata_purpose",
+      "family": "encoded variants",
+      "expected": "inert text/no executable DOM/no dialog/no sentinel mutation/no canary request/no unsafe URL/no signed-file request"
+    },
+    {
+      "field": "review_comment",
+      "family": "element/event handlers",
+      "expected": "inert text/no executable DOM/no dialog/no sentinel mutation/no canary request/no unsafe URL/no signed-file request"
+    },
+    {
+      "field": "review_comment",
+      "family": "SVG payload",
+      "expected": "inert text/no executable DOM/no dialog/no sentinel mutation/no canary request/no unsafe URL/no signed-file request"
+    },
+    {
+      "field": "review_comment",
+      "family": "script-boundary text",
+      "expected": "inert text/no executable DOM/no dialog/no sentinel mutation/no canary request/no unsafe URL/no signed-file request"
+    },
+    {
+      "field": "review_comment",
+      "family": "javascript URL",
+      "expected": "inert text/no executable DOM/no dialog/no sentinel mutation/no canary request/no unsafe URL/no signed-file request"
+    },
+    {
+      "field": "review_comment",
+      "family": "data URL",
+      "expected": "inert text/no executable DOM/no dialog/no sentinel mutation/no canary request/no unsafe URL/no signed-file request"
+    },
+    {
+      "field": "review_comment",
+      "family": "encoded variants",
+      "expected": "inert text/no executable DOM/no dialog/no sentinel mutation/no canary request/no unsafe URL/no signed-file request"
+    },
+    {
+      "field": "disposition",
+      "family": "element/event handlers",
+      "expected": "inert text/no executable DOM/no dialog/no sentinel mutation/no canary request/no unsafe URL/no signed-file request"
+    },
+    {
+      "field": "disposition",
+      "family": "SVG payload",
+      "expected": "inert text/no executable DOM/no dialog/no sentinel mutation/no canary request/no unsafe URL/no signed-file request"
+    },
+    {
+      "field": "disposition",
+      "family": "script-boundary text",
+      "expected": "inert text/no executable DOM/no dialog/no sentinel mutation/no canary request/no unsafe URL/no signed-file request"
+    },
+    {
+      "field": "disposition",
+      "family": "javascript URL",
+      "expected": "inert text/no executable DOM/no dialog/no sentinel mutation/no canary request/no unsafe URL/no signed-file request"
+    },
+    {
+      "field": "disposition",
+      "family": "data URL",
+      "expected": "inert text/no executable DOM/no dialog/no sentinel mutation/no canary request/no unsafe URL/no signed-file request"
+    },
+    {
+      "field": "disposition",
+      "family": "encoded variants",
+      "expected": "inert text/no executable DOM/no dialog/no sentinel mutation/no canary request/no unsafe URL/no signed-file request"
+    },
+    {
+      "field": "annotation_text_label",
+      "family": "element/event handlers",
+      "expected": "inert text/no executable DOM/no dialog/no sentinel mutation/no canary request/no unsafe URL/no signed-file request"
+    },
+    {
+      "field": "annotation_text_label",
+      "family": "SVG payload",
+      "expected": "inert text/no executable DOM/no dialog/no sentinel mutation/no canary request/no unsafe URL/no signed-file request"
+    },
+    {
+      "field": "annotation_text_label",
+      "family": "script-boundary text",
+      "expected": "inert text/no executable DOM/no dialog/no sentinel mutation/no canary request/no unsafe URL/no signed-file request"
+    },
+    {
+      "field": "annotation_text_label",
+      "family": "javascript URL",
+      "expected": "inert text/no executable DOM/no dialog/no sentinel mutation/no canary request/no unsafe URL/no signed-file request"
+    },
+    {
+      "field": "annotation_text_label",
+      "family": "data URL",
+      "expected": "inert text/no executable DOM/no dialog/no sentinel mutation/no canary request/no unsafe URL/no signed-file request"
+    },
+    {
+      "field": "annotation_text_label",
+      "family": "encoded variants",
+      "expected": "inert text/no executable DOM/no dialog/no sentinel mutation/no canary request/no unsafe URL/no signed-file request"
+    },
+    {
+      "field": "transmittal_text",
+      "family": "element/event handlers",
+      "expected": "inert text/no executable DOM/no dialog/no sentinel mutation/no canary request/no unsafe URL/no signed-file request"
+    },
+    {
+      "field": "transmittal_text",
+      "family": "SVG payload",
+      "expected": "inert text/no executable DOM/no dialog/no sentinel mutation/no canary request/no unsafe URL/no signed-file request"
+    },
+    {
+      "field": "transmittal_text",
+      "family": "script-boundary text",
+      "expected": "inert text/no executable DOM/no dialog/no sentinel mutation/no canary request/no unsafe URL/no signed-file request"
+    },
+    {
+      "field": "transmittal_text",
+      "family": "javascript URL",
+      "expected": "inert text/no executable DOM/no dialog/no sentinel mutation/no canary request/no unsafe URL/no signed-file request"
+    },
+    {
+      "field": "transmittal_text",
+      "family": "data URL",
+      "expected": "inert text/no executable DOM/no dialog/no sentinel mutation/no canary request/no unsafe URL/no signed-file request"
+    },
+    {
+      "field": "transmittal_text",
+      "family": "encoded variants",
+      "expected": "inert text/no executable DOM/no dialog/no sentinel mutation/no canary request/no unsafe URL/no signed-file request"
+    },
+    {
+      "field": "document_code",
+      "family": "element/event handlers",
+      "expected": "inert text/no executable DOM/no dialog/no sentinel mutation/no canary request/no unsafe URL/no signed-file request"
+    },
+    {
+      "field": "document_code",
+      "family": "SVG payload",
+      "expected": "inert text/no executable DOM/no dialog/no sentinel mutation/no canary request/no unsafe URL/no signed-file request"
+    },
+    {
+      "field": "document_code",
+      "family": "script-boundary text",
+      "expected": "inert text/no executable DOM/no dialog/no sentinel mutation/no canary request/no unsafe URL/no signed-file request"
+    },
+    {
+      "field": "document_code",
+      "family": "javascript URL",
+      "expected": "inert text/no executable DOM/no dialog/no sentinel mutation/no canary request/no unsafe URL/no signed-file request"
+    },
+    {
+      "field": "document_code",
+      "family": "data URL",
+      "expected": "inert text/no executable DOM/no dialog/no sentinel mutation/no canary request/no unsafe URL/no signed-file request"
+    },
+    {
+      "field": "document_code",
+      "family": "encoded variants",
+      "expected": "inert text/no executable DOM/no dialog/no sentinel mutation/no canary request/no unsafe URL/no signed-file request"
+    }
+  ],
+  "iteration": 4,
+  "reused_i3_raw_cases": 2,
+  "reused_i3_raw_artifact": "evidence/VIN-MEGA-002/i3/BROWSER_SECURITY_RESULTS.json",
+  "source_paths_unchanged": true
+}

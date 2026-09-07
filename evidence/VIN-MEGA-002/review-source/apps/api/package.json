@@ -1,0 +1,27 @@
+{
+  "name": "@vinops/api",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json",
+    "build": "tsc -p tsconfig.build.json",
+    "start": "node dist/main.js"
+  },
+  "dependencies": {
+    "@nestjs/common": "11.1.28",
+    "@nestjs/core": "11.1.28",
+    "@nestjs/platform-express": "11.1.28",
+    "@vinops/config": "workspace:*",
+    "@vinops/database": "workspace:*",
+    "@vinops/domain": "workspace:*",
+    "@vinops/file": "workspace:*",
+    "@vinops/observability": "workspace:*",
+    "reflect-metadata": "0.2.2",
+    "rxjs": "7.8.2"
+  },
+  "devDependencies": {
+    "@nestjs/testing": "11.1.28",
+    "pg": "8.22.0"
+  }
+}

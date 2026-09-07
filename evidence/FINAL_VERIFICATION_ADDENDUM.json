@@ -1,0 +1,22 @@
+{
+  "checkpoint": "VIN-FND-001A",
+  "recorded_after_archive_creation": true,
+  "commands": [
+    {
+      "command": "corepack pnpm@11.15.1 verify",
+      "exit": 0,
+      "result": "All repository-native gates passed; 6 test files/12 assertions, 59 modules/33 dependencies, secret scan 91 text files with 1 archive excluded, and 41 direct license declarations passed."
+    },
+    {
+      "command": "git diff --check",
+      "exit": 0,
+      "result": "No whitespace errors."
+    },
+    {
+      "command": "git status --short",
+      "exit": 0,
+      "result": "25 intentional untracked status entries in a new repository; HEAD is unborn, branch is main, and no remote exists."
+    }
+  ],
+  "note": "TEST_SUMMARY.json records the pre-archive verification snapshot (86 text files, 0 archives). The final scan includes newly created JSON evidence and the ZIP, so the final count is 91 text files and 1 excluded archive. Both scans passed."
+}

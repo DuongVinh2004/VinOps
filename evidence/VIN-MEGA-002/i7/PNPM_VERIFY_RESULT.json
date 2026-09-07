@@ -1,0 +1,9 @@
+{
+  "command": "pnpm verify",
+  "persistent_child": true,
+  "exit_code": 1,
+  "status": "FAIL",
+  "failure": "repository verify script invoked corepack, which is unavailable in the execution environment (corepack is not recognized).",
+  "log": "evidence/VIN-MEGA-002/i7/pnpm-verify-i7.log",
+  "no_second_verify_started": true
+}

@@ -1,0 +1,6 @@
+{
+  "status": "UNVERIFIED",
+  "side_effect_assertions": "The first harness recorded a side_effect_assertion flag but did not capture per-row before/after database or audit/outbox state hashes.",
+  "impact": "AC-05 is not promoted to PASS; raw HTTP rows remain preserved for rerun with a complete assertion harness.",
+  "source_changed": false
+}

@@ -1,0 +1,58 @@
+{
+  "checkpoint": "VIN-FND-001A",
+  "iteration": 1,
+  "recorded_at": "2026-07-30",
+  "host": {
+    "os": "Windows",
+    "node_local_verifier": "v24.15.0",
+    "node_exact_repository_pin": "24.18.0",
+    "pnpm": "11.15.1"
+  },
+  "commands": [
+    {
+      "command": "git init -b main",
+      "exit": 0,
+      "result": "Created a new local repository; no commit, push, PR, or remote was created."
+    },
+    {
+      "command": "corepack pnpm@11.15.1 install --frozen-lockfile --reporter=append-only",
+      "exit": 0,
+      "result": "All 7 workspace projects matched pnpm-lock.yaml."
+    },
+    {
+      "command": "corepack pnpm@11.15.1 peers check",
+      "exit": 0,
+      "result": "No peer dependency issues found."
+    },
+    {
+      "command": "corepack pnpm@11.15.1 verify",
+      "exit": 0,
+      "result": "Format, lint, strict typecheck, 12 tests, OpenAPI/no-drift, architecture, build, secret scan, and direct-license policy passed."
+    },
+    {
+      "command": "corepack pnpm@11.15.1 audit --audit-level high",
+      "exit": "POLICY_DENIED",
+      "result": "Not executed: the environment denied registry egress because it would transmit dependency-graph metadata. No advisory result, waiver, or exception exists."
+    },
+    {
+      "command": "docker version",
+      "exit": 1,
+      "result": "Docker CLI 29.4.0 is present; daemon pipe is unavailable. No retry, start, pull, or build was attempted."
+    },
+    {
+      "command": "clean-room: install --frozen-lockfile; format:check; lint; typecheck; test; contracts:verify; architecture:check; build",
+      "exit": 0,
+      "result": "A source-only copy passed frozen install, format/lint/typecheck, 12 tests, contract/no-drift, architecture, and build."
+    },
+    {
+      "command": "clean-room cleanup of .tmp/vinops-fnd001a-cleanroom",
+      "exit": 1,
+      "result": "Source files were task-created, but removal of package-manager hardlinks was denied because their targets resolve outside the workspace. No unsafe bypass was used."
+    },
+    {
+      "command": "i3 archive manifest/hash verification",
+      "exit": 0,
+      "result": "Nine ZIP entries (eight readiness artifacts plus manifest) were extracted and every manifest size/hash matched."
+    }
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "retained": {
+    "label": "retained",
+    "actor_id": "00000000-0000-4000-8000-000000000101",
+    "project_id": "00000000-0000-4000-8000-000000000301",
+    "transmittal_id": "00000000-0000-4000-8000-000000000941",
+    "correlation_id": "7b1d5383-bb26-4fb1-9f0e-310389111fa1",
+    "statement": "SELECT id, project_id, code, purpose, status, created_by, created_at, issued_at, snapshot_sha256, version::text FROM vinops.transmittals WHERE id = $1::uuid",
+    "status": "PASS",
+    "session": {
+      "current_user": "vinops_app",
+      "app_user_id": "00000000-0000-4000-8000-000000000101",
+      "app_correlation_id": "7b1d5383-bb26-4fb1-9f0e-310389111fa1"
+    },
+    "error": {
+      "message": "infinite recursion detected in policy for relation \"transmittals\"",
+      "code": "42P17",
+      "detail": null,
+      "hint": null,
+      "schema": null,
+      "table": null,
+      "column": null,
+      "constraint": null,
+      "position": null,
+      "routine": "fireRIRrules",
+      "query": null,
+      "sqlstate": "42P17",
+      "relation": "transmittals",
+      "statement": "SELECT id, project_id, code, purpose, status, created_by, created_at, issued_at, snapshot_sha256, version::text FROM vinops.transmittals WHERE id = $1::uuid"
+    }
+  },
+  "fresh": {
+    "label": "fresh",
+    "actor_id": "00000000-0000-4000-8000-000000000101",
+    "project_id": "00000000-0000-4000-8000-000000000301",
+    "transmittal_id": "00000000-0000-4000-8000-000000000941",
+    "correlation_id": "7b1d5383-bb26-4fb1-9f0e-310389111fa1",
+    "statement": "SELECT id, project_id, code, purpose, status, created_by, created_at, issued_at, snapshot_sha256, version::text FROM vinops.transmittals WHERE id = $1::uuid",
+    "status": "PASS",
+    "session": {
+      "current_user": "vinops_app",
+      "app_user_id": "00000000-0000-4000-8000-000000000101",
+      "app_correlation_id": "7b1d5383-bb26-4fb1-9f0e-310389111fa1"
+    },
+    "error": {
+      "message": "infinite recursion detected in policy for relation \"transmittals\"",
+      "code": "42P17",
+      "detail": null,
+      "hint": null,
+      "schema": null,
+      "table": null,
+      "column": null,
+      "constraint": null,
+      "position": null,
+      "routine": "fireRIRrules",
+      "query": null,
+      "sqlstate": "42P17",
+      "relation": "transmittals",
+      "statement": "SELECT id, project_id, code, purpose, status, created_by, created_at, issued_at, snapshot_sha256, version::text FROM vinops.transmittals WHERE id = $1::uuid"
+    }
+  },
+  "same_sqlstate": true,
+  "same_relation": true,
+  "same_statement": true,
+  "canonical_schema_reproduces_42P17": true
+}

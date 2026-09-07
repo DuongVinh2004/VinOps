@@ -1,0 +1,13 @@
+{
+  "checkpoint_id": "VIN-MEGA-002",
+  "from_iteration": 7,
+  "to_iteration": 8,
+  "frozen_rows": 10800,
+  "frozen_routes": 18,
+  "reused_rows": 10800,
+  "invalidated_rows": 0,
+  "rerun_rows": 0,
+  "arithmetic": "10800 = 10800 + 0",
+  "reason": "No product source, canonical migration, fixture, or auth behavior changed; i7 matrix remains the valid evidence for unchanged behavior.",
+  "final_matrix_sha256": "2b6da3e3a6e0112e99c48e66897114047a8ccf74dcedccb5ce46ebb7ebada83c"
+}

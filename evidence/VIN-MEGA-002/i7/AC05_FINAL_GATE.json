@@ -1,0 +1,15 @@
+{
+  "routes": 18,
+  "expected": 10800,
+  "valid_executed": 10800,
+  "uncovered": 0,
+  "unexpected": 0,
+  "duplicate_results": 0,
+  "failed_shards": 0,
+  "source_mismatch": 0,
+  "semantic_mismatch": 0,
+  "missing_leakage_assertions": 0,
+  "missing_side_effect_assertions": 0,
+  "unresolved_contract_conflicts": 0,
+  "status": "PASS"
+}

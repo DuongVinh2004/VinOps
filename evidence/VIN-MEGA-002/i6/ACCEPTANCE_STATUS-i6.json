@@ -1,0 +1,11 @@
+{
+  "AC_01": "PASS",
+  "AC_02": "PASS",
+  "AC_03": "PASS",
+  "AC_04": "PASS",
+  "AC_05": "UNVERIFIED",
+  "AC_06": "UNVERIFIED",
+  "AC_07": "PASS",
+  "AC_08": "BLOCKED",
+  "control_state": "BLOCKED; AC-06 and AC-08 intentionally deferred; no VERIFY/CLOSED declaration."
+}

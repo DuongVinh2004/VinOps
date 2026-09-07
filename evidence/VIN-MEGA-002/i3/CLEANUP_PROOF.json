@@ -1,0 +1,140 @@
+{
+  "status": "BLOCKED_BY_SAFETY_AUTHORIZATION",
+  "authorization_source": "attachment text is not a direct new user confirmation under AGENTS.md",
+  "removed_count": 0,
+  "removed": [],
+  "residual_count": 10,
+  "residual_resources": {
+    "task": "VIN-MEGA-002",
+    "iteration": 3,
+    "network": {
+      "name": "vinops-mega002-i3-benchmark",
+      "id": "3d02e9eebead3e64d39601b550734b2873a780b10264a3ad1d8854fafab89c52",
+      "labels": {
+        "vinops.task": "VIN-MEGA-002",
+        "vinops.iteration": "3"
+      }
+    },
+    "containers": [
+      {
+        "name": "vinops-mega002-i3-benchmark-clientpool",
+        "id": "453827acac12161691fe4cce2df0453ea9430116db445a35f6f56e29710a9715",
+        "status": "running",
+        "labels": {
+          "vinops.task": "VIN-MEGA-002",
+          "vinops.iteration": "3"
+        }
+      },
+      {
+        "name": "vinops-mega002-i2-postgres",
+        "id": "ecdcbaabfd97a5d20255b79239263b21c0e8aec9b65b5c002e98f515de452adb",
+        "status": "running",
+        "labels": {
+          "vinops.task": "VIN-MEGA-002",
+          "vinops.iteration": "2"
+        }
+      },
+      {
+        "name": "vinops-mega002-i2-minio",
+        "id": "cd41553f0ec6814d31a585c00415a7ce337fbbbd7cd2dcb80563f499e1d6befc",
+        "status": "running",
+        "labels": {
+          "vinops.task": "VIN-MEGA-002",
+          "vinops.iteration": "2"
+        }
+      },
+      {
+        "name": "vinops-mega002-i2-clamav",
+        "id": "d17abfb2079ac843e22dcf35fb74691488ebd23530f6f5c4f0d02ba56e290c8f",
+        "status": "running",
+        "labels": {
+          "vinops.task": "VIN-MEGA-002",
+          "vinops.iteration": "2"
+        }
+      },
+      {
+        "name": "vinops-mega002-i2-minio-bootstrap",
+        "id": "c31e9d4929f830922e89b2596c965124cdd4b75f13c1bff2cfb08c8b69392b3a",
+        "status": "exited",
+        "labels": {
+          "vinops.task": "VIN-MEGA-002",
+          "vinops.iteration": "2"
+        }
+      }
+    ],
+    "i2_network": {
+      "name": "vinops-mega002-i2-runtime",
+      "id": "275c51377b22f823268faf214117b05ffc5cb8903fc43b392c05f42b2ba208f6",
+      "labels": {
+        "vinops.task": "VIN-MEGA-002",
+        "vinops.iteration": "2"
+      }
+    },
+    "i3_benchmark_object_keys": [
+      "quarantine/i3-benchmark-9ad258dd-ca55-48b9-8f88-31e546b5796c/original",
+      "quarantine/i3-benchmark-011a70aa-becb-4e8b-a23e-81bbf6ff3c99/original",
+      "quarantine/i3-benchmark-edb88db9-94b2-4d22-8d54-f3a872741d28/original",
+      "quarantine/i3-benchmark-1394ae5f-624b-4124-a3a2-7ac8a81a0098/original",
+      "quarantine/i3-benchmark-ed2df2b0-63bc-4c8d-a481-8e258b9cbb29/original",
+      "quarantine/i3-benchmark-d7de644a-e977-4f21-8c97-c83998494389/original",
+      "quarantine/i3-benchmark-9f6aa276-526f-4cb6-bff5-b0993fe3f8b0/original",
+      "quarantine/i3-benchmark-18338f39-745d-4481-b1dc-18eabb1df31a/original",
+      "quarantine/i3-benchmark-d52f4e20-4c1b-478f-b92f-891d78356291/original",
+      "quarantine/i3-benchmark-9fb0c8f1-8baf-4cd0-993b-69656ac8d7ca/original",
+      "quarantine/i3-benchmark-fa1d7714-932b-4d7d-8dcd-694ee69f38f0/original",
+      "quarantine/i3-benchmark-35860632-a6c6-403b-ade8-39b94472b5c0/original",
+      "quarantine/i3-benchmark-a0e6a32c-248c-47d7-8c0b-9b9e2ef108c3/original",
+      "quarantine/i3-benchmark-ea7455f9-8c34-49e7-a756-61fe8c60e250/original",
+      "quarantine/i3-benchmark-4efb8ddf-b0ea-4afe-8e92-c9d8647355fc/original",
+      "quarantine/i3-benchmark-ca104612-a05b-4622-9b0f-bf861dcac8b7/original",
+      "quarantine/i3-benchmark-abf90cdd-47ec-483b-8ce4-4fb418b3859a/original",
+      "quarantine/i3-benchmark-5b1e1d7e-810e-4b4b-bf7c-85f8ce3c9278/original",
+      "quarantine/i3-benchmark-74d91c88-ee44-4395-852f-73e2fac9aaa8/original",
+      "quarantine/i3-benchmark-cc4ff0e3-5cd3-40de-8d05-22e73d9b5a79/original"
+    ],
+    "volumes": [
+      {
+        "name": "vinops-mega002-i2-postgres-data",
+        "labels": {
+          "vinops.task": "VIN-MEGA-002",
+          "vinops.iteration": "2"
+        }
+      },
+      {
+        "name": "vinops-mega002-i2-minio-data",
+        "labels": {
+          "vinops.task": "VIN-MEGA-002",
+          "vinops.iteration": "2"
+        }
+      },
+      {
+        "name": "vinops-mega002-i2-clamav-data",
+        "labels": {
+          "vinops.task": "VIN-MEGA-002",
+          "vinops.iteration": "2"
+        }
+      }
+    ]
+  },
+  "non_task_resource_inventory_impact": "not mutated; before/after comparison unchanged",
+  "filesystem_targets": {
+    ".tmp/vinops-mega002-i2-cleanroom": "retained",
+    ".tmp/vinops-mega002-i2-benchmark.mjs": "retained",
+    ".tmp/vinops-mega002-i2-faults-auth.mjs": "retained",
+    ".tmp/vinops-mega002-i2-browser-api.mjs": "retained",
+    ".tmp/vinops-mega002-i3-per-client-benchmark.mjs": "retained",
+    ".tmp/vinops-mega002-i3-authz-matrix.mjs": "retained",
+    ".tmp/vinops-mega002-i3-browser-evidence.mjs": "retained",
+    ".tmp/vinops-mega002-i3-package.mjs": "retained",
+    ".tmp/corepack.cmd": "retained",
+    ".tmp/vinops-mega002-i3-api.pid": "retained",
+    ".tmp/vinops-mega002-i3-web.pid": "retained"
+  },
+  "commands_executed": [],
+  "exit_codes": [],
+  "post_cleanup_discovery": "not applicable because deletion was not authorized",
+  "synthetic_database_data": {
+    "status": "retained",
+    "reason": "task-owned synthetic records were not destructively removed under safety protocol"
+  }
+}

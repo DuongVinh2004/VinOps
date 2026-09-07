@@ -1,0 +1,46 @@
+{
+  "node": "24.18.0",
+  "pnpm": "11.15.1",
+  "results": [
+    [
+      "pnpm install --frozen-lockfile --offline",
+      0,
+      "PASS"
+    ],
+    [
+      "pnpm --filter @vinops/database run migration:verify",
+      0,
+      "PASS: 10 migrations verified"
+    ],
+    [
+      "pnpm --filter @vinops/database run seed",
+      0,
+      "PASS: deterministic platform seeded"
+    ],
+    [
+      "pnpm verify",
+      0,
+      "PASS: 49 passed / 16 skipped / 0 failed; all gates green"
+    ],
+    [
+      "focused runtime vitest (fresh PostgreSQL/MinIO/ClamAV)",
+      0,
+      "PASS: 9 passed / 0 skipped / 0 failed"
+    ],
+    [
+      "faithful aggregate 20 Mbps benchmark",
+      0,
+      "MEASURED: strict NFR FAIL; p95 100312 ms"
+    ],
+    [
+      "real fault-injection matrix",
+      0,
+      "PASS after worker 404 recognition fix"
+    ],
+    [
+      "real auth and browser matrix",
+      0,
+      "PASS"
+    ]
+  ]
+}

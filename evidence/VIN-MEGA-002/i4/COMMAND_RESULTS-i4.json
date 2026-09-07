@@ -1,0 +1,34 @@
+{
+  "commands": [
+    {
+      "command": "node .tmp/vinops-mega002-i4-diagnostics.mjs",
+      "exit_code": 0,
+      "result": "AC-03 fresh i4 direct and app-path controls PASS; root cause isolated to reused i2 MinIO runtime state."
+    },
+    {
+      "command": "node .tmp/vinops-mega002-i4-capture.mjs",
+      "exit_code": 0,
+      "result": "MinIO stats, trace, and PostgreSQL lock/activity snapshot captured."
+    },
+    {
+      "command": "real browser owner/outsider/unauthenticated deep-link checks",
+      "exit_code": 0,
+      "result": "6 of 14 required deep-link cases executed; 8 uncovered; no observed failures."
+    },
+    {
+      "command": "AC-05 frozen authorization matrix",
+      "exit_code": 0,
+      "result": "0 of 10,800 rows reconciled/executed in i4; coverage UNVERIFIED; no i3 aggregate rows reused."
+    },
+    {
+      "command": "pnpm verify (single i4 final invocation via local shim)",
+      "exit_code": 124,
+      "result": "tool timeout at 124 seconds; no source drift; i3 preserved gate evidence remains available."
+    },
+    {
+      "command": "git diff --check",
+      "exit_code": 0,
+      "result": "clean"
+    }
+  ]
+}

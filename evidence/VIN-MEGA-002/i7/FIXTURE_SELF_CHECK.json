@@ -1,0 +1,31 @@
+{
+  "status": "PASS",
+  "fixture_namespace": "VIN-MEGA-002/i7",
+  "checks": [
+    {
+      "semantic_scope": "in-scope resource",
+      "project_id": "00000000-0000-4000-8000-000000000301",
+      "organization_id": "00000000-0000-4000-8000-000000000201",
+      "exists": true
+    },
+    {
+      "semantic_scope": "same-project out-of-scope resource",
+      "project_id": "00000000-0000-4000-8000-000000000301",
+      "organization_id": "00000000-0000-4000-8000-000000000201",
+      "exists": true,
+      "resource_exists": false
+    },
+    {
+      "semantic_scope": "other project same tenant",
+      "project_id": "00000000-0000-4000-8000-000000000302",
+      "organization_id": "00000000-0000-4000-8000-000000000201",
+      "exists": true
+    },
+    {
+      "semantic_scope": "other tenant",
+      "project_id": "00000000-0000-4000-8000-000000000303",
+      "organization_id": "00000000-0000-4000-8000-000000000202",
+      "exists": true
+    }
+  ]
+}

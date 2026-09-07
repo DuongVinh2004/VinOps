@@ -1,0 +1,14 @@
+{
+  "migration": "packages/database/migrations/011_transmittal_rls_recursion_fix.sql",
+  "migration_sha256": "A06E9F77B8056E7B0CE4B1A96EFE335C3AD2BD0B6EC9FADC58FA6F38BB95485E",
+  "operation": "forward_only_drop_and_recreate_transmittal_items_scoped",
+  "databases": [
+    { "database": "vinops_mega002_test", "before_schema_migrations": 10, "after_schema_migrations": 11, "exit_code": 0 },
+    { "database": "vinops_mega002_i8_test", "before_schema_migrations": 10, "after_schema_migrations": 11, "exit_code": 0 },
+    { "database": "vinops_mega002_i2_test9", "before_schema_migrations": 0, "after_schema_migrations": 11, "exit_code": 0 }
+  ],
+  "rls_disabled": false,
+  "row_security_bypass": false,
+  "manual_hotfix": false,
+  "status": "PASS"
+}

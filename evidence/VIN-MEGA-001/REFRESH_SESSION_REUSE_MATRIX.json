@@ -1,0 +1,20 @@
+{
+  "checkpoint": "VIN-MEGA-001",
+  "iteration": 4,
+  "status": "PASS",
+  "boundary": "real Nest HTTP plus vinops_app PostgreSQL role and verifier role",
+  "cases": {
+    "login_session": "PASS",
+    "refresh_rotation": "PASS",
+    "old_refresh_reuse_detected": "PASS",
+    "family_revoked_on_reuse": "PASS",
+    "rotated_credential_rejected_after_reuse": "PASS",
+    "revoke_one_preserves_other_session": "PASS",
+    "revoke_all_invalidates_all_sessions": "PASS",
+    "password_reset_enumeration_safe": "PASS",
+    "password_reset_single_use": "PASS",
+    "csrf_negative": "PASS",
+    "cors_negative_403": "PASS"
+  },
+  "test": "apps/api/test/runtime-security.integration.test.ts"
+}

@@ -1,0 +1,71 @@
+{
+  "api_base": "http://127.0.0.1:4610",
+  "classification": "UNVERIFIED",
+  "login": { "method": "POST", "path": "/api/v1/auth/sessions", "status": 200 },
+  "unauthenticated_malformed_upload": {
+    "method": "POST",
+    "path": "/api/v1/upload-sessions/00000000-0000-4000-8000-000000000921/complete",
+    "status": 401,
+    "expected": 401,
+    "result": "PASS",
+    "body_sha256": "044ce27f64c7056fb07d6b30713902e6874beee1f7c8d00089e839d56c13c511",
+    "body_length": 155,
+    "body_keys": ["code", "message_key", "correlation_id", "retryable"],
+    "correlation_id": "e82ce11a-cc10-4170-ba0f-bd8885616b6d"
+  },
+  "authenticated_malformed_upload": {
+    "method": "POST",
+    "path": "/api/v1/upload-sessions/00000000-0000-4000-8000-000000000921/complete",
+    "status": 422,
+    "expected": 422,
+    "result": "PASS",
+    "body_sha256": "1e267d4a6ba35cd240e96d02b30ebf2a5156cbe78ae73a69b69325cfd8becf14",
+    "body_length": 140,
+    "body_keys": ["code", "message_key", "correlation_id", "retryable"],
+    "correlation_id": "18453e0d-d359-46ed-8713-01b2803a7a73"
+  },
+  "authorized_existing_transmittal": {
+    "method": "GET",
+    "path": "/api/v1/transmittals/00000000-0000-4000-8000-000000000941",
+    "status": 404,
+    "expected": 200,
+    "result": "UNVERIFIED",
+    "reason": "The required existing fixture was not available; retained and fresh canonical role probes both raise 42P17 before an existing-resource response.",
+    "body_sha256": "61098cdd319def4b6c62bd4e2dc91d73d390603462d795eb808ccf62e8c36683",
+    "body_length": 147,
+    "body_keys": ["code", "message_key", "correlation_id", "retryable"],
+    "correlation_id": "f0e1f157-ce65-4fac-b84f-f0d2d2ef1fd4"
+  },
+  "authorized_nonexistent_transmittal": {
+    "method": "GET",
+    "path": "/api/v1/transmittals/00000000-0000-4000-8000-00000000dead",
+    "status": 404,
+    "expected": 404,
+    "result": "PASS",
+    "body_sha256": "b65958a0b7d78ce70512e0ba3de86b4d973b596448690b9ddd7fe20a8102ba51",
+    "body_length": 147,
+    "body_keys": ["code", "message_key", "correlation_id", "retryable"],
+    "correlation_id": "5215f09c-0af0-45f2-b301-4d797e926418"
+  },
+  "forbidden_cross_tenant_transmittal": {
+    "method": "GET",
+    "path": "/api/v1/transmittals/00000000-0000-4000-8000-000000000941",
+    "status": 404,
+    "expected": "403_or_404",
+    "result": "PASS",
+    "metadata_leakage": false,
+    "body_sha256": "32e071596c28067d3c95cde34dc770a5cd8fc2c1f47cc719003801eab9590e7b",
+    "body_length": 147,
+    "body_keys": ["code", "message_key", "correlation_id", "retryable"],
+    "correlation_id": "fc858233-1e4b-489f-9b52-cb4209a5923b",
+    "outsider_fixture": "i7-outsider-3b6ac9d5-1df6-4d60-8743-3a01f5ffca70@vinops.test"
+  },
+  "authenticated_valid_uploader": {
+    "result": "UNVERIFIED",
+    "reason": "No isolated valid upload-session/file graph was available without altering protected migration/runtime state; the canonical RLS defect requires a forbidden migration correction."
+  },
+  "forbidden_uploader": {
+    "result": "UNVERIFIED",
+    "reason": "No isolated uploader fixture was created; no mutation, scan, outbox, or signed URL assertion was attempted outside the required real-HTTP boundary."
+  }
+}

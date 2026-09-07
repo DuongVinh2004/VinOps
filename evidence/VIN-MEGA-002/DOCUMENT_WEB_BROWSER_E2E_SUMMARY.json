@@ -1,0 +1,17 @@
+{
+  "result": "PASS_WITH_LIMITATIONS",
+  "browser": "Codex in-app browser",
+  "checks": [
+    "real sign-in with deterministic synthetic account",
+    "Documents navigation",
+    "document list/search surface",
+    "detail and immutable revision history",
+    "current/superseded state visible",
+    "review/distribution UI present",
+    "memory-only auth state visible"
+  ],
+  "unverified": [
+    "full browser upload and deep-link matrix",
+    "negative XSS and stale-version visual assertions"
+  ]
+}

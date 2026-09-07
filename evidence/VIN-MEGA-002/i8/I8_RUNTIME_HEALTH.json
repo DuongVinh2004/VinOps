@@ -1,0 +1,15 @@
+{
+  "api": {
+    "pid": 21288,
+    "port": 4610,
+    "health_live": { "status_code": 200, "body": "{\"status\":\"live\"}" },
+    "health_ready": { "status_code": 200, "body": "{\"status\":\"ready\"}" }
+  },
+  "postgres": {
+    "container_id": "29b49c3bd124200b3a2b4d1dc3726313fc12064f957b6a306058c8da895fbe45",
+    "database": "vinops_mega002_test",
+    "fresh_database": "vinops_mega002_i8_test"
+  },
+  "runtime_mutation": "none",
+  "cleanup": "not_performed"
+}

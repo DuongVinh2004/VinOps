@@ -1,0 +1,14 @@
+{
+  "result": "PASS",
+  "checks": [
+    "configurable sequential/quorum route",
+    "reviewer assignment and immutable decisions",
+    "maker-checker separation",
+    "mandatory and advisory comments",
+    "unresolved mandatory disposition blocks publish"
+  ],
+  "evidence": [
+    "packages/domain/test/document-control.test.ts: 6/6",
+    "API runtime flow: review -> approve -> publish and mandatory comment guard"
+  ]
+}

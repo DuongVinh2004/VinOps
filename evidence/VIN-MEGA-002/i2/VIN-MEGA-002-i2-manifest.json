@@ -1,0 +1,38 @@
+{
+  "project": "VinOps",
+  "checkpoint_id": "VIN-MEGA-002",
+  "iteration": 2,
+  "status": "BLOCKED",
+  "context_mode": "STRICT",
+  "evidence_mode": "PATCH_FILE",
+  "generated_at": "2026-08-02T13:44:50.797Z",
+  "source_fingerprint_before": "b819f50a568c6da11c2b2b8f258053fc0536fe19f6e9faa8b8e02cc179a6a1f7",
+  "source_fingerprint_after": "94ff9f64896bf640f89d80fd993aeb8dc6871a05c87f6bf6b02cff556c41e9ae",
+  "source_files_before": 183,
+  "source_files_after": 183,
+  "changed_source_test_script_files": [
+    "apps/worker/src/file-processing-worker.ts",
+    "apps/worker/test/file-processing.integration.test.ts",
+    "packages/database/src/seed.ts",
+    "packages/database/test/document-postgres.integration.test.ts"
+  ],
+  "change_budget": {
+    "source_test_script_changed": 4,
+    "limit": 20,
+    "migrations_changed": 0,
+    "dependencies_changed": 0
+  },
+  "benchmark": "FAIL_STRICT_NFR",
+  "cleanup": "BLOCKED_BY_SAFETY_AUTHORIZATION",
+  "required_artifacts": [
+    "VIN-MEGA-002-i2-evidence-verifiable.zip",
+    "VIN-MEGA-002-i2-review-verifiable.zip",
+    "VIN-MEGA-002-i2-source.delta.patch"
+  ],
+  "i1_archives_preserved_byte_identical": true,
+  "artifact_hashes": {
+    "evidence_zip_sha256": "10E9920C5F80627B8BA5C11EC5ED6951C3A6522A48A460C2A1952A6FCA8B9CE5",
+    "review_zip_sha256": "F09D96DA5BA7478C8C804D808BD985ADD1117D780EC75ABD1BAEA2E161789039",
+    "source_delta_patch_sha256": "7D734F4BF544D3B19CA4370C352A3B6C9550B10B8949001F819476F0E36572A5"
+  }
+}

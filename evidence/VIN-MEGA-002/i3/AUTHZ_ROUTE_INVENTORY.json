@@ -1,0 +1,132 @@
+{
+  "generated_from": "apps/api/src/platform.controller.ts",
+  "route_count": 18,
+  "routes": [
+    {
+      "operation_id": "listDocuments",
+      "method": "GET",
+      "path": "/api/v1/projects/:projectId/documents",
+      "source_line": 643,
+      "implemented": true
+    },
+    {
+      "operation_id": "createDocument",
+      "method": "POST",
+      "path": "/api/v1/projects/:projectId/documents",
+      "source_line": 660,
+      "implemented": true
+    },
+    {
+      "operation_id": "documentDetail",
+      "method": "GET",
+      "path": "/api/v1/documents/:documentId",
+      "source_line": 704,
+      "implemented": true
+    },
+    {
+      "operation_id": "documentRevisionHistory",
+      "method": "GET",
+      "path": "/api/v1/documents/:documentId/revisions",
+      "source_line": 718,
+      "implemented": true
+    },
+    {
+      "operation_id": "createRevision",
+      "method": "POST",
+      "path": "/api/v1/documents/:documentId/revisions",
+      "source_line": 733,
+      "implemented": true
+    },
+    {
+      "operation_id": "authorizeUploadPart",
+      "method": "POST",
+      "path": "/api/v1/upload-sessions/:uploadSessionId/parts/:partNumber/authorization",
+      "source_line": 760,
+      "implemented": true
+    },
+    {
+      "operation_id": "completeUpload",
+      "method": "POST",
+      "path": "/api/v1/upload-sessions/:uploadSessionId/complete",
+      "source_line": 777,
+      "implemented": true
+    },
+    {
+      "operation_id": "transitionRevision",
+      "method": "POST",
+      "path": "/api/v1/revisions/:revisionId/transitions",
+      "source_line": 804,
+      "implemented": true
+    },
+    {
+      "operation_id": "addReviewComment",
+      "method": "POST",
+      "path": "/api/v1/revisions/:revisionId/comments",
+      "source_line": 848,
+      "implemented": true
+    },
+    {
+      "operation_id": "disposeReviewComment",
+      "method": "POST",
+      "path": "/api/v1/review-comments/:commentId/dispositions",
+      "source_line": 884,
+      "implemented": true
+    },
+    {
+      "operation_id": "addAnnotation",
+      "method": "POST",
+      "path": "/api/v1/revisions/:revisionId/annotations",
+      "source_line": 905,
+      "implemented": true
+    },
+    {
+      "operation_id": "previewRevision",
+      "method": "GET",
+      "path": "/api/v1/revisions/:revisionId/preview",
+      "source_line": 941,
+      "implemented": true
+    },
+    {
+      "operation_id": "downloadRevision",
+      "method": "GET",
+      "path": "/api/v1/revisions/:revisionId/download",
+      "source_line": 954,
+      "implemented": true
+    },
+    {
+      "operation_id": "reviewInbox",
+      "method": "GET",
+      "path": "/api/v1/projects/:projectId/review-inbox",
+      "source_line": 967,
+      "implemented": true
+    },
+    {
+      "operation_id": "createTransmittal",
+      "method": "POST",
+      "path": "/api/v1/projects/:projectId/transmittals",
+      "source_line": 981,
+      "implemented": true
+    },
+    {
+      "operation_id": "transmittalDetail",
+      "method": "GET",
+      "path": "/api/v1/transmittals/:transmittalId",
+      "source_line": 1036,
+      "implemented": true
+    },
+    {
+      "operation_id": "archiveDocument",
+      "method": "POST",
+      "path": "/api/v1/documents/:documentId/archive",
+      "source_line": 1048,
+      "implemented": true
+    },
+    {
+      "operation_id": "restoreDocument",
+      "method": "POST",
+      "path": "/api/v1/documents/:documentId/restore",
+      "source_line": 1067,
+      "implemented": true
+    }
+  ]
+}

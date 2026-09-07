@@ -1,0 +1,56 @@
+diff --git i1/evidence/VIN-MEGA-002/review-source/apps/worker/src/file-processing-worker.ts i2/.tmp/vinops-mega002-i2-current-source/apps/worker/src/file-processing-worker.ts
+index 593cf35..3b570cc 100644
+--- i1/evidence/VIN-MEGA-002/review-source/apps/worker/src/file-processing-worker.ts
++++ i2/.tmp/vinops-mega002-i2-current-source/apps/worker/src/file-processing-worker.ts
+@@ -185,7 +185,11 @@ export class FileProcessingWorker {
+       bytes = await this.storage.getObject(claim.quarantine_object_key);
+     } catch (error) {
+       const code = safeErrorCode(error);
+-      if (code !== 'S3_HTTP_404' && code !== 'S3_OBJECT_NOT_FOUND') {
++      if (
++        code !== 'S3_HTTP_404' &&
++        code !== 'S3_OBJECT_NOT_FOUND' &&
++        code !== 'S3_REQUEST_FAILED:HTTP_404'
++      ) {
+         throw error;
+       }
+     }
+diff --git i1/evidence/VIN-MEGA-002/review-source/apps/worker/test/file-processing.integration.test.ts i2/.tmp/vinops-mega002-i2-current-source/apps/worker/test/file-processing.integration.test.ts
+index c9d9d07..abce909 100644
+--- i1/evidence/VIN-MEGA-002/review-source/apps/worker/test/file-processing.integration.test.ts
++++ i2/.tmp/vinops-mega002-i2-current-source/apps/worker/test/file-processing.integration.test.ts
+@@ -30,7 +30,7 @@ let workerDatabase: VinopsDatabase | undefined;
+ beforeAll(() => {
+   if (!runtimeConfigured || databaseUrl === undefined) return;
+   const databaseName = new URL(databaseUrl).pathname.replace(/^\//u, '');
+-  if (!/^vinops_mega002_i1_test\d*$/u.test(databaseName)) {
++  if (!/^vinops_mega002_i[12]_test\d*$/u.test(databaseName)) {
+     throw new Error('Worker runtime test requires an isolated VIN-MEGA-002 database.');
+   }
+   owner = new Pool({
+diff --git i1/evidence/VIN-MEGA-002/review-source/packages/database/src/seed.ts i2/.tmp/vinops-mega002-i2-current-source/packages/database/src/seed.ts
+index acd2fa7..be08af6 100644
+--- i1/evidence/VIN-MEGA-002/review-source/packages/database/src/seed.ts
++++ i2/.tmp/vinops-mega002-i2-current-source/packages/database/src/seed.ts
+@@ -25,7 +25,7 @@ const seedIds = {
+ 
+ function assertTaskOwnedDatabase(connectionString: string): void {
+   const database = new URL(connectionString).pathname.replace(/^\//u, '');
+-  if (!/^vinops_mega00[12](?:_test|_i1_test)?$/u.test(database)) {
++  if (!/^vinops_mega00[12](?:_test|_i[12]_test)?$/u.test(database)) {
+     throw new Error(
+       'Deterministic seed may run only against a task-owned VinOps Mega 001 or Mega 002 database.',
+     );
+diff --git i1/evidence/VIN-MEGA-002/review-source/packages/database/test/document-postgres.integration.test.ts i2/.tmp/vinops-mega002-i2-current-source/packages/database/test/document-postgres.integration.test.ts
+index 26f9598..3beb005 100644
+--- i1/evidence/VIN-MEGA-002/review-source/packages/database/test/document-postgres.integration.test.ts
++++ i2/.tmp/vinops-mega002-i2-current-source/packages/database/test/document-postgres.integration.test.ts
+@@ -192,7 +192,7 @@ describePostgres('Document Control PostgreSQL invariants', () => {
+   beforeAll(async () => {
+     if (connectionString === undefined) return;
+     const database = new URL(connectionString).pathname.replace(/^\//u, '');
+-    if (!/^vinops_mega002_i1_test\d*$/u.test(database)) {
++    if (!/^vinops_mega002_i[12]_test\d*$/u.test(database)) {
+       throw new Error('VINOPS_TEST_DATABASE_URL must name an explicit VIN-MEGA-002 task database.');
+     }
+     await runMigrations(connectionString);

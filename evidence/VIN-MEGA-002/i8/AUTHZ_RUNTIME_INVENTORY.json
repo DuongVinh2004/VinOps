@@ -1,0 +1,17 @@
+{
+  "checkpoint_id": "VIN-MEGA-002",
+  "iteration": 8,
+  "retained_runtime": {
+    "postgres_container": "29b49c3bd124200b3a2b4d1dc3726313fc12064f957b6a306058c8da895fbe45",
+    "postgres_database": "vinops_mega002_test",
+    "api_port": 4610,
+    "api_pid": 21288,
+    "minio_container": "6c84c89661c600e902169ab09f9068a948cf6c81cca69395bfd5188d27324b8c",
+    "clamav_container": "55b1da833969c06aceb763bc2c1320bcb086f74f97f24522949f127a5ca7e638",
+    "network": "1aa6e8a5eabba455857000001e7762699c967344f48f7eaaabf586b2011d3f46"
+  },
+  "fresh_canonical_database": "vinops_mega002_i8_test",
+  "cleanup_performed": false,
+  "no_prune": true,
+  "no_rls_bypass": true
+}

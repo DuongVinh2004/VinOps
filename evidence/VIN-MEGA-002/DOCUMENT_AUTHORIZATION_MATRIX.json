@@ -1,0 +1,20 @@
+{
+  "result": "PASS_WITH_LIMITATIONS",
+  "checks": [
+    "tenant membership",
+    "project membership",
+    "role/action permission",
+    "document scope",
+    "state and maker-checker guards",
+    "cross-tenant/project UUID denial",
+    "preview/download reauthorization"
+  ],
+  "evidence": [
+    "apps/api/src/document.service.ts",
+    "apps/api/src/platform.controller.ts",
+    "packages/database migrations RLS functions"
+  ],
+  "unverified": [
+    "complete field-engineer/QA/document-controller/guest/auditor matrix across every surface"
+  ]
+}

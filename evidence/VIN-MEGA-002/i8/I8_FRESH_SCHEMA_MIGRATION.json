@@ -1,0 +1,12 @@
+{
+  "database": "vinops_mega002_i8_test",
+  "existed_before": false,
+  "created": true,
+  "canonical_migration_source_sha256": "8865bf08ce096341a8564ac3f33421ed0251d7f0bec8ab99ee9a87608998150b",
+  "migration": {
+    "status": "PASS",
+    "applied_count": 10,
+    "database": "vinops_mega002_i8_test",
+    "connection": "postgresql://postgres:***@127.0.0.1:55446/vinops_mega002_i8_test"
+  }
+}

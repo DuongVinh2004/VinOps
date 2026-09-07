@@ -1,0 +1,9 @@
+{
+  "total_rows": 10800,
+  "read_only_not_applicable": 4200,
+  "mutation_applicable": 6600,
+  "missing_assertions": 0,
+  "denied_domain_unchanged": 4730,
+  "denied_outbox_unchanged": 4730,
+  "placeholder_or_empty_hashes": 0
+}

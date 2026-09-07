@@ -1,0 +1,3892 @@
+openapi: 3.1.0
+info:
+  title: VinOps API - Core Vertical Slice
+  version: 1.1.0
+  license:
+    name: Proprietary - VinOps internal project artifact
+    identifier: LicenseRef-Proprietary
+  description: >-
+    Executable contract for the VIN-MEGA-001 platform foundation and VIN-MEGA-002 Document Control vertical slice.
+    Tenant, project, action and resource scope are derived and verified server-side; client identifiers never grant
+    access. Current revision is an explicit context pointer changed only by an atomic authorized publication.
+  x-vinops-cr-002:
+    effective_date: '2026-07-30'
+    access_token:
+      default_ttl_minutes: 15
+      storage: browser-memory-only
+      cache_control: no-store
+    refresh_credential:
+      storage: hashed-server-representation
+      rotation: every-refresh
+      reuse_response: revoke-session-family-and-emit-security-audit-signal
+      default_idle_ttl_days: 7
+      default_absolute_ttl_days: 30
+    csrf:
+      required_for: cookie-authenticated-mutations
+      token_binding: session-and-browser-memory
+      origin_check: exact-allowlist-with-referer-fallback
+    cors:
+      origins: exact-environment-allowlist
+      credentials_with_wildcard: forbidden
+      production_localhost_or_null_default: forbidden
+  x-vinops-response-invariants:
+    correlation_id: Every response, including errors and 204 responses, returns X-Correlation-ID and any problem body repeats it as correlation_id.
+    error_shape: application/problem+json uses code, message_key, optional safe details, correlation_id, and retryable; no credential, token, or cross-tenant metadata is exposed.
+    mutation: Material tenant/project domain commands require an Idempotency-Key; Mega-001 versioned commands carry expected_version in their envelope, while credential operations use their dedicated rotation, single-use, or revocation semantics. Retained Candidate endpoints may use If-Match.
+    pagination: Cursor pagination uses an opaque cursor, page_size in the inclusive range 1..100, and PageMeta.has_more.
+servers:
+  - url: https://api.staging.vinops.example/api/v1
+    description: Staging placeholder; replace through environment configuration.
+tags:
+  - name: Auth
+    description: Authentication, password reset, rotating refresh credentials, and session revocation.
+  - name: Organizations
+    description: Tenant bootstrap and organization membership; organization identifiers never confer access.
+  - name: Projects
+    description: Project provisioning, listing and lifecycle transitions.
+  - name: Membership
+    description: Invitations, project membership, roles and resource scope.
+  - name: Delegation
+    description: Time-bounded delegated authority under a project scope.
+  - name: BreakGlass
+    description: Reasoned, approved, time-bounded emergency access with an auditable banner signal.
+  - name: ProjectContext
+    description: Project-local metadata, partner metadata, calendars, numbering, LBS/WBS, disciplines, classifications, and CSV import.
+  - name: Documents
+    description: Stable document containers and authorized search/detail.
+  - name: Revisions
+    description: Business revisions, review decisions and atomic publish.
+  - name: Files
+    description: Staged upload completion and short-lived authorized download.
+  - name: Review
+    description: Immutable review assignments, comments, dispositions and decisions.
+  - name: Transmittals
+    description: Immutable controlled-distribution snapshots.
+  - name: Audit
+    description: Redacted audit timeline under the caller's resource scope.
+security:
+  - bearerAuth: []
+paths:
+  /auth/sessions:
+    post:
+      operationId: createSession
+      tags:
+        - Auth
+      summary: Authenticate and create a session
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SessionCreate'
+      responses:
+        '200':
+          description: Success
+          headers:
+            Set-Cookie:
+              $ref: '#/components/headers/RefreshSetCookie'
+            Cache-Control:
+              $ref: '#/components/headers/AuthCacheControl'
+            X-Correlation-ID:
+              description: End-to-end request correlation identifier.
+              schema:
+                type: string
+                format: uuid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Session'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+        '503':
+          $ref: '#/components/responses/DependencyUnavailable'
+    delete:
+      operationId: revokeAllSessions
+      tags:
+        - Auth
+      summary: Revoke every session in the authenticated user's refresh-token families
+      responses:
+        '204':
+          description: All sessions revoked
+          headers:
+            Set-Cookie:
+              $ref: '#/components/headers/ExpiredRefreshSetCookie'
+            X-Correlation-ID:
+              $ref: '#/components/headers/CorrelationId'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+        '503':
+          $ref: '#/components/responses/DependencyUnavailable'
+  /auth/refresh:
+    post:
+      operationId: refreshSession
+      tags:
+        - Auth
+      summary: Rotate the HttpOnly refresh credential and issue a short-lived access token
+      security:
+        - refreshCookie: []
+      parameters:
+        - $ref: '#/components/parameters/CsrfHeader'
+      responses:
+        '200':
+          description: Success
+          headers:
+            Set-Cookie:
+              $ref: '#/components/headers/RefreshSetCookie'
+            Cache-Control:
+              $ref: '#/components/headers/AuthCacheControl'
+            X-Correlation-ID:
+              description: End-to-end request correlation identifier.
+              schema:
+                type: string
+                format: uuid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Session'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '503':
+          $ref: '#/components/responses/DependencyUnavailable'
+  /auth/sessions/{sessionId}:
+    delete:
+      operationId: revokeSession
+      tags:
+        - Auth
+      summary: Revoke one session
+      parameters:
+        - $ref: '#/components/parameters/SessionId'
+      responses:
+        '204':
+          description: Session revoked
+          headers:
+            X-Correlation-ID:
+              $ref: '#/components/headers/CorrelationId'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/Validation'
+        '404':
+          $ref: '#/components/responses/ResourceNotVisible'
+        '503':
+          $ref: '#/components/responses/DependencyUnavailable'
+  /auth/password-resets:
+    post:
+      operationId: requestPasswordReset
+      tags:
+        - Auth
+      summary: Accept a password-reset request without revealing whether the account exists
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PasswordResetRequest'
+      responses:
+        '202':
+          description: Request accepted. The response is intentionally indistinguishable for existing and unknown accounts.
+          headers:
+            X-Correlation-ID:
+              $ref: '#/components/headers/CorrelationId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Acknowledgement'
+        '422':
+          $ref: '#/components/responses/Validation'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+        '503':
+          $ref: '#/components/responses/DependencyUnavailable'
+  /auth/password-resets/confirm:
+    post:
+      operationId: confirmPasswordReset
+      tags:
+        - Auth
+      summary: Consume one short-lived password-reset credential and revoke affected sessions
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PasswordResetConfirm'
+      responses:
+        '204':
+          description: Password reset accepted; the opaque reset credential can never be used again.
+          headers:
+            X-Correlation-ID:
+              $ref: '#/components/headers/CorrelationId'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/Validation'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+        '503':
+          $ref: '#/components/responses/DependencyUnavailable'
+  /organizations:
+    get:
+      operationId: listOrganizations
+      tags:
+        - Organizations
+      summary: List organizations visible to the authenticated user
+      parameters:
+        - $ref: '#/components/parameters/Cursor'
+        - $ref: '#/components/parameters/PageSize'
+      responses:
+        '200':
+          description: Tenant-safe visible organization page
+          headers:
+            X-Correlation-ID:
+              $ref: '#/components/headers/CorrelationId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizationList'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '503':
+          $ref: '#/components/responses/DependencyUnavailable'
+    post:
+      operationId: createOrganization
+      tags:
+        - Organizations
+      summary: Bootstrap an organization only when the server grants the required platform entitlement
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrganizationCreate'
+      responses:
+        '201':
+          description: Organization created with its creating user as an organization owner
+          headers:
+            X-Correlation-ID:
+              $ref: '#/components/headers/CorrelationId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Organization'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/Validation'
+        '503':
+          $ref: '#/components/responses/DependencyUnavailable'
+  /organizations/{organizationId}/members:
+    get:
+      operationId: listOrganizationMembers
+      tags:
+        - Organizations
+      summary: List organization membership within the caller's authorized tenant view
+      parameters:
+        - $ref: '#/components/parameters/OrganizationId'
+        - $ref: '#/components/parameters/Cursor'
+        - $ref: '#/components/parameters/PageSize'
+      responses:
+        '200':
+          description: Organization membership page
+          headers:
+            X-Correlation-ID:
+              $ref: '#/components/headers/CorrelationId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizationMembershipList'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/ResourceNotVisible'
+        '503':
+          $ref: '#/components/responses/DependencyUnavailable'
+    post:
+      operationId: createOrganizationMembership
+      tags:
+        - Organizations
+      summary: Add an organization member without granting project access
+      parameters:
+        - $ref: '#/components/parameters/OrganizationId'
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrganizationMembershipCreate'
+      responses:
+        '201':
+          description: Organization membership created
+          headers:
+            X-Correlation-ID:
+              $ref: '#/components/headers/CorrelationId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizationMembership'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/ResourceNotVisible'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/Validation'
+        '503':
+          $ref: '#/components/responses/DependencyUnavailable'
+  /organizations/{organizationId}/projects:
+    get:
+      operationId: listProjects
+      tags:
+        - Projects
+      summary: List projects visible to the caller
+      parameters:
+        - $ref: '#/components/parameters/OrganizationId'
+        - $ref: '#/components/parameters/Cursor'
+        - $ref: '#/components/parameters/PageSize'
+      responses:
+        '200':
+          description: Success
+          headers:
+            X-Correlation-ID:
+              description: End-to-end request correlation identifier.
+              schema:
+                type: string
+                format: uuid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectList'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/Validation'
+    post:
+      operationId: createProject
+      tags:
+        - Projects
+      summary: Create a project in Setup state
+      parameters:
+        - $ref: '#/components/parameters/OrganizationId'
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProjectCreate'
+      responses:
+        '201':
+          description: Project created
+          headers:
+            X-Correlation-ID:
+              description: End-to-end request correlation identifier.
+              schema:
+                type: string
+                format: uuid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/Validation'
+  /projects/{projectId}:
+    get:
+      operationId: getProject
+      tags:
+        - Projects
+      summary: Return one project only when it is visible through effective tenant and project membership
+      parameters:
+        - $ref: '#/components/parameters/ProjectId'
+      responses:
+        '200':
+          description: Project detail visible through the caller's effective tenant and project membership
+          headers:
+            X-Correlation-ID:
+              $ref: '#/components/headers/CorrelationId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectDetail'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/ResourceNotVisible'
+        '503':
+          $ref: '#/components/responses/DependencyUnavailable'
+  /projects/{projectId}/transitions:
+    post:
+      operationId: transitionProject
+      tags:
+        - Projects
+      summary: Execute a state-aware project command
+      parameters:
+        - $ref: '#/components/parameters/ProjectId'
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProjectTransition'
+      responses:
+        '200':
+          description: Success
+          headers:
+            X-Correlation-ID:
+              description: End-to-end request correlation identifier.
+              schema:
+                type: string
+                format: uuid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/Validation'
+        '404':
+          $ref: '#/components/responses/ResourceNotVisible'
+        '503':
+          $ref: '#/components/responses/DependencyUnavailable'
+  /projects/{projectId}/invitations:
+    post:
+      operationId: createInvitation
+      tags:
+        - Membership
+      summary: Invite an internal member or project guest
+      parameters:
+        - $ref: '#/components/parameters/ProjectId'
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InvitationCreate'
+      responses:
+        '201':
+          description: Success
+          headers:
+            X-Correlation-ID:
+              description: End-to-end request correlation identifier.
+              schema:
+                type: string
+                format: uuid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Invitation'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/Validation'
+  /invitations/{token}/accept:
+    post:
+      operationId: acceptInvitation
+      tags:
+        - Membership
+      summary: Accept a valid invitation
+      parameters:
+        - name: token
+          in: path
+          required: true
+          schema:
+            type: string
+            minLength: 32
+      responses:
+        '200':
+          description: Success
+          headers:
+            X-Correlation-ID:
+              description: End-to-end request correlation identifier.
+              schema:
+                type: string
+                format: uuid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectMembership'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/Validation'
+        '404':
+          $ref: '#/components/responses/ResourceNotVisible'
+        '503':
+          $ref: '#/components/responses/DependencyUnavailable'
+  /projects/{projectId}/invitations/{invitationId}:
+    delete:
+      operationId: revokeInvitation
+      tags:
+        - Membership
+      summary: Revoke a pending invitation without revealing inaccessible project metadata
+      parameters:
+        - $ref: '#/components/parameters/ProjectId'
+        - name: invitationId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - $ref: '#/components/parameters/IdempotencyKey'
+      responses:
+        '204':
+          description: Invitation revoked when it was pending and visible to the caller
+          headers:
+            X-Correlation-ID:
+              $ref: '#/components/headers/CorrelationId'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/ResourceNotVisible'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '503':
+          $ref: '#/components/responses/DependencyUnavailable'
+  /projects/{projectId}/members:
+    get:
+      operationId: listProjectMembers
+      tags:
+        - Membership
+      summary: List project memberships within caller scope
+      parameters:
+        - $ref: '#/components/parameters/ProjectId'
+        - $ref: '#/components/parameters/Cursor'
+      responses:
+        '200':
+          description: Success
+          headers:
+            X-Correlation-ID:
+              description: End-to-end request correlation identifier.
+              schema:
+                type: string
+                format: uuid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MembershipList'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/Validation'
+  /project-members/{membershipId}:
+    patch:
+      operationId: updateProjectMembership
+      tags:
+        - Membership
+      summary: Change role, scope or lifecycle with separation-of-duty checks
+      parameters:
+        - name: membershipId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MembershipUpdate'
+      responses:
+        '200':
+          description: Success
+          headers:
+            X-Correlation-ID:
+              description: End-to-end request correlation identifier.
+              schema:
+                type: string
+                format: uuid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectMembership'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/Validation'
+        '404':
+          $ref: '#/components/responses/ResourceNotVisible'
+        '503':
+          $ref: '#/components/responses/DependencyUnavailable'
+  /projects/{projectId}/context:
+    get:
+      operationId: getProjectContext
+      tags:
+        - ProjectContext
+      summary: Read all project-local context collections permitted by the caller's effective scope
+      parameters:
+        - $ref: '#/components/parameters/ProjectId'
+      responses:
+        '200':
+          description: Project metadata and Project Context collections
+          headers:
+            X-Correlation-ID:
+              $ref: '#/components/headers/CorrelationId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectContext'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/ResourceNotVisible'
+        '503':
+          $ref: '#/components/responses/DependencyUnavailable'
+  /projects/{projectId}/context/{kind}:
+    post:
+      operationId: createProjectContextEntity
+      tags:
+        - ProjectContext
+      summary: Create one Project Context entity selected by kind
+      parameters:
+        - $ref: '#/components/parameters/ProjectId'
+        - $ref: '#/components/parameters/ProjectContextKind'
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ContextEntityCreate'
+      responses:
+        '201':
+          description: Context entity created. Partner ownership remains metadata and never grants authorization.
+          headers:
+            X-Correlation-ID:
+              $ref: '#/components/headers/CorrelationId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectContextEntity'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/ResourceNotVisible'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/Validation'
+        '503':
+          $ref: '#/components/responses/DependencyUnavailable'
+  /projects/{projectId}/context-imports/preview:
+    post:
+      operationId: previewProjectContextImport
+      tags:
+        - ProjectContext
+      summary: Validate an LBS or WBS CSV import without mutating project records
+      parameters:
+        - $ref: '#/components/parameters/ProjectId'
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ContextImportPreviewRequest'
+      responses:
+        '201':
+          description: Deterministic import preview retained for a retry-safe commit
+          headers:
+            X-Correlation-ID:
+              $ref: '#/components/headers/CorrelationId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContextImportPreview'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/ResourceNotVisible'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/Validation'
+        '503':
+          $ref: '#/components/responses/DependencyUnavailable'
+  /projects/{projectId}/context-imports/{importId}/commit:
+    post:
+      operationId: commitProjectContextImport
+      tags:
+        - ProjectContext
+      summary: Commit a validated Project Context import once; retry returns the canonical outcome
+      parameters:
+        - $ref: '#/components/parameters/ProjectId'
+        - $ref: '#/components/parameters/ContextImportId'
+        - $ref: '#/components/parameters/IdempotencyKey'
+      responses:
+        '200':
+          description: Import committed or canonical prior result returned
+          headers:
+            X-Correlation-ID:
+              $ref: '#/components/headers/CorrelationId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContextImportCommitResult'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/ResourceNotVisible'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/Validation'
+        '503':
+          $ref: '#/components/responses/DependencyUnavailable'
+  /projects/{projectId}/delegations:
+    post:
+      operationId: createDelegation
+      tags:
+        - Delegation
+      summary: Create an auditable bounded delegation that never outlives valid_to
+      parameters:
+        - $ref: '#/components/parameters/ProjectId'
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DelegationCreate'
+      responses:
+        '201':
+          description: Delegation created
+          headers:
+            X-Correlation-ID:
+              $ref: '#/components/headers/CorrelationId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Delegation'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/ResourceNotVisible'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/Validation'
+        '503':
+          $ref: '#/components/responses/DependencyUnavailable'
+  /projects/{projectId}/break-glass-requests:
+    post:
+      operationId: createBreakGlassRequest
+      tags:
+        - BreakGlass
+      summary: Request emergency access with a reason, resource scope, and bounded duration
+      parameters:
+        - $ref: '#/components/parameters/ProjectId'
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BreakGlassRequestCreate'
+      responses:
+        '201':
+          description: Break-glass request created in Requested state
+          headers:
+            X-Correlation-ID:
+              $ref: '#/components/headers/CorrelationId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BreakGlassRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/ResourceNotVisible'
+        '422':
+          $ref: '#/components/responses/Validation'
+        '503':
+          $ref: '#/components/responses/DependencyUnavailable'
+  /break-glass-requests/{requestId}/approve:
+    post:
+      operationId: approveBreakGlassRequest
+      tags:
+        - BreakGlass
+      summary: Approve an eligible break-glass request; requester self-approval is forbidden
+      parameters:
+        - $ref: '#/components/parameters/BreakGlassRequestId'
+        - $ref: '#/components/parameters/IdempotencyKey'
+      responses:
+        '200':
+          description: Break-glass request approved
+          headers:
+            X-Correlation-ID:
+              $ref: '#/components/headers/CorrelationId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BreakGlassRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/ResourceNotVisible'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/Validation'
+        '503':
+          $ref: '#/components/responses/DependencyUnavailable'
+  /break-glass-requests/{requestId}/sessions:
+    post:
+      operationId: createBreakGlassSession
+      tags:
+        - BreakGlass
+      summary: Open a visibly signalled emergency session only for an approved, unexpired request
+      parameters:
+        - $ref: '#/components/parameters/BreakGlassRequestId'
+        - $ref: '#/components/parameters/IdempotencyKey'
+      responses:
+        '201':
+          description: Break-glass session created with banner true
+          headers:
+            X-Correlation-ID:
+              $ref: '#/components/headers/CorrelationId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BreakGlassSession'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/ResourceNotVisible'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/Validation'
+        '503':
+          $ref: '#/components/responses/DependencyUnavailable'
+  /projects/{projectId}/documents:
+    get:
+      operationId: listDocuments
+      tags:
+        - Documents
+      summary: Search and list documents under project and resource scope
+      parameters:
+        - $ref: '#/components/parameters/ProjectId'
+        - $ref: '#/components/parameters/Cursor'
+        - $ref: '#/components/parameters/PageSize'
+        - name: search
+          in: query
+          schema:
+            type: string
+            maxLength: 120
+        - name: include_archived
+          in: query
+          schema:
+            type: boolean
+            default: false
+      responses:
+        '200':
+          description: Success
+          headers:
+            X-Correlation-ID:
+              description: End-to-end request correlation identifier.
+              schema:
+                type: string
+                format: uuid
+            ETag:
+              description: Weak ETag based on canonical entity version when applicable.
+              schema:
+                type: string
+                example: W/"17"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentList'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/Validation'
+    post:
+      operationId: createDocument
+      tags:
+        - Documents
+      summary: Create a stable document container
+      parameters:
+        - $ref: '#/components/parameters/ProjectId'
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DocumentCreate'
+      responses:
+        '201':
+          description: Success
+          headers:
+            X-Correlation-ID:
+              description: End-to-end request correlation identifier.
+              schema:
+                type: string
+                format: uuid
+            ETag:
+              description: Weak ETag based on canonical entity version when applicable.
+              schema:
+                type: string
+                example: W/"17"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Document'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/Validation'
+  /documents/{documentId}:
+    get:
+      operationId: getDocument
+      tags:
+        - Documents
+      summary: Get document metadata, current revision and revision history links
+      parameters:
+        - $ref: '#/components/parameters/DocumentId'
+        - name: revision_id
+          in: query
+          description: Exact immutable revision deep link; it is never silently redirected to current.
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Success
+          headers:
+            X-Correlation-ID:
+              description: End-to-end request correlation identifier.
+              schema:
+                type: string
+                format: uuid
+            ETag:
+              description: Weak ETag based on canonical entity version when applicable.
+              schema:
+                type: string
+                example: W/"17"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentDetail'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/Validation'
+        '404':
+          $ref: '#/components/responses/ResourceNotVisible'
+        '503':
+          $ref: '#/components/responses/DependencyUnavailable'
+  /documents/{documentId}/revisions:
+    get:
+      operationId: listDocumentRevisions
+      tags:
+        - Revisions
+      summary: List revision history without replacing superseded links
+      parameters:
+        - $ref: '#/components/parameters/DocumentId'
+        - $ref: '#/components/parameters/Cursor'
+      responses:
+        '200':
+          description: Success
+          headers:
+            X-Correlation-ID:
+              description: End-to-end request correlation identifier.
+              schema:
+                type: string
+                format: uuid
+            ETag:
+              description: Weak ETag based on canonical entity version when applicable.
+              schema:
+                type: string
+                example: W/"17"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RevisionList'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/Validation'
+    post:
+      operationId: createRevision
+      tags:
+        - Revisions
+      summary: Create a Draft revision and resumable upload session
+      parameters:
+        - $ref: '#/components/parameters/DocumentId'
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RevisionCreate'
+      responses:
+        '201':
+          description: Success
+          headers:
+            X-Correlation-ID:
+              description: End-to-end request correlation identifier.
+              schema:
+                type: string
+                format: uuid
+            ETag:
+              description: Weak ETag based on canonical entity version when applicable.
+              schema:
+                type: string
+                example: W/"17"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RevisionWithUpload'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/Validation'
+  /upload-sessions/{uploadSessionId}/parts/{partNumber}/authorization:
+    post:
+      operationId: authorizeUploadPart
+      tags:
+        - Files
+      summary: Reauthorize and issue one short-lived quarantine part URL
+      parameters:
+        - $ref: '#/components/parameters/UploadSessionId'
+        - name: partNumber
+          in: path
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 10000
+      responses:
+        '200':
+          description: Short-lived part authorization; clients must not persist the URL.
+          headers:
+            X-Correlation-ID:
+              $ref: '#/components/headers/CorrelationId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UploadPartAuthorization'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/ResourceNotVisible'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/Validation'
+        '503':
+          $ref: '#/components/responses/DependencyUnavailable'
+  /upload-sessions/{uploadSessionId}/complete:
+    post:
+      operationId: completeUpload
+      tags:
+        - Files
+      summary: Finalize upload metadata and start validation/scan
+      parameters:
+        - $ref: '#/components/parameters/UploadSessionId'
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UploadComplete'
+      responses:
+        '202':
+          description: Validation accepted
+          headers:
+            X-Correlation-ID:
+              description: End-to-end request correlation identifier.
+              schema:
+                type: string
+                format: uuid
+            ETag:
+              description: Weak ETag based on canonical entity version when applicable.
+              schema:
+                type: string
+                example: W/"17"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileObject'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/Validation'
+  /revisions/{revisionId}/transitions:
+    post:
+      operationId: transitionRevision
+      tags:
+        - Revisions
+      summary: Submit, approve, reject, publish or withdraw a revision
+      parameters:
+        - $ref: '#/components/parameters/RevisionId'
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RevisionTransition'
+      responses:
+        '200':
+          description: Success
+          headers:
+            X-Correlation-ID:
+              description: End-to-end request correlation identifier.
+              schema:
+                type: string
+                format: uuid
+            ETag:
+              description: Weak ETag based on canonical entity version when applicable.
+              schema:
+                type: string
+                example: W/"17"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentRevision'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/Validation'
+  /revisions/{revisionId}/comments:
+    post:
+      operationId: createReviewComment
+      tags:
+        - Review
+      summary: Append a mandatory or advisory review comment
+      parameters:
+        - $ref: '#/components/parameters/RevisionId'
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReviewCommentCreate'
+      responses:
+        '201':
+          description: Immutable review comment created
+          headers:
+            X-Correlation-ID:
+              $ref: '#/components/headers/CorrelationId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReviewComment'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/ResourceNotVisible'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/Validation'
+  /review-comments/{commentId}/dispositions:
+    post:
+      operationId: createReviewCommentDisposition
+      tags:
+        - Review
+      summary: Append a disposition without editing the original comment
+      parameters:
+        - name: commentId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReviewCommentDispositionCreate'
+      responses:
+        '201':
+          description: Immutable disposition created
+          headers:
+            X-Correlation-ID:
+              $ref: '#/components/headers/CorrelationId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReviewCommentDisposition'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/ResourceNotVisible'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/Validation'
+  /revisions/{revisionId}/annotations:
+    post:
+      operationId: createRevisionAnnotation
+      tags:
+        - Revisions
+      summary: Append a normalized page annotation or pin
+      parameters:
+        - $ref: '#/components/parameters/RevisionId'
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AnnotationCreate'
+      responses:
+        '201':
+          description: Annotation created
+          headers:
+            X-Correlation-ID:
+              $ref: '#/components/headers/CorrelationId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Annotation'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/ResourceNotVisible'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/Validation'
+  /revisions/{revisionId}/preview:
+    get:
+      operationId: getRevisionPreview
+      tags:
+        - Files
+      summary: Reauthorize and issue a short-lived Available derivative URL
+      parameters:
+        - $ref: '#/components/parameters/RevisionId'
+      responses:
+        '200':
+          description: Short-lived preview authorization
+          headers:
+            X-Correlation-ID:
+              $ref: '#/components/headers/CorrelationId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SignedDownload'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/ResourceNotVisible'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '503':
+          $ref: '#/components/responses/DependencyUnavailable'
+  /projects/{projectId}/review-inbox:
+    get:
+      operationId: listReviewInbox
+      tags:
+        - Review
+      summary: List only the caller's visible review assignments
+      parameters:
+        - $ref: '#/components/parameters/ProjectId'
+      responses:
+        '200':
+          description: Review inbox
+          headers:
+            X-Correlation-ID:
+              $ref: '#/components/headers/CorrelationId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReviewInboxList'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/ResourceNotVisible'
+  /projects/{projectId}/transmittals:
+    post:
+      operationId: createTransmittal
+      tags:
+        - Transmittals
+      summary: Issue an immutable revision and recipient snapshot
+      parameters:
+        - $ref: '#/components/parameters/ProjectId'
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransmittalCreate'
+      responses:
+        '201':
+          description: Immutable transmittal issued
+          headers:
+            X-Correlation-ID:
+              $ref: '#/components/headers/CorrelationId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Transmittal'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/ResourceNotVisible'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/Validation'
+  /transmittals/{transmittalId}:
+    get:
+      operationId: getTransmittal
+      tags:
+        - Transmittals
+      summary: Retrieve an immutable distribution snapshot under current authorization
+      parameters:
+        - name: transmittalId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Transmittal snapshot
+          headers:
+            X-Correlation-ID:
+              $ref: '#/components/headers/CorrelationId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Transmittal'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/ResourceNotVisible'
+  /documents/{documentId}/archive:
+    post:
+      operationId: archiveDocument
+      tags:
+        - Documents
+      summary: Archive a document without changing its current revision pointer
+      parameters:
+        - $ref: '#/components/parameters/DocumentId'
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExpectedVersionCommand'
+      responses:
+        '200':
+          description: Document archived
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Document'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/ResourceNotVisible'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/Validation'
+  /documents/{documentId}/restore:
+    post:
+      operationId: restoreDocument
+      tags:
+        - Documents
+      summary: Restore a document without changing its current revision pointer
+      parameters:
+        - $ref: '#/components/parameters/DocumentId'
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExpectedVersionCommand'
+      responses:
+        '200':
+          description: Document restored
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Document'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/ResourceNotVisible'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/Validation'
+  /revisions/{revisionId}/download:
+    get:
+      operationId: getRevisionDownload
+      tags:
+        - Files
+      summary: Authorize and issue a short-lived download URL
+      parameters:
+        - $ref: '#/components/parameters/RevisionId'
+      responses:
+        '200':
+          description: Success
+          headers:
+            X-Correlation-ID:
+              description: End-to-end request correlation identifier.
+              schema:
+                type: string
+                format: uuid
+            ETag:
+              description: Weak ETag based on canonical entity version when applicable.
+              schema:
+                type: string
+                example: W/"17"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SignedDownload'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/Validation'
+        '404':
+          $ref: '#/components/responses/ResourceNotVisible'
+        '503':
+          $ref: '#/components/responses/DependencyUnavailable'
+  /projects/{projectId}/audit-events:
+    get:
+      operationId: listAuditEvents
+      tags:
+        - Audit
+      summary: Query redacted audit events under caller scope
+      parameters:
+        - $ref: '#/components/parameters/ProjectId'
+        - $ref: '#/components/parameters/Cursor'
+        - name: entity_type
+          in: query
+          schema:
+            type: string
+        - name: entity_id
+          in: query
+          schema:
+            type: string
+            format: uuid
+        - name: from
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: to
+          in: query
+          schema:
+            type: string
+            format: date-time
+      responses:
+        '200':
+          description: Success
+          headers:
+            X-Correlation-ID:
+              description: End-to-end request correlation identifier.
+              schema:
+                type: string
+                format: uuid
+            ETag:
+              description: Weak ETag based on canonical entity version when applicable.
+              schema:
+                type: string
+                example: W/"17"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuditEventList'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/Validation'
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Short-lived access token stored in memory only.
+    refreshCookie:
+      type: apiKey
+      in: cookie
+      name: vinops_refresh
+      description: Opaque rotated credential. Cookie is Secure, HttpOnly, SameSite=Lax, host-only, Path=/api/v1/auth; idle TTL defaults to 7 days and absolute TTL to 30 days. Never log its value.
+  parameters:
+    OrganizationId:
+      name: organizationId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    ProjectId:
+      name: projectId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    DocumentId:
+      name: documentId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    RevisionId:
+      name: revisionId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    UploadSessionId:
+      name: uploadSessionId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    SessionId:
+      name: sessionId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    ContextImportId:
+      name: importId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    BreakGlassRequestId:
+      name: requestId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    ProjectContextKind:
+      name: kind
+      in: path
+      required: true
+      schema:
+        type: string
+        enum:
+          - partner
+          - calendar
+          - numbering_profile
+          - location_node
+          - work_node
+          - discipline
+          - classification
+    Cursor:
+      name: cursor
+      in: query
+      schema:
+        type: string
+    PageSize:
+      name: page_size
+      in: query
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 100
+        default: 25
+    IdempotencyKey:
+      name: Idempotency-Key
+      in: header
+      required: true
+      schema:
+        type: string
+        format: uuid
+      description: Same key and payload returns the canonical result; reuse with a different payload is rejected.
+    CsrfHeader:
+      name: X-CSRF-Token
+      in: header
+      required: true
+      schema:
+        type: string
+        minLength: 32
+      description: Session-bound token kept in browser memory. Cookie-authenticated mutations also require exact Origin allowlist validation, with appropriate Referer fallback.
+  headers:
+    CorrelationId:
+      description: End-to-end request correlation identifier returned on every response, including errors and 204 responses.
+      schema:
+        type: string
+        format: uuid
+    RefreshSetCookie:
+      description: Sets the rotated refresh credential; host-only with no Domain attribute.
+      schema:
+        type: string
+        example: vinops_refresh=opaque; Path=/api/v1/auth; HttpOnly; Secure; SameSite=Lax
+    ExpiredRefreshSetCookie:
+      description: Expires the current refresh cookie using the same name, path and security attributes.
+      schema:
+        type: string
+        example: vinops_refresh=; Max-Age=0; Path=/api/v1/auth; HttpOnly; Secure; SameSite=Lax
+    AuthCacheControl:
+      description: Prevents caching authentication credentials and responses.
+      schema:
+        type: string
+        const: no-store
+    RetryAfter:
+      description: Delay in seconds before a safe or idempotency-protected retry.
+      schema:
+        type: integer
+        minimum: 1
+  responses:
+    BadRequest:
+      description: Malformed request
+      headers:
+        X-Correlation-ID:
+          $ref: '#/components/headers/CorrelationId'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Authentication required or session revoked
+      headers:
+        X-Correlation-ID:
+          $ref: '#/components/headers/CorrelationId'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Forbidden:
+      description: Visible resource but action, state, scope or separation-of-duty denied
+      headers:
+        X-Correlation-ID:
+          $ref: '#/components/headers/CorrelationId'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Conflict:
+      description: State, concurrency or idempotency conflict
+      headers:
+        X-Correlation-ID:
+          $ref: '#/components/headers/CorrelationId'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Validation:
+      description: Semantic validation failed
+      headers:
+        X-Correlation-ID:
+          $ref: '#/components/headers/CorrelationId'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    RateLimited:
+      description: Rate limit exceeded
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Error'
+      headers:
+        X-Correlation-ID:
+          $ref: '#/components/headers/CorrelationId'
+        Retry-After:
+          $ref: '#/components/headers/RetryAfter'
+    ResourceNotVisible:
+      description: Resource does not exist or must not be revealed across tenant, membership or visibility boundaries
+      headers:
+        X-Correlation-ID:
+          $ref: '#/components/headers/CorrelationId'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: RESOURCE_NOT_VISIBLE
+            message_key: errors.resourceNotVisible
+            correlation_id: 123e4567-e89b-42d3-a456-426614174000
+            retryable: false
+    DependencyUnavailable:
+      description: A required dependency is unavailable; clients must not blindly retry non-idempotent mutations
+      headers:
+        X-Correlation-ID:
+          $ref: '#/components/headers/CorrelationId'
+        Retry-After:
+          $ref: '#/components/headers/RetryAfter'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: DEPENDENCY_UNAVAILABLE
+            message_key: errors.dependencyUnavailable
+            correlation_id: 123e4567-e89b-42d3-a456-426614174000
+            retryable: true
+  schemas:
+    Error:
+      type: object
+      required:
+        - code
+        - message_key
+        - correlation_id
+        - retryable
+      properties:
+        code:
+          type: string
+          example: PERMISSION_DENIED
+        message_key:
+          type: string
+          example: errors.permissionDenied
+        details:
+          type: object
+          additionalProperties: true
+        correlation_id:
+          type: string
+          format: uuid
+        retryable:
+          type: boolean
+    SessionCreate:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          format: password
+          minLength: 8
+        device_name:
+          type: string
+          maxLength: 120
+    Session:
+      type: object
+      required:
+        - access_token
+        - access_token_expires_at
+        - session_id
+        - user
+      properties:
+        access_token:
+          type: string
+          description: Bearer token kept in browser memory only; default TTL is 15 minutes and is configurable. Never persist in localStorage, sessionStorage or IndexedDB.
+        access_token_expires_at:
+          type: string
+          format: date-time
+        session_id:
+          type: string
+          format: uuid
+        csrf_token:
+          type: string
+          description: Returned for cookie-authenticated refresh/logout requests.
+        user:
+          $ref: '#/components/schemas/UserSummary'
+    UserSummary:
+      type: object
+      required:
+        - id
+        - display_name
+      properties:
+        id:
+          type: string
+          format: uuid
+        display_name:
+          type: string
+        email:
+          type: string
+          format: email
+    Acknowledgement:
+      type: object
+      required:
+        - status
+      properties:
+        status:
+          type: string
+          const: accepted
+    PasswordResetRequest:
+      type: object
+      required:
+        - email
+      properties:
+        email:
+          type: string
+          format: email
+    PasswordResetConfirm:
+      type: object
+      required:
+        - token
+        - password
+      properties:
+        token:
+          type: string
+          minLength: 32
+          description: Opaque single-use credential. It is never returned, logged, or stored in clear text.
+        password:
+          type: string
+          format: password
+          minLength: 12
+    OrganizationCreate:
+      type: object
+      required:
+        - code
+        - name
+      properties:
+        code:
+          type: string
+          pattern: ^[A-Z0-9][A-Z0-9_-]{1,31}$
+        name:
+          type: string
+          minLength: 2
+          maxLength: 200
+    Organization:
+      type: object
+      required:
+        - id
+        - code
+        - name
+        - status
+        - version
+      properties:
+        id:
+          type: string
+          format: uuid
+        code:
+          type: string
+        name:
+          type: string
+        status:
+          type: string
+          enum:
+            - Active
+            - Suspended
+            - Archived
+        version:
+          type: integer
+          format: int64
+          minimum: 1
+    OrganizationList:
+      type: object
+      required:
+        - items
+        - page
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Organization'
+        page:
+          $ref: '#/components/schemas/PageMeta'
+    OrganizationMembershipCreate:
+      type: object
+      required:
+        - user_id
+        - roles
+      properties:
+        user_id:
+          type: string
+          format: uuid
+        roles:
+          type: array
+          minItems: 1
+          items:
+            type: string
+        valid_from:
+          type: string
+          format: date-time
+        valid_to:
+          type: string
+          format: date-time
+    OrganizationMembership:
+      type: object
+      required:
+        - id
+        - user_id
+        - roles
+        - status
+      properties:
+        id:
+          type: string
+          format: uuid
+        organization_id:
+          type: string
+          format: uuid
+        user_id:
+          type: string
+          format: uuid
+        display_name:
+          type: string
+        roles:
+          type: array
+          items:
+            type: string
+        status:
+          type: string
+          enum:
+            - Active
+            - Suspended
+            - Ended
+        valid_from:
+          oneOf:
+            - type: string
+              format: date-time
+            - type: 'null'
+        valid_to:
+          oneOf:
+            - type: string
+              format: date-time
+            - type: 'null'
+        version:
+          type: integer
+          format: int64
+          minimum: 1
+    OrganizationMembershipList:
+      type: object
+      required:
+        - items
+        - page
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrganizationMembership'
+        page:
+          $ref: '#/components/schemas/PageMeta'
+    ProjectCreate:
+      type: object
+      required:
+        - code
+        - name
+        - timezone
+      properties:
+        code:
+          type: string
+          pattern: ^[A-Z0-9][A-Z0-9_-]{1,31}$
+        name:
+          type: string
+          minLength: 2
+          maxLength: 200
+        timezone:
+          type: string
+          example: Asia/Bangkok
+        calendar_profile_id:
+          type: string
+          format: uuid
+        numbering_profile_id:
+          type: string
+          format: uuid
+    ProjectTransition:
+      type: object
+      required:
+        - action
+        - expected_version
+      properties:
+        action:
+          type: string
+          enum:
+            - activate
+            - suspend
+            - resume
+            - start_archive
+            - complete_archive
+            - restore
+        expected_version:
+          type: string
+          pattern: ^[1-9][0-9]*$
+          description: Canonical bigint version expected by the command envelope.
+        reason:
+          type: string
+          maxLength: 1000
+    Project:
+      type: object
+      required:
+        - id
+        - organization_id
+        - code
+        - name
+        - timezone
+        - status
+        - version
+      properties:
+        id:
+          type: string
+          format: uuid
+        organization_id:
+          type: string
+          format: uuid
+        code:
+          type: string
+        name:
+          type: string
+        timezone:
+          type: string
+        status:
+          type: string
+          enum:
+            - Setup
+            - Active
+            - Suspended
+            - Archiving
+            - Archived
+        version:
+          type: integer
+          format: int64
+          minimum: 1
+    ProjectDetail:
+      allOf:
+        - $ref: '#/components/schemas/Project'
+    InvitationCreate:
+      type: object
+      required:
+        - email
+        - roles
+        - valid_to
+      properties:
+        email:
+          type: string
+          format: email
+        roles:
+          type: array
+          items:
+            type: string
+          minItems: 1
+        valid_to:
+          type: string
+          format: date-time
+        scopes:
+          type: array
+          items:
+            $ref: '#/components/schemas/MemberScope'
+        guest:
+          type: boolean
+          default: false
+    Invitation:
+      type: object
+      required:
+        - id
+        - project_id
+        - status
+        - expires_at
+      properties:
+        id:
+          type: string
+          format: uuid
+        project_id:
+          type: string
+          format: uuid
+        status:
+          type: string
+          enum:
+            - Pending
+            - Accepted
+            - Expired
+            - Revoked
+        expires_at:
+          type: string
+          format: date-time
+    MemberScope:
+      type: object
+      required:
+        - scope_type
+        - scope_id
+        - actions
+      properties:
+        scope_type:
+          type: string
+          enum:
+            - project
+            - location
+            - work
+            - discipline
+            - classification
+        scope_id:
+          type: string
+          format: uuid
+        actions:
+          type: array
+          items:
+            type: string
+    MembershipUpdate:
+      type: object
+      required:
+        - expected_version
+      properties:
+        roles:
+          type: array
+          items:
+            type: string
+          minItems: 1
+        status:
+          type: string
+          enum:
+            - Active
+            - Suspended
+            - Ended
+        valid_to:
+          type: string
+          format: date-time
+        expected_version:
+          type: string
+          pattern: ^[1-9][0-9]*$
+        reason:
+          type: string
+          maxLength: 1000
+    ProjectMembership:
+      type: object
+      required:
+        - id
+        - project_id
+        - roles
+        - status
+        - version
+      properties:
+        id:
+          type: string
+          format: uuid
+        project_id:
+          type: string
+          format: uuid
+        organization_id:
+          type: string
+          format: uuid
+        user_id:
+          type: string
+          format: uuid
+        display_name:
+          type: string
+        user:
+          $ref: '#/components/schemas/UserSummary'
+        roles:
+          type: array
+          items:
+            type: string
+        scopes:
+          type: array
+          items:
+            $ref: '#/components/schemas/MemberScope'
+        status:
+          type: string
+          enum:
+            - Pending
+            - Active
+            - Suspended
+            - Ended
+        version:
+          type: integer
+          format: int64
+    ProjectContext:
+      type: object
+      required:
+        - project
+        - partners
+        - calendars
+        - numbering_profiles
+        - location_nodes
+        - work_nodes
+        - disciplines
+        - classifications
+      properties:
+        project:
+          $ref: '#/components/schemas/Project'
+        partners:
+          type: array
+          items:
+            $ref: '#/components/schemas/PartnerOrganization'
+        calendars:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProjectCalendar'
+        numbering_profiles:
+          type: array
+          items:
+            $ref: '#/components/schemas/NumberingProfile'
+        location_nodes:
+          type: array
+          items:
+            $ref: '#/components/schemas/LocationNode'
+        work_nodes:
+          type: array
+          items:
+            $ref: '#/components/schemas/WorkNode'
+        disciplines:
+          type: array
+          items:
+            $ref: '#/components/schemas/Discipline'
+        classifications:
+          type: array
+          items:
+            $ref: '#/components/schemas/Classification'
+    ContextEntityCreate:
+      anyOf:
+        - $ref: '#/components/schemas/PartnerOrganizationCreate'
+        - $ref: '#/components/schemas/ProjectCalendarCreate'
+        - $ref: '#/components/schemas/NumberingProfileCreate'
+        - $ref: '#/components/schemas/LocationNodeCreate'
+        - $ref: '#/components/schemas/WorkNodeCreate'
+        - $ref: '#/components/schemas/DisciplineCreate'
+        - $ref: '#/components/schemas/ClassificationCreate'
+      description: The path kind selects the applicable Project Context shape. The server rejects a mismatched or unsupported kind.
+    ProjectContextEntity:
+      type: object
+      required:
+        - id
+        - project_id
+        - kind
+        - code
+        - name
+        - status
+      properties:
+        id:
+          type: string
+          format: uuid
+        project_id:
+          type: string
+          format: uuid
+        kind:
+          type: string
+          enum:
+            - partner
+            - calendar
+            - numbering_profile
+            - location_node
+            - work_node
+            - discipline
+            - classification
+        code:
+          type: string
+        name:
+          type: string
+        status:
+          type: string
+          const: Active
+    PartnerOrganizationCreate:
+      type: object
+      required:
+        - code
+        - name
+      properties:
+        code:
+          type: string
+          pattern: ^[A-Z0-9][A-Z0-9_-]{1,31}$
+        name:
+          type: string
+          minLength: 2
+          maxLength: 200
+        contact_metadata:
+          type: object
+          additionalProperties:
+            type: string
+          description: Non-secret business contact metadata. Credentials and authorization grants are prohibited.
+    PartnerOrganization:
+      type: object
+      required:
+        - id
+        - code
+        - name
+        - status
+        - version
+      properties:
+        id:
+          type: string
+          format: uuid
+        project_id:
+          type: string
+          format: uuid
+        code:
+          type: string
+        name:
+          type: string
+        status:
+          type: string
+          enum:
+            - Active
+            - Archived
+        version:
+          type: integer
+          format: int64
+    ProjectCalendarCreate:
+      type: object
+      required:
+        - code
+        - name
+        - timezone
+      properties:
+        code:
+          type: string
+          minLength: 1
+          maxLength: 80
+        name:
+          type: string
+          minLength: 2
+          maxLength: 120
+        timezone:
+          type: string
+          example: Asia/Bangkok
+    ProjectCalendar:
+      type: object
+      required:
+        - id
+        - name
+        - timezone
+        - status
+        - version
+      properties:
+        id:
+          type: string
+          format: uuid
+        project_id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        timezone:
+          type: string
+        working_days:
+          type: array
+          items:
+            type: integer
+            minimum: 1
+            maximum: 7
+        holidays:
+          type: array
+          items:
+            type: string
+            format: date
+        status:
+          type: string
+          enum:
+            - Active
+            - Archived
+        version:
+          type: integer
+          format: int64
+    NumberingProfileCreate:
+      type: object
+      required:
+        - code
+        - name
+        - template
+      properties:
+        code:
+          type: string
+          pattern: ^[A-Z0-9][A-Z0-9_-]{1,31}$
+        name:
+          type: string
+          minLength: 2
+          maxLength: 120
+        template:
+          type: string
+          minLength: 1
+          maxLength: 500
+          description: Allocation template for future identifiers. Updating a profile never rewrites issued identifiers.
+    NumberingProfile:
+      type: object
+      required:
+        - id
+        - code
+        - name
+        - template
+        - status
+        - version
+      properties:
+        id:
+          type: string
+          format: uuid
+        project_id:
+          type: string
+          format: uuid
+        code:
+          type: string
+        name:
+          type: string
+        template:
+          type: string
+        status:
+          type: string
+          enum:
+            - Active
+            - Archived
+        version:
+          type: integer
+          format: int64
+    LocationNodeCreate:
+      type: object
+      required:
+        - code
+        - name
+        - node_type
+      properties:
+        parent_id:
+          oneOf:
+            - type: string
+              format: uuid
+            - type: 'null'
+        code:
+          type: string
+          minLength: 1
+          maxLength: 80
+        name:
+          type: string
+          minLength: 1
+          maxLength: 200
+        node_type:
+          type: string
+          maxLength: 80
+        sort_order:
+          type: integer
+          default: 0
+    LocationNode:
+      type: object
+      required:
+        - id
+        - code
+        - name
+        - node_type
+        - status
+        - version
+      properties:
+        id:
+          type: string
+          format: uuid
+        project_id:
+          type: string
+          format: uuid
+        parent_id:
+          oneOf:
+            - type: string
+              format: uuid
+            - type: 'null'
+        code:
+          type: string
+        name:
+          type: string
+        node_type:
+          type: string
+        sort_order:
+          type: integer
+        status:
+          type: string
+          enum:
+            - Active
+            - Archived
+        version:
+          type: integer
+          format: int64
+    WorkNodeCreate:
+      type: object
+      required:
+        - code
+        - name
+        - node_type
+      properties:
+        parent_id:
+          oneOf:
+            - type: string
+              format: uuid
+            - type: 'null'
+        location_node_id:
+          oneOf:
+            - type: string
+              format: uuid
+            - type: 'null'
+        owner_partner_organization_id:
+          oneOf:
+            - type: string
+              format: uuid
+            - type: 'null'
+          description: Metadata only; it does not grant the partner any user or resource permission.
+        code:
+          type: string
+          minLength: 1
+          maxLength: 80
+        name:
+          type: string
+          minLength: 1
+          maxLength: 200
+        node_type:
+          type: string
+          enum:
+            - work_package
+            - discipline
+            - system
+            - trade
+            - other
+        planned_start_at:
+          type: string
+          format: date-time
+        planned_finish_at:
+          type: string
+          format: date-time
+    WorkNode:
+      type: object
+      required:
+        - id
+        - code
+        - name
+        - node_type
+        - status
+        - version
+      properties:
+        id:
+          type: string
+          format: uuid
+        project_id:
+          type: string
+          format: uuid
+        parent_id:
+          oneOf:
+            - type: string
+              format: uuid
+            - type: 'null'
+        location_node_id:
+          oneOf:
+            - type: string
+              format: uuid
+            - type: 'null'
+        owner_partner_organization_id:
+          oneOf:
+            - type: string
+              format: uuid
+            - type: 'null'
+        code:
+          type: string
+        name:
+          type: string
+        node_type:
+          type: string
+        planned_start_at:
+          oneOf:
+            - type: string
+              format: date-time
+            - type: 'null'
+        planned_finish_at:
+          oneOf:
+            - type: string
+              format: date-time
+            - type: 'null'
+        status:
+          type: string
+          enum:
+            - Active
+            - Archived
+        version:
+          type: integer
+          format: int64
+    DisciplineCreate:
+      type: object
+      required:
+        - code
+        - name
+      properties:
+        code:
+          type: string
+          pattern: ^[A-Z0-9][A-Z0-9_-]{1,31}$
+        name:
+          type: string
+          minLength: 1
+          maxLength: 120
+    Discipline:
+      type: object
+      required:
+        - id
+        - code
+        - name
+        - status
+        - version
+      properties:
+        id:
+          type: string
+          format: uuid
+        project_id:
+          type: string
+          format: uuid
+        code:
+          type: string
+        name:
+          type: string
+        status:
+          type: string
+          enum:
+            - Active
+            - Archived
+        version:
+          type: integer
+          format: int64
+    ClassificationCreate:
+      type: object
+      required:
+        - classification_type
+        - code
+        - name
+      properties:
+        parent_id:
+          oneOf:
+            - type: string
+              format: uuid
+            - type: 'null'
+        classification_type:
+          type: string
+          enum:
+            - document_type
+            - document_subtype
+            - originator
+            - package
+            - confidentiality
+            - review
+            - distribution
+        code:
+          type: string
+          minLength: 1
+          maxLength: 80
+        name:
+          type: string
+          minLength: 1
+          maxLength: 160
+    Classification:
+      type: object
+      required:
+        - id
+        - classification_type
+        - code
+        - name
+        - status
+        - version
+      properties:
+        id:
+          type: string
+          format: uuid
+        project_id:
+          type: string
+          format: uuid
+        parent_id:
+          oneOf:
+            - type: string
+              format: uuid
+            - type: 'null'
+        classification_type:
+          type: string
+          enum:
+            - document_type
+            - document_subtype
+            - originator
+            - package
+            - confidentiality
+            - review
+            - distribution
+        code:
+          type: string
+        name:
+          type: string
+        status:
+          type: string
+          enum:
+            - Active
+            - Archived
+        version:
+          type: integer
+          format: int64
+    ContextImportPreviewRequest:
+      type: object
+      required:
+        - target_type
+        - csv
+      properties:
+        target_type:
+          type: string
+          enum:
+            - location_nodes
+            - work_nodes
+        csv:
+          type: string
+          minLength: 1
+          maxLength: 1048576
+          description: UTF-8 CSV text. Rows are validated before any Project Context mutation occurs.
+    ContextImportError:
+      type: object
+      required:
+        - row
+        - code
+      properties:
+        row:
+          type: integer
+          minimum: 2
+        code:
+          type: string
+    ContextImportPreview:
+      type: object
+      required:
+        - import_id
+        - valid_rows
+        - invalid_rows
+        - row_errors
+        - rows
+      properties:
+        import_id:
+          type: string
+          format: uuid
+        valid_rows:
+          type: integer
+          minimum: 0
+        invalid_rows:
+          type: integer
+          minimum: 0
+        row_errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ContextImportError'
+        rows:
+          type: array
+          items:
+            type: object
+            required:
+              - code
+              - name
+            properties:
+              code:
+                type: string
+              name:
+                type: string
+    ContextImportCommitResult:
+      type: object
+      required:
+        - import_id
+        - status
+        - duplicate_safe
+      properties:
+        import_id:
+          type: string
+          format: uuid
+        status:
+          type: string
+          const: Committed
+        duplicate_safe:
+          type: boolean
+          const: true
+    DelegationCreate:
+      type: object
+      required:
+        - delegatee_user_id
+        - scope_type
+        - scope_id
+        - actions
+        - valid_from
+        - valid_to
+        - reason
+      properties:
+        delegatee_user_id:
+          type: string
+          format: uuid
+        scope_type:
+          type: string
+          enum:
+            - project
+            - location
+            - work
+            - discipline
+            - classification
+        scope_id:
+          type: string
+          format: uuid
+        actions:
+          type: array
+          minItems: 1
+          items:
+            type: string
+        valid_from:
+          type: string
+          format: date-time
+        valid_to:
+          type: string
+          format: date-time
+        reason:
+          type: string
+          minLength: 1
+          maxLength: 1000
+    Delegation:
+      type: object
+      required:
+        - id
+        - project_id
+        - status
+      properties:
+        id:
+          type: string
+          format: uuid
+        project_id:
+          type: string
+          format: uuid
+        status:
+          type: string
+          const: Active
+    BreakGlassRequestCreate:
+      type: object
+      required:
+        - scope_type
+        - scope_id
+        - actions
+        - reason
+        - valid_from
+        - valid_to
+      properties:
+        scope_type:
+          type: string
+          enum:
+            - project
+            - location
+            - work
+            - discipline
+            - classification
+        scope_id:
+          type: string
+          format: uuid
+        actions:
+          type: array
+          minItems: 1
+          items:
+            type: string
+        reason:
+          type: string
+          minLength: 1
+          maxLength: 1000
+        valid_from:
+          type: string
+          format: date-time
+        valid_to:
+          type: string
+          format: date-time
+          description: Must be inside the server-configured maximum break-glass TTL.
+    BreakGlassRequest:
+      type: object
+      required:
+        - id
+        - project_id
+        - status
+        - banner
+      properties:
+        id:
+          type: string
+          format: uuid
+        project_id:
+          type: string
+          format: uuid
+        status:
+          type: string
+          enum:
+            - Requested
+            - Approved
+        banner:
+          type: boolean
+    BreakGlassSession:
+      type: object
+      required:
+        - id
+        - request_id
+        - status
+        - expires_at
+        - banner
+      properties:
+        id:
+          type: string
+          format: uuid
+        request_id:
+          type: string
+          format: uuid
+        status:
+          type: string
+          const: Active
+        expires_at:
+          type: string
+          format: date-time
+        banner:
+          type: boolean
+          const: true
+    DocumentCreate:
+      type: object
+      additionalProperties: false
+      required:
+        - code
+        - title
+        - document_type
+      properties:
+        code:
+          type: string
+          maxLength: 120
+        title:
+          type: string
+          maxLength: 300
+        document_type:
+          type: string
+        numbering_context:
+          type: string
+          default: default
+        discipline_id:
+          type: string
+          format: uuid
+        classification_id:
+          type: string
+          format: uuid
+        work_id:
+          type: string
+          format: uuid
+        confidentiality:
+          type: string
+          enum:
+            - internal
+            - restricted
+            - project
+    Document:
+      type: object
+      required:
+        - id
+        - project_id
+        - numbering_context
+        - code
+        - title
+        - document_type
+        - confidentiality
+        - version
+      properties:
+        id:
+          type: string
+          format: uuid
+        project_id:
+          type: string
+          format: uuid
+        numbering_context:
+          type: string
+        code:
+          type: string
+        title:
+          type: string
+        document_type:
+          type: string
+        discipline_id:
+          type: string
+          format: uuid
+        version:
+          type: string
+          pattern: ^[1-9][0-9]*$
+        confidentiality:
+          type: string
+        archived_at:
+          type:
+            - string
+            - 'null'
+          format: date-time
+        current_revision:
+          oneOf:
+            - $ref: '#/components/schemas/DocumentRevision'
+            - type: 'null'
+    DocumentDetail:
+      allOf:
+        - $ref: '#/components/schemas/Document'
+        - type: object
+          properties:
+            allowed_actions:
+              type: array
+              items:
+                type: string
+            revision_count:
+              type: integer
+            revisions:
+              type: array
+              items:
+                $ref: '#/components/schemas/DocumentRevision'
+            exact_revision:
+              oneOf:
+                - $ref: '#/components/schemas/DocumentRevision'
+                - type: 'null'
+            superseded_banner:
+              type: boolean
+            current_link_authorized:
+              type: boolean
+            current_pointer_version:
+              type: string
+              pattern: ^[0-9]+$
+            review_comments:
+              type: array
+              items:
+                $ref: '#/components/schemas/ReviewComment'
+            annotations:
+              type: array
+              items:
+                $ref: '#/components/schemas/Annotation'
+    RevisionCreate:
+      type: object
+      additionalProperties: false
+      required:
+        - revision_code
+        - purpose
+        - file
+      properties:
+        revision_code:
+          type: string
+          maxLength: 60
+        purpose:
+          type: string
+          maxLength: 100
+        suitability_code:
+          type: string
+        file:
+          type: object
+          additionalProperties: false
+          required:
+            - filename
+            - size_bytes
+            - media_type
+            - sha256
+          properties:
+            filename:
+              type: string
+              maxLength: 255
+            size_bytes:
+              type: integer
+              format: int64
+              minimum: 1
+            media_type:
+              type: string
+            sha256:
+              type: string
+              pattern: ^[a-f0-9]{64}$
+    DocumentRevision:
+      type: object
+      required:
+        - id
+        - document_id
+        - revision_code
+        - status
+        - version
+      properties:
+        id:
+          type: string
+          format: uuid
+        document_id:
+          type: string
+          format: uuid
+        revision_code:
+          type: string
+        status:
+          type: string
+          enum:
+            - Draft
+            - Under Review
+            - Approved
+            - Approved with Comments
+            - Rejected
+            - Published
+            - Superseded
+            - Withdrawn
+        purpose:
+          type: string
+        file:
+          oneOf:
+            - $ref: '#/components/schemas/FileObject'
+            - type: 'null'
+        version:
+          type: string
+          pattern: ^[1-9][0-9]*$
+        allowed_actions:
+          type: array
+          items:
+            type: string
+    RevisionWithUpload:
+      type: object
+      required:
+        - revision
+        - upload_session
+      properties:
+        revision:
+          $ref: '#/components/schemas/DocumentRevision'
+        upload_session:
+          $ref: '#/components/schemas/UploadSession'
+    UploadSession:
+      type: object
+      required:
+        - id
+        - expires_at
+        - upload_target
+      properties:
+        id:
+          type: string
+          format: uuid
+        expires_at:
+          type: string
+          format: date-time
+        chunk_size_bytes:
+          type: integer
+        upload_target:
+          type: string
+          format: uri
+          description: Short-lived quarantine upload target.
+        required_headers:
+          type: object
+          additionalProperties:
+            type: string
+    UploadPartAuthorization:
+      type: object
+      required:
+        - url
+        - expires_at
+        - part_number
+      properties:
+        url:
+          type: string
+          format: uri
+          description: Short-lived, memory-only quarantine part authorization.
+        expires_at:
+          type: string
+          format: date-time
+        part_number:
+          type: integer
+          minimum: 1
+    UploadComplete:
+      type: object
+      additionalProperties: false
+      required:
+        - completed_parts
+        - size_bytes
+        - sha256
+      properties:
+        size_bytes:
+          type: integer
+          format: int64
+        sha256:
+          type: string
+          pattern: ^[a-f0-9]{64}$
+        completed_parts:
+          type: array
+          items:
+            type: object
+            additionalProperties: false
+            required:
+              - part_number
+              - etag
+            properties:
+              part_number:
+                type: integer
+                minimum: 1
+              etag:
+                type: string
+    FileObject:
+      type: object
+      required:
+        - id
+        - status
+        - size_bytes
+        - media_type
+        - sha256
+      properties:
+        id:
+          type: string
+          format: uuid
+        status:
+          type: string
+          enum:
+            - Pending
+            - Uploading
+            - Validating
+            - Quarantined
+            - Available
+            - Rejected
+            - Purged
+        size_bytes:
+          type: integer
+          format: int64
+        media_type:
+          type: string
+        sha256:
+          type: string
+        failure_code:
+          type: string
+    RevisionTransition:
+      type: object
+      additionalProperties: false
+      required:
+        - action
+        - expected_version
+      properties:
+        action:
+          type: string
+          enum:
+            - submit_review
+            - approve
+            - approve_with_comments
+            - reject
+            - publish
+            - withdraw
+        expected_version:
+          type: string
+          pattern: ^[1-9][0-9]*$
+        expected_current_version:
+          type: string
+          pattern: ^[0-9]+$
+        reason:
+          type: string
+          maxLength: 2000
+        reviewer_ids:
+          type: array
+          items:
+            type: string
+            format: uuid
+        review_mode:
+          type: string
+          enum:
+            - sequential
+            - quorum
+        required_approvals:
+          type: integer
+          minimum: 1
+        reject_threshold:
+          type: integer
+          minimum: 1
+        distribution_context:
+          type: string
+          default: default
+    ExpectedVersionCommand:
+      type: object
+      additionalProperties: false
+      required:
+        - expected_version
+      properties:
+        expected_version:
+          type: string
+          pattern: ^[1-9][0-9]*$
+    ReviewCommentCreate:
+      type: object
+      additionalProperties: false
+      required:
+        - importance
+        - body
+      properties:
+        importance:
+          type: string
+          enum:
+            - mandatory
+            - advisory
+        body:
+          type: string
+          minLength: 1
+          maxLength: 4000
+        page:
+          type: integer
+          minimum: 1
+        x:
+          type: number
+          minimum: 0
+          maximum: 1
+        y:
+          type: number
+          minimum: 0
+          maximum: 1
+    ReviewComment:
+      type: object
+      required:
+        - id
+        - revision_id
+        - importance
+        - body
+      properties:
+        id:
+          type: string
+          format: uuid
+        revision_id:
+          type: string
+          format: uuid
+        author_user_id:
+          type: string
+          format: uuid
+        importance:
+          type: string
+          enum:
+            - mandatory
+            - advisory
+        body:
+          type: string
+        page:
+          type:
+            - integer
+            - 'null'
+          minimum: 1
+        x:
+          type:
+            - number
+            - 'null'
+          minimum: 0
+          maximum: 1
+        y:
+          type:
+            - number
+            - 'null'
+          minimum: 0
+          maximum: 1
+        disposition_id:
+          type:
+            - string
+            - 'null'
+          format: uuid
+        disposition:
+          type:
+            - string
+            - 'null'
+        response:
+          type:
+            - string
+            - 'null'
+    ReviewCommentDispositionCreate:
+      type: object
+      additionalProperties: false
+      required:
+        - disposition
+        - response
+      properties:
+        disposition:
+          type: string
+          enum:
+            - accepted
+            - incorporated
+            - noted
+            - rejected_with_reason
+        response:
+          type: string
+          minLength: 1
+          maxLength: 4000
+    ReviewCommentDisposition:
+      type: object
+      required:
+        - id
+        - comment_id
+        - disposition
+        - response
+      properties:
+        id:
+          type: string
+          format: uuid
+        comment_id:
+          type: string
+          format: uuid
+        disposition:
+          type: string
+        response:
+          type: string
+        created_by:
+          type: string
+          format: uuid
+        created_at:
+          type: string
+          format: date-time
+    AnnotationCreate:
+      type: object
+      additionalProperties: false
+      required:
+        - page
+        - x
+        - y
+        - kind
+      properties:
+        page:
+          type: integer
+          minimum: 1
+        x:
+          type: number
+          minimum: 0
+          maximum: 1
+        y:
+          type: number
+          minimum: 0
+          maximum: 1
+        kind:
+          type: string
+          enum:
+            - pin
+            - note
+            - highlight
+            - area
+        body:
+          type: string
+          maxLength: 4000
+        linked_entity_type:
+          type: string
+        linked_entity_id:
+          type: string
+          format: uuid
+    Annotation:
+      allOf:
+        - $ref: '#/components/schemas/AnnotationCreate'
+        - type: object
+          required:
+            - id
+            - revision_id
+            - created_by
+            - created_at
+          properties:
+            id:
+              type: string
+              format: uuid
+            revision_id:
+              type: string
+              format: uuid
+            created_by:
+              type: string
+              format: uuid
+            created_at:
+              type: string
+              format: date-time
+    ReviewInboxItem:
+      type: object
+      required:
+        - assignment_id
+        - revision_id
+        - revision_code
+        - status
+        - version
+        - document_id
+        - document_code
+        - title
+      properties:
+        assignment_id:
+          type: string
+          format: uuid
+        revision_id:
+          type: string
+          format: uuid
+        revision_code:
+          type: string
+        status:
+          type: string
+        version:
+          type: string
+        document_id:
+          type: string
+          format: uuid
+        document_code:
+          type: string
+        title:
+          type: string
+        sequence:
+          type: integer
+        due_at:
+          type:
+            - string
+            - 'null'
+          format: date-time
+        decision:
+          type:
+            - string
+            - 'null'
+    ReviewInboxList:
+      type: object
+      required:
+        - items
+        - page
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReviewInboxItem'
+        page:
+          $ref: '#/components/schemas/PageMeta'
+    TransmittalCreate:
+      type: object
+      additionalProperties: false
+      required:
+        - code
+        - purpose
+        - items
+        - recipients
+      properties:
+        code:
+          type: string
+          minLength: 1
+          maxLength: 120
+        purpose:
+          type: string
+          minLength: 1
+          maxLength: 300
+        items:
+          type: array
+          minItems: 1
+          items:
+            type: object
+            additionalProperties: false
+            required:
+              - revision_id
+            properties:
+              revision_id:
+                type: string
+                format: uuid
+              distribution_context:
+                type: string
+                default: default
+        recipients:
+          type: array
+          minItems: 1
+          items:
+            type: object
+            additionalProperties: false
+            required:
+              - type
+              - reference
+              - name
+            properties:
+              type:
+                type: string
+                enum:
+                  - user
+                  - organization
+                  - external
+              reference:
+                type: string
+              name:
+                type: string
+              address:
+                type: string
+    Transmittal:
+      type: object
+      required:
+        - id
+        - project_id
+        - code
+        - purpose
+        - status
+        - issued_at
+        - snapshot_sha256
+        - items
+        - recipients
+      properties:
+        id:
+          type: string
+          format: uuid
+        project_id:
+          type: string
+          format: uuid
+        code:
+          type: string
+        purpose:
+          type: string
+        status:
+          type: string
+          const: Issued
+        issued_at:
+          type: string
+          format: date-time
+        snapshot_sha256:
+          type: string
+          pattern: ^[a-f0-9]{64}$
+        items:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+        recipients:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+    SignedDownload:
+      type: object
+      required:
+        - url
+        - expires_at
+        - filename
+      properties:
+        url:
+          type: string
+          format: uri
+        expires_at:
+          type: string
+          format: date-time
+        filename:
+          type: string
+    AuditEvent:
+      type: object
+      required:
+        - id
+        - occurred_at
+        - action
+        - entity_type
+        - entity_id
+        - outcome
+        - correlation_id
+      properties:
+        id:
+          type: string
+          format: uuid
+        occurred_at:
+          type: string
+          format: date-time
+        actor:
+          $ref: '#/components/schemas/UserSummary'
+        effective_roles:
+          type: array
+          items:
+            type: string
+        action:
+          type: string
+        entity_type:
+          type: string
+        entity_id:
+          type: string
+          format: uuid
+        entity_version:
+          type: integer
+          format: int64
+        outcome:
+          type: string
+          enum:
+            - success
+            - denied
+            - failed
+        reason_code:
+          type: string
+        correlation_id:
+          type: string
+          format: uuid
+    PageMeta:
+      type: object
+      required:
+        - has_more
+      properties:
+        next_cursor:
+          type:
+            - string
+            - 'null'
+        has_more:
+          type: boolean
+    ProjectList:
+      type: object
+      required:
+        - items
+        - page
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Project'
+        page:
+          $ref: '#/components/schemas/PageMeta'
+    MembershipList:
+      type: object
+      required:
+        - items
+        - page
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProjectMembership'
+        page:
+          $ref: '#/components/schemas/PageMeta'
+    DocumentList:
+      type: object
+      required:
+        - items
+        - page
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Document'
+        page:
+          $ref: '#/components/schemas/PageMeta'
+    RevisionList:
+      type: object
+      required:
+        - items
+        - page
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/DocumentRevision'
+        page:
+          $ref: '#/components/schemas/PageMeta'
+    AuditEventList:
+      type: object
+      required:
+        - items
+        - page
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/AuditEvent'
+        page:
+          $ref: '#/components/schemas/PageMeta'

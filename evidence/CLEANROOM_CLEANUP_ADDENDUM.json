@@ -1,0 +1,13 @@
+{
+  "checkpoint": "VIN-FND-001A",
+  "temporary_path": "C:\\Users\\Duong Vinh\\Downloads\\VinOps\\vinops\\.tmp\\vinops-fnd001a-cleanroom",
+  "ownership": "Created during this checkpoint; it contains no user-authored source input.",
+  "observed": [
+    "The source-only clean-room matrix completed successfully before cleanup.",
+    "All 1,185 junctions created by pnpm were detached only after each target was verified to remain inside the temporary directory.",
+    "Recursive cleanup then failed with AccessDenied on package-manager material; 16,644 files remain and no reparse points remain.",
+    "A read-only fsutil hardlink inspection was also denied, so an external hardlink target is an unconfirmed hypothesis rather than a recorded fact."
+  ],
+  "safety_action": "No alternate delete tool, ACL/attribute change, or other bypass was used. The directory is ignored by Git and must be removed only after an authorized environment-level cleanup method is available.",
+  "status": "BLOCKED_EXTERNAL_PERMISSION"
+}

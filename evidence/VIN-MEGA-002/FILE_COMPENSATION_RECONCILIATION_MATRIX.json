@@ -1,0 +1,21 @@
+{
+  "result": "PASS_WITH_LIMITATIONS",
+  "implemented": [
+    "idempotent completion",
+    "checksum/size mismatch quarantines",
+    "worker retry and claim deduplication",
+    "outbox event",
+    "typed reconcile job claim",
+    "reconcile sweep quarantines stuck/orphan metadata without promotion"
+  ],
+  "evidence": [
+    "apps/worker/test/file-processing.integration.test.ts: reconciliation 1/1",
+    "packages/database/migrations/009_document_file_reconciliation.sql",
+    "packages/database/migrations/010_file_job_type_claim.sql"
+  ],
+  "unverified": [
+    "storage-success/DB-failure compensation",
+    "DB-success/storage-finalization failure recovery"
+  ],
+  "reason": "Reconciliation is fail-closed; the two cross-system fault-injection cases remain for a clean-room run."
+}

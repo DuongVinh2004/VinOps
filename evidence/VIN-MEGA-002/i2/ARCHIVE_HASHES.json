@@ -1,0 +1,28 @@
+{
+  "iteration": 2,
+  "evidence_zip": {
+    "path": "evidence/VIN-MEGA-002/i2/VIN-MEGA-002-i2-evidence-verifiable.zip",
+    "bytes": 17726,
+    "sha256": "10E9920C5F80627B8BA5C11EC5ED6951C3A6522A48A460C2A1952A6FCA8B9CE5",
+    "entries": 12,
+    "nested_archives": 0
+  },
+  "review_zip": {
+    "path": "evidence/VIN-MEGA-002/i2/VIN-MEGA-002-i2-review-verifiable.zip",
+    "bytes": 323389,
+    "sha256": "F09D96DA5BA7478C8C804D808BD985ADD1117D780EC75ABD1BAEA2E161789039",
+    "entries": 183,
+    "nested_archives": 0,
+    "source_byte_mismatches": 0
+  },
+  "source_delta_patch": {
+    "path": "evidence/VIN-MEGA-002/i2/VIN-MEGA-002-i2-source.delta.patch",
+    "bytes": 3465,
+    "sha256": "7D734F4BF544D3B19CA4370C352A3B6C9550B10B8949001F819476F0E36572A5"
+  },
+  "i1_preserved": {
+    "manifest_sha256": "06f2d374c94b59a6bda20ab1e14aaf57bf275bea3a1a2dde09c1d4fcf5e1e81d",
+    "evidence_zip_sha256": "1a1c62e0e42ffb8da5c4c807ebc0ff37619db074daab2b838748a6f37424d7ed",
+    "review_zip_sha256": "82adc046469b8558088953ec2da049902ac3d895f14b1195cea6856c9073b1e5"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "classification": "PRODUCT_RLS_DDL_DEFECT",
+  "chain": [
+    "007_document_control.sql:transmittals_scoped USING",
+    "transmittals_scoped USING -> vinops.transmittal_items item subquery",
+    "transmittal_items_scoped USING -> vinops.transmittals t subquery",
+    "transmittals policy re-entry -> PostgreSQL 42P17 infinite recursion",
+    "transmittals_scoped also calls vinops.can_access_document(item.document_id)",
+    "can_access_document -> can_access_document_scope/can_access_project helper chain"
+  ],
+  "migration_sha256": "8865bf08ce096341a8564ac3f33421ed0251d7f0bec8ab99ee9a87608998150b",
+  "source_excerpt_sha256": "f3b3a782d8637ef5e35527efbcffab3c28c29c95a07c64109358e0454f09a058"
+}

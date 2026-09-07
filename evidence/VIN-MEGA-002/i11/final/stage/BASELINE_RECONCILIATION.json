@@ -1,0 +1,13 @@
+{
+  "status": "PASS",
+  "branch": "main",
+  "head": "UNBORN",
+  "remote": "NONE",
+  "source_before": "a9ec3c2a437bb8d1ab6c30a69e8b711eb203fd075e0e4db19e573369aecd7a1b",
+  "source_after": "46462000a1ff765243d2d69e8ec7f2b560d77a6bfcfc93125ca846badd501431",
+  "i10_manifest_sha256": "1BF3B520083B21B7BA97C47E9B1CEC46B09DC0DF77755914B2B573147779F7CA",
+  "i10_evidence_sha256": "9AF3107FCF7C5E3B585FB3688516548727C834F1BEAE9F646148FFE748048AC8",
+  "i10_review_sha256": "6C5636FD285B84032A3D4665B65EBD453C298EA3CC9C50761AE93D1AE28C186A",
+  "protected_artifacts_match": true,
+  "migrations_001_011_unchanged": true
+}

@@ -1,0 +1,1 @@
+{"checkpoint":"VIN-MEGA-001","iteration":2,"status":"UNVERIFIED","reason":"Live API/PostgreSQL runtime unavailable.","unit_security_tests":"PASS","runtime_login_logout":"NOT_RUN","refresh_rotation_reuse":"NOT_RUN","revoke_session_family":"NOT_RUN","password_reset_single_use":"NOT_RUN","csrf_cors_negative":"NOT_RUN","membership_revocation":"NOT_RUN"}

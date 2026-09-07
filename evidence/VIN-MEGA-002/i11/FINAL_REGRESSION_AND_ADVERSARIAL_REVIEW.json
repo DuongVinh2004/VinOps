@@ -1,0 +1,46 @@
+{
+  "status": "PASS",
+  "focused_tests": {
+    "exit_code": 0,
+    "static": "4/4",
+    "postgres_non_bypass": "5/5",
+    "secret_scan": "2/2"
+  },
+  "authorization_canaries": {
+    "exit_code": 0,
+    "statuses": [
+      200,
+      404,
+      404
+    ],
+    "metadata_leakage": false
+  },
+  "api_build_exit": 0,
+  "worker_build_exit": 0,
+  "final_verify_exit": 0,
+  "final_verify_constituents_executed": [
+    "format:check",
+    "lint",
+    "typecheck",
+    "test",
+    "contracts:verify",
+    "architecture:check",
+    "build",
+    "secret:scan",
+    "license:check"
+  ],
+  "adversarial_checks": {
+    "mocked_boundary": false,
+    "status_only_assertions": false,
+    "stale_runtime": false,
+    "skipped_final_gate": false,
+    "weakened_security": false
+  },
+  "authorization_matrix": {
+    "rows": 10800,
+    "unique": 10800,
+    "unexpected": 0,
+    "reused": true,
+    "reason": "Only package-manager orchestration changed."
+  }
+}

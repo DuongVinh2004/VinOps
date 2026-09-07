@@ -1,0 +1,19 @@
+{
+  "result": "PASS",
+  "transitions": [
+    "Draft -> Under Review",
+    "Under Review -> Approved",
+    "Under Review -> Approved with Comments",
+    "Under Review -> Rejected",
+    "Approved -> Published",
+    "Published -> Superseded",
+    "Draft/Under Review -> Withdrawn"
+  ],
+  "guards": [
+    "maker-checker",
+    "mandatory disposition",
+    "expected version",
+    "idempotency",
+    "scope/action authorization"
+  ]
+}

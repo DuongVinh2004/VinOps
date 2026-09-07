@@ -1,0 +1,13 @@
+{
+  "checkpoint_id": "VIN-MEGA-002",
+  "iteration": 8,
+  "protected_i7": [
+    { "path": "evidence/VIN-MEGA-002/i7/VIN-MEGA-002-i7-manifest.json", "sha256": "CAABC71C9F86FE1830324D203BC31AAD64CBA6BA73D9422C9312280BF5D61F46", "status": "PASS" },
+    { "path": "evidence/VIN-MEGA-002/i7/VIN-MEGA-002-i7-evidence-verifiable.zip", "sha256": "8BBE4754C66D12316FA124A4CD58D8351E83EE58FFFD7A6F90797341CFE39CB7", "status": "PASS" },
+    { "path": "evidence/VIN-MEGA-002/i7/VIN-MEGA-002-i7-review-verifiable.zip", "sha256": "E0FE71EBC40EDA136206AE48B94982D21423E0228B5205E3313A16DA0DCAEE74", "status": "PASS" },
+    { "path": "evidence/VIN-MEGA-002/i7/VIN-MEGA-002-i7-source.delta.patch", "sha256": "91BC7FFC91DAECFD6464F0632F2AE830F307AA2A654F78F2BE204CF412FD689B", "status": "PASS" }
+  ],
+  "source_fingerprint": { "before": "45c68e8314962e35a3e3c29fd713df13d037c3fe418955cfd4341d48f533ece3", "after": "45c68e8314962e35a3e3c29fd713df13d037c3fe418955cfd4341d48f533ece3", "status": "PASS" },
+  "i7_raw_final_evidence": "untouched",
+  "i8_scope_only": true
+}

@@ -1,0 +1,127 @@
+{
+  "protocol_version": "2.0",
+  "checkpoint_id": "VIN-MEGA-002",
+  "iteration": 10,
+  "status": "BLOCKED",
+  "source_fingerprint_before": "4b6b33f7c844fd7dc35071adeb1f4e944349e4f171f5aefa225aac98879bc7f9",
+  "source_fingerprint_after": "a9ec3c2a437bb8d1ab6c30a69e8b711eb203fd075e0e4db19e573369aecd7a1b",
+  "changed_paths": [
+    "scripts/secret-scan.mjs",
+    "packages/config/test/secret-scan.test.ts"
+  ],
+  "product_tool_files": 1,
+  "test_files": 1,
+  "migrations": 0,
+  "dependencies_or_lockfiles": 0,
+  "entries": [
+    {
+      "path": "api-i10.stderr.log",
+      "bytes": 383,
+      "sha256": "c3f6998fc21c332b28a6b31744f9f1337cfc191f4e7f0bbb2be353c0946998e1"
+    },
+    {
+      "path": "api-i10.stdout.log",
+      "bytes": 9456,
+      "sha256": "bce36b0f00ee91dc086803ee87a4344e99ae1e516a63d67aa1147334ba8f9fa7"
+    },
+    {
+      "path": "AUTHZ_MATRIX_RECONCILIATION.json",
+      "bytes": 369,
+      "sha256": "bff1ba562b2da1419a674aa029176741dbd04197e002dbab1b0c914420cfcd94"
+    },
+    {
+      "path": "BASELINE_RECONCILIATION.json",
+      "bytes": 1011,
+      "sha256": "865158d7a710e7f87366773961e63084ea5b3bccc7607090cddf9afc3598fecc"
+    },
+    {
+      "path": "CONTROL_STATE_RECONCILIATION.json",
+      "bytes": 649,
+      "sha256": "f3070bfef7236324c4b77f78962bb9ff5609385d6a83d5a3ec659cc146d0dc26"
+    },
+    {
+      "path": "FIVE_FILE_SOURCE_REVIEW.json",
+      "bytes": 1256,
+      "sha256": "efc924abd672e7ae9de3d250c9be18515d8f4fc8629120e35e117d5e5faa2821"
+    },
+    {
+      "path": "HTTP_REGRESSION_RESULTS.json",
+      "bytes": 8027,
+      "sha256": "1ef2174241e01240da0650ddad1823bf79de73907844515b3825b6a36606e19f"
+    },
+    {
+      "path": "I10_FIXTURE_IDS.json",
+      "bytes": 504,
+      "sha256": "faf611b571803facafed0819c6b7c6c04bbcb136d75691bee034ac9a55e269c4"
+    },
+    {
+      "path": "I10_SOURCE_INVENTORY.json",
+      "bytes": 31270,
+      "sha256": "468abfb99e1166adb298ddee05265456449e2d6a6cad4fe30a988058bd4f67d5"
+    },
+    {
+      "path": "pnpm-verify-i10.stderr.log",
+      "bytes": 424,
+      "sha256": "0dd2744dee26bd6bbf40a2fc82afe89db665a3e4711417e764c2b4a973fc1460"
+    },
+    {
+      "path": "pnpm-verify-i10.stdout.log",
+      "bytes": 46,
+      "sha256": "70691ee46df8bffd84dd117eb9297af7108f7fc0b6be5f63d6cb30aef0d605b5"
+    },
+    {
+      "path": "PROTECTED_ARTIFACT_RECONCILIATION.json",
+      "bytes": 5517,
+      "sha256": "9de2511f8ffadb1cbeb28b2435ff17aef90af9b49adf1147c52784ad6f09d243"
+    },
+    {
+      "path": "SECRET_SCAN_RECONCILIATION.json",
+      "bytes": 839,
+      "sha256": "aeb8c5052eca91353dca2b3704f53123ad0a01763778082d829ad1e3a545ceda"
+    },
+    {
+      "path": "VERIFICATION_COMMANDS.json",
+      "bytes": 1333,
+      "sha256": "f06b53f277ee5ce9325cda865e42856d507cb6632a6b781eb4484292cb40a10c"
+    },
+    {
+      "path": "VIN-MEGA-002-i10-evidence-verifiable.zip",
+      "bytes": 31328,
+      "sha256": "9af3107fcf7c5e3b585fb3688516548727c834f1beae9f646148ffe748048ac8"
+    },
+    {
+      "path": "VIN-MEGA-002-i10-review-verifiable.zip",
+      "bytes": 11976,
+      "sha256": "6c5636fd285b84032a3d4665b65ebd453c298ea3cc9c50761ae93d1ae28c186a"
+    },
+    {
+      "path": "VIN-MEGA-002-i10-source.delta.patch",
+      "bytes": 4077,
+      "sha256": "5905a863202a729246f287a3ac45284f3c2c2307636f3267153fb727e287a7c1"
+    },
+    {
+      "path": "VIN-MEGA-002-i8-to-i9-reconstructed.patch",
+      "bytes": 5969,
+      "sha256": "faff98f3ae94195adcbd0264b88065a969f86632ebc659b916d040a70378fee1"
+    }
+  ],
+  "evidence_zip": {
+    "file": "VIN-MEGA-002-i10-evidence-verifiable.zip",
+    "bytes": 31328,
+    "sha256": "9af3107fcf7c5e3b585fb3688516548727c834f1beae9f646148ffe748048ac8",
+    "duplicate_entries": 0,
+    "nested_archives": 0,
+    "source_byte_mismatches": 0
+  },
+  "review_zip": {
+    "file": "VIN-MEGA-002-i10-review-verifiable.zip",
+    "bytes": 11976,
+    "sha256": "6c5636fd285b84032a3d4665b65ebd453c298ea3cc9c50761ae93d1ae28c186a",
+    "duplicate_entries": 0,
+    "nested_archives": 0,
+    "source_byte_mismatches": 0
+  },
+  "control_state_delta": "BLOCKED",
+  "ac06": "UNVERIFIED",
+  "ac08": "BLOCKED"
+}

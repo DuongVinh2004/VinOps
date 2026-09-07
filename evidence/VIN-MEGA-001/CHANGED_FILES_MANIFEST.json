@@ -1,0 +1,29 @@
+{
+  "checkpoint": "VIN-MEGA-001",
+  "iteration": 4,
+  "fingerprint_method": "SHA-256 of sorted relative-path|byte-length|file-SHA-256 lines joined by LF without trailing LF; excludes .git, .tmp, node_modules, evidence, coverage, dist and generated package source JavaScript/declaration artifacts.",
+  "before": { "review_entries": 116, "sha256": "bad57a9afd26cb826bc4837cde81a0f25f6d20cad230f8f781c12cc770ae5afd" },
+  "after": { "source_files": 124, "sha256": "4bb3bcea758b55544062c73954a4595be9560bdeeec34281aa399ba03172479e" },
+  "preexisting_i3_review_omissions_preserved": [
+    { "path": "eslint.config.js", "sha256": "5045a02c7c821b60eb0ed6395aff59155927291724b0f46d89d94a775cfd24a9" },
+    { "path": "apps/web/index.html", "sha256": "c5c314d9de266c6d06511b8bb536c2af88937c002f3f4fee0da879976fd910ca" }
+  ],
+  "modified": [
+    { "path": "apps/api/package.json", "before": "ab0e06b865525eacc90c35e22327e01ed71cdce61064dcfe78633d065a904bef", "after": "b039235c4f9c2a136b374b89a53b7fc2991cbfd935a4e5b00e79ce5ce9dd3c5a" },
+    { "path": "apps/api/src/bootstrap.ts", "before": "cd376fc098da28457da5c704e95700425834e91e8aa5cf34d4774d56d64c31d5", "after": "02ded01336eb03cd046d6d40cd33698e0bd366a847d57fbf3e56bf1ae7a644fc" },
+    { "path": "apps/api/src/platform.service.ts", "before": "0707646e595903bfe1ec715c249cd6bd4da698a6b1f25f16ccd50b29c6b10483", "after": "5a0ed15bfb30613a300028019e03abcd98d69c4fab8cb786ce224c87a4b80594" },
+    { "path": "apps/worker/package.json", "before": "786b6affe73363c023043391885e3032f3d5df80981f8e1c4e1d5ffedd91e0f0", "after": "d96cffd68af7cd38f188121375299f6288fada31965de6482fbbc873c46c3e03" },
+    { "path": "pnpm-lock.yaml", "before": "3fb0ef550ae670a4647c81c902c3b8562682cf1bc3803bcef2d232c4cd368413", "after": "26cc1d1b6abeb8623812f6a1d7876bd56ff427873859f086bb136d66506aae07" },
+    { "path": "vitest.config.ts", "before": "1214f62cdec08040dfa3dd1555cb686e34c1219c3d8ce14875ecd62ba98fecf2", "after": "1fce9ba6af7510faf69fb2c70a0b2b9e2d8991f4eef64cef542457851f63a240" }
+  ],
+  "created": [
+    "apps/api/test/runtime-security.integration.test.ts",
+    "apps/worker/test/postgres-runtime.integration.test.ts",
+    "packages/database/migrations/003_security_runtime_closure.sql",
+    "packages/database/migrations/004_invitation_and_member_visibility.sql",
+    "packages/database/migrations/005_membership_session_revocation.sql",
+    "packages/database/migrations/006_runtime_actor_context_fix.sql"
+  ],
+  "user_work_preserved": true,
+  "patch": "NOT_APPLICABLE_UNBORN_REPOSITORY"
+}

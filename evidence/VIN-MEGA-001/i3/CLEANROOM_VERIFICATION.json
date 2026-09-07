@@ -1,0 +1,13 @@
+{
+  "checkpoint": "VIN-MEGA-001",
+  "iteration": 3,
+  "status": "BLOCKED_SAFETY_TOOL_POLICY",
+  "target": "C:\\Users\\Duong Vinh\\Downloads\\VinOps\\vinops\\.tmp\\vinops-fnd001a-cleanroom",
+  "identity_before": {"exists":true,"canonical_path":"C:\\Users\\Duong Vinh\\Downloads\\VinOps\\vinops\\.tmp\\vinops-fnd001a-cleanroom","direct_child_of_repo_tmp":true,"reparse_point":false,"top_level":["node_modules"],"file_count":16644},
+  "authorized_scope": "Exact obsolete clean-room only plus iteration-3 task-owned temporary resources.",
+  "delete_attempt": {"attempted":true,"target_set_changed":false,"tool":"PowerShell Remove-Item -LiteralPath exact target -Recurse -Force","result":"Rejected by execution safety policy; escalation unavailable because approval policy is Never."},
+  "identity_after": {"exists":true},
+  "sibling_preservation": "PASS",
+  "user_work_preservation": "PASS",
+  "reason": "No alternate executable, API, ACL change or bypass was used."
+}

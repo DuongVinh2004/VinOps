@@ -1,0 +1,273 @@
+{
+  "status": "PASS",
+  "runtime": {
+    "api": "http://127.0.0.1:4620/api/v1",
+    "database": "vinops_mega002_i2_test9"
+  },
+  "logins": {
+    "owner": {
+      "status": 200,
+      "body_sha256": "72b403e63a106f83f855f2f7ee92786485cc39305b46e7eb0d33ed58bce2d10d",
+      "body_length": 571,
+      "body_keys": [
+        "access_token",
+        "access_token_expires_at",
+        "session_id",
+        "csrf_token",
+        "user"
+      ],
+      "correlation_id": "f96f1aa4-842c-4437-b384-201684a29cd2"
+    },
+    "outsider": {
+      "status": 200,
+      "body_sha256": "ca0cfe2fec304c7277e7b42410183ac0bfd3da68babf2df68b237ef08c94f790",
+      "body_length": 574,
+      "body_keys": [
+        "access_token",
+        "access_token_expires_at",
+        "session_id",
+        "csrf_token",
+        "user"
+      ],
+      "correlation_id": "80b124bb-3314-43da-b026-a6da8cf923d5"
+    }
+  },
+  "complete_upload": {
+    "unauthenticated_malformed": {
+      "expected": 401,
+      "result": {
+        "status": 401,
+        "body_sha256": "c90d7e1fc073cfca3e83770a9552a6377a6c52807d823c4421520d16518ad36b",
+        "body_length": 155,
+        "body_keys": [
+          "code",
+          "message_key",
+          "correlation_id",
+          "retryable"
+        ],
+        "correlation_id": "e2cd518d-0145-4f4e-bb29-7e710338cde2"
+      }
+    },
+    "authenticated_malformed": {
+      "expected": 422,
+      "result": {
+        "status": 422,
+        "body_sha256": "e450cbde17c7508f5b0b4a95111ead947510d5bb048b905da3b4b49cde5778e6",
+        "body_length": 140,
+        "body_keys": [
+          "code",
+          "message_key",
+          "correlation_id",
+          "retryable"
+        ],
+        "correlation_id": "38bcbc34-ab3d-4d0b-b6fc-86cfe677e0ee"
+      }
+    },
+    "authorized_valid": {
+      "expected": 202,
+      "result": {
+        "status": 202,
+        "body_sha256": "86740c21b2b7489b68cd17bb6200c064adea4f5dc9a09930c948ed05a40aec50",
+        "body_length": 159,
+        "body_keys": [
+          "id",
+          "status",
+          "size_bytes",
+          "sha256"
+        ],
+        "correlation_id": "6dd6e227-8baf-4a02-902b-643493173e24"
+      },
+      "response_status": "Validating",
+      "upload_part": {
+        "authorization": {
+          "status": 200,
+          "body_sha256": "204224f14cf66464a313442dc9fff5599a509fef285775829f416bb71ce6c01f",
+          "body_length": 565,
+          "body_keys": [
+            "url",
+            "expires_at",
+            "part_number"
+          ],
+          "correlation_id": "9cfd1b08-5a78-479f-a0f2-d2efd645d94a",
+          "signed_url_sha256": "8388344b913bf8dd4298beeaed304152f969804b1d1233ac20751df414e35121"
+        },
+        "upload_status": 200,
+        "etag_sha256": "b3bd76c513f5f3c2082841c43f14e54e824d46a06f82286cd7c13dc72c177b55"
+      },
+      "before": {
+        "file": {
+          "status": "Uploading",
+          "failure_code": null,
+          "actual_sha256": null,
+          "actual_size_bytes": null
+        },
+        "upload_session": {
+          "status": "Open",
+          "completed_at": null,
+          "received_bytes": 0
+        },
+        "job_count": 0,
+        "scan_count": 0,
+        "derivative_count": 0,
+        "audit_count": 0,
+        "outbox_count": 0,
+        "sha256": "b7249a21c38057f317144f71a196682ac2f94ddcac8a42517a3424119b7706bd"
+      },
+      "after": {
+        "file": {
+          "status": "Validating",
+          "failure_code": null,
+          "actual_sha256": null,
+          "actual_size_bytes": null
+        },
+        "upload_session": {
+          "status": "Completed",
+          "completed_at": "2026-08-03T02:56:40.872513+00:00",
+          "received_bytes": 75
+        },
+        "job_count": 1,
+        "scan_count": 0,
+        "derivative_count": 0,
+        "audit_count": 1,
+        "outbox_count": 1,
+        "sha256": "76fe9f557dd72e296ab9a49a2065909f38c92a2fa71031d8f3e6f27adccc4706"
+      },
+      "side_effects_changed": true
+    },
+    "forbidden": {
+      "authorization_expected": "403_or_404",
+      "authorization": {
+        "status": 404,
+        "body_sha256": "bb0bc02d7e5de39bd4a3bfe06d1dc7ac2c8d9d00b4f49e6da23ac2d730cfb6ec",
+        "body_length": 147,
+        "body_keys": [
+          "code",
+          "message_key",
+          "correlation_id",
+          "retryable"
+        ],
+        "correlation_id": "6f3e95d8-bb3c-4c29-883e-d2633361ab9a"
+      },
+      "complete_expected": "403_or_404",
+      "complete": {
+        "status": 404,
+        "body_sha256": "1ca751d7bf1de70207034add2e93ffc113cac24600fb1d54d01f6016d4d9f40e",
+        "body_length": 147,
+        "body_keys": [
+          "code",
+          "message_key",
+          "correlation_id",
+          "retryable"
+        ],
+        "correlation_id": "f6b75f8f-26b2-4f53-a9c5-dba17d2e9801"
+      },
+      "before": {
+        "file": {
+          "status": "Uploading",
+          "failure_code": null,
+          "actual_sha256": null,
+          "actual_size_bytes": null
+        },
+        "upload_session": {
+          "status": "Open",
+          "completed_at": null,
+          "received_bytes": 0
+        },
+        "job_count": 0,
+        "scan_count": 0,
+        "derivative_count": 0,
+        "audit_count": 0,
+        "outbox_count": 0,
+        "sha256": "b7249a21c38057f317144f71a196682ac2f94ddcac8a42517a3424119b7706bd"
+      },
+      "after": {
+        "file": {
+          "status": "Uploading",
+          "failure_code": null,
+          "actual_sha256": null,
+          "actual_size_bytes": null
+        },
+        "upload_session": {
+          "status": "Open",
+          "completed_at": null,
+          "received_bytes": 0
+        },
+        "job_count": 0,
+        "scan_count": 0,
+        "derivative_count": 0,
+        "audit_count": 0,
+        "outbox_count": 0,
+        "sha256": "b7249a21c38057f317144f71a196682ac2f94ddcac8a42517a3424119b7706bd"
+      },
+      "side_effects_unchanged": true,
+      "signed_url_leaked": false,
+      "metadata_leakage": false
+    }
+  },
+  "transmittal_detail": {
+    "authorized_existing": {
+      "expected": 200,
+      "result": {
+        "status": 200,
+        "body_sha256": "f963ca27c6f8faf093c6944553b9e202b467b2ca4a2acf42e0b77c86498d4533",
+        "body_length": 982,
+        "body_keys": [
+          "id",
+          "project_id",
+          "code",
+          "purpose",
+          "status",
+          "created_by",
+          "created_at",
+          "issued_at",
+          "snapshot_sha256",
+          "version",
+          "items",
+          "recipients"
+        ],
+        "correlation_id": "905c3042-115d-4c33-b168-509fa615c30e"
+      }
+    },
+    "authorized_nonexistent": {
+      "expected": 404,
+      "result": {
+        "status": 404,
+        "body_sha256": "7c2214648c75fbbf1c01f28c9419a0c32d7a23c3693dcc2353a743fb13f87061",
+        "body_length": 147,
+        "body_keys": [
+          "code",
+          "message_key",
+          "correlation_id",
+          "retryable"
+        ],
+        "correlation_id": "7b73ae41-212a-43e4-9152-a512bc44e3a1"
+      }
+    },
+    "forbidden_cross_tenant": {
+      "expected": "403_or_404",
+      "result": {
+        "status": 404,
+        "body_sha256": "d963ecbfb38d5ea25fc737e64d038a97b5a98c50378c09945450865d93ec9e20",
+        "body_length": 147,
+        "body_keys": [
+          "code",
+          "message_key",
+          "correlation_id",
+          "retryable"
+        ],
+        "correlation_id": "7a01d4e3-943c-498d-8e91-61e4e965405d"
+      },
+      "metadata_leakage": false
+    }
+  },
+  "fixture_ids": {
+    "document_id": "1652638a-0a3b-404b-b9b2-1bbbf31ad14a",
+    "valid_revision_id": "93661772-2362-4f35-b480-6f2705363166",
+    "valid_file_id": "23cfc899-dd5e-4091-b8dd-f99738d36855",
+    "valid_upload_session_id": "7a02a75a-7794-4875-9c8b-bc9801f204de",
+    "denied_revision_id": "f113a187-5e1d-490a-9d6d-5f9a9f527651",
+    "denied_file_id": "54e3889c-5a93-4134-8987-db1e6e52108f",
+    "denied_upload_session_id": "4938a110-9b3e-40e0-a304-4d0774d7fc02",
+    "transmittal_id": "3aea85ca-bbe9-4150-9ad9-b1dbdff53c62"
+  }
+}

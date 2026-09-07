@@ -1,0 +1,35 @@
+{
+  "iteration": 4,
+  "evidence_archive": {
+    "name": "VIN-MEGA-002-i4-evidence-verifiable.zip",
+    "sha256": "C4F640AC90973A2E1720736981558718041119B4AD6D869F74EFE338987669B5",
+    "entries": [
+      "AC03_DIAGNOSTICS.json",
+      "AC03_MINIO_STATS.log",
+      "AC03_MINIO_TRACE.log",
+      "AC03_POSTGRES_LOCKS.json",
+      "AUTHZ_EXPECTED_MATRIX-i4.json",
+      "AUTHZ_RESULT_MATRIX-i4.json",
+      "AUTHZ_ROUTE_INVENTORY-i4.json",
+      "BROWSER_SECURITY_RESULTS-i4.json",
+      "CHANGED_FILES_MANIFEST-i4.json",
+      "CLEANUP_PROOF-i4.json",
+      "COMMAND_RESULTS-i4.json",
+      "FAILURES_EXCERPT-i4.log",
+      "I3_PRESERVATION-i4.json",
+      "RUNTIME_RESOURCES-i4.json",
+      "VIN-MEGA-002-i4-source.delta.patch",
+      "XSS_FIELD_INVENTORY-i4.json"
+    ]
+  },
+  "review_archive": {
+    "name": "VIN-MEGA-002-i4-review-verifiable.zip",
+    "sha256": "9793C6CA8E7934B75D2CAAF6419B1BF6A4095F28293E13322701D5A45B296F85",
+    "entries": 183
+  },
+  "source_delta": {
+    "name": "VIN-MEGA-002-i4-source.delta.patch",
+    "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+    "bytes": 0
+  }
+}

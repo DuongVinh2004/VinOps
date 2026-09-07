@@ -1,0 +1,13 @@
+{
+  "task": "VIN-MEGA-002",
+  "databases": ["vinops_mega002_i2_test9", "vinops_mega002_i6_test", "vinops_mega002_i8_test", "vinops_mega002_test"],
+  "containers": ["vinops-mega002-i6-clamav", "vinops-mega002-i6-minio", "vinops-mega002-i6-postgres"],
+  "networks": ["vinops-mega002-i6-runtime"],
+  "volumes": ["vinops-mega002-i6-minio-data", "vinops-mega002-i6-postgres-data"],
+  "process_count": 27,
+  "filesystem_target_count": 33,
+  "ownership": "all Docker targets had vinops.task=VIN-MEGA-002; process and filesystem targets resolved under task paths",
+  "authorization": "direct user confirmation naming EXACT_DESTRUCTIVE_TARGETS and phrase TÔI XÁC NHẬN THAO TÁC PHÁ HỦY NÀY",
+  "prune_used": false,
+  "images_targeted": 0
+}

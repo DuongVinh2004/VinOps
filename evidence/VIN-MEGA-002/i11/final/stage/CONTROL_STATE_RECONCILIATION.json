@@ -1,0 +1,16 @@
+{
+  "status": "BLOCKED",
+  "proposed_control_state": "BLOCKED",
+  "acceptance": {
+    "AC-01": "PASS",
+    "AC-02": "PASS",
+    "AC-03": "PASS",
+    "AC-04": "PASS",
+    "AC-05": "PASS",
+    "AC-06": "PASS",
+    "AC-07": "PASS",
+    "AC-08": "BLOCKED"
+  },
+  "RLS_GATE": "PASS",
+  "POST_FIX_REGRESSION_GATE": "PASS"
+}

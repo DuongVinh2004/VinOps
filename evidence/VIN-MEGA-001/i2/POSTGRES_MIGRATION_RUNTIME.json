@@ -1,0 +1,1 @@
+{"checkpoint":"VIN-MEGA-001","iteration":2,"status":"BLOCKED_RUNTIME","docker_version_exit":1,"docker_client":"29.4.0","blocker":"Docker desktop-linux daemon pipe was absent on the single permitted docker version check.","postgres_version":"UNVERIFIED","migration":"NOT_RUN","seed":"NOT_RUN","rollback_proof":"NOT_RUN"}

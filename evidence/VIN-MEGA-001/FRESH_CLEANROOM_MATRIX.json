@@ -1,0 +1,15 @@
+{
+  "checkpoint": "VIN-MEGA-001",
+  "iteration": 4,
+  "status": "PASS",
+  "isolation": "task-owned Docker containers and named PostgreSQL volume",
+  "source_only_inventory": { "files": 124, "excluded": [".git", "node_modules", ".tmp", "evidence", "dist", "coverage", "cache", "ZIP"], "comparison": "PASS" },
+  "i3_review_inventory_corrections": ["eslint.config.js", "apps/web/index.html"],
+  "toolchain": { "node": "v24.18.0", "pnpm": "11.15.1", "postgresql": "16.14" },
+  "install": { "frozen_lockfile": "PASS", "supply_chain_policy_entries": 528, "peer_dependency_validation": "PASS" },
+  "database": { "empty_database": true, "migrations_applied": 6, "migrations_verified": 6, "deterministic_seed": "PASS", "real_postgresql": true },
+  "gates": { "format": "PASS", "lint": "PASS", "strict_typecheck": "PASS", "tests": "PASS", "openapi": "PASS", "architecture": "PASS", "api_worker_web_build": "PASS", "secret_scan": "PASS", "license": "PASS", "audit": "Critical=0 High=0" },
+  "tests": { "files_passed": 13, "tests_passed": 45, "skipped": 0, "failed": 0 },
+  "browser_e2e": { "status": "PASS", "flow": ["sign-in", "workspace/project load", "members", "LBS context", "sign-out"] },
+  "cleanup": { "containers_before": 5, "volumes_before": 2, "networks_before": 1, "containers_after": 0, "volumes_after": 0, "networks_after": 0 }
+}

@@ -1,0 +1,12 @@
+{
+  "classification": "PRODUCT_RLS_DDL_DEFECT",
+  "sqlstate": "42P17",
+  "relation": "vinops.transmittals",
+  "exact_policy": "transmittals_scoped",
+  "canonical_migration": "packages/database/migrations/007_document_control.sql",
+  "fresh_canonical_reproduction": true,
+  "durable_correction_required": "Change canonical migration policy dependency graph to remove mutual transmittals/transmittal_items RLS recursion.",
+  "correction_applied": false,
+  "correction_blocked_by": "Work order forbids migrations and protected contract changes in i8; no manual ALTER POLICY or RLS bypass was used.",
+  "lane_status": "BLOCKED"
+}

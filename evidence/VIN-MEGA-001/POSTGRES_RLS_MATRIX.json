@@ -1,0 +1,77 @@
+{
+  "checkpoint": "VIN-MEGA-001",
+  "artifact_status": "PRELIMINARY_STATIC_RLS_MATRIX",
+  "recorded_on": "2026-07-30",
+  "source": "packages/database/migrations/002_tenant_rls.sql",
+  "static_role_design": [
+    {
+      "role": "vinops_owner",
+      "attributes": ["NOLOGIN", "NOSUPERUSER", "NOINHERIT"],
+      "intended_use": "Owns VinOps database objects and security-definer functions; not an application or worker runtime identity.",
+      "runtime_verified": false
+    },
+    {
+      "role": "vinops_app",
+      "attributes": ["NOLOGIN", "NOSUPERUSER", "NOINHERIT", "no static BYPASSRLS declaration"],
+      "intended_use": "Application transaction role after set_request_context(actor, correlation).",
+      "runtime_verified": false
+    },
+    {
+      "role": "vinops_worker",
+      "attributes": ["NOLOGIN", "NOSUPERUSER", "NOINHERIT", "no static BYPASSRLS declaration"],
+      "intended_use": "Fixed-function outbox worker path only.",
+      "runtime_verified": false
+    }
+  ],
+  "static_boundary": {
+    "rls_enabled_table_count": 29,
+    "policy_count": 29,
+    "application_role_grants": "USAGE on vinops schema; SELECT/INSERT/UPDATE on tables; DELETE revoked; RLS policies are intended to constrain visibility and writes.",
+    "worker_role_grants": "USAGE on vinops schema and EXECUTE on claim_outbox_events, mark_outbox_published and mark_outbox_failed; no generic table grant is recorded in this migration.",
+    "public_function_access": "ALL functions in the vinops schema are revoked from PUBLIC before explicit grants.",
+    "request_context": "vinops.set_request_context sets actor and correlation settings transaction-locally."
+  },
+  "candidate_policy_groups": [
+    {
+      "resources": ["organizations", "organization_members", "projects", "project_members", "member_scopes", "invitations"],
+      "candidate_guard": "active organization/project membership and server-derived actor context"
+    },
+    {
+      "resources": ["partner_organizations", "project_calendars", "numbering_profiles", "numbering_counters", "location_nodes", "work_nodes", "location_work_links", "disciplines", "document_classifications"],
+      "candidate_guard": "can_read_scoped_resource for reads and can_manage_project_context for writes"
+    },
+    {
+      "resources": ["refresh_token_families", "auth_sessions", "refresh_token_credentials", "password_reset_credentials"],
+      "candidate_guard": "current actor / self-owned session data with selected security-definer lookup functions"
+    },
+    {
+      "resources": ["delegations", "break_glass_requests", "break_glass_sessions", "idempotency_keys", "entity_transitions", "audit_events", "outbox_events", "context_imports"],
+      "candidate_guard": "actor, project/organization access, or fixed worker function depending on table"
+    }
+  ],
+  "required_runtime_matrix": [
+    {
+      "assertion": "Migration creates all roles, policies and RLS protections from an empty disposable database.",
+      "status": "NOT_RUN"
+    },
+    {
+      "assertion": "Application connection assumes vinops_app and cannot run with an owner/superuser/bypass-RLS identity.",
+      "status": "NOT_RUN"
+    },
+    {
+      "assertion": "Two synthetic tenants prove permitted same-tenant reads/writes and denied or invisible cross-tenant reads/writes, including USING and WITH CHECK behavior.",
+      "status": "NOT_RUN"
+    },
+    {
+      "assertion": "A transaction without a request actor cannot use tenant tables as an application context.",
+      "status": "NOT_RUN"
+    },
+    {
+      "assertion": "Worker connection assumes vinops_worker and can operate only through its fixed outbox procedures.",
+      "status": "NOT_RUN"
+    }
+  ],
+  "static_test_source": "packages/database/test/migration.static.test.ts",
+  "runtime_status": "BLOCKED_RUNTIME",
+  "blocker": "No task-owned PostgreSQL runtime was available after the Docker daemon check failed."
+}

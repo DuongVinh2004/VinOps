@@ -1,0 +1,11 @@
+{
+  "commands": [
+    {"command": "pnpm --filter @vinops/api build", "exit_code": 0},
+    {"command": "VINOPS_I7_API_URL=http://127.0.0.1:4610 pnpm exec vitest run apps/api/test/document-boundary.integration.test.ts --reporter=dot", "exit_code": 0, "tests": 2},
+    {"command": "pnpm exec prettier --check apps/api/src/platform.controller.ts apps/api/src/document.service.ts apps/api/test/document-boundary.integration.test.ts", "exit_code": 0},
+    {"command": "git diff --check", "exit_code": 0},
+    {"command": "pnpm verify", "exit_code": 1, "reason": "corepack is not recognized by the execution environment; full command log is retained."}
+  ],
+  "final_pnpm_verify_runs": 1,
+  "duplicate_verification_started": false
+}

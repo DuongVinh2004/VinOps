@@ -1,0 +1,41 @@
+{
+  "result": "PASS",
+  "api_auth_matrix": {
+    "unauthenticated_list": 401,
+    "owner_list": 200,
+    "member_project_list": 404,
+    "reviewer_list": 200,
+    "publisher_list": 200,
+    "member_create": 404,
+    "reviewer_create": 403,
+    "cross_tenant_list": 404,
+    "not_found_detail": 404,
+    "hostile_create": 201,
+    "owner_submit_review": 200,
+    "reviewer_approve": 200,
+    "publisher_publish": 200,
+    "superseding_publish": 200
+  },
+  "browser": {
+    "surface": "Codex in-app browser",
+    "real_sign_in": true,
+    "documents_navigation": true,
+    "current_deep_link": "hash #document=<synthetic-document>&revision=<current-revision>",
+    "superseded_deep_link": {
+      "banner": "Superseded revision deep link — preserved metadata is shown without redirect.",
+      "current_revision_button_visible": true,
+      "status_visible": "Superseded"
+    },
+    "hostile_xss": {
+      "payload_rendered_as_text": true,
+      "img_count": 0,
+      "script_count": 1,
+      "script_count_note": "one application module script; no injected script element"
+    },
+    "outsider": {
+      "project_context": "No project context is available",
+      "resource_metadata_disclosed": false
+    },
+    "auth_storage": "memory-only tokens; no browser storage used"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "iteration": 4,
+  "route_count": 18,
+  "expected_rows": 10800,
+  "executed_rows": 0,
+  "uncovered": 10800,
+  "unexpected": 0,
+  "coverage_gate": "UNVERIFIED",
+  "reconciled_i3_rows": 0,
+  "reconciled_reuse": false,
+  "reconciliation_reason": "i3 row ids are route|persona aggregates, not the frozen route|persona|scope|state row ids; no i3 rows were reused.",
+  "rows": []
+}

@@ -1,0 +1,19 @@
+﻿{
+    "removed":  {
+                    "databases":  4,
+                    "networks":  1,
+                    "processes":  27,
+                    "containers":  3,
+                    "volumes":  2
+                },
+    "images_removed":  0,
+    "filesystem_cleanup":  "BLOCKED_BY_GLOBAL_UNTRACKED_FILE_PROHIBITION",
+    "docker_prune_used":  false,
+    "status":  "PASS",
+    "remaining":  {
+                      "networks":  0,
+                      "processes":  0,
+                      "containers":  0,
+                      "volumes":  0
+                  }
+}

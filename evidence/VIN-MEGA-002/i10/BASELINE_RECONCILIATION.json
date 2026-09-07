@@ -1,0 +1,18 @@
+{
+  "status": "RECOVERED_WITH_STALE_I9_FINGERPRINT",
+  "branch": "main",
+  "head": "UNBORN",
+  "remote": "NONE",
+  "i8_source": "45c68e8314962e35a3e3c29fd713df13d037c3fe418955cfd4341d48f533ece3",
+  "reported_i9_source": "72e0ba48f357efd8a63be58c08e1615eae65c85936763e62746cc6045c28feb4",
+  "actual_final_i9_source_reconstructed": "4b6b33f7c844fd7dc35071adeb1f4e944349e4f171f5aefa225aac98879bc7f9",
+  "final_i10_source": "a9ec3c2a437bb8d1ab6c30a69e8b711eb203fd075e0e4db19e573369aecd7a1b",
+  "stale_i9_inventory_paths": [
+    "apps/api/test/document-boundary.integration.test.ts",
+    "packages/database/test/document-postgres.integration.test.ts",
+    "scripts/secret-scan.mjs"
+  ],
+  "explanation": "The three paths were modified after I9_SOURCE_INVENTORY.json; i9 failure/final logs and UTC timestamps document the same in-scope fixes. No path outside the five reported i9 paths differed.",
+  "original_i9_patch_complete": false,
+  "reconstructed_i8_to_i9_patch": "VIN-MEGA-002-i8-to-i9-reconstructed.patch"
+}

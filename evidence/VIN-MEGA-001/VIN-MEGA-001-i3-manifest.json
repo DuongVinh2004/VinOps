@@ -1,0 +1,16 @@
+{
+  "checkpoint": "VIN-MEGA-001",
+  "iteration": 3,
+  "status": "BLOCKED",
+  "context_mode": "STRICT",
+  "evidence_mode": "PATCH_FILE",
+  "baseline": {"head":"UNBORN","remote":"NONE","source_files":116,"source_sha256":"bad57a9afd26cb826bc4837cde81a0f25f6d20cad230f8f781c12cc770ae5afd"},
+  "after": {"head":"UNBORN","remote":"NONE","source_files":116,"source_sha256":"bad57a9afd26cb826bc4837cde81a0f25f6d20cad230f8f781c12cc770ae5afd","review_content_matches_i2":true},
+  "protected_inputs": {"prss":"8FF4CE6CA98546D36FB3CDF62DAA285A8BADDDC4F24A38B9AE7CF968920DAD8F","design":"73F2462457660DF38408A96F35CD871D1EEC54F78045B12A98CB4604FBD01D36","openapi":"88FE06F65BE4D002C16A70802F8E3965006AD63643891E82B4EE139D53484E66"},
+  "i2": {"evidence_sha256":"3bbec81403c10b756fbceebfcec6b5d49d1aeab850106d3eaa68396d78f21d45","review_sha256":"51b363053468e609774d2c585ef735cd76d7dd1bece9f2fa48e6fa6387b96c25","verified":true},
+  "archives": {"evidence":{"path":"evidence/VIN-MEGA-001/VIN-MEGA-001-i3-evidence-verifiable.zip","sha256":"5f8cf2d9dbc33a8910d35b56f045a09e15cdaeac92fa785d5c5ae48cddf67545","entries":12,"unsafe_paths":0,"duplicates":0,"verified":true},"evidence_final":{"path":"evidence/VIN-MEGA-001/VIN-MEGA-001-i3-evidence-final-verifiable.zip","sha256":"bd9a43d053b4281a3243a5d135dea4fb067c950cfb4bccba432271152fb59a76","entries":13,"unsafe_paths":0,"duplicates":0,"verified":true},"evidence_final_v2":{"path":"evidence/VIN-MEGA-001/VIN-MEGA-001-i3-evidence-final-v2-verifiable.zip","sha256":"c4dfd18de5f9b91025812498c20b0aa43645bfcd39d19045f347e717e20a4fe0","entries":13,"unsafe_paths":0,"duplicates":0,"verified":true,"authoritative_final_evidence":true},"review":{"path":"evidence/VIN-MEGA-001/VIN-MEGA-001-i3-review-verifiable.zip","sha256":"51b363053468e609774d2c585ef735cd76d7dd1bece9f2fa48e6fa6387b96c25","entries":116,"unsafe_paths":0,"duplicates":0,"verified":true}},
+  "runtime": {"node":"v24.18.0","postgres":"16.14","docker_version_check_count":1,"synthetic_only":true},
+  "post_archive_cleanup_addendum": {"path":"evidence/VIN-MEGA-001/VIN-MEGA-001-i3-cleanup-addendum.json","sha256":"8b6d6c9959d8c53fdc11bd246c92fd5848eecb8afc21fa1879e7ab297d0414ca","verified":true},
+  "blockers": ["Exact obsolete clean-room deletion was rejected by the execution safety policy despite user authorization.","Full IAM/concurrency and fresh clean-room matrix remain unverified."],
+  "patch":"NOT_APPLICABLE_UNBORN_REPOSITORY"
+}

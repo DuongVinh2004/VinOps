@@ -1,0 +1,12 @@
+{
+  "AC_01": "PASS",
+  "AC_02": "PASS",
+  "AC_03": "PASS",
+  "AC_04": "PASS",
+  "AC_05": "PASS",
+  "AC_06": "UNVERIFIED",
+  "AC_07": "FAIL",
+  "AC_08": "BLOCKED",
+  "required_phase_2_regressions": "UNVERIFIED",
+  "control_state": "BLOCKED; AC-06 and AC-08 remain open; no VERIFY/CLOSED declaration."
+}

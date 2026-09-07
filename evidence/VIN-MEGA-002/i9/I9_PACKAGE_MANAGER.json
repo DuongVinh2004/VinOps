@@ -1,0 +1,11 @@
+{
+  "requested_package_manager": "pnpm@11.15.1",
+  "executable": "C:\\Users\\Duong Vinh\\AppData\\Roaming\\npm\\pnpm.cmd",
+  "version": "11.15.1",
+  "node_executable": "C:\\Users\\Duong Vinh\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+  "node_version": "v24.14.0",
+  "corepack_compatibility_wrapper": "C:\\Users\\Duong Vinh\\Downloads\\VinOps\\vinops\\.tmp\\corepack.cmd",
+  "verify_child_pid": 7976,
+  "verify_exit_code": 0,
+  "install_or_lockfile_change": false
+}

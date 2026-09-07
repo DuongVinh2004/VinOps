@@ -1,0 +1,22 @@
+{
+  "name": "@vinops/database",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./dist/index.js"
+  },
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json",
+    "build": "tsc -p tsconfig.build.json",
+    "migrate": "node dist/migrate.js",
+    "migration:verify": "node dist/migrate.js --verify",
+    "seed": "node dist/seed.js"
+  },
+  "dependencies": {
+    "@vinops/domain": "workspace:*",
+    "@vinops/observability": "workspace:*",
+    "pg": "8.22.0"
+  }
+}

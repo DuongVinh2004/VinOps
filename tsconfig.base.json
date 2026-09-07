@@ -1,0 +1,35 @@
+{
+  "compilerOptions": {
+    "target": "ES2023",
+    "lib": ["ES2023"],
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+    "noImplicitOverride": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitReturns": true,
+    "forceConsistentCasingInFileNames": true,
+    "verbatimModuleSyntax": true,
+    "isolatedModules": true,
+    "resolveJsonModule": true,
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "composite": true,
+    "skipLibCheck": false,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "useDefineForClassFields": false,
+    "baseUrl": ".",
+    "paths": {
+      "@vinops/config": ["packages/config/src/index.ts"],
+      "@vinops/contracts": ["packages/contracts/src/index.ts"],
+      "@vinops/database": ["packages/database/src/index.ts"],
+      "@vinops/domain": ["packages/domain/src/index.ts"],
+      "@vinops/file": ["packages/file/src/index.ts"],
+      "@vinops/observability": ["packages/observability/src/index.ts"]
+    }
+  }
+}

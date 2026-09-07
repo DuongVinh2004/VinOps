@@ -1,0 +1,18 @@
+{
+  "status": "PASS",
+  "basis": "raw Iteration 4 artifacts reconciled without rerunning unchanged upload path",
+  "payload_bytes": 10000000,
+  "success": 20,
+  "expected_clients": 20,
+  "p95_ms": 4401,
+  "durations_le_8000": 20,
+  "max_progress_gap_ms": 520,
+  "measured_bitrate_mbps_range": [18.180, 19.441],
+  "unique_documents": 20,
+  "unique_revisions": 20,
+  "unique_files": 20,
+  "unique_sessions": 20,
+  "unique_object_keys": 20,
+  "postgres_waiting_locks": 0,
+  "raw_sources": ["evidence/VIN-MEGA-002/i4/AC03_DIAGNOSTICS.json", "evidence/VIN-MEGA-002/i4/AC03_POSTGRES_LOCKS.json"]
+}

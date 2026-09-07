@@ -1,0 +1,260 @@
+{
+  "policies": [
+    {
+      "schemaname": "vinops",
+      "tablename": "transmittal_items",
+      "policyname": "transmittal_items_scoped",
+      "permissive": "PERMISSIVE",
+      "roles": "{public}",
+      "cmd": "ALL",
+      "qual": "(EXISTS ( SELECT 1\n   FROM vinops.transmittals t\n  WHERE ((t.id = transmittal_items.transmittal_id) AND vinops.can_access_project(t.project_id))))",
+      "with_check": "vinops.can_access_project(project_id)"
+    },
+    {
+      "schemaname": "vinops",
+      "tablename": "transmittal_recipients",
+      "policyname": "transmittal_recipients_scoped",
+      "permissive": "PERMISSIVE",
+      "roles": "{public}",
+      "cmd": "ALL",
+      "qual": "(EXISTS ( SELECT 1\n   FROM vinops.transmittals t\n  WHERE ((t.id = transmittal_recipients.transmittal_id) AND vinops.can_access_project(t.project_id))))",
+      "with_check": "vinops.can_access_project(project_id)"
+    },
+    {
+      "schemaname": "vinops",
+      "tablename": "transmittals",
+      "policyname": "transmittals_scoped",
+      "permissive": "PERMISSIVE",
+      "roles": "{public}",
+      "cmd": "ALL",
+      "qual": "((created_by = vinops.current_actor_id()) OR ((EXISTS ( SELECT 1\n   FROM vinops.transmittal_items item\n  WHERE (item.transmittal_id = transmittals.id))) AND (NOT (EXISTS ( SELECT 1\n   FROM vinops.transmittal_items item\n  WHERE ((item.transmittal_id = transmittals.id) AND (NOT vinops.can_access_document(item.document_id))))))))",
+      "with_check": "((created_by = vinops.current_actor_id()) AND vinops.can_access_project(project_id))"
+    }
+  ],
+  "relations": [
+    {
+      "relation": "vinops.transmittal_items",
+      "relrowsecurity": true,
+      "relforcerowsecurity": false
+    },
+    {
+      "relation": "vinops.transmittal_recipients",
+      "relrowsecurity": true,
+      "relforcerowsecurity": false
+    },
+    {
+      "relation": "vinops.transmittals",
+      "relrowsecurity": true,
+      "relforcerowsecurity": false
+    }
+  ],
+  "functions": [
+    {
+      "signature": "vinops.can_access_document_scope(uuid,uuid,uuid,uuid,text,uuid)",
+      "prosecdef": true,
+      "definition": "CREATE OR REPLACE FUNCTION vinops.can_access_document_scope(p_project_id uuid, p_discipline_id uuid, p_classification_id uuid, p_work_id uuid, p_action text DEFAULT 'read'::text, p_user_id uuid DEFAULT vinops.current_actor_id())\n RETURNS boolean\n LANGUAGE sql\n STABLE SECURITY DEFINER\n SET search_path TO 'vinops', 'pg_catalog'\nAS $function$\n  SELECT vinops.can_access_project(p_project_id, p_user_id)\n     AND CASE\n       WHEN p_discipline_id IS NULL AND p_classification_id IS NULL AND p_work_id IS NULL\n         THEN vinops.can_read_scoped_resource(p_project_id, 'project', p_project_id, p_action, p_user_id)\n       ELSE\n         (p_discipline_id IS NULL OR vinops.can_read_scoped_resource(p_project_id, 'discipline', p_discipline_id, p_action, p_user_id))\n         AND (p_classification_id IS NULL OR vinops.can_read_scoped_resource(p_project_id, 'classification', p_classification_id, p_action, p_user_id))\n         AND (p_work_id IS NULL OR vinops.can_read_scoped_resource(p_project_id, 'work', p_work_id, p_action, p_user_id))\n     END;\n$function$\n"
+    },
+    {
+      "signature": "vinops.can_access_document(uuid,text,uuid)",
+      "prosecdef": true,
+      "definition": "CREATE OR REPLACE FUNCTION vinops.can_access_document(p_document_id uuid, p_action text DEFAULT 'read'::text, p_user_id uuid DEFAULT vinops.current_actor_id())\n RETURNS boolean\n LANGUAGE sql\n STABLE SECURITY DEFINER\n SET search_path TO 'vinops', 'pg_catalog'\nAS $function$\n  SELECT EXISTS (\n    SELECT 1 FROM vinops.documents document\n     WHERE document.id = p_document_id\n       AND vinops.can_access_document_scope(\n         document.project_id,\n         document.discipline_id,\n         document.classification_id,\n         document.work_id,\n         p_action,\n         p_user_id\n       )\n  );\n$function$\n"
+    },
+    {
+      "signature": "vinops.can_access_project(uuid,uuid)",
+      "prosecdef": true,
+      "definition": "CREATE OR REPLACE FUNCTION vinops.can_access_project(p_project_id uuid, p_user_id uuid DEFAULT vinops.current_actor_id())\n RETURNS boolean\n LANGUAGE sql\n STABLE SECURITY DEFINER\n SET search_path TO 'vinops', 'pg_catalog'\nAS $function$\n  SELECT EXISTS (\n    SELECT 1\n      FROM vinops.projects project\n     WHERE project.id = p_project_id\n       AND (\n         vinops.is_active_project_member(project.id, p_user_id)\n         OR vinops.has_organization_role(project.organization_id, 'organization_owner', p_user_id)\n         OR vinops.has_organization_role(project.organization_id, 'security_admin', p_user_id)\n       )\n  );\n$function$\n"
+    },
+    {
+      "signature": "vinops.can_read_scoped_resource(uuid,text,uuid,text,uuid)",
+      "prosecdef": true,
+      "definition": "CREATE OR REPLACE FUNCTION vinops.can_read_scoped_resource(p_project_id uuid, p_scope_type text, p_scope_id uuid, p_action text DEFAULT 'read'::text, p_user_id uuid DEFAULT vinops.current_actor_id())\n RETURNS boolean\n LANGUAGE sql\n STABLE SECURITY DEFINER\n SET search_path TO 'vinops', 'pg_catalog'\nAS $function$\n  SELECT\n    vinops.can_manage_project_context(p_project_id, p_user_id)\n    OR EXISTS (\n      SELECT 1\n        FROM vinops.member_scopes scope\n        JOIN vinops.project_members membership ON membership.id = scope.project_member_id\n       WHERE scope.project_id = p_project_id\n         AND membership.project_id = p_project_id\n         AND membership.user_id = p_user_id\n         AND membership.status = 'Active'\n         AND (membership.valid_from IS NULL OR membership.valid_from <= now())\n         AND (membership.valid_to IS NULL OR membership.valid_to > now())\n         AND scope.revoked_at IS NULL\n         AND (scope.valid_from IS NULL OR scope.valid_from <= now())\n         AND (scope.valid_to IS NULL OR scope.valid_to > now())\n         AND p_action = ANY(scope.actions)\n         AND (\n           scope.scope_type = 'project'\n           OR (scope.scope_type = p_scope_type AND scope.scope_id = p_scope_id)\n         )\n    );\n$function$\n"
+    },
+    {
+      "signature": "vinops.current_actor_id()",
+      "prosecdef": false,
+      "definition": "CREATE OR REPLACE FUNCTION vinops.current_actor_id()\n RETURNS uuid\n LANGUAGE sql\n STABLE\nAS $function$\n  SELECT NULLIF(current_setting('app.user_id', true), '')::uuid;\n$function$\n"
+    },
+    {
+      "signature": "vinops.set_request_context(uuid,uuid)",
+      "prosecdef": true,
+      "definition": "CREATE OR REPLACE FUNCTION vinops.set_request_context(p_user_id uuid, p_correlation_id uuid)\n RETURNS void\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO 'vinops', 'pg_catalog'\nAS $function$\nBEGIN\n  IF p_user_id IS NULL OR p_correlation_id IS NULL THEN\n    RAISE EXCEPTION 'REQUEST_CONTEXT_REQUIRED' USING ERRCODE = 'invalid_parameter_value';\n  END IF;\n  PERFORM set_config('app.user_id', p_user_id::text, true);\n  PERFORM set_config('app.correlation_id', p_correlation_id::text, true);\nEND;\n$function$\n"
+    }
+  ],
+  "pg_depend_policy_rows": [
+    {
+      "dependent_schema": "vinops",
+      "dependent_relation": "transmittal_items",
+      "policy_name": "transmittal_items_scoped",
+      "referenced_schema": "vinops",
+      "referenced_relation": "transmittal_items"
+    },
+    {
+      "dependent_schema": "vinops",
+      "dependent_relation": "transmittal_items",
+      "policy_name": "transmittal_items_scoped",
+      "referenced_schema": "vinops",
+      "referenced_relation": "transmittal_items"
+    },
+    {
+      "dependent_schema": "vinops",
+      "dependent_relation": "transmittal_items",
+      "policy_name": "transmittal_items_scoped",
+      "referenced_schema": "vinops",
+      "referenced_relation": "transmittal_items"
+    },
+    {
+      "dependent_schema": "vinops",
+      "dependent_relation": "transmittal_items",
+      "policy_name": "transmittal_items_scoped",
+      "referenced_schema": "vinops",
+      "referenced_relation": "transmittals"
+    },
+    {
+      "dependent_schema": "vinops",
+      "dependent_relation": "transmittal_items",
+      "policy_name": "transmittal_items_scoped",
+      "referenced_schema": "vinops",
+      "referenced_relation": "transmittals"
+    },
+    {
+      "dependent_schema": "vinops",
+      "dependent_relation": "transmittal_items",
+      "policy_name": "transmittal_items_scoped",
+      "referenced_schema": null,
+      "referenced_relation": null
+    },
+    {
+      "dependent_schema": "vinops",
+      "dependent_relation": "transmittal_items",
+      "policy_name": "transmittal_items_scoped",
+      "referenced_schema": null,
+      "referenced_relation": null
+    },
+    {
+      "dependent_schema": "vinops",
+      "dependent_relation": "transmittal_recipients",
+      "policy_name": "transmittal_recipients_scoped",
+      "referenced_schema": "vinops",
+      "referenced_relation": "transmittal_recipients"
+    },
+    {
+      "dependent_schema": "vinops",
+      "dependent_relation": "transmittal_recipients",
+      "policy_name": "transmittal_recipients_scoped",
+      "referenced_schema": "vinops",
+      "referenced_relation": "transmittal_recipients"
+    },
+    {
+      "dependent_schema": "vinops",
+      "dependent_relation": "transmittal_recipients",
+      "policy_name": "transmittal_recipients_scoped",
+      "referenced_schema": "vinops",
+      "referenced_relation": "transmittal_recipients"
+    },
+    {
+      "dependent_schema": "vinops",
+      "dependent_relation": "transmittal_recipients",
+      "policy_name": "transmittal_recipients_scoped",
+      "referenced_schema": "vinops",
+      "referenced_relation": "transmittals"
+    },
+    {
+      "dependent_schema": "vinops",
+      "dependent_relation": "transmittal_recipients",
+      "policy_name": "transmittal_recipients_scoped",
+      "referenced_schema": "vinops",
+      "referenced_relation": "transmittals"
+    },
+    {
+      "dependent_schema": "vinops",
+      "dependent_relation": "transmittal_recipients",
+      "policy_name": "transmittal_recipients_scoped",
+      "referenced_schema": null,
+      "referenced_relation": null
+    },
+    {
+      "dependent_schema": "vinops",
+      "dependent_relation": "transmittal_recipients",
+      "policy_name": "transmittal_recipients_scoped",
+      "referenced_schema": null,
+      "referenced_relation": null
+    },
+    {
+      "dependent_schema": "vinops",
+      "dependent_relation": "transmittals",
+      "policy_name": "transmittals_scoped",
+      "referenced_schema": "vinops",
+      "referenced_relation": "transmittal_items"
+    },
+    {
+      "dependent_schema": "vinops",
+      "dependent_relation": "transmittals",
+      "policy_name": "transmittals_scoped",
+      "referenced_schema": "vinops",
+      "referenced_relation": "transmittal_items"
+    },
+    {
+      "dependent_schema": "vinops",
+      "dependent_relation": "transmittals",
+      "policy_name": "transmittals_scoped",
+      "referenced_schema": "vinops",
+      "referenced_relation": "transmittals"
+    },
+    {
+      "dependent_schema": "vinops",
+      "dependent_relation": "transmittals",
+      "policy_name": "transmittals_scoped",
+      "referenced_schema": "vinops",
+      "referenced_relation": "transmittals"
+    },
+    {
+      "dependent_schema": "vinops",
+      "dependent_relation": "transmittals",
+      "policy_name": "transmittals_scoped",
+      "referenced_schema": "vinops",
+      "referenced_relation": "transmittals"
+    },
+    {
+      "dependent_schema": "vinops",
+      "dependent_relation": "transmittals",
+      "policy_name": "transmittals_scoped",
+      "referenced_schema": "vinops",
+      "referenced_relation": "transmittals"
+    },
+    {
+      "dependent_schema": "vinops",
+      "dependent_relation": "transmittals",
+      "policy_name": "transmittals_scoped",
+      "referenced_schema": "vinops",
+      "referenced_relation": "transmittals"
+    },
+    {
+      "dependent_schema": "vinops",
+      "dependent_relation": "transmittals",
+      "policy_name": "transmittals_scoped",
+      "referenced_schema": null,
+      "referenced_relation": null
+    },
+    {
+      "dependent_schema": "vinops",
+      "dependent_relation": "transmittals",
+      "policy_name": "transmittals_scoped",
+      "referenced_schema": null,
+      "referenced_relation": null
+    },
+    {
+      "dependent_schema": "vinops",
+      "dependent_relation": "transmittals",
+      "policy_name": "transmittals_scoped",
+      "referenced_schema": null,
+      "referenced_relation": null
+    },
+    {
+      "dependent_schema": "vinops",
+      "dependent_relation": "transmittals",
+      "policy_name": "transmittals_scoped",
+      "referenced_schema": null,
+      "referenced_relation": null
+    }
+  ]
+}

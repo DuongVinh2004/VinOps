@@ -1,0 +1,12 @@
+{
+  "command": "C:\\Users\\Duong Vinh\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\bin\\fallback\\pnpm.cmd verify",
+  "runs": 1,
+  "persistent_child_requested": true,
+  "real_exit_code": 1,
+  "status": "BLOCKED",
+  "reason": "The verify script invokes corepack pnpm@11.15.1, but corepack is not recognized. No package-manager install or second verify run was attempted.",
+  "stdout_log": "pnpm-verify-i8.stdout.log",
+  "stderr_log": "pnpm-verify-i8.stderr.log",
+  "pid_capture": "UNVERIFIED: wrapper was interrupted after the child had exited; the captured logs show the real exit code 1.",
+  "corepack_error": "'corepack' is not recognized as an internal or external command, operable program or batch file."
+}

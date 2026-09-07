@@ -1,0 +1,26 @@
+{
+  "status": "BLOCKED_BY_SAFETY_AUTHORIZATION",
+  "reason": "AGENTS.md requires a direct new user confirmation naming the exact targets and containing I AUTHORIZE THIS DESTRUCTIVE ACTION before deletion.",
+  "exact_task_owned_targets": {
+    "containers": [
+      "vinops-mega002-i2-postgres",
+      "vinops-mega002-i2-minio",
+      "vinops-mega002-i2-clamav",
+      "vinops-mega002-i2-minio-bootstrap"
+    ],
+    "network": "vinops-mega002-i2-runtime",
+    "volumes": [
+      "vinops-mega002-i2-postgres-data",
+      "vinops-mega002-i2-minio-data",
+      "vinops-mega002-i2-clamav-data"
+    ],
+    "cleanroom": ".tmp/vinops-mega002-i2-cleanroom",
+    "benchmark_proxy_script": ".tmp/vinops-mega002-i2-benchmark.mjs",
+    "runtime_scripts": [
+      ".tmp/vinops-mega002-i2-faults-auth.mjs",
+      ".tmp/vinops-mega002-i2-browser-api.mjs"
+    ]
+  },
+  "deletion_commands_executed": [],
+  "retained_for_recovery": true
+}

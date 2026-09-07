@@ -1,0 +1,10 @@
+{
+  "checkpoint": "VIN-MEGA-001",
+  "iteration": 3,
+  "status": "PASS_WITH_SCOPE_LIMITATION",
+  "api": {"process": "Node 24.18.0 apps/api/dist/main.js","health":200,"login":200,"organizations":200,"project_context":200,"cross_project":404},
+  "worker": {"process": "Node 24.18.0 apps/worker/dist/main.js","claim": "PASS","publish": "PASS","generic_tenant_query": "DENIED","event_status": "Published"},
+  "web": {"preview": "http://127.0.0.1:4174/","login": "PASS","project_overview": "PASS","project_context_navigation": "PASS","browser_storage_access_tokens": "NOT_PRESENT"},
+  "provider_scope": "Synthetic local PostgreSQL only; no external identity, email, queue or provider was contacted.",
+  "leakage": {"secret_scan": "PASS","raw_token_or_cookie_logs_in_evidence": false}
+}

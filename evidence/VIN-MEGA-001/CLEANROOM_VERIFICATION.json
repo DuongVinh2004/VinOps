@@ -1,0 +1,25 @@
+{
+  "checkpoint": "VIN-MEGA-001",
+  "artifact_status": "PRELIMINARY_CLEANROOM_STATUS",
+  "recorded_on": "2026-07-30",
+  "vin_mega_001_cleanroom": {
+    "status": "NOT_RUN",
+    "reason": "A fresh clean-room run was not performed in this artifact and cannot substitute for the required PostgreSQL role/RLS runtime proof."
+  },
+  "prior_fnd_cleanroom_residual": {
+    "path": "C:\\Users\\Duong Vinh\\Downloads\\VinOps\\vinops\\.tmp\\vinops-fnd001a-cleanroom",
+    "status": "BLOCKED_EXTERNAL_PERMISSION",
+    "verified_history": [
+      "The earlier source-only clean-room matrix passed before cleanup.",
+      "Cleanup left package-manager material because safe removal was denied where hardlink targets could resolve outside the workspace.",
+      "No alternate delete tool, ACL change or safety bypass was used."
+    ],
+    "scope_effect": "This is an independent VIN-FND-001A blocker and is not resolved by VIN-MEGA-001."
+  },
+  "required_if_a_new_cleanroom_is_authorized": [
+    "Use a new explicitly task-owned temporary path.",
+    "Run frozen install and the repository static gates.",
+    "Do not treat a source-only clean-room pass as PostgreSQL/RLS runtime proof.",
+    "Do not attempt cleanup outside the exact task-owned path or bypass hardlink/reparse-point protections."
+  ]
+}

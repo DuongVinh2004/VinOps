@@ -1,0 +1,106 @@
+{
+  "project": "VinOps",
+  "checkpoint": "VIN-MEGA-001",
+  "iteration": 4,
+  "status": "READY_FOR_REVIEW_WITH_RECOVERABLE_QUARANTINE",
+  "context_mode": "STRICT",
+  "evidence_mode": "PATCH_FILE",
+  "baseline": {
+    "head": "UNBORN",
+    "branch": "main",
+    "remote": "NONE",
+    "review_entries": 116,
+    "source_sha256": "bad57a9afd26cb826bc4837cde81a0f25f6d20cad230f8f781c12cc770ae5afd"
+  },
+  "after": {
+    "head": "UNBORN",
+    "branch": "main",
+    "remote": "NONE",
+    "source_files": 124,
+    "source_sha256": "4bb3bcea758b55544062c73954a4595be9560bdeeec34281aa399ba03172479e",
+    "source_fingerprint_method": "SHA-256 of sorted relative-path|byte-length|file-SHA-256 lines joined by LF without trailing LF"
+  },
+  "protected_inputs": {
+    "prss": "8ff4ce6ca98546d36fb3cdf62daa285a8badddc4f24a38b9ae7cf968920dad8f",
+    "design": "73f2462457660df38408a96f35cd871d1eec54f78045b12a98cb4604fbd01d36",
+    "openapi_input": "88fe06f65be4d002c16a70802f8e3965006ad63643891e82b4ee139d53484e66",
+    "unchanged": true
+  },
+  "i3_reconciliation": {
+    "manifest_sha256": "239d00fed2a5bd8f88e4dc8df1de0aee2df871e5590ede1de84cf20f6a476172",
+    "evidence_sha256": "5f8cf2d9dbc33a8910d35b56f045a09e15cdaeac92fa785d5c5ae48cddf67545",
+    "authoritative_final_evidence_sha256": "c4dfd18de5f9b91025812498c20b0aa43645bfcd39d19045f347e717e20a4fe0",
+    "review_sha256": "51b363053468e609774d2c585ef735cd76d7dd1bece9f2fa48e6fa6387b96c25",
+    "verified": true
+  },
+  "runtime": {
+    "node": "v24.18.0",
+    "pnpm": "11.15.1",
+    "postgresql": "16.14",
+    "migrations": 6,
+    "main_tests": { "files": 13, "passed": 45, "failed": 0, "skipped": 0 },
+    "cleanroom_tests": { "files": 13, "passed": 45, "failed": 0, "skipped": 0 },
+    "browser_e2e": "PASS",
+    "audit": "Critical=0 High=0"
+  },
+  "residual": {
+    "disposition": "QUARANTINED_RECOVERABLE",
+    "source_exists": false,
+    "quarantine_recovery_path": "C:\\Users\\Duong Vinh\\Downloads\\VinOps\\.vinops-quarantine\\VIN-MEGA-001-i4\\vinops-fnd001a-cleanroom",
+    "destination_exists": true,
+    "inventory_verified_equal": true,
+    "permanent_deletion_performed": false,
+    "false_deletion_claim": false
+  },
+  "acceptance_criteria": {
+    "AC-01": "PASS",
+    "AC-02": "PASS",
+    "AC-03": "PASS",
+    "AC-04": "PASS",
+    "AC-05": "PASS",
+    "AC-06": "PASS",
+    "AC-07": "PASS",
+    "AC-08": "PASS",
+    "AC-09": "PASS",
+    "AC-10": "PASS",
+    "AC-11": "PASS",
+    "AC-12": "PASS"
+  },
+  "archives": {
+    "evidence": {
+      "path": "evidence/VIN-MEGA-001/VIN-MEGA-001-i4-evidence-final-v2-verifiable.zip",
+      "sha256": "0d7a6ec827f3cab041521012913bc0aad7c06c70c8686571aebdd08f4596381d",
+      "entries": 14,
+      "unsafe_paths": 0,
+      "duplicates": 0,
+      "nested_archives": 0,
+      "content_hashes_verified": true,
+      "authoritative": true
+    },
+    "evidence_historical_blocked": {
+      "path": "evidence/VIN-MEGA-001/VIN-MEGA-001-i4-evidence-verifiable.zip",
+      "sha256": "6debcfae15ae0026f08b7559f8e734922eb7302d65d494f83c9215d75f83d1e4",
+      "entries": 13,
+      "preserved_without_overwrite": true
+    },
+    "review": {
+      "path": "evidence/VIN-MEGA-001/VIN-MEGA-001-i4-review-verifiable.zip",
+      "sha256": "ba5419088deada9fd2b5cea3c417281612f95cb0dae17cac90668d2cd7a46e3d",
+      "entries": 124,
+      "unsafe_paths": 0,
+      "duplicates": 0,
+      "nested_archives": 0,
+      "content_hashes_verified": true
+    }
+  },
+  "task_resource_cleanup": { "containers": 0, "volumes": 0, "networks": 0, "verified": true },
+  "runtime_unverified": [],
+  "remaining_unverified": [],
+  "user_work_preserved": true,
+  "external_actions": "NONE",
+  "destructive_actions": "No permanent filesystem deletion. The exact authorized obsolete clean-room was moved intact to recoverable in-workspace quarantine after canonical, reparse, scope and inventory verification. Earlier task cleanup removed only five exact task-owned containers, two exact task-owned volumes and one exact task-owned network after label verification.",
+  "no_commit_push_pr_deploy": true,
+  "vin_mega_002_started": false,
+  "patch": "NOT_APPLICABLE_UNBORN_REPOSITORY",
+  "proposed_control_state_delta": "VIN-MEGA-001 -> VERIFY; executor must not mark CLOSED. VIN-MEGA-002 remains not started."
+}

@@ -1,0 +1,18 @@
+{
+  "status": "PASS",
+  "i3_row_count": 10800,
+  "i4_row_count": 10800,
+  "i3_unique_id_count": 10800,
+  "i4_unique_id_count": 10800,
+  "i3_unique_semantic_key_count": 10800,
+  "i4_unique_semantic_key_count": 10800,
+  "exact_id_matches": 10800,
+  "id_renamed_semantic_matches": 0,
+  "rows_missing_from_i3": 0,
+  "rows_missing_from_i4": 0,
+  "duplicate_ids": 0,
+  "semantic_collisions": 0,
+  "conflicting_expected_decisions": 0,
+  "canonical_row_id_policy": "preserve Iteration 3 row_id; Iteration 4 row_id is identical for every row",
+  "semantic_dimensions": ["operation_id", "method", "path", "persona", "scope", "state", "expected_status", "expected_layers"]
+}

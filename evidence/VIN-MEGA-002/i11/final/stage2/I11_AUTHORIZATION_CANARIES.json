@@ -1,0 +1,52 @@
+{
+  "status": "PASS",
+  "transmittal_id": "a73ecc09-0207-4c3f-a783-f79ff556fe64",
+  "authorized_existing": {
+    "status": 200,
+    "body": {
+      "id": "a73ecc09-0207-4c3f-a783-f79ff556fe64",
+      "project_id": "00000000-0000-4000-8000-000000000301",
+      "code": "I11-TR-a73ecc09",
+      "purpose": "i11 auth canary",
+      "status": "Issued",
+      "created_by": "00000000-0000-4000-8000-000000000101",
+      "created_at": "2026-08-03T06:06:39.313Z",
+      "issued_at": "2026-08-03T06:06:39.313Z",
+      "snapshot_sha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "version": "1",
+      "items": [
+        {
+          "document_id": "a2e0f9ed-7a98-468a-9770-ef89097a521a",
+          "revision_id": "31186f21-4be2-4cb3-8acb-edf1439da1ae",
+          "context_key": "default",
+          "document_code_snapshot": "I11-CANARY",
+          "document_title_snapshot": "I11 Canary",
+          "revision_code_snapshot": "P01",
+          "file_sha256_snapshot": "351a780b2f1cdb5f3283405ac67b3ea2d11408acd832d90beb3418ea45520854"
+        }
+      ],
+      "recipients": []
+    },
+    "body_sha256": "865b24949799729040350cd8b003a420f47ba94c6e152f5b991a0029308a40b7"
+  },
+  "authorized_missing": {
+    "status": 404,
+    "body": {
+      "code": "RESOURCE_NOT_VISIBLE",
+      "message_key": "errors.resourceNotVisible",
+      "correlation_id": "34f50ba5-3624-4124-b39e-3f1d5cb49e34",
+      "retryable": false
+    },
+    "body_sha256": "a14051d91e71fe35758a45376dfce551440ae0aacdc190a3c6b4b29f2e485a9e"
+  },
+  "forbidden_cross_tenant": {
+    "status": 404,
+    "body": {
+      "code": "RESOURCE_NOT_VISIBLE",
+      "message_key": "errors.resourceNotVisible",
+      "correlation_id": "2f51cf7b-9f8a-4f65-a672-a677c39e2b3a",
+      "retryable": false
+    },
+    "body_sha256": "7ef2aad3ef89d42636f06c648cffc01b243cbad5277b55306dfae89a7e0de3e7"
+  }
+}

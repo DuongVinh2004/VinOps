@@ -1,0 +1,15 @@
+{
+  "result": "UNVERIFIED",
+  "target": "NFR-FILE-001: 95% of 20 concurrent 10 MB uploads within 8 seconds at 20 Mbps, excluding scan queue",
+  "measured": true,
+  "local_benchmark": {
+    "uploads": 20,
+    "size_mb_each": 10,
+    "elapsed_ms": 2419,
+    "p95_upload_ms": 2384,
+    "max_upload_ms": 2389,
+    "throughput_mbps": 661.4303,
+    "condition": "localhost task-owned MinIO; specified 20 Mbps condition not reproduced"
+  },
+  "reason": "Informational local measurement only; the specified 20 Mbps condition was not reproduced, so no performance PASS is claimed."
+}

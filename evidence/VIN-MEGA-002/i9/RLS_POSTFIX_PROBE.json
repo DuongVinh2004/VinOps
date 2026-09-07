@@ -1,0 +1,35 @@
+{
+  "classification": "PASS",
+  "results": [
+    {
+      "database": "vinops_mega002_test",
+      "status": "PASS",
+      "sqlstate": null,
+      "rows": 0,
+      "policy": {
+        "qual": "vinops.can_access_project(project_id)",
+        "with_check": "vinops.can_access_project(project_id)"
+      }
+    },
+    {
+      "database": "vinops_mega002_i8_test",
+      "status": "PASS",
+      "sqlstate": null,
+      "rows": 0,
+      "policy": {
+        "qual": "vinops.can_access_project(project_id)",
+        "with_check": "vinops.can_access_project(project_id)"
+      }
+    },
+    {
+      "database": "vinops_mega002_i2_test9",
+      "status": "PASS",
+      "sqlstate": null,
+      "rows": 0,
+      "policy": {
+        "qual": "vinops.can_access_project(project_id)",
+        "with_check": "vinops.can_access_project(project_id)"
+      }
+    }
+  ]
+}

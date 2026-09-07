@@ -1,0 +1,12 @@
+node_modules
+dist
+coverage
+pnpm-lock.yaml
+packages/contracts/src/generated/openapi.ts
+# Composite TypeScript builds can materialize JS/declaration siblings while
+# resolving workspace source aliases. They are build residuals, not source.
+packages/**/src/**/*.js
+packages/**/src/**/*.d.ts
+packages/**/src/**/*.map
+evidence
+.tmp

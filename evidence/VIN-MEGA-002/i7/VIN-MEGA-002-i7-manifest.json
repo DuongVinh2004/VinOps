@@ -1,0 +1,272 @@
+{
+  "project": "VinOps",
+  "checkpoint_id": "VIN-MEGA-002",
+  "iteration": 7,
+  "status": "BLOCKED",
+  "context_mode": "STRICT",
+  "evidence_mode": "PATCH_FILE",
+  "generated_at": "2026-08-02T18:14:29.671Z",
+  "source_fingerprint": "45c68e8314962e35a3e3c29fd713df13d037c3fe418955cfd4341d48f533ece3",
+  "expected_matrix_sha256": "10da18fe95aaddd84998a674c9ca00f43da710590a781aeb57406a450294fe0a",
+  "source_changes": {
+    "files": [
+      "apps/api/src/platform.controller.ts",
+      "apps/api/src/document.service.ts",
+      "apps/api/test/document-boundary.integration.test.ts"
+    ],
+    "cumulative_product_files": 7,
+    "additional_product_files": 3,
+    "migrations": 0,
+    "dependencies": 0
+  },
+  "protected_inputs": {
+    "i6_manifest_sha256": "B9E2D0D1736ABEC0A21883F82384897CFC4DDCF9B4D4BE02C517CED34E2D2A21",
+    "i6_evidence_sha256": "5806A3B85E150C6A96FD0F692A653145AC284E6475B42D64157100FE9CC7FADF",
+    "i6_review_sha256": "C9263CD4403C04383131FBD49C7EF008DE1A0184CEF2F17CF09E6F7F14A5F645",
+    "i6_delta_sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+  },
+  "evidence_files": [
+    "AC05_FINAL_GATE.json",
+    "ACCEPTANCE_STATUS-i7.json",
+    "AUTHZ_CANARY_RESULTS.json",
+    "AUTHZ_COVERAGE_SUMMARY.json",
+    "AUTHZ_EXECUTION_JOURNAL.json",
+    "AUTHZ_FAILURE_SUMMARY.json",
+    "AUTHZ_FINAL_MATRIX.ndjson",
+    "AUTHZ_I6_MISMATCH_TRIAGE.json",
+    "AUTHZ_I6_REUSE_AND_INVALIDATION.json",
+    "AUTHZ_LEAKAGE_SUMMARY.json",
+    "AUTHZ_REQUIRED_REGRESSIONS.json",
+    "AUTHZ_RESULT_MATRIX.json",
+    "AUTHZ_ROUTE_SUMMARY.json",
+    "AUTHZ_RUNTIME_INVENTORY.json",
+    "AUTHZ_SHARD-addAnnotation.ndjson",
+    "AUTHZ_SHARD-addReviewComment.ndjson",
+    "AUTHZ_SHARD-archiveDocument.ndjson",
+    "AUTHZ_SHARD-authorizeUploadPart.ndjson",
+    "AUTHZ_SHARD-completeUpload.ndjson",
+    "AUTHZ_SHARD-createDocument.ndjson",
+    "AUTHZ_SHARD-createRevision.ndjson",
+    "AUTHZ_SHARD-createTransmittal.ndjson",
+    "AUTHZ_SHARD-disposeReviewComment.ndjson",
+    "AUTHZ_SHARD-documentDetail.ndjson",
+    "AUTHZ_SHARD-documentRevisionHistory.ndjson",
+    "AUTHZ_SHARD-downloadRevision.ndjson",
+    "AUTHZ_SHARD-listDocuments.ndjson",
+    "AUTHZ_SHARD-previewRevision.ndjson",
+    "AUTHZ_SHARD-restoreDocument.ndjson",
+    "AUTHZ_SHARD-reviewInbox.ndjson",
+    "AUTHZ_SHARD-transitionRevision.ndjson",
+    "AUTHZ_SHARD-transmittalDetail.ndjson",
+    "AUTHZ_SIDE_EFFECT_SUMMARY.json",
+    "BASELINE_RECONCILIATION.json",
+    "FIXTURE_SELF_CHECK.json",
+    "FOCUSED_HTTP_REGRESSION.json",
+    "I7_SOURCE_INVENTORY.json",
+    "PNPM_VERIFY_RESULT.json",
+    "VERIFICATION_COMMANDS.json",
+    "VIN-MEGA-002-i7-source.delta.patch",
+    "pnpm-verify-i7.exit",
+    "pnpm-verify-i7.log",
+    "runner-i7.stderr.log",
+    "runner-i7.stdout.log"
+  ],
+  "evidence_file_hashes": {
+    "AC05_FINAL_GATE.json": {
+      "sha256": "977B4210EB6EEB0DBD895F26BE4BC654DA0684E942A9B42DDD6AE21C11DCFFEB",
+      "bytes": 333
+    },
+    "ACCEPTANCE_STATUS-i7.json": {
+      "sha256": "F44815E82189F1B3E704F25A4520EC2591249D9D80017A5E4AD17072B3DFB7FE",
+      "bytes": 302
+    },
+    "AUTHZ_CANARY_RESULTS.json": {
+      "sha256": "4F318652069DD39FCEEBE62CF456E51BECCAC26E82130D6481FF03450D2482D2",
+      "bytes": 63796
+    },
+    "AUTHZ_COVERAGE_SUMMARY.json": {
+      "sha256": "3BE44163B53A1F23727ACAEECF45A0516382D2FB127A023A8BB76C5CDEA53C90",
+      "bytes": 964
+    },
+    "AUTHZ_EXECUTION_JOURNAL.json": {
+      "sha256": "C5625264804FF19CD7F299B500F4502663A70CE69B251256873100A4010524D4",
+      "bytes": 845
+    },
+    "AUTHZ_FAILURE_SUMMARY.json": {
+      "sha256": "2714394301A273DCE5EDB7F713E9CE2B1310C1507CEA2ECADDCD222B6B7CF24E",
+      "bytes": 642
+    },
+    "AUTHZ_FINAL_MATRIX.ndjson": {
+      "sha256": "2B6DA3E3A6E0112E99C48E66897114047A8CCF74DCEDCCB5CE46EBB7EBADA83C",
+      "bytes": 16523836
+    },
+    "AUTHZ_I6_MISMATCH_TRIAGE.json": {
+      "sha256": "458871C5AD02E9EF99B450B0CA5B599EF71DE9E706FFE36A763DB9B16E35A680",
+      "bytes": 3116114
+    },
+    "AUTHZ_I6_REUSE_AND_INVALIDATION.json": {
+      "sha256": "10A67F30F9D74D0791A675AAF93F5802E7B4DD181D633D298AAD691B62E8533E",
+      "bytes": 1481
+    },
+    "AUTHZ_LEAKAGE_SUMMARY.json": {
+      "sha256": "6E3E86C0273F6C4E163670B14CB8DA11F86A0881F889FB4A528AA1F2922D1D9F",
+      "bytes": 121
+    },
+    "AUTHZ_REQUIRED_REGRESSIONS.json": {
+      "sha256": "C694B36C45F4354729A1CA666ADBE0EDE071A95E3C011EF9243F12984CF83704",
+      "bytes": 585
+    },
+    "AUTHZ_RESULT_MATRIX.json": {
+      "sha256": "3BE44163B53A1F23727ACAEECF45A0516382D2FB127A023A8BB76C5CDEA53C90",
+      "bytes": 964
+    },
+    "AUTHZ_ROUTE_SUMMARY.json": {
+      "sha256": "DBC4F0496696B0020BB3DB764A65EB3CDB5DF96E86461803A93CDB9065FDDA6A",
+      "bytes": 5838
+    },
+    "AUTHZ_RUNTIME_INVENTORY.json": {
+      "sha256": "796F17CF48119B825115A5E5C796F3E9BFFC4D4696ED86401C0E1BA064CB346E",
+      "bytes": 1081
+    },
+    "AUTHZ_SHARD-addAnnotation.ndjson": {
+      "sha256": "43B32CA92BCE2919BB773988BDE9F2631B6F67B1B48CD10E0436AAB73670718A",
+      "bytes": 996258
+    },
+    "AUTHZ_SHARD-addReviewComment.ndjson": {
+      "sha256": "46ABF3B09FDA3E03955E11C3B9DA6972AB29A44E15CAD90D04A220C0BB47BC0D",
+      "bytes": 998096
+    },
+    "AUTHZ_SHARD-archiveDocument.ndjson": {
+      "sha256": "301F38D98A4525431155D0C3FBE935DB3CA02EF3E7C4013468C5C592FC6343E9",
+      "bytes": 994705
+    },
+    "AUTHZ_SHARD-authorizeUploadPart.ndjson": {
+      "sha256": "74F02E1D2BB27034A44B28B10EB570AEFD322FA481B1D93A762146B2A3DBF5E5",
+      "bytes": 1044099
+    },
+    "AUTHZ_SHARD-completeUpload.ndjson": {
+      "sha256": "0BC41E537BE67D6378DB47A4FCAF5047F04BF4D6D4C9687764EE1498200BAF52",
+      "bytes": 1007654
+    },
+    "AUTHZ_SHARD-createDocument.ndjson": {
+      "sha256": "BD5A5C1B2144500C2507E119C48DAC27BFAA86EE504AB5541C026E9B7194F2D6",
+      "bytes": 993283
+    },
+    "AUTHZ_SHARD-createRevision.ndjson": {
+      "sha256": "09BD8EE6809EFE9700A127FADF246DED81FF876735C17AEF04236EAA1906FF54",
+      "bytes": 995339
+    },
+    "AUTHZ_SHARD-createTransmittal.ndjson": {
+      "sha256": "FE53B6297190A53F189CD7ACB31353F386583A03A821D72E598FA44DD05DF792",
+      "bytes": 1002165
+    },
+    "AUTHZ_SHARD-disposeReviewComment.ndjson": {
+      "sha256": "2F89DCF40DBDA409E32CA82B0EC86F70B963BD02FBAE559758E46AFC771C20F1",
+      "bytes": 1015845
+    },
+    "AUTHZ_SHARD-documentDetail.ndjson": {
+      "sha256": "8FBB66A3B81FCB16B5D0308BB1B72FBFAA1D0941BFCCF66D0AF9716B6E82C232",
+      "bytes": 762788
+    },
+    "AUTHZ_SHARD-documentRevisionHistory.ndjson": {
+      "sha256": "B9E5AD3103A4AE922187A3EB1B0465837FD58396D1D49DF5EBDB53757E8F9E50",
+      "bytes": 790749
+    },
+    "AUTHZ_SHARD-downloadRevision.ndjson": {
+      "sha256": "FAE02856CA0468AF64A908E8214BF11929F83EE555A0CFBD31921B27301ACC12",
+      "bytes": 777184
+    },
+    "AUTHZ_SHARD-listDocuments.ndjson": {
+      "sha256": "B17064339EEB09AAED951CBF27E45DEAE1532DB76A5BDC6373D58C4D56DFD6C6",
+      "bytes": 770706
+    },
+    "AUTHZ_SHARD-previewRevision.ndjson": {
+      "sha256": "928D9E56BF088EAE594FBBCB873507D0004C69C760281C36F03115BA438A926C",
+      "bytes": 774106
+    },
+    "AUTHZ_SHARD-restoreDocument.ndjson": {
+      "sha256": "22AFA84E7F3269845C04DFEE5F9CD783562A4961FA24F8B178BFBA5072D29E44",
+      "bytes": 994928
+    },
+    "AUTHZ_SHARD-reviewInbox.ndjson": {
+      "sha256": "E2841B67845AF70A22F08C2E958540C778242B9C058B4F9F3DE0EDFF0E2F4D14",
+      "bytes": 770704
+    },
+    "AUTHZ_SHARD-transitionRevision.ndjson": {
+      "sha256": "72E2E07CB2F4D07821A49BF9453A147982C9D87F70599783F634651376C8A245",
+      "bytes": 1005036
+    },
+    "AUTHZ_SHARD-transmittalDetail.ndjson": {
+      "sha256": "CE2FBDC11A146C1F9742F36DCBA6103873F1D8F6EEDA6243518F464192FFB645",
+      "bytes": 775274
+    },
+    "AUTHZ_SIDE_EFFECT_SUMMARY.json": {
+      "sha256": "2BE8F78F1D500E505CCE5FB1DF7DE9554A7EB3E648E98DA0DAC439570A6AB244",
+      "bytes": 225
+    },
+    "BASELINE_RECONCILIATION.json": {
+      "sha256": "27A82F58C72B7EC6D802CB6AFAB1523A33207F0323528162561B8C0E5E0FB2CF",
+      "bytes": 765
+    },
+    "FIXTURE_SELF_CHECK.json": {
+      "sha256": "945B9750B0B7AB5BFC9EC4517E8BC81EDDD5CD4B6874722F79DC03120EBF042B",
+      "bytes": 950
+    },
+    "FOCUSED_HTTP_REGRESSION.json": {
+      "sha256": "A4915800EEAD65432B0B8AAD461C4BA1618866EF17505EA92B72C954710237FC",
+      "bytes": 703
+    },
+    "I7_SOURCE_INVENTORY.json": {
+      "sha256": "465657BBD170221E4C1CC828397143EA71832A2829DEAE375F51EE90DD8F9B18",
+      "bytes": 31161
+    },
+    "PNPM_VERIFY_RESULT.json": {
+      "sha256": "0192BA650148B4716EAB20297AE30A8A0A85127621D2DF272A1F4788034AC5C0",
+      "bytes": 328
+    },
+    "VERIFICATION_COMMANDS.json": {
+      "sha256": "C51BAFB179CE68D7739CBD0E75191B202A112F9C86AA148BE172B2A3468B03AB",
+      "bytes": 726
+    },
+    "VIN-MEGA-002-i7-source.delta.patch": {
+      "sha256": "91BC7FFC91DAECFD6464F0632F2AE830F307AA2A654F78F2BE204CF412FD689B",
+      "bytes": 6250
+    },
+    "pnpm-verify-i7.exit": {
+      "sha256": "589C942E748EA16DC86923C4391092707CE22315EB01CB85B0988C6762AA0ED3",
+      "bytes": 14
+    },
+    "pnpm-verify-i7.log": {
+      "sha256": "306F75941822A515019B48237B8C082ED7DEDE0EC8E22DAC93E8A1DEAE49A880",
+      "bytes": 470
+    },
+    "runner-i7.stderr.log": {
+      "sha256": "BAACA38A93DAF012C9446868970C68FDBC86C3073A486997357A19FD9512950C",
+      "bytes": 383
+    },
+    "runner-i7.stdout.log": {
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "bytes": 0
+    }
+  },
+  "archive_hashes": {
+    "evidence_zip_sha256": "8BBE4754C66D12316FA124A4CD58D8351E83EE58FFFD7A6F90797341CFE39CB7",
+    "review_zip_sha256": "E0FE71EBC40EDA136206AE48B94982D21423E0228B5205E3313A16DA0DCAEE74",
+    "evidence_zip_entries": 56,
+    "review_zip_entries": 15,
+    "duplicates": 0,
+    "nested_archives": 0
+  },
+  "verification": {
+    "focused_http_regression_exit_code": 0,
+    "pnpm_verify_exit_code": 1,
+    "pnpm_verify_status": "FAIL",
+    "pnpm_verify_failure": "corepack unavailable in execution environment"
+  },
+  "acceptance": {
+    "AC05": "PASS",
+    "AC06": "UNVERIFIED",
+    "AC08": "BLOCKED",
+    "CONTROL_STATE_DELTA": "BLOCKED"
+  }
+}

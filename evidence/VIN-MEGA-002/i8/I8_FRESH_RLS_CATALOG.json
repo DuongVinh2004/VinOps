@@ -1,0 +1,52 @@
+{
+  "database": "vinops_mega002_i8_test",
+  "policies": [
+    {
+      "schemaname": "vinops",
+      "tablename": "transmittal_items",
+      "policyname": "transmittal_items_scoped",
+      "permissive": "PERMISSIVE",
+      "roles": "{public}",
+      "cmd": "ALL",
+      "qual": "(EXISTS ( SELECT 1\n   FROM vinops.transmittals t\n  WHERE ((t.id = transmittal_items.transmittal_id) AND vinops.can_access_project(t.project_id))))",
+      "with_check": "vinops.can_access_project(project_id)"
+    },
+    {
+      "schemaname": "vinops",
+      "tablename": "transmittal_recipients",
+      "policyname": "transmittal_recipients_scoped",
+      "permissive": "PERMISSIVE",
+      "roles": "{public}",
+      "cmd": "ALL",
+      "qual": "(EXISTS ( SELECT 1\n   FROM vinops.transmittals t\n  WHERE ((t.id = transmittal_recipients.transmittal_id) AND vinops.can_access_project(t.project_id))))",
+      "with_check": "vinops.can_access_project(project_id)"
+    },
+    {
+      "schemaname": "vinops",
+      "tablename": "transmittals",
+      "policyname": "transmittals_scoped",
+      "permissive": "PERMISSIVE",
+      "roles": "{public}",
+      "cmd": "ALL",
+      "qual": "((created_by = vinops.current_actor_id()) OR ((EXISTS ( SELECT 1\n   FROM vinops.transmittal_items item\n  WHERE (item.transmittal_id = transmittals.id))) AND (NOT (EXISTS ( SELECT 1\n   FROM vinops.transmittal_items item\n  WHERE ((item.transmittal_id = transmittals.id) AND (NOT vinops.can_access_document(item.document_id))))))))",
+      "with_check": "((created_by = vinops.current_actor_id()) AND vinops.can_access_project(project_id))"
+    }
+  ],
+  "relations": [
+    {
+      "relation": "vinops.transmittal_items",
+      "relrowsecurity": true,
+      "relforcerowsecurity": false
+    },
+    {
+      "relation": "vinops.transmittal_recipients",
+      "relrowsecurity": true,
+      "relforcerowsecurity": false
+    },
+    {
+      "relation": "vinops.transmittals",
+      "relrowsecurity": true,
+      "relforcerowsecurity": false
+    }
+  ]
+}

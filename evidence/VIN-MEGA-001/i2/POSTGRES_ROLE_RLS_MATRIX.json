@@ -1,0 +1,1 @@
+{"checkpoint":"VIN-MEGA-001","iteration":2,"status":"UNVERIFIED","reason":"No real PostgreSQL runtime was available.","checks":{"roles":"NOT_RUN","non_superuser_non_bypassrls":"NOT_RUN","row_security":"NOT_RUN","set_local_role":"NOT_RUN","context_leakage":"NOT_RUN","cross_tenant_matrix":"NOT_RUN","worker_outbox_role":"NOT_RUN"}}

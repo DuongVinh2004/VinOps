@@ -1,0 +1,8 @@
+extends:
+  - recommended
+
+rules:
+  no-unresolved-refs: error
+  no-unused-components: error
+  operation-operationId-unique: error
+  security-defined: error

@@ -1,0 +1,879 @@
+{
+  "route_count": 18,
+  "expected_rows": 10800,
+  "executed_rows": 54,
+  "uncovered": 10746,
+  "unexpected": 0,
+  "coverage_gate": "UNVERIFIED",
+  "rows": [
+    {
+      "row_id": "listDocuments|unauthenticated",
+      "operation_id": "listDocuments",
+      "method": "GET",
+      "path": "/api/v1/projects/:projectId/documents",
+      "persona": "unauthenticated",
+      "status": 401,
+      "body_keys": [
+        "code",
+        "message_key",
+        "correlation_id",
+        "retryable"
+      ],
+      "metadata_leak": false,
+      "expected_status": 401
+    },
+    {
+      "row_id": "listDocuments|active outsider",
+      "operation_id": "listDocuments",
+      "method": "GET",
+      "path": "/api/v1/projects/:projectId/documents",
+      "persona": "active outsider",
+      "status": 404,
+      "body_keys": [
+        "code",
+        "message_key",
+        "correlation_id",
+        "retryable"
+      ],
+      "metadata_leak": false,
+      "expected_status": "403_or_404_policy"
+    },
+    {
+      "row_id": "listDocuments|owner synthetic",
+      "operation_id": "listDocuments",
+      "method": "GET",
+      "path": "/api/v1/projects/:projectId/documents",
+      "persona": "owner synthetic",
+      "status": 200,
+      "body_keys": [
+        "items",
+        "page"
+      ],
+      "metadata_leak": true,
+      "expected_status": "policy/state-dependent"
+    },
+    {
+      "row_id": "createDocument|unauthenticated",
+      "operation_id": "createDocument",
+      "method": "POST",
+      "path": "/api/v1/projects/:projectId/documents",
+      "persona": "unauthenticated",
+      "status": 401,
+      "body_keys": [
+        "code",
+        "message_key",
+        "correlation_id",
+        "retryable"
+      ],
+      "metadata_leak": false,
+      "expected_status": 401
+    },
+    {
+      "row_id": "createDocument|active outsider",
+      "operation_id": "createDocument",
+      "method": "POST",
+      "path": "/api/v1/projects/:projectId/documents",
+      "persona": "active outsider",
+      "status": 404,
+      "body_keys": [
+        "code",
+        "message_key",
+        "correlation_id",
+        "retryable"
+      ],
+      "metadata_leak": false,
+      "expected_status": "403_or_404_policy"
+    },
+    {
+      "row_id": "createDocument|owner synthetic",
+      "operation_id": "createDocument",
+      "method": "POST",
+      "path": "/api/v1/projects/:projectId/documents",
+      "persona": "owner synthetic",
+      "status": 201,
+      "body_keys": [
+        "id",
+        "project_id",
+        "numbering_context",
+        "code",
+        "title",
+        "document_type",
+        "discipline_id",
+        "classification_id",
+        "work_id",
+        "confidentiality",
+        "version",
+        "archived_at",
+        "current_revision"
+      ],
+      "metadata_leak": true,
+      "expected_status": "policy/state-dependent"
+    },
+    {
+      "row_id": "documentDetail|unauthenticated",
+      "operation_id": "documentDetail",
+      "method": "GET",
+      "path": "/api/v1/documents/:documentId",
+      "persona": "unauthenticated",
+      "status": 401,
+      "body_keys": [
+        "code",
+        "message_key",
+        "correlation_id",
+        "retryable"
+      ],
+      "metadata_leak": false,
+      "expected_status": 401
+    },
+    {
+      "row_id": "documentDetail|active outsider",
+      "operation_id": "documentDetail",
+      "method": "GET",
+      "path": "/api/v1/documents/:documentId",
+      "persona": "active outsider",
+      "status": 404,
+      "body_keys": [
+        "code",
+        "message_key",
+        "correlation_id",
+        "retryable"
+      ],
+      "metadata_leak": false,
+      "expected_status": "403_or_404_policy"
+    },
+    {
+      "row_id": "documentDetail|owner synthetic",
+      "operation_id": "documentDetail",
+      "method": "GET",
+      "path": "/api/v1/documents/:documentId",
+      "persona": "owner synthetic",
+      "status": 404,
+      "body_keys": [
+        "code",
+        "message_key",
+        "correlation_id",
+        "retryable"
+      ],
+      "metadata_leak": false,
+      "expected_status": "policy/state-dependent"
+    },
+    {
+      "row_id": "documentRevisionHistory|unauthenticated",
+      "operation_id": "documentRevisionHistory",
+      "method": "GET",
+      "path": "/api/v1/documents/:documentId/revisions",
+      "persona": "unauthenticated",
+      "status": 401,
+      "body_keys": [
+        "code",
+        "message_key",
+        "correlation_id",
+        "retryable"
+      ],
+      "metadata_leak": false,
+      "expected_status": 401
+    },
+    {
+      "row_id": "documentRevisionHistory|active outsider",
+      "operation_id": "documentRevisionHistory",
+      "method": "GET",
+      "path": "/api/v1/documents/:documentId/revisions",
+      "persona": "active outsider",
+      "status": 404,
+      "body_keys": [
+        "code",
+        "message_key",
+        "correlation_id",
+        "retryable"
+      ],
+      "metadata_leak": false,
+      "expected_status": "403_or_404_policy"
+    },
+    {
+      "row_id": "documentRevisionHistory|owner synthetic",
+      "operation_id": "documentRevisionHistory",
+      "method": "GET",
+      "path": "/api/v1/documents/:documentId/revisions",
+      "persona": "owner synthetic",
+      "status": 404,
+      "body_keys": [
+        "code",
+        "message_key",
+        "correlation_id",
+        "retryable"
+      ],
+      "metadata_leak": false,
+      "expected_status": "policy/state-dependent"
+    },
+    {
+      "row_id": "createRevision|unauthenticated",
+      "operation_id": "createRevision",
+      "method": "POST",
+      "path": "/api/v1/documents/:documentId/revisions",
+      "persona": "unauthenticated",
+      "status": 401,
+      "body_keys": [
+        "code",
+        "message_key",
+        "correlation_id",
+        "retryable"
+      ],
+      "metadata_leak": false,
+      "expected_status": 401
+    },
+    {
+      "row_id": "createRevision|active outsider",
+      "operation_id": "createRevision",
+      "method": "POST",
+      "path": "/api/v1/documents/:documentId/revisions",
+      "persona": "active outsider",
+      "status": 503,
+      "body_keys": [
+        "code",
+        "message_key",
+        "correlation_id",
+        "retryable"
+      ],
+      "metadata_leak": false,
+      "expected_status": "403_or_404_policy"
+    },
+    {
+      "row_id": "createRevision|owner synthetic",
+      "operation_id": "createRevision",
+      "method": "POST",
+      "path": "/api/v1/documents/:documentId/revisions",
+      "persona": "owner synthetic",
+      "status": 503,
+      "body_keys": [
+        "code",
+        "message_key",
+        "correlation_id",
+        "retryable"
+      ],
+      "metadata_leak": false,
+      "expected_status": "policy/state-dependent"
+    },
+    {
+      "row_id": "authorizeUploadPart|unauthenticated",
+      "operation_id": "authorizeUploadPart",
+      "method": "POST",
+      "path": "/api/v1/upload-sessions/:uploadSessionId/parts/:partNumber/authorization",
+      "persona": "unauthenticated",
+      "status": 401,
+      "body_keys": [
+        "code",
+        "message_key",
+        "correlation_id",
+        "retryable"
+      ],
+      "metadata_leak": false,
+      "expected_status": 401
+    },
+    {
+      "row_id": "authorizeUploadPart|active outsider",
+      "operation_id": "authorizeUploadPart",
+      "method": "POST",
+      "path": "/api/v1/upload-sessions/:uploadSessionId/parts/:partNumber/authorization",
+      "persona": "active outsider",
+      "status": 503,
+      "body_keys": [
+        "code",
+        "message_key",
+        "correlation_id",
+        "retryable"
+      ],
+      "metadata_leak": false,
+      "expected_status": "403_or_404_policy"
+    },
+    {
+      "row_id": "authorizeUploadPart|owner synthetic",
+      "operation_id": "authorizeUploadPart",
+      "method": "POST",
+      "path": "/api/v1/upload-sessions/:uploadSessionId/parts/:partNumber/authorization",
+      "persona": "owner synthetic",
+      "status": 503,
+      "body_keys": [
+        "code",
+        "message_key",
+        "correlation_id",
+        "retryable"
+      ],
+      "metadata_leak": false,
+      "expected_status": "policy/state-dependent"
+    },
+    {
+      "row_id": "completeUpload|unauthenticated",
+      "operation_id": "completeUpload",
+      "method": "POST",
+      "path": "/api/v1/upload-sessions/:uploadSessionId/complete",
+      "persona": "unauthenticated",
+      "status": 401,
+      "body_keys": [
+        "code",
+        "message_key",
+        "correlation_id",
+        "retryable"
+      ],
+      "metadata_leak": false,
+      "expected_status": 401
+    },
+    {
+      "row_id": "completeUpload|active outsider",
+      "operation_id": "completeUpload",
+      "method": "POST",
+      "path": "/api/v1/upload-sessions/:uploadSessionId/complete",
+      "persona": "active outsider",
+      "status": 503,
+      "body_keys": [
+        "code",
+        "message_key",
+        "correlation_id",
+        "retryable"
+      ],
+      "metadata_leak": false,
+      "expected_status": "403_or_404_policy"
+    },
+    {
+      "row_id": "completeUpload|owner synthetic",
+      "operation_id": "completeUpload",
+      "method": "POST",
+      "path": "/api/v1/upload-sessions/:uploadSessionId/complete",
+      "persona": "owner synthetic",
+      "status": 503,
+      "body_keys": [
+        "code",
+        "message_key",
+        "correlation_id",
+        "retryable"
+      ],
+      "metadata_leak": false,
+      "expected_status": "policy/state-dependent"
+    },
+    {
+      "row_id": "transitionRevision|unauthenticated",
+      "operation_id": "transitionRevision",
+      "method": "POST",
+      "path": "/api/v1/revisions/:revisionId/transitions",
+      "persona": "unauthenticated",
+      "status": 401,
+      "body_keys": [
+        "code",
+        "message_key",
+        "correlation_id",
+        "retryable"
+      ],
+      "metadata_leak": false,
+      "expected_status": 401
+    },
+    {
+      "row_id": "transitionRevision|active outsider",
+      "operation_id": "transitionRevision",
+      "method": "POST",
+      "path": "/api/v1/revisions/:revisionId/transitions",
+      "persona": "active outsider",
+      "status": 404,
+      "body_keys": [
+        "code",
+        "message_key",
+        "correlation_id",
+        "retryable"
+      ],
+      "metadata_leak": false,
+      "expected_status": "403_or_404_policy"
+    },
+    {
+      "row_id": "transitionRevision|owner synthetic",
+      "operation_id": "transitionRevision",
+      "method": "POST",
+      "path": "/api/v1/revisions/:revisionId/transitions",
+      "persona": "owner synthetic",
+      "status": 404,
+      "body_keys": [
+        "code",
+        "message_key",
+        "correlation_id",
+        "retryable"
+      ],
+      "metadata_leak": false,
+      "expected_status": "policy/state-dependent"
+    },
+    {
+      "row_id": "addReviewComment|unauthenticated",
+      "operation_id": "addReviewComment",
+      "method": "POST",
+      "path": "/api/v1/revisions/:revisionId/comments",
+      "persona": "unauthenticated",
+      "status": 401,
+      "body_keys": [
+        "code",
+        "message_key",
+        "correlation_id",
+        "retryable"
+      ],
+      "metadata_leak": false,
+      "expected_status": 401
+    },
+    {
+      "row_id": "addReviewComment|active outsider",
+      "operation_id": "addReviewComment",
+      "method": "POST",
+      "path": "/api/v1/revisions/:revisionId/comments",
+      "persona": "active outsider",
+      "status": 404,
+      "body_keys": [
+        "code",
+        "message_key",
+        "correlation_id",
+        "retryable"
+      ],
+      "metadata_leak": false,
+      "expected_status": "403_or_404_policy"
+    },
+    {
+      "row_id": "addReviewComment|owner synthetic",
+      "operation_id": "addReviewComment",
+      "method": "POST",
+      "path": "/api/v1/revisions/:revisionId/comments",
+      "persona": "owner synthetic",
+      "status": 404,
+      "body_keys": [
+        "code",
+        "message_key",
+        "correlation_id",
+        "retryable"
+      ],
+      "metadata_leak": false,
+      "expected_status": "policy/state-dependent"
+    },
+    {
+      "row_id": "disposeReviewComment|unauthenticated",
+      "operation_id": "disposeReviewComment",
+      "method": "POST",
+      "path": "/api/v1/review-comments/:commentId/dispositions",
+      "persona": "unauthenticated",
+      "status": 401,
+      "body_keys": [
+        "code",
+        "message_key",
+        "correlation_id",
+        "retryable"
+      ],
+      "metadata_leak": false,
+      "expected_status": 401
+    },
+    {
+      "row_id": "disposeReviewComment|active outsider",
+      "operation_id": "disposeReviewComment",
+      "method": "POST",
+      "path": "/api/v1/review-comments/:commentId/dispositions",
+      "persona": "active outsider",
+      "status": 404,
+      "body_keys": [
+        "code",
+        "message_key",
+        "correlation_id",
+        "retryable"
+      ],
+      "metadata_leak": false,
+      "expected_status": "403_or_404_policy"
+    },
+    {
+      "row_id": "disposeReviewComment|owner synthetic",
+      "operation_id": "disposeReviewComment",
+      "method": "POST",
+      "path": "/api/v1/review-comments/:commentId/dispositions",
+      "persona": "owner synthetic",
+      "status": 404,
+      "body_keys": [
+        "code",
+        "message_key",
+        "correlation_id",
+        "retryable"
+      ],
+      "metadata_leak": false,
+      "expected_status": "policy/state-dependent"
+    },
+    {
+      "row_id": "addAnnotation|unauthenticated",
+      "operation_id": "addAnnotation",
+      "method": "POST",
+      "path": "/api/v1/revisions/:revisionId/annotations",
+      "persona": "unauthenticated",
+      "status": 401,
+      "body_keys": [
+        "code",
+        "message_key",
+        "correlation_id",
+        "retryable"
+      ],
+      "metadata_leak": false,
+      "expected_status": 401
+    },
+    {
+      "row_id": "addAnnotation|active outsider",
+      "operation_id": "addAnnotation",
+      "method": "POST",
+      "path": "/api/v1/revisions/:revisionId/annotations",
+      "persona": "active outsider",
+      "status": 404,
+      "body_keys": [
+        "code",
+        "message_key",
+        "correlation_id",
+        "retryable"
+      ],
+      "metadata_leak": false,
+      "expected_status": "403_or_404_policy"
+    },
+    {
+      "row_id": "addAnnotation|owner synthetic",
+      "operation_id": "addAnnotation",
+      "method": "POST",
+      "path": "/api/v1/revisions/:revisionId/annotations",
+      "persona": "owner synthetic",
+      "status": 404,
+      "body_keys": [
+        "code",
+        "message_key",
+        "correlation_id",
+        "retryable"
+      ],
+      "metadata_leak": false,
+      "expected_status": "policy/state-dependent"
+    },
+    {
+      "row_id": "previewRevision|unauthenticated",
+      "operation_id": "previewRevision",
+      "method": "GET",
+      "path": "/api/v1/revisions/:revisionId/preview",
+      "persona": "unauthenticated",
+      "status": 401,
+      "body_keys": [
+        "code",
+        "message_key",
+        "correlation_id",
+        "retryable"
+      ],
+      "metadata_leak": false,
+      "expected_status": 401
+    },
+    {
+      "row_id": "previewRevision|active outsider",
+      "operation_id": "previewRevision",
+      "method": "GET",
+      "path": "/api/v1/revisions/:revisionId/preview",
+      "persona": "active outsider",
+      "status": 503,
+      "body_keys": [
+        "code",
+        "message_key",
+        "correlation_id",
+        "retryable"
+      ],
+      "metadata_leak": false,
+      "expected_status": "403_or_404_policy"
+    },
+    {
+      "row_id": "previewRevision|owner synthetic",
+      "operation_id": "previewRevision",
+      "method": "GET",
+      "path": "/api/v1/revisions/:revisionId/preview",
+      "persona": "owner synthetic",
+      "status": 503,
+      "body_keys": [
+        "code",
+        "message_key",
+        "correlation_id",
+        "retryable"
+      ],
+      "metadata_leak": false,
+      "expected_status": "policy/state-dependent"
+    },
+    {
+      "row_id": "downloadRevision|unauthenticated",
+      "operation_id": "downloadRevision",
+      "method": "GET",
+      "path": "/api/v1/revisions/:revisionId/download",
+      "persona": "unauthenticated",
+      "status": 401,
+      "body_keys": [
+        "code",
+        "message_key",
+        "correlation_id",
+        "retryable"
+      ],
+      "metadata_leak": false,
+      "expected_status": 401
+    },
+    {
+      "row_id": "downloadRevision|active outsider",
+      "operation_id": "downloadRevision",
+      "method": "GET",
+      "path": "/api/v1/revisions/:revisionId/download",
+      "persona": "active outsider",
+      "status": 503,
+      "body_keys": [
+        "code",
+        "message_key",
+        "correlation_id",
+        "retryable"
+      ],
+      "metadata_leak": false,
+      "expected_status": "403_or_404_policy"
+    },
+    {
+      "row_id": "downloadRevision|owner synthetic",
+      "operation_id": "downloadRevision",
+      "method": "GET",
+      "path": "/api/v1/revisions/:revisionId/download",
+      "persona": "owner synthetic",
+      "status": 503,
+      "body_keys": [
+        "code",
+        "message_key",
+        "correlation_id",
+        "retryable"
+      ],
+      "metadata_leak": false,
+      "expected_status": "policy/state-dependent"
+    },
+    {
+      "row_id": "reviewInbox|unauthenticated",
+      "operation_id": "reviewInbox",
+      "method": "GET",
+      "path": "/api/v1/projects/:projectId/review-inbox",
+      "persona": "unauthenticated",
+      "status": 401,
+      "body_keys": [
+        "code",
+        "message_key",
+        "correlation_id",
+        "retryable"
+      ],
+      "metadata_leak": false,
+      "expected_status": 401
+    },
+    {
+      "row_id": "reviewInbox|active outsider",
+      "operation_id": "reviewInbox",
+      "method": "GET",
+      "path": "/api/v1/projects/:projectId/review-inbox",
+      "persona": "active outsider",
+      "status": 404,
+      "body_keys": [
+        "code",
+        "message_key",
+        "correlation_id",
+        "retryable"
+      ],
+      "metadata_leak": false,
+      "expected_status": "403_or_404_policy"
+    },
+    {
+      "row_id": "reviewInbox|owner synthetic",
+      "operation_id": "reviewInbox",
+      "method": "GET",
+      "path": "/api/v1/projects/:projectId/review-inbox",
+      "persona": "owner synthetic",
+      "status": 200,
+      "body_keys": [
+        "items",
+        "page"
+      ],
+      "metadata_leak": false,
+      "expected_status": "policy/state-dependent"
+    },
+    {
+      "row_id": "createTransmittal|unauthenticated",
+      "operation_id": "createTransmittal",
+      "method": "POST",
+      "path": "/api/v1/projects/:projectId/transmittals",
+      "persona": "unauthenticated",
+      "status": 401,
+      "body_keys": [
+        "code",
+        "message_key",
+        "correlation_id",
+        "retryable"
+      ],
+      "metadata_leak": false,
+      "expected_status": 401
+    },
+    {
+      "row_id": "createTransmittal|active outsider",
+      "operation_id": "createTransmittal",
+      "method": "POST",
+      "path": "/api/v1/projects/:projectId/transmittals",
+      "persona": "active outsider",
+      "status": 404,
+      "body_keys": [
+        "code",
+        "message_key",
+        "correlation_id",
+        "retryable"
+      ],
+      "metadata_leak": false,
+      "expected_status": "403_or_404_policy"
+    },
+    {
+      "row_id": "createTransmittal|owner synthetic",
+      "operation_id": "createTransmittal",
+      "method": "POST",
+      "path": "/api/v1/projects/:projectId/transmittals",
+      "persona": "owner synthetic",
+      "status": 404,
+      "body_keys": [
+        "code",
+        "message_key",
+        "correlation_id",
+        "retryable"
+      ],
+      "metadata_leak": false,
+      "expected_status": "policy/state-dependent"
+    },
+    {
+      "row_id": "transmittalDetail|unauthenticated",
+      "operation_id": "transmittalDetail",
+      "method": "GET",
+      "path": "/api/v1/transmittals/:transmittalId",
+      "persona": "unauthenticated",
+      "status": 401,
+      "body_keys": [
+        "code",
+        "message_key",
+        "correlation_id",
+        "retryable"
+      ],
+      "metadata_leak": false,
+      "expected_status": 401
+    },
+    {
+      "row_id": "transmittalDetail|active outsider",
+      "operation_id": "transmittalDetail",
+      "method": "GET",
+      "path": "/api/v1/transmittals/:transmittalId",
+      "persona": "active outsider",
+      "status": 500,
+      "body_keys": [
+        "code",
+        "message_key",
+        "correlation_id",
+        "retryable"
+      ],
+      "metadata_leak": false,
+      "expected_status": "403_or_404_policy"
+    },
+    {
+      "row_id": "transmittalDetail|owner synthetic",
+      "operation_id": "transmittalDetail",
+      "method": "GET",
+      "path": "/api/v1/transmittals/:transmittalId",
+      "persona": "owner synthetic",
+      "status": 500,
+      "body_keys": [
+        "code",
+        "message_key",
+        "correlation_id",
+        "retryable"
+      ],
+      "metadata_leak": false,
+      "expected_status": "policy/state-dependent"
+    },
+    {
+      "row_id": "archiveDocument|unauthenticated",
+      "operation_id": "archiveDocument",
+      "method": "POST",
+      "path": "/api/v1/documents/:documentId/archive",
+      "persona": "unauthenticated",
+      "status": 401,
+      "body_keys": [
+        "code",
+        "message_key",
+        "correlation_id",
+        "retryable"
+      ],
+      "metadata_leak": false,
+      "expected_status": 401
+    },
+    {
+      "row_id": "archiveDocument|active outsider",
+      "operation_id": "archiveDocument",
+      "method": "POST",
+      "path": "/api/v1/documents/:documentId/archive",
+      "persona": "active outsider",
+      "status": 404,
+      "body_keys": [
+        "code",
+        "message_key",
+        "correlation_id",
+        "retryable"
+      ],
+      "metadata_leak": false,
+      "expected_status": "403_or_404_policy"
+    },
+    {
+      "row_id": "archiveDocument|owner synthetic",
+      "operation_id": "archiveDocument",
+      "method": "POST",
+      "path": "/api/v1/documents/:documentId/archive",
+      "persona": "owner synthetic",
+      "status": 404,
+      "body_keys": [
+        "code",
+        "message_key",
+        "correlation_id",
+        "retryable"
+      ],
+      "metadata_leak": false,
+      "expected_status": "policy/state-dependent"
+    },
+    {
+      "row_id": "restoreDocument|unauthenticated",
+      "operation_id": "restoreDocument",
+      "method": "POST",
+      "path": "/api/v1/documents/:documentId/restore",
+      "persona": "unauthenticated",
+      "status": 401,
+      "body_keys": [
+        "code",
+        "message_key",
+        "correlation_id",
+        "retryable"
+      ],
+      "metadata_leak": false,
+      "expected_status": 401
+    },
+    {
+      "row_id": "restoreDocument|active outsider",
+      "operation_id": "restoreDocument",
+      "method": "POST",
+      "path": "/api/v1/documents/:documentId/restore",
+      "persona": "active outsider",
+      "status": 404,
+      "body_keys": [
+        "code",
+        "message_key",
+        "correlation_id",
+        "retryable"
+      ],
+      "metadata_leak": false,
+      "expected_status": "403_or_404_policy"
+    },
+    {
+      "row_id": "restoreDocument|owner synthetic",
+      "operation_id": "restoreDocument",
+      "method": "POST",
+      "path": "/api/v1/documents/:documentId/restore",
+      "persona": "owner synthetic",
+      "status": 404,
+      "body_keys": [
+        "code",
+        "message_key",
+        "correlation_id",
+        "retryable"
+      ],
+      "metadata_leak": false,
+      "expected_status": "policy/state-dependent"
+    }
+  ]
+}

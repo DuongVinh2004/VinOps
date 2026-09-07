@@ -1,0 +1,1 @@
+{"checkpoint":"VIN-MEGA-001","iteration":2,"baseline":"UNBORN; all repository content untracked","changed_source":["pnpm-workspace.yaml","pnpm-lock.yaml"],"change":"Override transitive js-yaml to 4.3.0 and regenerate the lockfile.","evidence_root":"evidence/VIN-MEGA-001/i2","patch":"NOT_APPLICABLE_UNBORN_REPOSITORY","user_work_preserved":true}

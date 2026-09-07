@@ -1,0 +1,20 @@
+{
+  "checkpoint": "VIN-MEGA-001",
+  "iteration": 4,
+  "status": "PASS",
+  "database": "real PostgreSQL 16.14",
+  "role": "vinops_worker via dedicated login",
+  "cases": {
+    "concurrent_claim_one_winner": "PASS",
+    "skip_locked_duplicate_claims": 0,
+    "generic_tenant_table_read_denied": "PASS",
+    "first_publish_failure_persisted": "PASS",
+    "retry_publish_success": "PASS",
+    "publish_attempts": 2,
+    "final_status": "Published",
+    "later_claims": 0,
+    "notification_deliveries": 1,
+    "error_log_payload_or_secret_leak": false
+  },
+  "tests": { "files": 1, "passed": 2, "failed": 0, "skipped": 0 }
+}

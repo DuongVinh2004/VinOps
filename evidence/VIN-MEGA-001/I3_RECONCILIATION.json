@@ -1,0 +1,24 @@
+{
+  "checkpoint": "VIN-MEGA-001",
+  "iteration": 4,
+  "status": "PASS",
+  "git": { "head": "UNBORN", "branch": "main", "remote_count": 0, "all_content_untracked": true },
+  "protected_inputs": {
+    "prss_sha256": "8ff4ce6ca98546d36fb3cdf62daa285a8badddc4f24a38b9ae7cf968920dad8f",
+    "design_sha256": "73f2462457660df38408a96f35cd871d1eec54f78045b12a98cb4604fbd01d36",
+    "openapi_input_sha256": "88fe06f65be4d002c16a70802f8e3965006ad63643891e82b4ee139d53484e66",
+    "unchanged": true
+  },
+  "i3_artifacts": {
+    "manifest_sha256": "239d00fed2a5bd8f88e4dc8df1de0aee2df871e5590ede1de84cf20f6a476172",
+    "evidence_sha256": "5f8cf2d9dbc33a8910d35b56f045a09e15cdaeac92fa785d5c5ae48cddf67545",
+    "authoritative_final_evidence_sha256": "c4dfd18de5f9b91025812498c20b0aa43645bfcd39d19045f347e717e20a4fe0",
+    "review_sha256": "51b363053468e609774d2c585ef735cd76d7dd1bece9f2fa48e6fa6387b96c25",
+    "safe_paths": true,
+    "duplicates": 0,
+    "nested_archives": 0,
+    "verified_in_memory": true
+  },
+  "baseline_review": { "entries": 116, "byte_mismatches": 0, "source_sha256": "bad57a9afd26cb826bc4837cde81a0f25f6d20cad230f8f781c12cc770ae5afd" },
+  "user_work_preserved": true
+}

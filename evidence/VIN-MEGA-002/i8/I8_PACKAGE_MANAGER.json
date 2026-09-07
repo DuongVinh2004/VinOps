@@ -1,0 +1,15 @@
+{
+  "package_manager": {
+    "requested": "pnpm@11.15.1",
+    "executable": "C:\\Users\\Duong Vinh\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\bin\\fallback\\pnpm.cmd",
+    "version": "11.9.0",
+    "version_status": "PASS",
+    "node_executable": "C:\\Users\\Duong Vinh\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+    "node_version": "v24.14.0",
+    "corepack_resolution": "UNAVAILABLE: corepack is not recognized",
+    "install_performed": false,
+    "lockfile_changed": false,
+    "package_json_sha256": "254893249B8082B743969B9A9A69F6D216FD3287CD05060269EC29E07E6D7D4C",
+    "pnpm_lock_sha256": "59E218512F84B55C0A68C61787AB3DF223D23B880EF1B8ED11078B720D303A4A"
+  }
+}

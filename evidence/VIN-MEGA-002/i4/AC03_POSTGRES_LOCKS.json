@@ -1,0 +1,13 @@
+{
+  "generated_at": "2026-08-02T15:23:50.308Z",
+  "postgres": {
+    "lock_snapshot": {
+      "waiting": 0,
+      "total": 2
+    },
+    "activity_snapshot": {
+      "active": 11
+    }
+  },
+  "source": "AC03_DIAGNOSTICS.json"
+}

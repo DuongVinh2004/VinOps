@@ -1,0 +1,44 @@
+{
+  "commands": [
+    {
+      "command": "git status --short --branch",
+      "exit_code": 0,
+      "result": "HEAD unborn; pre-existing untracked source preserved"
+    },
+    {
+      "command": "i2 hash recomputation and review archive verification",
+      "exit_code": 0,
+      "result": "protected hashes match; 183 entries; 0 mismatches; 0 duplicates; 0 nested archives"
+    },
+    {
+      "command": "node .tmp/vinops-mega002-i3-per-client-benchmark.mjs",
+      "exit_code": 0,
+      "result": "20 clients measured; success=0; p95_ms=64775; verdict=FAIL"
+    },
+    {
+      "command": "node .tmp/vinops-mega002-i3-authz-matrix.mjs",
+      "exit_code": 0,
+      "result": "routes=18; expected=10800; executed=54; uncovered=10746"
+    },
+    {
+      "command": "pnpm verify (final gate via local corepack shim)",
+      "exit_code": 0,
+      "result": "49 passed; 16 unchanged intentional skips; all static/build/security/license gates passed"
+    },
+    {
+      "command": "git diff --check",
+      "exit_code": 0,
+      "result": "clean"
+    }
+  ],
+  "browser_observations": {
+    "authorized_current": "PASS",
+    "authorized_superseded": "PASS",
+    "outsider_no_context": "PASS",
+    "hostile_title_inert_text": "PASS"
+  },
+  "cleanup": {
+    "exit_code": null,
+    "status": "BLOCKED_BY_SAFETY_AUTHORIZATION"
+  }
+}

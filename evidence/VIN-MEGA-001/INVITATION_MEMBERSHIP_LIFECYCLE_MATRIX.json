@@ -1,0 +1,18 @@
+{
+  "checkpoint": "VIN-MEGA-001",
+  "iteration": 4,
+  "status": "PASS",
+  "cases": {
+    "pending_invitation_has_no_rights": "PASS",
+    "matching_email_accepts_single_invitation": "PASS",
+    "expired_invitation_denied": "PASS",
+    "revoked_invitation_denied": "PASS",
+    "active_to_suspended_immediate_revocation": "PASS",
+    "suspended_to_ended": "PASS",
+    "old_access_token_rejected": "PASS",
+    "sessions_and_refresh_families_revoked": "PASS",
+    "cross_project_uuid_non_disclosure": "PASS",
+    "random_uuid_non_disclosure": "PASS"
+  },
+  "implementation": "SECURITY DEFINER session revocation is authorization-checked by project and actor; RLS remains enabled."
+}

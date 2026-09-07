@@ -1,0 +1,9 @@
+{
+  "status": "PASS",
+  "root_cause": "Nested repository scripts invoked unavailable corepack although pnpm 11.15.1 was directly installed.",
+  "correction": "Replaced only nested corepack pnpm@11.15.1 invocations with pnpm; packageManager and every gate remain unchanged.",
+  "pnpm_path": "C:/Users/Duong Vinh/AppData/Roaming/npm/pnpm.cmd",
+  "pnpm_version": "11.15.1",
+  "final_verify_exit_code": 0,
+  "final_verify_log": "pnpm-verify-i11.stdout.log"
+}

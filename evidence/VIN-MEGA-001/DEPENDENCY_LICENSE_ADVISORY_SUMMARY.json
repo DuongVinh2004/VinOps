@@ -1,0 +1,58 @@
+{
+  "checkpoint": "VIN-MEGA-001",
+  "artifact_status": "PRELIMINARY_DEPENDENCY_EVIDENCE",
+  "recorded_on": "2026-07-30",
+  "package_policy": {
+    "package_manager": "pnpm@11.15.1",
+    "node_pin": "24.18.0",
+    "exact_direct_versions": true,
+    "engine_strict": true,
+    "strict_peer_dependencies": true,
+    "minimum_release_age_minutes": 1440,
+    "minimum_release_age_strict": true
+  },
+  "new_database_dependency": {
+    "package": "pg",
+    "version": "8.22.0",
+    "license": "MIT",
+    "declared_node_engine": ">=16",
+    "verification_source": "Official registry metadata inspected for this work order."
+  },
+  "new_type_dependency": {
+    "package": "@types/pg",
+    "version": "8.20.0",
+    "license": "MIT",
+    "verification_source": "Official registry metadata inspected for this work order."
+  },
+  "frozen_install": {
+    "command": "corepack pnpm@11.15.1 install --frozen-lockfile",
+    "status": "PASS_RECORDED_DURING_THIS_WORK_ORDER",
+    "note": "Final command log and lockfile/hash inventory remain to be captured by the executor."
+  },
+  "advisory_scan": {
+    "command": "corepack pnpm@11.15.1 audit --audit-level high",
+    "execution_limit": "Executed once for this work order; do not rerun solely for this preliminary artifact.",
+    "critical": 0,
+    "high": 2,
+    "scope": "development-only dependency paths",
+    "findings": [
+      {
+        "package": "js-yaml@4.2.0",
+        "path": "openapi-typescript > @redocly/openapi-core@1.34.17",
+        "status": "UNRESOLVED"
+      },
+      {
+        "package": "brace-expansion@2.1.3",
+        "path": "minimatch@5.1.9",
+        "status": "UNRESOLVED"
+      }
+    ],
+    "remediation_attempt": "A proposed @redocly/openapi-core@1.34.18/minimatch@10.2.6 override was not adopted because lockfile-only install was blocked by the configured minimum release age.",
+    "checkpoint_effect": "VIN-FND-001A AC01 remains blocked; VIN-MEGA-001 does not clear that independent blocker."
+  },
+  "license_check": {
+    "status": "NOT_RECORDED_FOR_THIS_ARTIFACT",
+    "required_command": "corepack pnpm@11.15.1 run license:check"
+  },
+  "overall_status": "BLOCKED_BY_EXISTING_FND_ADVISORY_GATE"
+}

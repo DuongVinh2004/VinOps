@@ -1,0 +1,190 @@
+{
+  "protocol_version": "2.0",
+  "checkpoint_id": "VIN-MEGA-002",
+  "iteration": 9,
+  "status": "PASS",
+  "source_fingerprint_before": "45c68e8314962e35a3e3c29fd713df13d037c3fe418955cfd4341d48f533ece3",
+  "source_fingerprint_after": "72e0ba48f357efd8a63be58c08e1615eae65c85936763e62746cc6045c28feb4",
+  "changed_product_files": [
+    "packages/database/migrations/011_transmittal_rls_recursion_fix.sql",
+    "packages/database/test/document-migration.static.test.ts",
+    "packages/database/test/document-postgres.integration.test.ts",
+    "apps/api/test/document-boundary.integration.test.ts",
+    "scripts/secret-scan.mjs"
+  ],
+  "product_source_change_count_i9": 5,
+  "migrations_i9": 1,
+  "dependencies_i9": 0,
+  "evidence_entries": [
+    {
+      "path": "ACCEPTANCE_STATUS-i9.json",
+      "bytes": 498,
+      "sha256": "A5D2F850B0376677AEB16AB4D81D5EE2A0878CF4D732F37BE3FEC15A767BE167"
+    },
+    {
+      "path": "AUTHZ_FINAL_MATRIX_I9.ndjson",
+      "bytes": 16708396,
+      "sha256": "A3BFC3DE81B81F968C7AB269BCD24AE9ACB78722B58E49EAB61244E9071695EC"
+    },
+    {
+      "path": "AUTHZ_I8_REUSE_AND_I9_INVALIDATION.json",
+      "bytes": 393,
+      "sha256": "9EC491892DC086CE523CE22CC57AE59A083B996C11897E80AD6A421D3B7C24FB"
+    },
+    {
+      "path": "AUTHZ_I9_RERUN_MATRIX.ndjson",
+      "bytes": 1420725,
+      "sha256": "F506E23543FE8F103991ED0B9EEF7280A8D8DB47F5114A63FE8E8DA1F711174C"
+    },
+    {
+      "path": "HTTP_REGRESSION_RESULTS.json",
+      "bytes": 8027,
+      "sha256": "04D67C854B1EC2446564CFBD91C8BF43CDA38A607F77B4F336C46C1943492CB2"
+    },
+    {
+      "path": "I9_FIXTURE_IDS.json",
+      "bytes": 504,
+      "sha256": "00BB0085BF5A814199207EC2593C6396B875CC08DC520152DD60C0F5382D889E"
+    },
+    {
+      "path": "I9_MIGRATION_RESULT.json",
+      "bytes": 748,
+      "sha256": "2C1F018BEC61E4424D2F3631FB5A6D4EAD554F5C430123A6E9EF5A71EFCB2EB0"
+    },
+    {
+      "path": "I9_PACKAGE_MANAGER.json",
+      "bytes": 506,
+      "sha256": "4D63C2D10E29A898D0A8D5103CC26266BE76EAE037A29799C6C51407BE65132A"
+    },
+    {
+      "path": "I9_PROTECTED_RECONCILIATION.json",
+      "bytes": 856,
+      "sha256": "F5F9D299D013FB1DA39542490344B2E40E94790732016D8A7D8D97DA9453855F"
+    },
+    {
+      "path": "I9_RUNTIME_INVENTORY.json",
+      "bytes": 820,
+      "sha256": "6BFD5BB9B8543D62B18861B5F5A281969D32F7471065C01017D857672823FFF9"
+    },
+    {
+      "path": "I9_SOURCE_DELTA.json",
+      "bytes": 708,
+      "sha256": "8FDE5747848ACCD0A8601F19D85223DDAA094E4BD3CD6F016AC6E82637AD70BD"
+    },
+    {
+      "path": "I9_SOURCE_INVENTORY.json",
+      "bytes": 31094,
+      "sha256": "F6B9450D9ED4082B394A204669CA98444F8DCAC11F076D4F194435974E2F1CF6"
+    },
+    {
+      "path": "I9_VERIFICATION_COMMANDS.json",
+      "bytes": 923,
+      "sha256": "33D899F1975CEC8D6BCA7CD86528A398C208FF7D5999EE16E5763F76A3FDFED2"
+    },
+    {
+      "path": "RLS_POSTFIX_PROBE.json",
+      "bytes": 848,
+      "sha256": "2C73FA4DBEC7B4E8F0F7D0338FF24AB7F3B81EB160ED43ECC755DC2BA7114F6A"
+    },
+    {
+      "path": "VIN-MEGA-002-i9-source.delta.patch",
+      "bytes": 499,
+      "sha256": "3F172CF60B4062BD4F37EBC817128E6967CEB856344AEECAB79F3052927FB731"
+    },
+    {
+      "path": "WORKER_SCAN_RESULT.json",
+      "bytes": 629,
+      "sha256": "C165F98CADE405ED5072871FC65E548BE3BF12ED4E9312C6A0C559B222E30946"
+    },
+    {
+      "path": "api-i9.stderr.log",
+      "bytes": 382,
+      "sha256": "EBFE42B4D2787A9FF11CD2506F5F272B23D43192E92C9BDC4CF454410729DEC9"
+    },
+    {
+      "path": "api-i9.stdout.log",
+      "bytes": 9456,
+      "sha256": "03B4D33F026C525093B3DF41EA5DBCF0D496796051E12914F8DE880AFD08ADAC"
+    },
+    {
+      "path": "pnpm-verify-i9-initial.stderr.log",
+      "bytes": 518,
+      "sha256": "FC033E56EBF6EA7E6D9649D47C080CEC44B5ECE69AC8E417E95DFE588622D8E1"
+    },
+    {
+      "path": "pnpm-verify-i9-initial.stdout.log",
+      "bytes": 115,
+      "sha256": "F52043EB5D6C43812617B6AF6FCD97C42C706E2D0813F08D51F6AB4DF18DED0F"
+    },
+    {
+      "path": "pnpm-verify-i9-secret-failure.stderr.log",
+      "bytes": 4330,
+      "sha256": "413BB030454E4FF764BD2359BA7E4E1580C7186513073F128B93FD1C0477A145"
+    },
+    {
+      "path": "pnpm-verify-i9-secret-failure.stdout.log",
+      "bytes": 5481,
+      "sha256": "12B983BCCD57A060E4B7A86BD38101522F12ECB18B756AD4AE2097EFB4690102"
+    },
+    {
+      "path": "pnpm-verify-i9-typecheck-failure.stderr.log",
+      "bytes": 476,
+      "sha256": "2C5ED61880A2AACB2CAA05B69E54959521BA1AD7C083D0B1112621639D10742A"
+    },
+    {
+      "path": "pnpm-verify-i9-typecheck-failure.stdout.log",
+      "bytes": 1169,
+      "sha256": "973BBABB7B84A65C6698E44D024E58263A33D59E38777BE7663D5709D124FB06"
+    },
+    {
+      "path": "pnpm-verify-i9.stderr.log",
+      "bytes": 1934,
+      "sha256": "FCA3D2F7D61236F8C0679594F9F8F94E2A2B6C6166DE4E66D092E69433D1EF91"
+    },
+    {
+      "path": "pnpm-verify-i9.stdout.log",
+      "bytes": 7649,
+      "sha256": "74EE312641D6D2F67205B1ABC50EC0D21F457F09F22A7FA35FB43EC82DBC6C82"
+    },
+    {
+      "path": "worker-i9.stderr.log",
+      "bytes": 382,
+      "sha256": "97CF166A320BA1B8C7D87576F68F4A33D61BEE646B1E0569CD1664D95743B1F7"
+    },
+    {
+      "path": "worker-i9.stdout.log",
+      "bytes": 3358,
+      "sha256": "4A1C4AB304127A24CE58FB7B28CAC2C9EC480B05911CECB9B33A00FC2C45C436"
+    }
+  ],
+  "final_matrix": {
+    "file": "AUTHZ_FINAL_MATRIX_I9.ndjson",
+    "bytes": 16708396,
+    "sha256": "A3BFC3DE81B81F968C7AB269BCD24AE9ACB78722B58E49EAB61244E9071695EC",
+    "rows": 10800,
+    "unexpected": 0,
+    "duplicate_row_ids": 0
+  },
+  "evidence_zip": {
+    "file": "VIN-MEGA-002-i9-evidence-verifiable.zip",
+    "bytes": 1120702,
+    "sha256": "B5BB461A52C064520FDC7CEDF2C4A4CBA81F4CF6062B5D4B89429E210C2C2B6F",
+    "entry_count": 28,
+    "duplicate_entries": 0,
+    "nested_zip_entries": 0,
+    "source_byte_mismatches": 0
+  },
+  "review_zip": {
+    "file": "VIN-MEGA-002-i9-review-verifiable.zip",
+    "bytes": 6847,
+    "sha256": "A77A569BEE86E49E0567060F141D25A45383A5C9FFDD5975FFD95D0443B8E16D",
+    "entry_count": 11,
+    "duplicate_entries": 0,
+    "nested_zip_entries": 0,
+    "source_byte_mismatches": 0
+  },
+  "protected_i7_i8_untouched": true,
+  "root_cause_fixed": "PRODUCT_RLS_DDL_DEFECT",
+  "cleanup_performed": false,
+  "no_rls_bypass": true
+}

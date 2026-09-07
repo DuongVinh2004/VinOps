@@ -1,0 +1,32 @@
+{
+  "checkpoint": "VIN-MEGA-002",
+  "iteration": 1,
+  "result": "PASS_WITH_LIMITATIONS",
+  "repository": {
+    "branch": "main",
+    "head": "UNBORN",
+    "remote": "NONE",
+    "source_files_before": 124,
+    "source_fingerprint_before": "4bb3bcea758b55544062c73954a4595be9560bdeeec34281aa399ba03172479e",
+    "source_files_after": 183,
+    "source_fingerprint_after": "b819f50a568c6da11c2b2b8f258053fc0536fe19f6e9faa8b8e02cc179a6a1f7"
+  },
+  "protected_inputs": {
+    "prss_sha256": "8ff4ce6ca98546d36fb3cdf62daa285a8badddc4f24a38b9ae7cf968920dad8f",
+    "design_sha256": "73f2462457660df38408a96f35cd871d1eec54f78045b12a98cb4604fbd01d36",
+    "openapi_input_sha256": "88fe06f65be4d002c16a70802f8e3965006ad63643891e82b4ee139d53484e66"
+  },
+  "vinops_mega001_reconciliation": {
+    "manifest_sha256": "e9d9b62f124e11f9972205755791d6d74e7f6e95203681845062ec08d63fee68",
+    "evidence_sha256": "0d7a6ec827f3cab041521012913bc0aad7c06c70c8686571aebdd08f4596381d",
+    "review_sha256": "ba5419088deada9fd2b5cea3c417281612f95cb0dae17cac90668d2cd7a46e3d",
+    "duplicates": 0,
+    "nested_archives": 0
+  },
+  "preservation": {
+    "obsolete_clean_room_absent": true,
+    "recoverable_quarantine_not_touched": true,
+    "user_work_preserved": true
+  },
+  "recorded_at": "2026-08-02T06:43:55.233Z"
+}

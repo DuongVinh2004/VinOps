@@ -1,0 +1,14 @@
+{
+  "status": "UNVERIFIED",
+  "routes": 18,
+  "expected": 10800,
+  "executed": 0,
+  "uncovered": 10800,
+  "unexpected": 0,
+  "failed_shards": 0,
+  "duplicate_results": 0,
+  "source_fingerprint_mismatch": 0,
+  "canary": "UNVERIFIED",
+  "shards": {"required": 18, "captured": 0},
+  "reason": "Iteration 5 runtime matrix execution was not captured; prior Iteration 4 coverage remained incomplete and is not promoted to PASS."
+}

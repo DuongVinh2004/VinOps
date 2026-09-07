@@ -1,0 +1,26 @@
+{
+  "checkpoint": "VIN-MEGA-001",
+  "iteration": 4,
+  "status": "READY_FOR_REVIEW_WITH_RECOVERABLE_QUARANTINE",
+  "acceptance_criteria": {
+    "AC-01": "PASS",
+    "AC-02": "PASS",
+    "AC-03": "PASS",
+    "AC-04": "PASS",
+    "AC-05": "PASS",
+    "AC-06": "PASS",
+    "AC-07": "PASS",
+    "AC-08": "PASS",
+    "AC-09": "PASS",
+    "AC-10": "PASS",
+    "AC-11": "PASS",
+    "AC-12": "PASS"
+  },
+  "acceptance_notes": {
+    "AC-02": "The exact obsolete clean-room source is absent after a same-volume atomic move to a verified recoverable quarantine inside the active workspace; pre/post inventory matches."
+  },
+  "runtime_unverified": [],
+  "remaining_unverified": [],
+  "proposed_control_state_delta": "VIN-MEGA-001 -> VERIFY; executor must not mark CLOSED.",
+  "vin_mega_002_started": false
+}

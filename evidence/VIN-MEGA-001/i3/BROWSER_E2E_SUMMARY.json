@@ -1,0 +1,10 @@
+{
+  "checkpoint": "VIN-MEGA-001",
+  "iteration": 3,
+  "status": "PASS",
+  "browser": "Codex in-app browser",
+  "url": "http://127.0.0.1:4174/",
+  "flow": ["login form","owner@vinops.test synthetic login","authenticated project overview","Project navigation","project context rendered"],
+  "assertions": {"login":true,"organization_context":"Synthetic VinOps Organization","project_context":"Synthetic Platform Project (SYN-001)","storage_api":"window.localStorage/window.sessionStorage unavailable in page; app access/CSRF state is memory-only","raw_token_in_storage":false},
+  "console_network_log_leakage": "No raw token/cookie/secret was captured into evidence."
+}

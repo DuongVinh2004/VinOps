@@ -1,0 +1,1 @@
+{"checkpoint":"VIN-MEGA-001","iteration":2,"status":"UNVERIFIED","reason":"Docker/PostgreSQL blocker prevented live-stack startup.","api":"NOT_RUN","worker":"NOT_RUN","web":"NOT_RUN","static_tests":{"passed":38,"skipped":1,"failed":0}}

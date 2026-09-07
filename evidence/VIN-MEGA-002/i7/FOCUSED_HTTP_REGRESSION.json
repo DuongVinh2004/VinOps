@@ -1,0 +1,14 @@
+{
+  "test_file": "apps/api/test/document-boundary.integration.test.ts",
+  "command": "VINOPS_I7_API_URL=http://127.0.0.1:4610 pnpm exec vitest run apps/api/test/document-boundary.integration.test.ts --reporter=dot",
+  "exit_code": 0,
+  "tests": 2,
+  "passed": 2,
+  "authorized_existing_transmittal_200": "UNVERIFIED",
+  "authorized_existing_transmittal_200_reason": "Retained task database has no seed transmittal and its transmittals RLS policy raises PostgreSQL 42P17 recursion before an existing-resource response can be observed.",
+  "assertions": [
+    "unauthenticated malformed completeUpload=401",
+    "authenticated malformed completeUpload=422",
+    "transmittalDetail RLS boundary=404"
+  ]
+}

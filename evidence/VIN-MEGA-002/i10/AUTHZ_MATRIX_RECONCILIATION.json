@@ -1,0 +1,10 @@
+{
+  "status": "FAIL",
+  "rows": 10800,
+  "unique_row_ids": 9601,
+  "duplicates": 1199,
+  "unexpected": 0,
+  "leakage_assertion_failures": 0,
+  "applicable_side_effect_assertion_failures": 0,
+  "reuse_basis": "i10 changes only the secret scanner and its regression test; API, RLS, migration, session context and authorization fixtures are byte-identical to final i9."
+}

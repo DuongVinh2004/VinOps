@@ -1,0 +1,164 @@
+﻿[
+    {
+        "ProcessId":  3116,
+        "ParentProcessId":  10528,
+        "Name":  "esbuild.exe",
+        "CommandLine":  "\"C:\\Users\\Duong Vinh\\Downloads\\VinOps\\vinops\\.tmp\\vinops-mega002-i2-cleanroom\\node_modules\\.pnpm\\@esbuild+win32-x64@0.28.1\\node_modules\\@esbuild\\win32-x64\\esbuild.exe\" --service=0.28.1 --ping"
+    },
+    {
+        "ProcessId":  3340,
+        "ParentProcessId":  15272,
+        "Name":  "node.exe",
+        "CommandLine":  "\"C:\\Program Files\\nodejs\\node.exe\" .tmp\\vinops-mega002-i4-browser-api-4180.mjs"
+    },
+    {
+        "ProcessId":  3472,
+        "ParentProcessId":  14708,
+        "Name":  "esbuild.exe",
+        "CommandLine":  "\"C:\\Users\\Duong Vinh\\Downloads\\VinOps\\vinops\\.tmp\\vinops-mega002-i2-cleanroom\\node_modules\\.pnpm\\@esbuild+win32-x64@0.28.1\\node_modules\\@esbuild\\win32-x64\\esbuild.exe\" --service=0.28.1 --ping"
+    },
+    {
+        "ProcessId":  4392,
+        "ParentProcessId":  3600,
+        "Name":  "cmd.exe",
+        "CommandLine":  "C:\\WINDOWS\\system32\\cmd.exe /c \"\"C:\\Users\\Duong Vinh\\Downloads\\VinOps\\vinops\\.tmp\\vinops-mega002-i2-cleanroom\\apps\\web\\node_modules\\.bin\\vite.CMD\" --host 127.0.0.1 --port 4179\""
+    },
+    {
+        "ProcessId":  8912,
+        "ParentProcessId":  19060,
+        "Name":  "node.exe",
+        "CommandLine":  "\"C:\\Users\\Duong Vinh\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe\" --loader ./evidence/VIN-MEGA-002/i6/harness/pg-loader.mjs ./evidence/VIN-MEGA-002/i9/harness/probe-rls-postfix.mjs"
+    },
+    {
+        "ProcessId":  9916,
+        "ParentProcessId":  15584,
+        "Name":  "cmd.exe",
+        "CommandLine":  "C:\\WINDOWS\\system32\\cmd.exe /c \"\"C:\\Users\\Duong Vinh\\Downloads\\VinOps\\vinops\\.tmp\\vinops-mega002-i2-cleanroom\\apps\\web\\node_modules\\.bin\\vite.CMD\" --host 127.0.0.1 --port 4180\""
+    },
+    {
+        "ProcessId":  11052,
+        "ParentProcessId":  13028,
+        "Name":  "node.exe",
+        "CommandLine":  "\"C:\\Program Files\\nodejs\\node.exe\" .tmp\\vinops-mega002-i2-browser-api.mjs "
+    },
+    {
+        "ProcessId":  11796,
+        "ParentProcessId":  19936,
+        "Name":  "esbuild.exe",
+        "CommandLine":  "\"C:\\Users\\Duong Vinh\\Downloads\\VinOps\\vinops\\.tmp\\vinops-mega002-i2-cleanroom\\node_modules\\.pnpm\\@esbuild+win32-x64@0.28.1\\node_modules\\@esbuild\\win32-x64\\esbuild.exe\" --service=0.28.1 --ping"
+    },
+    {
+        "ProcessId":  12012,
+        "ParentProcessId":  22616,
+        "Name":  "cmd.exe",
+        "CommandLine":  "\"C:\\Windows\\System32\\cmd.exe\" /c \"C:\\Users\\Duong Vinh\\Downloads\\VinOps\\vinops\\evidence\\VIN-MEGA-002\\i11\\harness\\start-worker-i11.cmd\" "
+    },
+    {
+        "ProcessId":  12156,
+        "ParentProcessId":  6404,
+        "Name":  "node.exe",
+        "CommandLine":  "\"C:\\Program Files\\nodejs\\node.exe\" .tmp\\vinops-mega002-i4-browser-api-4179.mjs"
+    },
+    {
+        "ProcessId":  12748,
+        "ParentProcessId":  23528,
+        "Name":  "node.exe",
+        "CommandLine":  "\"C:\\Program Files\\nodejs\\node.exe\" .tmp\\vinops-mega002-i4-browser-api.mjs"
+    },
+    {
+        "ProcessId":  14708,
+        "ParentProcessId":  19044,
+        "Name":  "node.exe",
+        "CommandLine":  "node   \"C:\\Users\\Duong Vinh\\Downloads\\VinOps\\vinops\\.tmp\\vinops-mega002-i2-cleanroom\\apps\\web\\node_modules\\.bin\\\\..\\vite\\bin\\vite.js\" --host 127.0.0.1 --port 4176"
+    },
+    {
+        "ProcessId":  15624,
+        "ParentProcessId":  20352,
+        "Name":  "node.exe",
+        "CommandLine":  "\"C:\\Program Files\\nodejs\\node.exe\" .tmp\\vinops-mega002-i4-browser-api-4178.mjs"
+    },
+    {
+        "ProcessId":  17868,
+        "ParentProcessId":  19528,
+        "Name":  "esbuild.exe",
+        "CommandLine":  "\"C:\\Users\\Duong Vinh\\Downloads\\VinOps\\vinops\\.tmp\\vinops-mega002-i2-cleanroom\\node_modules\\.pnpm\\@esbuild+win32-x64@0.28.1\\node_modules\\@esbuild\\win32-x64\\esbuild.exe\" --service=0.28.1 --ping"
+    },
+    {
+        "ProcessId":  17884,
+        "ParentProcessId":  21716,
+        "Name":  "cmd.exe",
+        "CommandLine":  "C:\\WINDOWS\\system32\\cmd.exe /c \"\"C:\\Users\\Duong Vinh\\Downloads\\VinOps\\vinops\\.tmp\\vinops-mega002-i2-cleanroom\\apps\\web\\node_modules\\.bin\\vite.CMD\" --host 127.0.0.1 --port 4178\""
+    },
+    {
+        "ProcessId":  19044,
+        "ParentProcessId":  11684,
+        "Name":  "cmd.exe",
+        "CommandLine":  "C:\\WINDOWS\\system32\\cmd.exe /c \"\"C:\\Users\\Duong Vinh\\Downloads\\VinOps\\vinops\\.tmp\\vinops-mega002-i2-cleanroom\\apps\\web\\node_modules\\.bin\\vite.CMD\" --host 127.0.0.1 --port 4176\""
+    },
+    {
+        "ProcessId":  19528,
+        "ParentProcessId":  4392,
+        "Name":  "node.exe",
+        "CommandLine":  "node   \"C:\\Users\\Duong Vinh\\Downloads\\VinOps\\vinops\\.tmp\\vinops-mega002-i2-cleanroom\\apps\\web\\node_modules\\.bin\\\\..\\vite\\bin\\vite.js\" --host 127.0.0.1 --port 4179"
+    },
+    {
+        "ProcessId":  19936,
+        "ParentProcessId":  9916,
+        "Name":  "node.exe",
+        "CommandLine":  "node   \"C:\\Users\\Duong Vinh\\Downloads\\VinOps\\vinops\\.tmp\\vinops-mega002-i2-cleanroom\\apps\\web\\node_modules\\.bin\\\\..\\vite\\bin\\vite.js\" --host 127.0.0.1 --port 4180"
+    },
+    {
+        "ProcessId":  21288,
+        "ParentProcessId":  22540,
+        "Name":  "node.exe",
+        "CommandLine":  "\"C:\\Users\\Duong Vinh\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe\"  --loader \"./evidence/VIN-MEGA-002/i6/harness/pg-loader.mjs\" \"apps/api/dist/main.js\" "
+    },
+    {
+        "ProcessId":  21308,
+        "ParentProcessId":  17884,
+        "Name":  "node.exe",
+        "CommandLine":  "node   \"C:\\Users\\Duong Vinh\\Downloads\\VinOps\\vinops\\.tmp\\vinops-mega002-i2-cleanroom\\apps\\web\\node_modules\\.bin\\\\..\\vite\\bin\\vite.js\" --host 127.0.0.1 --port 4178"
+    },
+    {
+        "ProcessId":  21640,
+        "ParentProcessId":  18732,
+        "Name":  "node.exe",
+        "CommandLine":  "\"C:\\Program Files\\nodejs\\node.exe\" .tmp\\vinops-mega002-i4-browser-api-4177.mjs"
+    },
+    {
+        "ProcessId":  21700,
+        "ParentProcessId":  21308,
+        "Name":  "esbuild.exe",
+        "CommandLine":  "\"C:\\Users\\Duong Vinh\\Downloads\\VinOps\\vinops\\.tmp\\vinops-mega002-i2-cleanroom\\node_modules\\.pnpm\\@esbuild+win32-x64@0.28.1\\node_modules\\@esbuild\\win32-x64\\esbuild.exe\" --service=0.28.1 --ping"
+    },
+    {
+        "ProcessId":  21704,
+        "ParentProcessId":  3648,
+        "Name":  "cmd.exe",
+        "CommandLine":  "C:\\WINDOWS\\system32\\cmd.exe /c \"\"C:\\Users\\Duong Vinh\\Downloads\\VinOps\\vinops\\.tmp\\vinops-mega002-i2-cleanroom\\apps\\web\\node_modules\\.bin\\vite.CMD\" --host 127.0.0.1 --port 4177\""
+    },
+    {
+        "ProcessId":  22448,
+        "ParentProcessId":  21704,
+        "Name":  "node.exe",
+        "CommandLine":  "node   \"C:\\Users\\Duong Vinh\\Downloads\\VinOps\\vinops\\.tmp\\vinops-mega002-i2-cleanroom\\apps\\web\\node_modules\\.bin\\\\..\\vite\\bin\\vite.js\" --host 127.0.0.1 --port 4177"
+    },
+    {
+        "ProcessId":  22540,
+        "ParentProcessId":  1632,
+        "Name":  "cmd.exe",
+        "CommandLine":  "C:\\WINDOWS\\system32\\cmd.exe  /K \"C:\\Users\\Duong Vinh\\Downloads\\VinOps\\vinops\\evidence\\VIN-MEGA-002\\i6\\harness\\start-api-i6.cmd\""
+    },
+    {
+        "ProcessId":  23368,
+        "ParentProcessId":  22448,
+        "Name":  "esbuild.exe",
+        "CommandLine":  "\"C:\\Users\\Duong Vinh\\Downloads\\VinOps\\vinops\\.tmp\\vinops-mega002-i2-cleanroom\\node_modules\\.pnpm\\@esbuild+win32-x64@0.28.1\\node_modules\\@esbuild\\win32-x64\\esbuild.exe\" --service=0.28.1 --ping"
+    },
+    {
+        "ProcessId":  23380,
+        "ParentProcessId":  12012,
+        "Name":  "node.exe",
+        "CommandLine":  "\"C:\\Users\\Duong Vinh\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe\"  --loader \"./evidence/VIN-MEGA-002/i6/harness/pg-loader.mjs\" \"apps/worker/dist/main.js\" "
+    }
+]

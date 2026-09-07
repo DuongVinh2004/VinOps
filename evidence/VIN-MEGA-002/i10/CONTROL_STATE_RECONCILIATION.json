@@ -1,0 +1,23 @@
+{
+  "status": "BLOCKED",
+  "control_state_delta": "BLOCKED",
+  "gates": {
+    "RLS_GATE": "PASS",
+    "POST_FIX_REGRESSION_GATE": "PASS"
+  },
+  "acceptance": {
+    "AC-01": "PASS",
+    "AC-02": "PASS",
+    "AC-03": "PASS",
+    "AC-04": "PASS",
+    "AC-05": "PASS",
+    "AC-06": "UNVERIFIED",
+    "AC-07": "BLOCKED",
+    "AC-08": "BLOCKED"
+  },
+  "blockers": [
+    "The one allowed direct pnpm verify invocation exited 1 because corepack was absent from the persistent child process PATH; it was not rerun.",
+    "AC-06 performance/load execution is forbidden by i10 authority.",
+    "AC-08 cleanup/finalization is forbidden by i10 authority."
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "status": "PASS_WITH_SCANNER_CORRECTION",
+  "migration_011": {
+    "sha256": "a06e9f77b8056e7b0ce4b1a96efe335c3ad2bd0b6ec9fadc58fa6f38bb95485e",
+    "forward_only": true,
+    "transactional_via_runner": true,
+    "data_mutation": false,
+    "security_definer_added": false,
+    "rls_bypass_added": false,
+    "direct_project_using_and_with_check_preserved": true,
+    "reverse_parent_query_removed": true,
+    "dependency_direction": "transmittals_scoped -> transmittal_items_scoped only"
+  },
+  "tests": {
+    "static": "4 assertions-bearing migration tests cover cycle removal and reject BYPASSRLS/RLS disablement.",
+    "postgres": "5 real PostgreSQL tests; RLS case uses SET LOCAL ROLE vinops_app and proves same-project visibility plus cross-tenant empty result.",
+    "http": "Real HTTP runtime covers 200/404/404 transmittal and 401/422/202 plus forbidden no-side-effect/no-leak upload boundaries."
+  },
+  "scanner_classification_before_i10": "COVERAGE_WEAKENING",
+  "scanner_reason": "i9 excluded the complete evidence directory, including text, JSON, NDJSON and patches.",
+  "final_scanner": "Evidence exclusion removed; exact local fixture/redaction values only; scan-root override exists solely for isolated regression; read errors fail."
+}

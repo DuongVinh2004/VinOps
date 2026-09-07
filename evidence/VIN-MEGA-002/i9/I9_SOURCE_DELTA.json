@@ -1,0 +1,14 @@
+{
+  "source_before": "45c68e8314962e35a3e3c29fd713df13d037c3fe418955cfd4341d48f533ece3",
+  "source_after": "72e0ba48f357efd8a63be58c08e1615eae65c85936763e62746cc6045c28feb4",
+  "changed_files": [
+    "packages/database/migrations/011_transmittal_rls_recursion_fix.sql",
+    "packages/database/test/document-migration.static.test.ts",
+    "packages/database/test/document-postgres.integration.test.ts",
+    "apps/api/test/document-boundary.integration.test.ts",
+    "scripts/secret-scan.mjs"
+  ],
+  "migration_count": 1,
+  "dependency_count": 0,
+  "semantic_fix": "Remove only the transmittal_items policy's reverse parent-table query; retain project-scoped RLS semantics through the existing foreign key."
+}

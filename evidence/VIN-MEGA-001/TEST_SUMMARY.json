@@ -1,0 +1,10 @@
+{
+  "checkpoint": "VIN-MEGA-001",
+  "iteration": 4,
+  "status": "PASS",
+  "main_workspace": { "test_files_passed": 13, "tests_passed": 45, "failed": 0, "skipped": 0, "format": "PASS", "lint": "PASS", "strict_typecheck": "PASS", "openapi": "PASS", "architecture": "PASS", "direct_pinned_build": "PASS", "secret_scan": "PASS", "license": "PASS", "audit": "Critical=0 High=0", "git_diff_check": "PASS" },
+  "cleanroom": { "test_files_passed": 13, "tests_passed": 45, "failed": 0, "skipped": 0, "full_verify_wrapper": "PASS", "browser_e2e": "PASS" },
+  "runtime_tests": { "postgres_integration": 1, "api_security_consistency": 4, "worker_retry_dedupe": 2 },
+  "toolchain": "Node v24.18.0 / pnpm 11.15.1 / PostgreSQL 16.14",
+  "main_wrapper_note": "The root build wrapper returned exit 1 because it invokes corepack while PATH was intentionally unchanged; the identical recursive build graph passed through the pinned pnpm executable. Cleanroom root verify passed because corepack is present in the exact Node image."
+}

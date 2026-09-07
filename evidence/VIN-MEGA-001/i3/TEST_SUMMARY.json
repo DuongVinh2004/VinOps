@@ -1,0 +1,10 @@
+{
+  "checkpoint": "VIN-MEGA-001",
+  "iteration": 3,
+  "status": "PASS_WITH_CLEANROOM_BLOCKER",
+  "full_main_workspace_matrix_node_24_18_0": {"frozen_install":"PASS","format":"PASS","lint":"PASS","typecheck":"PASS","test_files_passed":11,"tests_passed":39,"tests_skipped":0,"tests_failed":0,"openapi":"PASS","architecture":"PASS","build":"PASS","secret_scan":"PASS","license":"PASS","git_diff_check":"PASS"},
+  "wrapper_note": "The root verify wrapper could not resolve corepack because PATH was intentionally not changed; each equivalent gate was run directly through the pinned toolchain and passed.",
+  "static_reused_from_i2": {"audit":"Critical 0 / High 0","i2_static_tests":{"passed":38,"skipped":1,"failed":0}},
+  "runtime": {"postgres_integration_passed":1,"postgres_integration_skipped":0,"api_worker_web_browser":"PASS_WITH_SCOPE_LIMITATION"},
+  "toolchain":"Node v24.18.0 / pnpm 11.15.1"
+}

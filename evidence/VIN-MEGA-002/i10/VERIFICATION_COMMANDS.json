@@ -1,0 +1,54 @@
+{
+  "commands": [
+    {
+      "command": "focused secret-scan regression",
+      "exit_code": 0,
+      "result": "2/2 PASS; 3/3 positive canaries rejected"
+    },
+    {
+      "command": "node scripts/secret-scan.mjs",
+      "exit_code": 0,
+      "result": "696 text files scanned"
+    },
+    {
+      "command": "vitest document-migration.static",
+      "exit_code": 0,
+      "result": "4/4 PASS"
+    },
+    {
+      "command": "vitest document-postgres.integration",
+      "exit_code": 0,
+      "result": "5/5 PASS under SET LOCAL ROLE vinops_app"
+    },
+    {
+      "command": "focused HTTP runtime probe",
+      "exit_code": 0,
+      "result": "all required status, side-effect and leakage assertions PASS"
+    },
+    {
+      "command": "pnpm --filter @vinops/api build",
+      "exit_code": 0,
+      "result": "PASS"
+    },
+    {
+      "command": "pnpm --filter @vinops/worker build",
+      "exit_code": 0,
+      "result": "PASS"
+    },
+    {
+      "command": "direct pnpm 11.15.1 verify (single child process)",
+      "exit_code": 1,
+      "result": "BLOCKED before gates: corepack executable absent from child PATH"
+    },
+    {
+      "command": "pnpm exec prettier --check .",
+      "exit_code": 0,
+      "result": "PASS"
+    },
+    {
+      "command": "git diff --check",
+      "exit_code": 0,
+      "result": "PASS"
+    }
+  ]
+}

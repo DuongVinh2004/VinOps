@@ -1,0 +1,25 @@
+{
+  "status": "BLOCKED",
+  "resource_cleanup": {
+    "processes_removed": 27,
+    "databases_removed": 4,
+    "containers_removed": 3,
+    "networks_removed": 1,
+    "volumes_removed": 2,
+    "remaining_processes": 0,
+    "remaining_containers": 0,
+    "remaining_networks": 0,
+    "remaining_volumes": 0,
+    "docker_prune_used": false,
+    "images_removed": 0
+  },
+  "filesystem_cleanup": {
+    "status": "BLOCKED_BY_GLOBAL_UNTRACKED_FILE_PROHIBITION",
+    "remaining_target_count": 33,
+    "targets": "the exact .tmp target list displayed in the i11 handoff",
+    "reason": "Permanent deletion of untracked filesystem data is prohibited to this executor even after user confirmation; user must remove these exact files/directories manually if desired."
+  },
+  "unrelated_resources_changed": 0,
+  "source_preserved": true,
+  "evidence_i1_i11_preserved": true
+}

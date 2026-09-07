@@ -1,0 +1,29 @@
+{
+  "runner_pid": 17108,
+  "source_fingerprint": "94ff9f64896bf640f89d80fd993aeb8dc6871a05c87f6bf6b02cff556c41e9ae",
+  "expected_matrix_sha256": "10da18fe95aaddd84998a674c9ca00f43da710590a781aeb57406a450294fe0a",
+  "current_shard": null,
+  "completed_rows": 10800,
+  "pending_rows": 0,
+  "retries": [],
+  "shard_counts": {
+    "addAnnotation": 598,
+    "addReviewComment": 598,
+    "archiveDocument": 598,
+    "authorizeUploadPart": 598,
+    "completeUpload": 598,
+    "createDocument": 598,
+    "createRevision": 598,
+    "createTransmittal": 598,
+    "disposeReviewComment": 598,
+    "documentDetail": 598,
+    "documentRevisionHistory": 598,
+    "downloadRevision": 598,
+    "listDocuments": 598,
+    "previewRevision": 598,
+    "restoreDocument": 598,
+    "reviewInbox": 598,
+    "transitionRevision": 598,
+    "transmittalDetail": 598
+  }
+}

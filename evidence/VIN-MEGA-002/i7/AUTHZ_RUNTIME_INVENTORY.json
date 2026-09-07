@@ -1,0 +1,14 @@
+{
+  "checkpoint_id": "VIN-MEGA-002",
+  "iteration": 7,
+  "health": {"api_port": 4610, "live": 200, "ready": 200, "api_pid": 21288},
+  "retained_task_runtime": {
+    "postgres": {"container_id": "29b49c3bd124200b3a2b4d1dc3726313fc12064f957b6a306058c8da895fbe45", "name": "vinops-mega002-i6-postgres", "database": "vinops_mega002_test", "host_port": 55446, "status": "retained"},
+    "minio": {"container_id": "6c84c89661c600e902169ab09f9068a948cf6c81cca69395bfd5188d27324b8c", "name": "vinops-mega002-i6-minio", "bucket": "vinops-files", "host_port": 59060, "status": "retained"},
+    "clamav": {"container_id": "55b1da833969c06aceb763bc2c1320bcb086f74f97f24522949f127a5ca7e638", "name": "vinops-mega002-i6-clamav", "host_port": 3311, "status": "healthy_retained"},
+    "network": {"id": "1aa6e8a5eabba455857000001e7762699c967344f48f7eaaabf586b2011d3f46", "name": "vinops-mega002-i6-runtime", "status": "retained"},
+    "volumes": ["vinops-mega002-i6-postgres-data", "vinops-mega002-i6-minio-data"]
+  },
+  "cleanup_performed": false,
+  "runtime_retention_required_for_ac06": true
+}

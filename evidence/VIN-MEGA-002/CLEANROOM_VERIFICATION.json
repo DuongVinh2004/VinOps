@@ -1,0 +1,13 @@
+{
+  "result": "UNVERIFIED",
+  "source_only_inventory_generated": true,
+  "frozen_install": false,
+  "clean_postgresql": false,
+  "clean_object_storage": false,
+  "full_cleanroom_matrix": false,
+  "cleanup": {
+    "status": "BLOCKED_BY_SAFETY_AUTHORIZATION",
+    "exact_task_resources_retained": true
+  },
+  "reason": "AGENTS.md requires explicit destructive authorization before removing task-owned containers, networks, volumes or clean-room data."
+}

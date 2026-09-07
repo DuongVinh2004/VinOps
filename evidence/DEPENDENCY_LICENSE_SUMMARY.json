@@ -1,0 +1,31 @@
+{
+  "checkpoint": "VIN-FND-001A",
+  "iteration": 1,
+  "policy": {
+    "direct_versions": "exact only",
+    "package_manager": "pnpm@11.15.1",
+    "lockfile": "pnpm-lock.yaml verified with --frozen-lockfile",
+    "strict_peers": "enabled and passed",
+    "engine_strict": "enabled",
+    "minimum_release_age_minutes": 1440,
+    "build_script_allowlist": ["esbuild"]
+  },
+  "selected_toolchain": {
+    "node_exact_pin": "24.18.0",
+    "pnpm_exact_pin": "11.15.1",
+    "typescript_exact_pin": "5.9.3"
+  },
+  "license_check": {
+    "status": "PASS",
+    "direct_dependency_declarations": 41,
+    "allowlist": ["MIT", "Apache-2.0", "BSD-2-Clause", "BSD-3-Clause", "ISC", "MPL-2.0", "PostgreSQL", "Zlib"],
+    "blocked_or_exception_licenses": []
+  },
+  "advisory_scan": {
+    "command": "pnpm audit --audit-level high",
+    "status": "UNVERIFIED_POLICY_DENIED",
+    "reason": "Environment policy denied registry egress of dependency-graph metadata. No High/Critical result can be claimed and no exception is recorded."
+  },
+  "deferred_provider_dependencies": ["PostgreSQL", "Redis/Valkey", "object storage", "queue provider", "observability sink", "Docker image"],
+  "deferred_gate": "ER-GATE-B/C"
+}

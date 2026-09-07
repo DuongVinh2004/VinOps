@@ -1,0 +1,20 @@
+packages:
+  - apps/*
+  - packages/*
+
+overrides:
+  js-yaml: 4.3.0
+
+nodeVersion: 24.18.0
+engineStrict: true
+strictPeerDependencies: true
+strictDepBuilds: true
+verifyDepsBeforeRun: error
+savePrefix: ''
+minimumReleaseAge: 1440
+minimumReleaseAgeStrict: true
+minimumReleaseAgeIgnoreMissingTime: false
+trustLockfile: false
+blockExoticSubdeps: true
+allowBuilds:
+  esbuild: true

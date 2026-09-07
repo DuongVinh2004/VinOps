@@ -1,0 +1,16 @@
+{
+  "checkpoint_id": "VIN-MEGA-002",
+  "iteration": 8,
+  "AC01_evidence_integrity": "PASS",
+  "AC02_runtime_and_canonical_repro": "PASS",
+  "AC03_rls_catalog_and_dependency_proof": "PASS",
+  "AC04_root_cause_classification": "PASS",
+  "AC05_matrix_reuse_and_invalidation": "PASS",
+  "AC06_required_original_http_regressions": "UNVERIFIED",
+  "AC07_final_verification": "BLOCKED",
+  "AC08_control_state": "BLOCKED",
+  "POST_FIX_REGRESSION_GATE": "UNVERIFIED",
+  "RLS_GATE": "BLOCKED",
+  "control_state": "BLOCKED",
+  "stop_reason": "PRODUCT_RLS_DDL_DEFECT reproduced on fresh canonical schema; durable fix requires a migration/policy dependency change explicitly forbidden in i8."
+}

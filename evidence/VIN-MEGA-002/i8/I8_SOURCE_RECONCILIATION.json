@@ -1,0 +1,12 @@
+{
+  "checkpoint_id": "VIN-MEGA-002",
+  "iteration": 8,
+  "source_fingerprint_before": "45c68e8314962e35a3e3c29fd713df13d037c3fe418955cfd4341d48f533ece3",
+  "source_fingerprint_after": "45c68e8314962e35a3e3c29fd713df13d037c3fe418955cfd4341d48f533ece3",
+  "changed_product_files": [],
+  "product_source_changes": 0,
+  "migrations": 0,
+  "dependencies": 0,
+  "protected_i7_source_and_evidence_untouched": true,
+  "reason": "The canonical migration reproduces the retained RLS defect; the required durable correction is a forbidden migration/protected-contract change, so i8 stops without product mutation."
+}

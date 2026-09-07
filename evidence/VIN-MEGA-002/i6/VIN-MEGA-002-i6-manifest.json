@@ -1,0 +1,31 @@
+{
+  "project": "VinOps",
+  "checkpoint_id": "VIN-MEGA-002",
+  "iteration": 6,
+  "status": "BLOCKED",
+  "source_fingerprint_before": "94ff9f64896bf640f89d80fd993aeb8dc6871a05c87f6bf6b02cff556c41e9ae",
+  "source_fingerprint_after": "94ff9f64896bf640f89d80fd993aeb8dc6871a05c87f6bf6b02cff556c41e9ae",
+  "cumulative_product_source_test_script_files": 4,
+  "migrations": 0,
+  "dependencies": 0,
+  "frozen_expected_matrix_sha256": "10DA18FE95AADDD84998A674C9CA00F43DA710590A781AEB57406A450294FE0A",
+  "runtime": {"api_pid": 10308, "api_live": 200, "api_ready": 200, "runner_pid": 17108, "database_container": "29b49c3bd124200b3a2b4d1dc3726313fc12064f957b6a306058c8da895fbe45", "minio_container": "6c84c89661c600e902169ab09f9068a948cf6c81cca69395bfd5188d27324b8c", "clamav_container": "55b1da833969c06aceb763bc2c1320bcb086f74f97f24522949f127a5ca7e638", "network": "1aa6e8a5eabba455857000001e7762699c967344f48f7eaaabf586b2011d3f46"},
+  "coverage": {"routes": 18, "expected": 10800, "executed": 10800, "uncovered": 0, "unexpected": 1690, "duplicates": 0, "failed_shards": 0, "source_fingerprint_mismatches": 0, "canary_expected": 36, "canary_executed": 36, "canary_unexpected": 6, "shard_rows": 10764},
+  "harness_sha256": {
+    "harness/pg-loader.mjs": "1F8BA64B68C7CF28D43006703DA212C177EA0931054AFDADB062912B5D3F667D",
+    "harness/run-authz-i6.mjs": "78475462C5A1D72E812A5308CADD0CDC36CD235F56896F925CDC533686F44D2B",
+    "harness/run-authz-i6.cmd": "3133BC446C3CB4D9726786CA68002A92F8BC0D779B405F7EDC9E3A9A80D8F4AE",
+    "harness/start-api-i6.cmd": "9558B46D8AFCBD74F0DC78EAB75AB0B407CB3BE700584D51D06624EE3C9F3E59"
+  },
+  "artifacts": {
+    "VIN-MEGA-002-i6-evidence-verifiable.zip": {"sha256": "5806A3B85E150C6A96FD0F692A653145AC284E6475B42D64157100FE9CC7FADF", "entries": 33, "duplicates": 0, "nested_archives": 0},
+    "VIN-MEGA-002-i6-review-verifiable.zip": {"sha256": "C9263CD4403C04383131FBD49C7EF008DE1A0184CEF2F17CF09E6F7F14A5F645", "entries": 9, "duplicates": 0, "nested_archives": 0, "source_byte_mismatches": 0},
+    "VIN-MEGA-002-i6-source.delta.patch": {"sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855", "bytes": 0},
+    "AUTHZ_RUNTIME_INVENTORY.json": {"sha256": "7F44B86A0ED5914241F983FAA645D2F2C1714624B9F97196436FB761370938D8"},
+    "AUTHZ_FAILURE_SUMMARY.json": {"sha256": "4CEA64750068560F256F2E53939A05722D6EDE1EF6A186C650F13FDB147A5239"},
+    "AUTHZ_CANARY_RESULTS.json": {"sha256": "D3E5FCE5169C8752F8B8CA425C021181E813219281AA869D766A841FA10EEF6D"}
+  },
+  "external_runtime_logs": ["api-i6.stdout.log", "api-i6.stderr.log"],
+  "acceptance": {"AC-01": "PASS", "AC-02": "PASS", "AC-03": "PASS", "AC-04": "PASS", "AC-05": "UNVERIFIED", "AC-06": "UNVERIFIED", "AC-07": "PASS", "AC-08": "BLOCKED"},
+  "control_state_delta": "BLOCKED; AC-05 has complete runtime execution but unexpected results; AC-06 and AC-08 remain deferred."
+}

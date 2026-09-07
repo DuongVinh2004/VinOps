@@ -1,0 +1,14 @@
+{
+  "result": "PASS",
+  "checks": [
+    "normalized annotation x/y bounds in API/domain",
+    "annotation pin UI",
+    "immutable transmittal snapshot and recipient metadata",
+    "published/superseded revisions represented"
+  ],
+  "evidence": [
+    "apps/api/src/document.service.ts",
+    "apps/web/src/document-control.tsx",
+    "API runtime flow"
+  ]
+}

@@ -1,0 +1,13 @@
+node_modules/
+dist/
+coverage/
+.cache/
+.pnpm-store/
+.tmp/
+*.tsbuildinfo
+*.log
+.env
+.env.*
+!.env.example
+evidence/*.zip
+evidence/*.patch

@@ -1,0 +1,1397 @@
+{
+  "project": "VinOps",
+  "checkpoint_id": "VIN-MEGA-002",
+  "iteration": 3,
+  "status": "BLOCKED",
+  "context_mode": "STRICT",
+  "evidence_mode": "PATCH_FILE",
+  "source_fingerprint_before": "94ff9f64896bf640f89d80fd993aeb8dc6871a05c87f6bf6b02cff556c41e9ae",
+  "source_fingerprint_after": "94ff9f64896bf640f89d80fd993aeb8dc6871a05c87f6bf6b02cff556c41e9ae",
+  "source_files_before": 183,
+  "source_files_after": 183,
+  "cumulative_changed_source_test_script_files": [
+    "apps/worker/src/file-processing-worker.ts",
+    "apps/worker/test/file-processing.integration.test.ts",
+    "packages/database/src/seed.ts",
+    "packages/database/test/document-postgres.integration.test.ts"
+  ],
+  "additional_source_test_script_files": [],
+  "change_budget": {
+    "additional_source_test_script_changed": 0,
+    "cumulative_source_test_script_changed": 4,
+    "additional_limit": 8,
+    "cumulative_limit": 12,
+    "migrations_changed": 0,
+    "dependencies_changed": 0
+  },
+  "acceptance": {
+    "AC_01": "PASS",
+    "AC_02": "PASS",
+    "AC_03": "FAIL",
+    "AC_03_aggregate": "FAIL",
+    "AC_03_per_client": "FAIL",
+    "AC_04": "PASS",
+    "AC_05": "UNVERIFIED",
+    "AC_06": "UNVERIFIED",
+    "AC_07": "PASS",
+    "AC_08": "BLOCKED"
+  },
+  "benchmark": {
+    "aggregate_i2": "FAIL_STRICT_NFR",
+    "per_client_i3": {
+      "generated_at": "2026-08-02T14:35:20.841Z",
+      "shaping_semantics": "independent client-to-MinIO token bucket per proxy socket; body bytes counted after request headers and before upstream write",
+      "clients": 20,
+      "payload_bytes": 10000000,
+      "payload_sha256": "7922289ab02a036ccf8465b663fe58186e89f11ccda610e0f14a6b6e0d866c5e",
+      "rate_mbps_per_client": 20,
+      "results": [
+        {
+          "client_index": 6,
+          "object_key": "quarantine/i3-benchmark-9ad258dd-ca55-48b9-8f88-31e546b5796c/original",
+          "payload_bytes": 10000000,
+          "payload_sha256": "7922289ab02a036ccf8465b663fe58186e89f11ccda610e0f14a6b6e0d866c5e",
+          "start_ms": 131,
+          "end_ms": 34260,
+          "duration_ms": 34129,
+          "emitted_body_bytes": 9633106,
+          "measured_bitrate_mbps": 2.258,
+          "http_status": 503,
+          "etag": null,
+          "checksum_outcome": "not_acknowledged",
+          "error": "HTTP 503: <?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Error><Code>RequestTimeout</Code><Message>A timeout occurred while trying to lock a resource, please reduce your request rate</Message><Key>quarantine/i3-benchmark-9ad258dd-ca55-48b9-8f88-31e546b5796c/original</Key><BucketName>vinops-files</BucketName><Resourc",
+          "response_excerpt": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Error><Code>RequestTimeout</Code><Message>A timeout occurred while trying to lock a resource, please reduce your request rate</Message><Key>quarantine/i3-benchmark-9ad258dd-ca55-48b9-8f88-31e546b5796c/original</Key><BucketName>vinops-files</BucketName><Resourc",
+          "progress_samples": [
+            {
+              "emitted_bytes": 64850,
+              "t_ms": 0
+            },
+            {
+              "emitted_bytes": 130386,
+              "t_ms": 1
+            },
+            {
+              "emitted_bytes": 195922,
+              "t_ms": 1
+            },
+            {
+              "emitted_bytes": 261458,
+              "t_ms": 11
+            },
+            {
+              "emitted_bytes": 326994,
+              "t_ms": 178
+            },
+            {
+              "emitted_bytes": 392530,
+              "t_ms": 178
+            },
+            {
+              "emitted_bytes": 458066,
+              "t_ms": 180
+            },
+            {
+              "emitted_bytes": 523602,
+              "t_ms": 180
+            },
+            {
+              "emitted_bytes": 9567570,
+              "t_ms": 3797
+            },
+            {
+              "emitted_bytes": 9633106,
+              "t_ms": 3829
+            }
+          ],
+          "max_progress_gap_ms": 174.9,
+          "shaping": {
+            "independent": true,
+            "rate_mbps": 20,
+            "rate_bytes_per_second": 2500000,
+            "socket_emitted_bytes_counted": true
+          }
+        },
+        {
+          "client_index": 2,
+          "object_key": "quarantine/i3-benchmark-011a70aa-becb-4e8b-a23e-81bbf6ff3c99/original",
+          "payload_bytes": 10000000,
+          "payload_sha256": "7922289ab02a036ccf8465b663fe58186e89f11ccda610e0f14a6b6e0d866c5e",
+          "start_ms": 125,
+          "end_ms": 34262,
+          "duration_ms": 34137,
+          "emitted_body_bytes": 9567570,
+          "measured_bitrate_mbps": 2.242,
+          "http_status": 503,
+          "etag": null,
+          "checksum_outcome": "not_acknowledged",
+          "error": "HTTP 503: <?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Error><Code>RequestTimeout</Code><Message>A timeout occurred while trying to lock a resource, please reduce your request rate</Message><Key>quarantine/i3-benchmark-011a70aa-becb-4e8b-a23e-81bbf6ff3c99/original</Key><BucketName>vinops-files</BucketName><Resourc",
+          "response_excerpt": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Error><Code>RequestTimeout</Code><Message>A timeout occurred while trying to lock a resource, please reduce your request rate</Message><Key>quarantine/i3-benchmark-011a70aa-becb-4e8b-a23e-81bbf6ff3c99/original</Key><BucketName>vinops-files</BucketName><Resourc",
+          "progress_samples": [
+            {
+              "emitted_bytes": 64850,
+              "t_ms": 0
+            },
+            {
+              "emitted_bytes": 130386,
+              "t_ms": 1
+            },
+            {
+              "emitted_bytes": 195922,
+              "t_ms": 1
+            },
+            {
+              "emitted_bytes": 261458,
+              "t_ms": 2
+            },
+            {
+              "emitted_bytes": 326994,
+              "t_ms": 182
+            },
+            {
+              "emitted_bytes": 392530,
+              "t_ms": 183
+            },
+            {
+              "emitted_bytes": 458066,
+              "t_ms": 183
+            },
+            {
+              "emitted_bytes": 523602,
+              "t_ms": 183
+            },
+            {
+              "emitted_bytes": 9502034,
+              "t_ms": 3786
+            },
+            {
+              "emitted_bytes": 9567570,
+              "t_ms": 3802
+            }
+          ],
+          "max_progress_gap_ms": 182.7,
+          "shaping": {
+            "independent": true,
+            "rate_mbps": 20,
+            "rate_bytes_per_second": 2500000,
+            "socket_emitted_bytes_counted": true
+          }
+        },
+        {
+          "client_index": 17,
+          "object_key": "quarantine/i3-benchmark-edb88db9-94b2-4d22-8d54-f3a872741d28/original",
+          "payload_bytes": 10000000,
+          "payload_sha256": "7922289ab02a036ccf8465b663fe58186e89f11ccda610e0f14a6b6e0d866c5e",
+          "start_ms": 137,
+          "end_ms": 34427,
+          "duration_ms": 34290,
+          "emitted_body_bytes": 9698642,
+          "measured_bitrate_mbps": 2.263,
+          "http_status": 503,
+          "etag": null,
+          "checksum_outcome": "not_acknowledged",
+          "error": "HTTP 503: <?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Error><Code>RequestTimeout</Code><Message>A timeout occurred while trying to lock a resource, please reduce your request rate</Message><Key>quarantine/i3-benchmark-edb88db9-94b2-4d22-8d54-f3a872741d28/original</Key><BucketName>vinops-files</BucketName><Resourc",
+          "response_excerpt": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Error><Code>RequestTimeout</Code><Message>A timeout occurred while trying to lock a resource, please reduce your request rate</Message><Key>quarantine/i3-benchmark-edb88db9-94b2-4d22-8d54-f3a872741d28/original</Key><BucketName>vinops-files</BucketName><Resourc",
+          "progress_samples": [
+            {
+              "emitted_bytes": 64850,
+              "t_ms": 0
+            },
+            {
+              "emitted_bytes": 130386,
+              "t_ms": 1
+            },
+            {
+              "emitted_bytes": 195922,
+              "t_ms": 1
+            },
+            {
+              "emitted_bytes": 261458,
+              "t_ms": 2
+            },
+            {
+              "emitted_bytes": 326994,
+              "t_ms": 30
+            },
+            {
+              "emitted_bytes": 392530,
+              "t_ms": 55
+            },
+            {
+              "emitted_bytes": 458066,
+              "t_ms": 81
+            },
+            {
+              "emitted_bytes": 523602,
+              "t_ms": 111
+            },
+            {
+              "emitted_bytes": 9633106,
+              "t_ms": 3759
+            },
+            {
+              "emitted_bytes": 9698642,
+              "t_ms": 3777
+            }
+          ],
+          "max_progress_gap_ms": 119.2,
+          "shaping": {
+            "independent": true,
+            "rate_mbps": 20,
+            "rate_bytes_per_second": 2500000,
+            "socket_emitted_bytes_counted": true
+          }
+        },
+        {
+          "client_index": 13,
+          "object_key": "quarantine/i3-benchmark-1394ae5f-624b-4124-a3a2-7ac8a81a0098/original",
+          "payload_bytes": 10000000,
+          "payload_sha256": "7922289ab02a036ccf8465b663fe58186e89f11ccda610e0f14a6b6e0d866c5e",
+          "start_ms": 135,
+          "end_ms": 34432,
+          "duration_ms": 34296,
+          "emitted_body_bytes": 9698642,
+          "measured_bitrate_mbps": 2.262,
+          "http_status": 503,
+          "etag": null,
+          "checksum_outcome": "not_acknowledged",
+          "error": "HTTP 503: <?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Error><Code>RequestTimeout</Code><Message>A timeout occurred while trying to lock a resource, please reduce your request rate</Message><Key>quarantine/i3-benchmark-1394ae5f-624b-4124-a3a2-7ac8a81a0098/original</Key><BucketName>vinops-files</BucketName><Resourc",
+          "response_excerpt": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Error><Code>RequestTimeout</Code><Message>A timeout occurred while trying to lock a resource, please reduce your request rate</Message><Key>quarantine/i3-benchmark-1394ae5f-624b-4124-a3a2-7ac8a81a0098/original</Key><BucketName>vinops-files</BucketName><Resourc",
+          "progress_samples": [
+            {
+              "emitted_bytes": 64850,
+              "t_ms": 0
+            },
+            {
+              "emitted_bytes": 130386,
+              "t_ms": 1
+            },
+            {
+              "emitted_bytes": 195922,
+              "t_ms": 2
+            },
+            {
+              "emitted_bytes": 261458,
+              "t_ms": 2
+            },
+            {
+              "emitted_bytes": 326994,
+              "t_ms": 36
+            },
+            {
+              "emitted_bytes": 392530,
+              "t_ms": 56
+            },
+            {
+              "emitted_bytes": 458066,
+              "t_ms": 83
+            },
+            {
+              "emitted_bytes": 523602,
+              "t_ms": 113
+            },
+            {
+              "emitted_bytes": 9633106,
+              "t_ms": 3752
+            },
+            {
+              "emitted_bytes": 9698642,
+              "t_ms": 3779
+            }
+          ],
+          "max_progress_gap_ms": 72,
+          "shaping": {
+            "independent": true,
+            "rate_mbps": 20,
+            "rate_bytes_per_second": 2500000,
+            "socket_emitted_bytes_counted": true
+          }
+        },
+        {
+          "client_index": 7,
+          "object_key": "quarantine/i3-benchmark-ed2df2b0-63bc-4c8d-a481-8e258b9cbb29/original",
+          "payload_bytes": 10000000,
+          "payload_sha256": "7922289ab02a036ccf8465b663fe58186e89f11ccda610e0f14a6b6e0d866c5e",
+          "start_ms": 132,
+          "end_ms": 34430,
+          "duration_ms": 34298,
+          "emitted_body_bytes": 9698642,
+          "measured_bitrate_mbps": 2.262,
+          "http_status": 503,
+          "etag": null,
+          "checksum_outcome": "not_acknowledged",
+          "error": "HTTP 503: <?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Error><Code>RequestTimeout</Code><Message>A timeout occurred while trying to lock a resource, please reduce your request rate</Message><Key>quarantine/i3-benchmark-ed2df2b0-63bc-4c8d-a481-8e258b9cbb29/original</Key><BucketName>vinops-files</BucketName><Resourc",
+          "response_excerpt": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Error><Code>RequestTimeout</Code><Message>A timeout occurred while trying to lock a resource, please reduce your request rate</Message><Key>quarantine/i3-benchmark-ed2df2b0-63bc-4c8d-a481-8e258b9cbb29/original</Key><BucketName>vinops-files</BucketName><Resourc",
+          "progress_samples": [
+            {
+              "emitted_bytes": 64850,
+              "t_ms": 0
+            },
+            {
+              "emitted_bytes": 130386,
+              "t_ms": 1
+            },
+            {
+              "emitted_bytes": 195922,
+              "t_ms": 1
+            },
+            {
+              "emitted_bytes": 261458,
+              "t_ms": 1
+            },
+            {
+              "emitted_bytes": 326994,
+              "t_ms": 29
+            },
+            {
+              "emitted_bytes": 392530,
+              "t_ms": 57
+            },
+            {
+              "emitted_bytes": 458066,
+              "t_ms": 88
+            },
+            {
+              "emitted_bytes": 523602,
+              "t_ms": 118
+            },
+            {
+              "emitted_bytes": 9633106,
+              "t_ms": 3751
+            },
+            {
+              "emitted_bytes": 9698642,
+              "t_ms": 3785
+            }
+          ],
+          "max_progress_gap_ms": 96.1,
+          "shaping": {
+            "independent": true,
+            "rate_mbps": 20,
+            "rate_bytes_per_second": 2500000,
+            "socket_emitted_bytes_counted": true
+          }
+        },
+        {
+          "client_index": 5,
+          "object_key": "quarantine/i3-benchmark-d7de644a-e977-4f21-8c97-c83998494389/original",
+          "payload_bytes": 10000000,
+          "payload_sha256": "7922289ab02a036ccf8465b663fe58186e89f11ccda610e0f14a6b6e0d866c5e",
+          "start_ms": 129,
+          "end_ms": 34433,
+          "duration_ms": 34304,
+          "emitted_body_bytes": 9698642,
+          "measured_bitrate_mbps": 2.262,
+          "http_status": 503,
+          "etag": null,
+          "checksum_outcome": "not_acknowledged",
+          "error": "HTTP 503: <?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Error><Code>RequestTimeout</Code><Message>A timeout occurred while trying to lock a resource, please reduce your request rate</Message><Key>quarantine/i3-benchmark-d7de644a-e977-4f21-8c97-c83998494389/original</Key><BucketName>vinops-files</BucketName><Resourc",
+          "response_excerpt": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Error><Code>RequestTimeout</Code><Message>A timeout occurred while trying to lock a resource, please reduce your request rate</Message><Key>quarantine/i3-benchmark-d7de644a-e977-4f21-8c97-c83998494389/original</Key><BucketName>vinops-files</BucketName><Resourc",
+          "progress_samples": [
+            {
+              "emitted_bytes": 64850,
+              "t_ms": 0
+            },
+            {
+              "emitted_bytes": 130386,
+              "t_ms": 1
+            },
+            {
+              "emitted_bytes": 195922,
+              "t_ms": 1
+            },
+            {
+              "emitted_bytes": 261458,
+              "t_ms": 1
+            },
+            {
+              "emitted_bytes": 326994,
+              "t_ms": 31
+            },
+            {
+              "emitted_bytes": 392530,
+              "t_ms": 58
+            },
+            {
+              "emitted_bytes": 458066,
+              "t_ms": 87
+            },
+            {
+              "emitted_bytes": 523602,
+              "t_ms": 106
+            },
+            {
+              "emitted_bytes": 9633106,
+              "t_ms": 3753
+            },
+            {
+              "emitted_bytes": 9698642,
+              "t_ms": 3778
+            }
+          ],
+          "max_progress_gap_ms": 139.4,
+          "shaping": {
+            "independent": true,
+            "rate_mbps": 20,
+            "rate_bytes_per_second": 2500000,
+            "socket_emitted_bytes_counted": true
+          }
+        },
+        {
+          "client_index": 19,
+          "object_key": "quarantine/i3-benchmark-9f6aa276-526f-4cb6-bff5-b0993fe3f8b0/original",
+          "payload_bytes": 10000000,
+          "payload_sha256": "7922289ab02a036ccf8465b663fe58186e89f11ccda610e0f14a6b6e0d866c5e",
+          "start_ms": 139,
+          "end_ms": 34442,
+          "duration_ms": 34304,
+          "emitted_body_bytes": 9698642,
+          "measured_bitrate_mbps": 2.262,
+          "http_status": 503,
+          "etag": null,
+          "checksum_outcome": "not_acknowledged",
+          "error": "HTTP 503: <?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Error><Code>RequestTimeout</Code><Message>A timeout occurred while trying to lock a resource, please reduce your request rate</Message><Key>quarantine/i3-benchmark-9f6aa276-526f-4cb6-bff5-b0993fe3f8b0/original</Key><BucketName>vinops-files</BucketName><Resourc",
+          "response_excerpt": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Error><Code>RequestTimeout</Code><Message>A timeout occurred while trying to lock a resource, please reduce your request rate</Message><Key>quarantine/i3-benchmark-9f6aa276-526f-4cb6-bff5-b0993fe3f8b0/original</Key><BucketName>vinops-files</BucketName><Resourc",
+          "progress_samples": [
+            {
+              "emitted_bytes": 64850,
+              "t_ms": 0
+            },
+            {
+              "emitted_bytes": 130386,
+              "t_ms": 0
+            },
+            {
+              "emitted_bytes": 195922,
+              "t_ms": 1
+            },
+            {
+              "emitted_bytes": 261458,
+              "t_ms": 1
+            },
+            {
+              "emitted_bytes": 326994,
+              "t_ms": 31
+            },
+            {
+              "emitted_bytes": 392530,
+              "t_ms": 58
+            },
+            {
+              "emitted_bytes": 458066,
+              "t_ms": 89
+            },
+            {
+              "emitted_bytes": 523602,
+              "t_ms": 106
+            },
+            {
+              "emitted_bytes": 9633106,
+              "t_ms": 3752
+            },
+            {
+              "emitted_bytes": 9698642,
+              "t_ms": 3787
+            }
+          ],
+          "max_progress_gap_ms": 101.2,
+          "shaping": {
+            "independent": true,
+            "rate_mbps": 20,
+            "rate_bytes_per_second": 2500000,
+            "socket_emitted_bytes_counted": true
+          }
+        },
+        {
+          "client_index": 1,
+          "object_key": "quarantine/i3-benchmark-18338f39-745d-4481-b1dc-18eabb1df31a/original",
+          "payload_bytes": 10000000,
+          "payload_sha256": "7922289ab02a036ccf8465b663fe58186e89f11ccda610e0f14a6b6e0d866c5e",
+          "start_ms": 124,
+          "end_ms": 34443,
+          "duration_ms": 34319,
+          "emitted_body_bytes": 9698642,
+          "measured_bitrate_mbps": 2.261,
+          "http_status": 503,
+          "etag": null,
+          "checksum_outcome": "not_acknowledged",
+          "error": "HTTP 503: <?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Error><Code>RequestTimeout</Code><Message>A timeout occurred while trying to lock a resource, please reduce your request rate</Message><Key>quarantine/i3-benchmark-18338f39-745d-4481-b1dc-18eabb1df31a/original</Key><BucketName>vinops-files</BucketName><Resourc",
+          "response_excerpt": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Error><Code>RequestTimeout</Code><Message>A timeout occurred while trying to lock a resource, please reduce your request rate</Message><Key>quarantine/i3-benchmark-18338f39-745d-4481-b1dc-18eabb1df31a/original</Key><BucketName>vinops-files</BucketName><Resourc",
+          "progress_samples": [
+            {
+              "emitted_bytes": 64850,
+              "t_ms": 0
+            },
+            {
+              "emitted_bytes": 130386,
+              "t_ms": 1
+            },
+            {
+              "emitted_bytes": 195922,
+              "t_ms": 1
+            },
+            {
+              "emitted_bytes": 261458,
+              "t_ms": 1
+            },
+            {
+              "emitted_bytes": 326994,
+              "t_ms": 27
+            },
+            {
+              "emitted_bytes": 392530,
+              "t_ms": 60
+            },
+            {
+              "emitted_bytes": 458066,
+              "t_ms": 91
+            },
+            {
+              "emitted_bytes": 523602,
+              "t_ms": 106
+            },
+            {
+              "emitted_bytes": 9633106,
+              "t_ms": 3755
+            },
+            {
+              "emitted_bytes": 9698642,
+              "t_ms": 3790
+            }
+          ],
+          "max_progress_gap_ms": 111.2,
+          "shaping": {
+            "independent": true,
+            "rate_mbps": 20,
+            "rate_bytes_per_second": 2500000,
+            "socket_emitted_bytes_counted": true
+          }
+        },
+        {
+          "client_index": 10,
+          "object_key": "quarantine/i3-benchmark-d52f4e20-4c1b-478f-b92f-891d78356291/original",
+          "payload_bytes": 10000000,
+          "payload_sha256": "7922289ab02a036ccf8465b663fe58186e89f11ccda610e0f14a6b6e0d866c5e",
+          "start_ms": 134,
+          "end_ms": 34471,
+          "duration_ms": 34337,
+          "emitted_body_bytes": 9698642,
+          "measured_bitrate_mbps": 2.26,
+          "http_status": 503,
+          "etag": null,
+          "checksum_outcome": "not_acknowledged",
+          "error": "HTTP 503: <?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Error><Code>RequestTimeout</Code><Message>A timeout occurred while trying to lock a resource, please reduce your request rate</Message><Key>quarantine/i3-benchmark-d52f4e20-4c1b-478f-b92f-891d78356291/original</Key><BucketName>vinops-files</BucketName><Resourc",
+          "response_excerpt": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Error><Code>RequestTimeout</Code><Message>A timeout occurred while trying to lock a resource, please reduce your request rate</Message><Key>quarantine/i3-benchmark-d52f4e20-4c1b-478f-b92f-891d78356291/original</Key><BucketName>vinops-files</BucketName><Resourc",
+          "progress_samples": [
+            {
+              "emitted_bytes": 64850,
+              "t_ms": 0
+            },
+            {
+              "emitted_bytes": 130386,
+              "t_ms": 1
+            },
+            {
+              "emitted_bytes": 195922,
+              "t_ms": 1
+            },
+            {
+              "emitted_bytes": 261458,
+              "t_ms": 1
+            },
+            {
+              "emitted_bytes": 326994,
+              "t_ms": 37
+            },
+            {
+              "emitted_bytes": 392530,
+              "t_ms": 54
+            },
+            {
+              "emitted_bytes": 458066,
+              "t_ms": 84
+            },
+            {
+              "emitted_bytes": 523602,
+              "t_ms": 115
+            },
+            {
+              "emitted_bytes": 9633106,
+              "t_ms": 3755
+            },
+            {
+              "emitted_bytes": 9698642,
+              "t_ms": 3781
+            }
+          ],
+          "max_progress_gap_ms": 78.6,
+          "shaping": {
+            "independent": true,
+            "rate_mbps": 20,
+            "rate_bytes_per_second": 2500000,
+            "socket_emitted_bytes_counted": true
+          }
+        },
+        {
+          "client_index": 9,
+          "object_key": "quarantine/i3-benchmark-9fb0c8f1-8baf-4cd0-993b-69656ac8d7ca/original",
+          "payload_bytes": 10000000,
+          "payload_sha256": "7922289ab02a036ccf8465b663fe58186e89f11ccda610e0f14a6b6e0d866c5e",
+          "start_ms": 133,
+          "end_ms": 34471,
+          "duration_ms": 34338,
+          "emitted_body_bytes": 9698642,
+          "measured_bitrate_mbps": 2.26,
+          "http_status": 503,
+          "etag": null,
+          "checksum_outcome": "not_acknowledged",
+          "error": "HTTP 503: <?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Error><Code>RequestTimeout</Code><Message>A timeout occurred while trying to lock a resource, please reduce your request rate</Message><Key>quarantine/i3-benchmark-9fb0c8f1-8baf-4cd0-993b-69656ac8d7ca/original</Key><BucketName>vinops-files</BucketName><Resourc",
+          "response_excerpt": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Error><Code>RequestTimeout</Code><Message>A timeout occurred while trying to lock a resource, please reduce your request rate</Message><Key>quarantine/i3-benchmark-9fb0c8f1-8baf-4cd0-993b-69656ac8d7ca/original</Key><BucketName>vinops-files</BucketName><Resourc",
+          "progress_samples": [
+            {
+              "emitted_bytes": 64850,
+              "t_ms": 0
+            },
+            {
+              "emitted_bytes": 130386,
+              "t_ms": 0
+            },
+            {
+              "emitted_bytes": 195922,
+              "t_ms": 1
+            },
+            {
+              "emitted_bytes": 261458,
+              "t_ms": 1
+            },
+            {
+              "emitted_bytes": 326994,
+              "t_ms": 27
+            },
+            {
+              "emitted_bytes": 392530,
+              "t_ms": 55
+            },
+            {
+              "emitted_bytes": 458066,
+              "t_ms": 86
+            },
+            {
+              "emitted_bytes": 523602,
+              "t_ms": 116
+            },
+            {
+              "emitted_bytes": 9633106,
+              "t_ms": 3749
+            },
+            {
+              "emitted_bytes": 9698642,
+              "t_ms": 3783
+            }
+          ],
+          "max_progress_gap_ms": 84.1,
+          "shaping": {
+            "independent": true,
+            "rate_mbps": 20,
+            "rate_bytes_per_second": 2500000,
+            "socket_emitted_bytes_counted": true
+          }
+        },
+        {
+          "client_index": 11,
+          "object_key": "quarantine/i3-benchmark-fa1d7714-932b-4d7d-8dcd-694ee69f38f0/original",
+          "payload_bytes": 10000000,
+          "payload_sha256": "7922289ab02a036ccf8465b663fe58186e89f11ccda610e0f14a6b6e0d866c5e",
+          "start_ms": 134,
+          "end_ms": 34511,
+          "duration_ms": 34376,
+          "emitted_body_bytes": 9698642,
+          "measured_bitrate_mbps": 2.257,
+          "http_status": 503,
+          "etag": null,
+          "checksum_outcome": "not_acknowledged",
+          "error": "HTTP 503: <?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Error><Code>RequestTimeout</Code><Message>A timeout occurred while trying to lock a resource, please reduce your request rate</Message><Key>quarantine/i3-benchmark-fa1d7714-932b-4d7d-8dcd-694ee69f38f0/original</Key><BucketName>vinops-files</BucketName><Resourc",
+          "response_excerpt": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Error><Code>RequestTimeout</Code><Message>A timeout occurred while trying to lock a resource, please reduce your request rate</Message><Key>quarantine/i3-benchmark-fa1d7714-932b-4d7d-8dcd-694ee69f38f0/original</Key><BucketName>vinops-files</BucketName><Resourc",
+          "progress_samples": [
+            {
+              "emitted_bytes": 64850,
+              "t_ms": 0
+            },
+            {
+              "emitted_bytes": 130386,
+              "t_ms": 2
+            },
+            {
+              "emitted_bytes": 195922,
+              "t_ms": 3
+            },
+            {
+              "emitted_bytes": 261458,
+              "t_ms": 4
+            },
+            {
+              "emitted_bytes": 326994,
+              "t_ms": 32
+            },
+            {
+              "emitted_bytes": 392530,
+              "t_ms": 53
+            },
+            {
+              "emitted_bytes": 458066,
+              "t_ms": 79
+            },
+            {
+              "emitted_bytes": 523602,
+              "t_ms": 109
+            },
+            {
+              "emitted_bytes": 9633106,
+              "t_ms": 3750
+            },
+            {
+              "emitted_bytes": 9698642,
+              "t_ms": 3776
+            }
+          ],
+          "max_progress_gap_ms": 63,
+          "shaping": {
+            "independent": true,
+            "rate_mbps": 20,
+            "rate_bytes_per_second": 2500000,
+            "socket_emitted_bytes_counted": true
+          }
+        },
+        {
+          "client_index": 4,
+          "object_key": "quarantine/i3-benchmark-35860632-a6c6-403b-ade8-39b94472b5c0/original",
+          "payload_bytes": 10000000,
+          "payload_sha256": "7922289ab02a036ccf8465b663fe58186e89f11ccda610e0f14a6b6e0d866c5e",
+          "start_ms": 127,
+          "end_ms": 34514,
+          "duration_ms": 34387,
+          "emitted_body_bytes": 9633106,
+          "measured_bitrate_mbps": 2.241,
+          "http_status": 503,
+          "etag": null,
+          "checksum_outcome": "not_acknowledged",
+          "error": "HTTP 503: <?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Error><Code>RequestTimeout</Code><Message>A timeout occurred while trying to lock a resource, please reduce your request rate</Message><Key>quarantine/i3-benchmark-35860632-a6c6-403b-ade8-39b94472b5c0/original</Key><BucketName>vinops-files</BucketName><Resourc",
+          "response_excerpt": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Error><Code>RequestTimeout</Code><Message>A timeout occurred while trying to lock a resource, please reduce your request rate</Message><Key>quarantine/i3-benchmark-35860632-a6c6-403b-ade8-39b94472b5c0/original</Key><BucketName>vinops-files</BucketName><Resourc",
+          "progress_samples": [
+            {
+              "emitted_bytes": 64850,
+              "t_ms": 0
+            },
+            {
+              "emitted_bytes": 130386,
+              "t_ms": 1
+            },
+            {
+              "emitted_bytes": 195922,
+              "t_ms": 1
+            },
+            {
+              "emitted_bytes": 261458,
+              "t_ms": 1
+            },
+            {
+              "emitted_bytes": 326994,
+              "t_ms": 28
+            },
+            {
+              "emitted_bytes": 392530,
+              "t_ms": 58
+            },
+            {
+              "emitted_bytes": 458066,
+              "t_ms": 88
+            },
+            {
+              "emitted_bytes": 523602,
+              "t_ms": 106
+            },
+            {
+              "emitted_bytes": 9567570,
+              "t_ms": 3725
+            },
+            {
+              "emitted_bytes": 9633106,
+              "t_ms": 3750
+            }
+          ],
+          "max_progress_gap_ms": 59.6,
+          "shaping": {
+            "independent": true,
+            "rate_mbps": 20,
+            "rate_bytes_per_second": 2500000,
+            "socket_emitted_bytes_counted": true
+          }
+        },
+        {
+          "client_index": 12,
+          "object_key": "quarantine/i3-benchmark-a0e6a32c-248c-47d7-8c0b-9b9e2ef108c3/original",
+          "payload_bytes": 10000000,
+          "payload_sha256": "7922289ab02a036ccf8465b663fe58186e89f11ccda610e0f14a6b6e0d866c5e",
+          "start_ms": 135,
+          "end_ms": 64835,
+          "duration_ms": 64700,
+          "emitted_body_bytes": 9764178,
+          "measured_bitrate_mbps": 1.207,
+          "http_status": 503,
+          "etag": null,
+          "checksum_outcome": "not_acknowledged",
+          "error": "HTTP 503: <?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Error><Code>RequestTimeout</Code><Message>A timeout occurred while trying to lock a resource, please reduce your request rate</Message><Key>quarantine/i3-benchmark-a0e6a32c-248c-47d7-8c0b-9b9e2ef108c3/original</Key><BucketName>vinops-files</BucketName><Resourc",
+          "response_excerpt": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Error><Code>RequestTimeout</Code><Message>A timeout occurred while trying to lock a resource, please reduce your request rate</Message><Key>quarantine/i3-benchmark-a0e6a32c-248c-47d7-8c0b-9b9e2ef108c3/original</Key><BucketName>vinops-files</BucketName><Resourc",
+          "progress_samples": [
+            {
+              "emitted_bytes": 64850,
+              "t_ms": 0
+            },
+            {
+              "emitted_bytes": 130386,
+              "t_ms": 0
+            },
+            {
+              "emitted_bytes": 195922,
+              "t_ms": 1
+            },
+            {
+              "emitted_bytes": 261458,
+              "t_ms": 1
+            },
+            {
+              "emitted_bytes": 326994,
+              "t_ms": 45
+            },
+            {
+              "emitted_bytes": 392530,
+              "t_ms": 57
+            },
+            {
+              "emitted_bytes": 458066,
+              "t_ms": 86
+            },
+            {
+              "emitted_bytes": 523602,
+              "t_ms": 116
+            },
+            {
+              "emitted_bytes": 9698642,
+              "t_ms": 3778
+            },
+            {
+              "emitted_bytes": 9764178,
+              "t_ms": 3813
+            }
+          ],
+          "max_progress_gap_ms": 166.5,
+          "shaping": {
+            "independent": true,
+            "rate_mbps": 20,
+            "rate_bytes_per_second": 2500000,
+            "socket_emitted_bytes_counted": true
+          }
+        },
+        {
+          "client_index": 8,
+          "object_key": "quarantine/i3-benchmark-ea7455f9-8c34-49e7-a756-61fe8c60e250/original",
+          "payload_bytes": 10000000,
+          "payload_sha256": "7922289ab02a036ccf8465b663fe58186e89f11ccda610e0f14a6b6e0d866c5e",
+          "start_ms": 132,
+          "end_ms": 64837,
+          "duration_ms": 64705,
+          "emitted_body_bytes": 9764178,
+          "measured_bitrate_mbps": 1.207,
+          "http_status": 503,
+          "etag": null,
+          "checksum_outcome": "not_acknowledged",
+          "error": "HTTP 503: <?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Error><Code>RequestTimeout</Code><Message>A timeout occurred while trying to lock a resource, please reduce your request rate</Message><Key>quarantine/i3-benchmark-ea7455f9-8c34-49e7-a756-61fe8c60e250/original</Key><BucketName>vinops-files</BucketName><Resourc",
+          "response_excerpt": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Error><Code>RequestTimeout</Code><Message>A timeout occurred while trying to lock a resource, please reduce your request rate</Message><Key>quarantine/i3-benchmark-ea7455f9-8c34-49e7-a756-61fe8c60e250/original</Key><BucketName>vinops-files</BucketName><Resourc",
+          "progress_samples": [
+            {
+              "emitted_bytes": 64850,
+              "t_ms": 0
+            },
+            {
+              "emitted_bytes": 130386,
+              "t_ms": 1
+            },
+            {
+              "emitted_bytes": 195922,
+              "t_ms": 1
+            },
+            {
+              "emitted_bytes": 261458,
+              "t_ms": 1
+            },
+            {
+              "emitted_bytes": 326994,
+              "t_ms": 47
+            },
+            {
+              "emitted_bytes": 392530,
+              "t_ms": 54
+            },
+            {
+              "emitted_bytes": 458066,
+              "t_ms": 87
+            },
+            {
+              "emitted_bytes": 523602,
+              "t_ms": 118
+            },
+            {
+              "emitted_bytes": 9698642,
+              "t_ms": 3781
+            },
+            {
+              "emitted_bytes": 9764178,
+              "t_ms": 3815
+            }
+          ],
+          "max_progress_gap_ms": 171.6,
+          "shaping": {
+            "independent": true,
+            "rate_mbps": 20,
+            "rate_bytes_per_second": 2500000,
+            "socket_emitted_bytes_counted": true
+          }
+        },
+        {
+          "client_index": 18,
+          "object_key": "quarantine/i3-benchmark-4efb8ddf-b0ea-4afe-8e92-c9d8647355fc/original",
+          "payload_bytes": 10000000,
+          "payload_sha256": "7922289ab02a036ccf8465b663fe58186e89f11ccda610e0f14a6b6e0d866c5e",
+          "start_ms": 137,
+          "end_ms": 64864,
+          "duration_ms": 64726,
+          "emitted_body_bytes": 9764178,
+          "measured_bitrate_mbps": 1.207,
+          "http_status": 503,
+          "etag": null,
+          "checksum_outcome": "not_acknowledged",
+          "error": "HTTP 503: <?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Error><Code>RequestTimeout</Code><Message>A timeout occurred while trying to lock a resource, please reduce your request rate</Message><Key>quarantine/i3-benchmark-4efb8ddf-b0ea-4afe-8e92-c9d8647355fc/original</Key><BucketName>vinops-files</BucketName><Resourc",
+          "response_excerpt": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Error><Code>RequestTimeout</Code><Message>A timeout occurred while trying to lock a resource, please reduce your request rate</Message><Key>quarantine/i3-benchmark-4efb8ddf-b0ea-4afe-8e92-c9d8647355fc/original</Key><BucketName>vinops-files</BucketName><Resourc",
+          "progress_samples": [
+            {
+              "emitted_bytes": 64850,
+              "t_ms": 0
+            },
+            {
+              "emitted_bytes": 130386,
+              "t_ms": 1
+            },
+            {
+              "emitted_bytes": 195922,
+              "t_ms": 1
+            },
+            {
+              "emitted_bytes": 261458,
+              "t_ms": 1
+            },
+            {
+              "emitted_bytes": 326994,
+              "t_ms": 34
+            },
+            {
+              "emitted_bytes": 392530,
+              "t_ms": 58
+            },
+            {
+              "emitted_bytes": 458066,
+              "t_ms": 88
+            },
+            {
+              "emitted_bytes": 523602,
+              "t_ms": 108
+            },
+            {
+              "emitted_bytes": 9698642,
+              "t_ms": 3780
+            },
+            {
+              "emitted_bytes": 9764178,
+              "t_ms": 3802
+            }
+          ],
+          "max_progress_gap_ms": 146.8,
+          "shaping": {
+            "independent": true,
+            "rate_mbps": 20,
+            "rate_bytes_per_second": 2500000,
+            "socket_emitted_bytes_counted": true
+          }
+        },
+        {
+          "client_index": 16,
+          "object_key": "quarantine/i3-benchmark-ca104612-a05b-4622-9b0f-bf861dcac8b7/original",
+          "payload_bytes": 10000000,
+          "payload_sha256": "7922289ab02a036ccf8465b663fe58186e89f11ccda610e0f14a6b6e0d866c5e",
+          "start_ms": 136,
+          "end_ms": 64869,
+          "duration_ms": 64732,
+          "emitted_body_bytes": 9764178,
+          "measured_bitrate_mbps": 1.207,
+          "http_status": 503,
+          "etag": null,
+          "checksum_outcome": "not_acknowledged",
+          "error": "HTTP 503: <?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Error><Code>RequestTimeout</Code><Message>A timeout occurred while trying to lock a resource, please reduce your request rate</Message><Key>quarantine/i3-benchmark-ca104612-a05b-4622-9b0f-bf861dcac8b7/original</Key><BucketName>vinops-files</BucketName><Resourc",
+          "response_excerpt": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Error><Code>RequestTimeout</Code><Message>A timeout occurred while trying to lock a resource, please reduce your request rate</Message><Key>quarantine/i3-benchmark-ca104612-a05b-4622-9b0f-bf861dcac8b7/original</Key><BucketName>vinops-files</BucketName><Resourc",
+          "progress_samples": [
+            {
+              "emitted_bytes": 64850,
+              "t_ms": 0
+            },
+            {
+              "emitted_bytes": 130386,
+              "t_ms": 1
+            },
+            {
+              "emitted_bytes": 195922,
+              "t_ms": 1
+            },
+            {
+              "emitted_bytes": 261458,
+              "t_ms": 1
+            },
+            {
+              "emitted_bytes": 326994,
+              "t_ms": 38
+            },
+            {
+              "emitted_bytes": 392530,
+              "t_ms": 63
+            },
+            {
+              "emitted_bytes": 458066,
+              "t_ms": 79
+            },
+            {
+              "emitted_bytes": 523602,
+              "t_ms": 109
+            },
+            {
+              "emitted_bytes": 9698642,
+              "t_ms": 3779
+            },
+            {
+              "emitted_bytes": 9764178,
+              "t_ms": 3806
+            }
+          ],
+          "max_progress_gap_ms": 159.2,
+          "shaping": {
+            "independent": true,
+            "rate_mbps": 20,
+            "rate_bytes_per_second": 2500000,
+            "socket_emitted_bytes_counted": true
+          }
+        },
+        {
+          "client_index": 3,
+          "object_key": "quarantine/i3-benchmark-abf90cdd-47ec-483b-8ce4-4fb418b3859a/original",
+          "payload_bytes": 10000000,
+          "payload_sha256": "7922289ab02a036ccf8465b663fe58186e89f11ccda610e0f14a6b6e0d866c5e",
+          "start_ms": 126,
+          "end_ms": 64866,
+          "duration_ms": 64740,
+          "emitted_body_bytes": 9764178,
+          "measured_bitrate_mbps": 1.207,
+          "http_status": 503,
+          "etag": null,
+          "checksum_outcome": "not_acknowledged",
+          "error": "HTTP 503: <?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Error><Code>RequestTimeout</Code><Message>A timeout occurred while trying to lock a resource, please reduce your request rate</Message><Key>quarantine/i3-benchmark-abf90cdd-47ec-483b-8ce4-4fb418b3859a/original</Key><BucketName>vinops-files</BucketName><Resourc",
+          "response_excerpt": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Error><Code>RequestTimeout</Code><Message>A timeout occurred while trying to lock a resource, please reduce your request rate</Message><Key>quarantine/i3-benchmark-abf90cdd-47ec-483b-8ce4-4fb418b3859a/original</Key><BucketName>vinops-files</BucketName><Resourc",
+          "progress_samples": [
+            {
+              "emitted_bytes": 64850,
+              "t_ms": 0
+            },
+            {
+              "emitted_bytes": 130386,
+              "t_ms": 1
+            },
+            {
+              "emitted_bytes": 195922,
+              "t_ms": 1
+            },
+            {
+              "emitted_bytes": 261458,
+              "t_ms": 1
+            },
+            {
+              "emitted_bytes": 326994,
+              "t_ms": 35
+            },
+            {
+              "emitted_bytes": 392530,
+              "t_ms": 61
+            },
+            {
+              "emitted_bytes": 458066,
+              "t_ms": 80
+            },
+            {
+              "emitted_bytes": 523602,
+              "t_ms": 106
+            },
+            {
+              "emitted_bytes": 9698642,
+              "t_ms": 3776
+            },
+            {
+              "emitted_bytes": 9764178,
+              "t_ms": 3804
+            }
+          ],
+          "max_progress_gap_ms": 152.3,
+          "shaping": {
+            "independent": true,
+            "rate_mbps": 20,
+            "rate_bytes_per_second": 2500000,
+            "socket_emitted_bytes_counted": true
+          }
+        },
+        {
+          "client_index": 14,
+          "object_key": "quarantine/i3-benchmark-5b1e1d7e-810e-4b4b-bf7c-85f8ce3c9278/original",
+          "payload_bytes": 10000000,
+          "payload_sha256": "7922289ab02a036ccf8465b663fe58186e89f11ccda610e0f14a6b6e0d866c5e",
+          "start_ms": 136,
+          "end_ms": 64887,
+          "duration_ms": 64751,
+          "emitted_body_bytes": 9764178,
+          "measured_bitrate_mbps": 1.206,
+          "http_status": 503,
+          "etag": null,
+          "checksum_outcome": "not_acknowledged",
+          "error": "HTTP 503: <?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Error><Code>RequestTimeout</Code><Message>A timeout occurred while trying to lock a resource, please reduce your request rate</Message><Key>quarantine/i3-benchmark-5b1e1d7e-810e-4b4b-bf7c-85f8ce3c9278/original</Key><BucketName>vinops-files</BucketName><Resourc",
+          "response_excerpt": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Error><Code>RequestTimeout</Code><Message>A timeout occurred while trying to lock a resource, please reduce your request rate</Message><Key>quarantine/i3-benchmark-5b1e1d7e-810e-4b4b-bf7c-85f8ce3c9278/original</Key><BucketName>vinops-files</BucketName><Resourc",
+          "progress_samples": [
+            {
+              "emitted_bytes": 64850,
+              "t_ms": 0
+            },
+            {
+              "emitted_bytes": 130386,
+              "t_ms": 0
+            },
+            {
+              "emitted_bytes": 195922,
+              "t_ms": 1
+            },
+            {
+              "emitted_bytes": 261458,
+              "t_ms": 1
+            },
+            {
+              "emitted_bytes": 326994,
+              "t_ms": 29
+            },
+            {
+              "emitted_bytes": 392530,
+              "t_ms": 54
+            },
+            {
+              "emitted_bytes": 458066,
+              "t_ms": 85
+            },
+            {
+              "emitted_bytes": 523602,
+              "t_ms": 115
+            },
+            {
+              "emitted_bytes": 9698642,
+              "t_ms": 3776
+            },
+            {
+              "emitted_bytes": 9764178,
+              "t_ms": 3804
+            }
+          ],
+          "max_progress_gap_ms": 132.2,
+          "shaping": {
+            "independent": true,
+            "rate_mbps": 20,
+            "rate_bytes_per_second": 2500000,
+            "socket_emitted_bytes_counted": true
+          }
+        },
+        {
+          "client_index": 0,
+          "object_key": "quarantine/i3-benchmark-74d91c88-ee44-4395-852f-73e2fac9aaa8/original",
+          "payload_bytes": 10000000,
+          "payload_sha256": "7922289ab02a036ccf8465b663fe58186e89f11ccda610e0f14a6b6e0d866c5e",
+          "start_ms": 95,
+          "end_ms": 64870,
+          "duration_ms": 64775,
+          "emitted_body_bytes": 9764178,
+          "measured_bitrate_mbps": 1.206,
+          "http_status": 503,
+          "etag": null,
+          "checksum_outcome": "not_acknowledged",
+          "error": "HTTP 503: <?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Error><Code>RequestTimeout</Code><Message>A timeout occurred while trying to lock a resource, please reduce your request rate</Message><Key>quarantine/i3-benchmark-74d91c88-ee44-4395-852f-73e2fac9aaa8/original</Key><BucketName>vinops-files</BucketName><Resourc",
+          "response_excerpt": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Error><Code>RequestTimeout</Code><Message>A timeout occurred while trying to lock a resource, please reduce your request rate</Message><Key>quarantine/i3-benchmark-74d91c88-ee44-4395-852f-73e2fac9aaa8/original</Key><BucketName>vinops-files</BucketName><Resourc",
+          "progress_samples": [
+            {
+              "emitted_bytes": 64850,
+              "t_ms": 1
+            },
+            {
+              "emitted_bytes": 130386,
+              "t_ms": 1
+            },
+            {
+              "emitted_bytes": 195922,
+              "t_ms": 2
+            },
+            {
+              "emitted_bytes": 261458,
+              "t_ms": 4
+            },
+            {
+              "emitted_bytes": 326994,
+              "t_ms": 41
+            },
+            {
+              "emitted_bytes": 392530,
+              "t_ms": 54
+            },
+            {
+              "emitted_bytes": 458066,
+              "t_ms": 82
+            },
+            {
+              "emitted_bytes": 523602,
+              "t_ms": 113
+            },
+            {
+              "emitted_bytes": 9698642,
+              "t_ms": 3776
+            },
+            {
+              "emitted_bytes": 9764178,
+              "t_ms": 3811
+            }
+          ],
+          "max_progress_gap_ms": 160.3,
+          "shaping": {
+            "independent": true,
+            "rate_mbps": 20,
+            "rate_bytes_per_second": 2500000,
+            "socket_emitted_bytes_counted": true
+          }
+        },
+        {
+          "client_index": 15,
+          "object_key": "quarantine/i3-benchmark-cc4ff0e3-5cd3-40de-8d05-22e73d9b5a79/original",
+          "payload_bytes": 10000000,
+          "payload_sha256": "7922289ab02a036ccf8465b663fe58186e89f11ccda610e0f14a6b6e0d866c5e",
+          "start_ms": 136,
+          "end_ms": 64926,
+          "duration_ms": 64790,
+          "emitted_body_bytes": 9764178,
+          "measured_bitrate_mbps": 1.206,
+          "http_status": 503,
+          "etag": null,
+          "checksum_outcome": "not_acknowledged",
+          "error": "HTTP 503: <?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Error><Code>RequestTimeout</Code><Message>A timeout occurred while trying to lock a resource, please reduce your request rate</Message><Key>quarantine/i3-benchmark-cc4ff0e3-5cd3-40de-8d05-22e73d9b5a79/original</Key><BucketName>vinops-files</BucketName><Resourc",
+          "response_excerpt": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Error><Code>RequestTimeout</Code><Message>A timeout occurred while trying to lock a resource, please reduce your request rate</Message><Key>quarantine/i3-benchmark-cc4ff0e3-5cd3-40de-8d05-22e73d9b5a79/original</Key><BucketName>vinops-files</BucketName><Resourc",
+          "progress_samples": [
+            {
+              "emitted_bytes": 64850,
+              "t_ms": 0
+            },
+            {
+              "emitted_bytes": 130386,
+              "t_ms": 1
+            },
+            {
+              "emitted_bytes": 195922,
+              "t_ms": 1
+            },
+            {
+              "emitted_bytes": 261458,
+              "t_ms": 1
+            },
+            {
+              "emitted_bytes": 326994,
+              "t_ms": 28
+            },
+            {
+              "emitted_bytes": 392530,
+              "t_ms": 57
+            },
+            {
+              "emitted_bytes": 458066,
+              "t_ms": 83
+            },
+            {
+              "emitted_bytes": 523602,
+              "t_ms": 113
+            },
+            {
+              "emitted_bytes": 9698642,
+              "t_ms": 3776
+            },
+            {
+              "emitted_bytes": 9764178,
+              "t_ms": 3803
+            }
+          ],
+          "max_progress_gap_ms": 124.3,
+          "shaping": {
+            "independent": true,
+            "rate_mbps": 20,
+            "rate_bytes_per_second": 2500000,
+            "socket_emitted_bytes_counted": true
+          }
+        }
+      ],
+      "p95_ms": 64775,
+      "success_count": 0,
+      "durations_le_8000": 0,
+      "max_progress_gap_ms": 182.7,
+      "verdict": "FAIL",
+      "resources": {
+        "network": "vinops-mega002-i3-benchmark",
+        "container": "vinops-mega002-i3-benchmark-clientpool",
+        "labels": {
+          "vinops.task": "VIN-MEGA-002",
+          "vinops.iteration": "3"
+        }
+      }
+    }
+  },
+  "authorization_matrix": {
+    "expected": 10800,
+    "executed": 54,
+    "uncovered": 10746,
+    "unexpected": 0
+  },
+  "browser_matrix": {
+    "expected": 51,
+    "executed": 4,
+    "uncovered": 47,
+    "failures": 0
+  },
+  "cleanup": "BLOCKED_BY_SAFETY_AUTHORIZATION",
+  "required_artifacts": [
+    "VIN-MEGA-002-i3-evidence-verifiable.zip",
+    "VIN-MEGA-002-i3-review-verifiable.zip",
+    "VIN-MEGA-002-i3-source.delta.patch"
+  ],
+  "artifact_hashes": {
+    "evidence_zip_sha256": "25F0ED896E693B8FA2CC41FF55C8AABED3DD738E8AB1C1000762D0CED8C05262",
+    "review_zip_sha256": "9F1CF6A1032553A84BF448673704E310551886D68BD20015ED3F797F56161584",
+    "source_delta_patch_sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+  },
+  "archive_verification": {
+    "review_entries": 183,
+    "review_byte_mismatches": 0,
+    "review_duplicates": 0,
+    "review_nested_archives": 0,
+    "evidence_entries": 13,
+    "evidence_duplicates": 0,
+    "evidence_nested_archives": 0
+  }
+}

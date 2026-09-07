@@ -1,0 +1,30 @@
+{
+  "status": "UNVERIFIED",
+  "total_rows": 10800,
+  "executed": 10800,
+  "unexpected": 1690,
+  "uncovered": 0,
+  "duplicate_results": 0,
+  "by_operation": {
+    "transmittalDetail": 560,
+    "completeUpload": 470,
+    "listDocuments": 270,
+    "reviewInbox": 270,
+    "createDocument": 120
+  },
+  "by_expected_actual": {
+    "403_or_404_to_200": 540,
+    "403_or_404_to_422": 430,
+    "403_or_404_to_500": 430,
+    "policy_state_to_500": 130,
+    "403_or_404_to_201": 120,
+    "401_to_422": 40
+  },
+  "triage": [
+    "Most 403 mismatches are scope-fixture mismatches in the first harness run; raw rows are preserved and not relabeled PASS.",
+    "completeUpload unauthenticated rows returned 422 before identity resolution, an exact original-path ordering defect candidate.",
+    "transmittalDetail for a nonexistent ID returned 500 with errors.internal instead of canonical 404; raw correlation IDs are in shard evidence."
+  ],
+  "source_changed": false,
+  "product_correction": "none"
+}

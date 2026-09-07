@@ -1,0 +1,33 @@
+{
+  "checkpoint": "VIN-FND-001A",
+  "iteration": 1,
+  "local_matrix": {
+    "format": "PASS",
+    "lint": "PASS",
+    "strict_typecheck": "PASS",
+    "tests": {
+      "status": "PASS",
+      "files": 6,
+      "assertions": 12,
+      "coverage_claim": "not collected at this checkpoint"
+    },
+    "openapi_lint_and_generation": "PASS",
+    "generated_contract_sha256": "EF68869AE55465B12FC3939469E45856B85D99C5EB300B110798712F341E3689",
+    "architecture_cycle_check": "PASS (59 modules, 33 dependencies)",
+    "build": "PASS (config, contracts, observability, API, worker, web)",
+    "secret_scan": "PASS (86 text files; 0 archive/binary files)",
+    "direct_license_policy": "PASS (41 direct dependency declarations)"
+  },
+  "clean_room": {
+    "source_only_copy": true,
+    "frozen_install": "PASS",
+    "format_lint_typecheck": "PASS",
+    "tests": "PASS (6 files, 12 assertions)",
+    "openapi_architecture_build": "PASS",
+    "cleanup": "BLOCKED by external-target package-manager hardlink protection; retained only under ignored .tmp/ path"
+  },
+  "not_run_or_unverified": {
+    "registry_advisory_audit_high_critical": "UNVERIFIED; policy denied dependency-graph egress",
+    "docker_runtime_dependencies": "UNVERIFIED; daemon unavailable"
+  }
+}

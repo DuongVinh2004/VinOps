@@ -1,0 +1,7 @@
+{
+  "i1_manifest_sha256": "06f2d374c94b59a6bda20ab1e14aaf57bf275bea3a1a2dde09c1d4fcf5e1e81d",
+  "i1_evidence_zip_sha256": "1a1c62e0e42ffb8da5c4c807ebc0ff37619db074daab2b838748a6f37424d7ed",
+  "i1_review_zip_sha256": "82adc046469b8558088953ec2da049902ac3d895f14b1195cea6856c9073b1e5",
+  "byte_identity_checked_before_i2": true,
+  "i1_artifacts_overwritten": false
+}

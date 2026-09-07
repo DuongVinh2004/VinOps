@@ -1,0 +1,53 @@
+{
+  "result": "PASS",
+  "storage_success_db_failure": {
+    "injection": "real MinIO multipart completion followed by task-scoped PostgreSQL trigger failure on file_processing_jobs insert",
+    "observed_error": "I2_DB_FAILURE_AFTER_STORAGE",
+    "object_exists_after_failure": true,
+    "database_before_reconcile": {
+      "file_status": "Uploading",
+      "session_status": "Open",
+      "job_count": 0
+    },
+    "reconcile": {
+      "claimed": 1,
+      "reconciled": 1,
+      "retried": 0,
+      "target_job_status": "Completed",
+      "failure_code": "RECONCILIATION_REQUIRED"
+    },
+    "database_after_reconcile": {
+      "file_status": "Quarantined",
+      "session_status": "Open",
+      "target_job_status": "Completed"
+    }
+  },
+  "db_success_storage_finalization_failure": {
+    "injection": "real MinIO multipart upload with invalid ETag at CompleteMultipartUpload boundary",
+    "observed_error": "S3_REQUEST_FAILED:HTTP_400",
+    "object_exists_after_failure": false,
+    "database_before_reconcile": {
+      "file_status": "Uploading",
+      "session_status": "Open",
+      "job_count": 0
+    },
+    "reconcile_first_run": {
+      "claimed": 1,
+      "reconciled": 1,
+      "retried": 0,
+      "target_job_status": "Completed"
+    },
+    "reconcile_second_run": {
+      "claimed": 0,
+      "reconciled": 0,
+      "retried": 0
+    },
+    "database_after_reconcile": {
+      "file_status": "Quarantined",
+      "session_status": "Open",
+      "target_job_status": "Completed",
+      "failure_code": "ORPHAN_OBJECT_MISSING"
+    }
+  },
+  "source_fix": "worker reconciliation recognizes S3_REQUEST_FAILED:HTTP_404 as missing-object boundary and quarantines idempotently"
+}

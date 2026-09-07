@@ -1,0 +1,44 @@
+{
+  "runtime": "http://127.0.0.1:4175",
+  "expected_cases": 51,
+  "executed_cases": 4,
+  "uncovered": 47,
+  "failures": 0,
+  "coverage_gate": "UNVERIFIED",
+  "csp_present": false,
+  "security_headers": {
+    "content_security_policy": null,
+    "x_frame_options": null,
+    "referrer_policy": null
+  },
+  "observations": [
+    {
+      "case_id": "stored_document_title_img_onerror",
+      "field": "document_title_name",
+      "family": "element/event handlers",
+      "observed": "marker rendered as text; img_count=0; script_count=1 baseline module; no dialog observed",
+      "verdict": "PASS"
+    },
+    {
+      "case_id": "authorized_current_deep_link",
+      "field": "revision_metadata_purpose",
+      "boundary": "current",
+      "observed": "authorized current revision rendered",
+      "verdict": "PASS"
+    },
+    {
+      "case_id": "authorized_superseded_deep_link",
+      "field": "revision_metadata_purpose",
+      "boundary": "superseded",
+      "observed": "persistent Superseded banner and authorized current link rendered",
+      "verdict": "PASS"
+    },
+    {
+      "case_id": "outsider_deep_link",
+      "field": "document_title_name",
+      "boundary": "cross-tenant outsider",
+      "observed": "No project context is available; protected title absent",
+      "verdict": "PASS"
+    }
+  ]
+}

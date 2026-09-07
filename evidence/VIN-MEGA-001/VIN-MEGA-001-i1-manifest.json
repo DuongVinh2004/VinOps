@@ -1,0 +1,39 @@
+{
+  "checkpoint": "VIN-MEGA-001",
+  "packet": "i1",
+  "recorded_on": "2026-08-01",
+  "repository_baseline": {
+    "head": "UNBORN",
+    "remote": "NONE",
+    "git_diff_baseline": "NOT_AVAILABLE"
+  },
+  "source_fingerprint": {
+    "method": "SHA-256 of sorted relative-path|byte-length|file-SHA-256 lines; excludes .git, .tmp, node_modules, evidence, coverage, dist and generated package source JavaScript/declaration artifacts.",
+    "file_count": 116,
+    "sha256": "3a5ac97ded4a0c4fbd2612ee57d2c337e0f6398260f0f0edadc70936de45641c"
+  },
+  "artifacts": {
+    "evidence_archive": {
+      "path": "evidence/VIN-MEGA-001/VIN-MEGA-001-i1-evidence-verifiable.zip",
+      "sha256": "cd989afbe59bf5e029e9607f7cdf0853109e9c0f42946e1897ca7c78fef6bd7a",
+      "verified": "PASS: 13 JSON entries; no unsafe, duplicate, missing, extra or content-hash-mismatched entries."
+    },
+    "review_archive": {
+      "path": "evidence/VIN-MEGA-001/VIN-MEGA-001-i1-review-verifiable.zip",
+      "sha256": "11df843f4d36ae2724aa114405c829312f9c4616402b41d3790ac142a469307c",
+      "verified": "PASS: 116 entries; no unsafe, duplicate, missing, extra or content-hash-mismatched entries."
+    }
+  },
+  "non_authoritative_generated_residuals": [
+    {
+      "path": "evidence/VIN-MEGA-001/VIN-MEGA-001-i1-evidence.zip",
+      "reason": "Created before the external manifest received archive hashes; preserved without overwrite or deletion."
+    },
+    {
+      "path": "evidence/VIN-MEGA-001/VIN-MEGA-001-i1-review.zip",
+      "reason": "PowerShell Compress-Archive flattened distinct source paths. Preserved without overwrite or deletion; do not use for review."
+    }
+  ],
+  "verification_status": "STATIC_VERIFICATION_PASS_WITH_RUNTIME_AND_TOOLCHAIN_LIMITATIONS",
+  "runtime_status": "BLOCKED_RUNTIME"
+}

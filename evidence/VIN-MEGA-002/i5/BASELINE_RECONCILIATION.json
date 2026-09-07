@@ -1,0 +1,35 @@
+{
+  "checkpoint": "VIN-MEGA-002",
+  "iteration": 5,
+  "status": "PASS",
+  "branch": "main",
+  "head": "UNBORN",
+  "source_before_i5": "94ff9f64896bf640f89d80fd993aeb8dc6871a05c87f6bf6b02cff556c41e9ae",
+  "source_after_i4": "94ff9f64896bf640f89d80fd993aeb8dc6871a05c87f6bf6b02cff556c41e9ae",
+  "source_drift": false,
+  "cumulative_changed_source_test_script_files": [
+    "apps/worker/src/file-processing-worker.ts",
+    "apps/worker/test/file-processing.integration.test.ts",
+    "packages/database/src/seed.ts",
+    "packages/database/test/document-postgres.integration.test.ts"
+  ],
+  "cumulative_changed_count": 4,
+  "migrations": 0,
+  "dependencies": 0,
+  "protected_artifacts": {
+    "i2_manifest": "2A2E64B32733BEA3A23F346B598D3B9BEDD65DF03329AE440A5544A6A05136D7",
+    "i3_manifest": "F423D292F195624A367CB4744AFC3083685D4B9136114CF179DC39A4416D304C",
+    "i3_evidence": "25F0ED896E693B8FA2CC41FF55C8AABED3DD738E8AB1C1000762D0CED8C05262",
+    "i3_review": "9F1CF6A1032553A84BF448673704E310551886D68BD20015ED3F797F56161584",
+    "i4_manifest": "1455C049406274A723DC0FC8CB8044699AA4B70BD49D22A859394B14FA581B33",
+    "i4_evidence": "C4F640AC90973A2E1720736981558718041119B4AD6D869F74EFE338987669B5",
+    "i4_review": "9793C6CA8E7934B75D2CAAF6419B1BF6A4095F28293E13322701D5A45B296F85",
+    "i4_delta": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+  },
+  "pnpm_compatibility_shim": {
+    "path": ".tmp/corepack.cmd",
+    "delegates_to": "C:\\Users\\Duong Vinh\\AppData\\Roaming\\npm\\pnpm.cmd",
+    "behavior": "single argument normalization for pnpm@11.15.1, then faithful CALL; no test skipping or assertion changes observed"
+  },
+  "protected_document_openapi": "packages/contracts/openapi/vinops.openapi.yaml was not modified"
+}

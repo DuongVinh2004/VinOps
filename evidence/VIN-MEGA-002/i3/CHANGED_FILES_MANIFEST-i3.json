@@ -1,0 +1,23 @@
+{
+  "checkpoint": "VIN-MEGA-002",
+  "iteration": 3,
+  "source_files": 183,
+  "source_fingerprint_before": "94ff9f64896bf640f89d80fd993aeb8dc6871a05c87f6bf6b02cff556c41e9ae",
+  "source_fingerprint_after": "94ff9f64896bf640f89d80fd993aeb8dc6871a05c87f6bf6b02cff556c41e9ae",
+  "changed_source_test_script_files": [
+    "apps/worker/src/file-processing-worker.ts",
+    "apps/worker/test/file-processing.integration.test.ts",
+    "packages/database/src/seed.ts",
+    "packages/database/test/document-postgres.integration.test.ts"
+  ],
+  "additional_source_test_script_files": [],
+  "cumulative_changed_source_test_script_count": 4,
+  "change_budget": {
+    "additional_limit": 8,
+    "cumulative_limit": 12,
+    "migrations_changed": 0,
+    "dependencies_changed": 0
+  },
+  "removed_files": [],
+  "source_drift": false
+}

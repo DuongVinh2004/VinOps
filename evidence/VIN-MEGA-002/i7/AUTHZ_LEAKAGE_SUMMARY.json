@@ -1,0 +1,6 @@
+{
+  "total_rows": 10800,
+  "missing_assertions": 0,
+  "denied_rows": 7740,
+  "denied_rows_without_sensitive_keys": 7740
+}

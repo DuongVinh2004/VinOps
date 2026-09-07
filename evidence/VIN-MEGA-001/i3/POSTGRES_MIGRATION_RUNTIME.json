@@ -1,0 +1,36 @@
+{
+  "checkpoint": "VIN-MEGA-001",
+  "iteration": 3,
+  "status": "PASS_WITH_ROLLBACK_STRATEGY_PROOF",
+  "runtime": {
+    "docker_version_exit": 0,
+    "docker_client": "29.4.0",
+    "docker_server": "Docker Desktop 4.70.0 / Engine 29.4.0",
+    "container": "vinops-mega001-i3-postgres",
+    "image": "postgres:16",
+    "postgres_version": "PostgreSQL 16.14 (Debian 16.14-1.pgdg13+1) on x86_64",
+    "database": "vinops_mega001_test",
+    "host_data_mount": false
+  },
+  "migration": {
+    "empty_database_apply_exit": 0,
+    "applied_count": 2,
+    "verify_exit": 0,
+    "verified_count": 2,
+    "migration_names": ["001_platform_foundation.sql", "002_tenant_rls.sql"]
+  },
+  "seed": {
+    "exit": 0,
+    "deterministic_seed": true,
+    "organizations": 3,
+    "projects": 3,
+    "project_members": 4
+  },
+  "rollback_proof": {
+    "status": "VERIFIED_RUNNER_STRATEGY",
+    "basis": "Migration runner and database transaction helpers issue BEGIN/COMMIT and ROLLBACK on failure; post-apply verification found no partial migration rows.",
+    "limitation": "A deliberately failing migration was not injected into the applied foundation migration set."
+  },
+  "constraints_verification": "PASS",
+  "cleanup": "Container is task-owned and synthetic; exact-name cleanup is pending final evidence capture."
+}

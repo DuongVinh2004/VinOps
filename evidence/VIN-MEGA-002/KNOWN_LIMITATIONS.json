@@ -1,0 +1,10 @@
+{
+  "status": "BLOCKED",
+  "limitations": [
+    "NFR performance not measured under specified condition",
+    "fresh clean-room full matrix not run",
+    "task-owned Docker cleanup intentionally retained pending explicit authorization",
+    "complete authorization/persona matrix and compensation fault-injection sweep remain for review"
+  ],
+  "no_false_pass_claims": true
+}

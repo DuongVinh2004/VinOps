@@ -1,0 +1,43 @@
+{
+  "checkpoint": "VIN-MEGA-002",
+  "result": "PASS_WITH_LIMITATIONS",
+  "implemented": [
+    "FR-DOC-001..FR-DOC-013",
+    "BR-002",
+    "BR-003",
+    "BR-006",
+    "BR-008",
+    "BR-009",
+    "BR-012",
+    "BR-013",
+    "BR-016",
+    "BR-017",
+    "BR-019..BR-026",
+    "BR-037..BR-041",
+    "API-DOC-001..API-DOC-006",
+    "API-FILE-001",
+    "ENT-DOCUMENT",
+    "ENT-DOC-REVISION",
+    "ENT-DOC-CURRENT",
+    "ENT-REVIEW",
+    "ENT-ANNOTATION",
+    "ENT-TRANSMITTAL",
+    "ENT-FILE",
+    "ENT-UPLOAD",
+    "ENT-SCAN"
+  ],
+  "evidence_links": {
+    "domain": "packages/domain/src/document-control.ts",
+    "schema": "packages/database/migrations/007_document_control.sql",
+    "publish_fix": "packages/database/migrations/008_document_control_publish_fix.sql",
+    "api": "apps/api/src/document.service.ts",
+    "worker": "apps/worker/src/file-processing-worker.ts",
+    "web": "apps/web/src/document-control.tsx",
+    "contract": "packages/contracts/openapi/vinops.openapi.yaml"
+  },
+  "unverified": [
+    "20 concurrent 10 MB upload NFR",
+    "fresh source-only clean-room matrix",
+    "destructive task-resource cleanup"
+  ]
+}

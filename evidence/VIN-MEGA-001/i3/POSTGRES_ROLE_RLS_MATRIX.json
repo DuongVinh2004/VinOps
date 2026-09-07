@@ -1,0 +1,18 @@
+{
+  "checkpoint": "VIN-MEGA-001",
+  "iteration": 3,
+  "status": "PASS_WITH_SCOPE_LIMITATION",
+  "roles": [
+    {"role":"vinops_owner","can_login":false,"superuser":false,"bypass_rls":false},
+    {"role":"vinops_app","can_login":false,"superuser":false,"bypass_rls":false},
+    {"role":"vinops_worker","can_login":false,"superuser":false,"bypass_rls":false},
+    {"role":"vinops_app_login","can_login":true,"superuser":false,"bypass_rls":false},
+    {"role":"vinops_worker_login","can_login":true,"superuser":false,"bypass_rls":false}
+  ],
+  "rls": {"tenant_table_count": 29,"all_tenant_tables_rls_enabled":true,"forced_rls":false,"owner":"vinops_owner","schema_migrations_exempt":true},
+  "transaction_local_context": {"set_local_role":"PASS","actor_context":"PASS","correlation_context":"PASS","new_transaction_context_empty":"PASS"},
+  "cross_tenant_matrix": {"same_tenant_project_visible":true,"cross_tenant_uuid_guess_rows":0,"cross_tenant_filter_rows":0,"cross_tenant_update_rows":0},
+  "worker": {"fixed_function_claim":"PASS","generic_tenant_table_query":"DENIED","mark_published":"PASS","published_event":true},
+  "least_privilege": {"app_schema_usage":true,"worker_schema_usage":false,"app_claim_function":false,"worker_claim_function":true},
+  "not_independently_exercised": ["cross-project resource-scope combinations","suspended and ended membership cases","search-specific policy path"]
+}

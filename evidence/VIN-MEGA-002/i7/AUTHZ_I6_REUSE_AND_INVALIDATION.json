@@ -1,0 +1,46 @@
+{
+  "checkpoint_id": "VIN-MEGA-002",
+  "iteration": 7,
+  "expected_matrix_sha256": "10da18fe95aaddd84998a674c9ca00f43da710590a781aeb57406a450294fe0a",
+  "source_before": "94ff9f64896bf640f89d80fd993aeb8dc6871a05c87f6bf6b02cff556c41e9ae",
+  "source_changed_after_i6": true,
+  "reused_count": 0,
+  "invalidated_count": 10800,
+  "rerun_count": 10800,
+  "reason_counts": {
+    "HARNESS_FIXTURE_DEFECT": 10800
+  },
+  "secondary_factors": {
+    "missing_meaningful_side_effect_proof_rows": 6600,
+    "route_local_product_change_rows": 1200,
+    "changed_fixture_scope_profiles": 10800
+  },
+  "cohort_counts": {
+    "by_operation": {
+      "listDocuments": 600,
+      "createDocument": 600,
+      "documentDetail": 600,
+      "documentRevisionHistory": 600,
+      "createRevision": 600,
+      "authorizeUploadPart": 600,
+      "completeUpload": 600,
+      "transitionRevision": 600,
+      "addReviewComment": 600,
+      "disposeReviewComment": 600,
+      "addAnnotation": 600,
+      "previewRevision": 600,
+      "downloadRevision": 600,
+      "reviewInbox": 600,
+      "createTransmittal": 600,
+      "transmittalDetail": 600,
+      "archiveDocument": 600,
+      "restoreDocument": 600
+    },
+    "by_method": {
+      "GET": 4200,
+      "POST": 6600
+    }
+  },
+  "admission_rule": "No i6 row is reusable: every row used a non-self-checking scope/resource mapper and the i6 side-effect flag was a placeholder; all rows are rerun exactly once through i7 fixtures.",
+  "sum_check": "PASS"
+}

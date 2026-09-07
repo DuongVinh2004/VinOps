@@ -1,0 +1,2414 @@
+{
+  "generated_at": "2026-08-02T15:23:50.308Z",
+  "topology": {
+    "minio_endpoint": "http://127.0.0.1:59012",
+    "network": "vinops-mega002-i4-diagnostics",
+    "container": "vinops-mega002-i4-minio",
+    "shaper": "per-stream token bucket before upstream socket emission for stage A and final stage D; stage B direct control has no shaper",
+    "os_qdisc": "not used; no shared qdisc claim",
+    "payload_bytes": 10000000,
+    "payload_sha256": "7922289ab02a036ccf8465b663fe58186e89f11ccda610e0f14a6b6e0d866c5e"
+  },
+  "stages": [
+    {
+      "stage": "a_one_client_20mbps",
+      "expected_clients": 1,
+      "results": [
+        {
+          "key": "quarantine/i4-stage-a-089bba15-0f83-44bb-96f3-d9c6de6a6463/original",
+          "upload_id": "NjQyYjNlNGMtMGM1MC00YjU5LThiMjctOTE3ZWRmZTFjZTMwLjdmYzFlODJlLTZmMjUtNDRkOS04NTk0LTZjM2I1NjIyZTY3NXgxNzg1Njg0MjE3NDkxMDgyNTY2",
+          "payload_bytes": 10000000,
+          "payload_sha256": "7922289ab02a036ccf8465b663fe58186e89f11ccda610e0f14a6b6e0d866c5e",
+          "start_ms": 619,
+          "end_ms": 4583,
+          "duration_ms": 3964,
+          "http_status": 200,
+          "etag": "\"262cdc88d5e5f14e2c0e0b86ea28957f\"",
+          "finalize": "acknowledged",
+          "error": null,
+          "proxy": {
+            "domain": "proxy-59200",
+            "rate_mbps": 20,
+            "token_bucket_before": 262144,
+            "token_bucket_after": 262144,
+            "emitted_bytes_after": 0,
+            "sample_count": 0,
+            "samples": []
+          }
+        }
+      ],
+      "pass_control": true
+    },
+    {
+      "stage": "b_twenty_direct_minio_distinct_keys",
+      "expected_clients": 20,
+      "elapsed_ms": 1743,
+      "results": [
+        {
+          "key": "quarantine/i4-stage-b-direct-0-d433abac-79d1-4290-aabc-e71a5cda3d89/original",
+          "upload_id": "NjQyYjNlNGMtMGM1MC00YjU5LThiMjctOTE3ZWRmZTFjZTMwLmQ5OWMwMjMzLWQ2OGItNGIyZC1iNmNkLTFjNjY4ZDU2N2UwMHgxNzg1Njg0MjIxNTAxMTY4NDk0",
+          "payload_bytes": 10000000,
+          "payload_sha256": "7922289ab02a036ccf8465b663fe58186e89f11ccda610e0f14a6b6e0d866c5e",
+          "start_ms": 4620,
+          "end_ms": 4982,
+          "duration_ms": 362,
+          "http_status": 200,
+          "etag": "\"262cdc88d5e5f14e2c0e0b86ea28957f\"",
+          "finalize": "acknowledged",
+          "error": null,
+          "proxy": null
+        },
+        {
+          "key": "quarantine/i4-stage-b-direct-1-bc5c5524-7846-4853-b569-628807d6dde4/original",
+          "upload_id": "NjQyYjNlNGMtMGM1MC00YjU5LThiMjctOTE3ZWRmZTFjZTMwLjcwZmQ4ZjAwLWFiYTktNGE0MC04N2Q1LTVmNmRhOGI3N2Q1M3gxNzg1Njg0MjIxNTAxMjMyMjk5",
+          "payload_bytes": 10000000,
+          "payload_sha256": "7922289ab02a036ccf8465b663fe58186e89f11ccda610e0f14a6b6e0d866c5e",
+          "start_ms": 4626,
+          "end_ms": 5529,
+          "duration_ms": 903,
+          "http_status": 200,
+          "etag": "\"262cdc88d5e5f14e2c0e0b86ea28957f\"",
+          "finalize": "acknowledged",
+          "error": null,
+          "proxy": null
+        },
+        {
+          "key": "quarantine/i4-stage-b-direct-2-9505079d-4dc8-418c-a50c-4017e84cb6c9/original",
+          "upload_id": "NjQyYjNlNGMtMGM1MC00YjU5LThiMjctOTE3ZWRmZTFjZTMwLjY3MjNjNWU0LThkYjAtNDY3NC1hNTJmLTU1N2YwNjI3MjdkNXgxNzg1Njg0MjIxNTAxNTEzNTI0",
+          "payload_bytes": 10000000,
+          "payload_sha256": "7922289ab02a036ccf8465b663fe58186e89f11ccda610e0f14a6b6e0d866c5e",
+          "start_ms": 4722,
+          "end_ms": 6310,
+          "duration_ms": 1588,
+          "http_status": 200,
+          "etag": "\"262cdc88d5e5f14e2c0e0b86ea28957f\"",
+          "finalize": "acknowledged",
+          "error": null,
+          "proxy": null
+        },
+        {
+          "key": "quarantine/i4-stage-b-direct-3-b7ad3922-736b-46f8-b422-59932b2fec37/original",
+          "upload_id": "NjQyYjNlNGMtMGM1MC00YjU5LThiMjctOTE3ZWRmZTFjZTMwLmZlN2Q1YzBmLTNmNzgtNGMyMC1hNGM1LWQxMjc4ZjJlOGFjMHgxNzg1Njg0MjIxNTAxNzM0ODQ0",
+          "payload_bytes": 10000000,
+          "payload_sha256": "7922289ab02a036ccf8465b663fe58186e89f11ccda610e0f14a6b6e0d866c5e",
+          "start_ms": 4796,
+          "end_ms": 6312,
+          "duration_ms": 1515,
+          "http_status": 200,
+          "etag": "\"262cdc88d5e5f14e2c0e0b86ea28957f\"",
+          "finalize": "acknowledged",
+          "error": null,
+          "proxy": null
+        },
+        {
+          "key": "quarantine/i4-stage-b-direct-4-84570906-3394-4fb9-9325-48cd0654601d/original",
+          "upload_id": "NjQyYjNlNGMtMGM1MC00YjU5LThiMjctOTE3ZWRmZTFjZTMwLjExZWE1NDZkLWIzMjctNDczNy1hMmVhLTM4ZTQwOGE1YzdhZngxNzg1Njg0MjIxNTAyMjQwMDg4",
+          "payload_bytes": 10000000,
+          "payload_sha256": "7922289ab02a036ccf8465b663fe58186e89f11ccda610e0f14a6b6e0d866c5e",
+          "start_ms": 4788,
+          "end_ms": 6311,
+          "duration_ms": 1522,
+          "http_status": 200,
+          "etag": "\"262cdc88d5e5f14e2c0e0b86ea28957f\"",
+          "finalize": "acknowledged",
+          "error": null,
+          "proxy": null
+        },
+        {
+          "key": "quarantine/i4-stage-b-direct-5-31b24cc6-325b-41f2-8014-efc0a18c38db/original",
+          "upload_id": "NjQyYjNlNGMtMGM1MC00YjU5LThiMjctOTE3ZWRmZTFjZTMwLjhjNjA5NjYzLWRhMTEtNGQ0YS05MDVmLWU3MjE0NDE4ZjZkOXgxNzg1Njg0MjIxNTAyNjE1MTIx",
+          "payload_bytes": 10000000,
+          "payload_sha256": "7922289ab02a036ccf8465b663fe58186e89f11ccda610e0f14a6b6e0d866c5e",
+          "start_ms": 4649,
+          "end_ms": 5805,
+          "duration_ms": 1156,
+          "http_status": 200,
+          "etag": "\"262cdc88d5e5f14e2c0e0b86ea28957f\"",
+          "finalize": "acknowledged",
+          "error": null,
+          "proxy": null
+        },
+        {
+          "key": "quarantine/i4-stage-b-direct-6-8d1ddcef-b3c8-4919-be15-6ad9e4454698/original",
+          "upload_id": "NjQyYjNlNGMtMGM1MC00YjU5LThiMjctOTE3ZWRmZTFjZTMwLjE5YjRkODI1LWI5NDMtNDgwMi04NjY4LTY1YjMwZWMxYjFiY3gxNzg1Njg0MjIxNTAzMDEyMjU2",
+          "payload_bytes": 10000000,
+          "payload_sha256": "7922289ab02a036ccf8465b663fe58186e89f11ccda610e0f14a6b6e0d866c5e",
+          "start_ms": 4711,
+          "end_ms": 6299,
+          "duration_ms": 1588,
+          "http_status": 200,
+          "etag": "\"262cdc88d5e5f14e2c0e0b86ea28957f\"",
+          "finalize": "acknowledged",
+          "error": null,
+          "proxy": null
+        },
+        {
+          "key": "quarantine/i4-stage-b-direct-7-f6877326-f1b8-46f7-9644-195c4d8a7634/original",
+          "upload_id": "NjQyYjNlNGMtMGM1MC00YjU5LThiMjctOTE3ZWRmZTFjZTMwLjMzZWE5ZGFjLTBiZDktNGQzYi05ZTI0LTFhMmY0MTg4ZDhhY3gxNzg1Njg0MjIxNTAzMzkwNzg5",
+          "payload_bytes": 10000000,
+          "payload_sha256": "7922289ab02a036ccf8465b663fe58186e89f11ccda610e0f14a6b6e0d866c5e",
+          "start_ms": 4660,
+          "end_ms": 5932,
+          "duration_ms": 1272,
+          "http_status": 200,
+          "etag": "\"262cdc88d5e5f14e2c0e0b86ea28957f\"",
+          "finalize": "acknowledged",
+          "error": null,
+          "proxy": null
+        },
+        {
+          "key": "quarantine/i4-stage-b-direct-8-679e896e-23c2-4437-825b-997db13ac59d/original",
+          "upload_id": "NjQyYjNlNGMtMGM1MC00YjU5LThiMjctOTE3ZWRmZTFjZTMwLjUzZjUwZTg3LWZkOTUtNGM0YS04ZmNhLWE0NWY1MTMzYjNiYngxNzg1Njg0MjIxNTAzNTI5NDAy",
+          "payload_bytes": 10000000,
+          "payload_sha256": "7922289ab02a036ccf8465b663fe58186e89f11ccda610e0f14a6b6e0d866c5e",
+          "start_ms": 4639,
+          "end_ms": 5789,
+          "duration_ms": 1149,
+          "http_status": 200,
+          "etag": "\"262cdc88d5e5f14e2c0e0b86ea28957f\"",
+          "finalize": "acknowledged",
+          "error": null,
+          "proxy": null
+        },
+        {
+          "key": "quarantine/i4-stage-b-direct-9-88b3a099-f9d9-4da0-a670-1844f44c5cb6/original",
+          "upload_id": "NjQyYjNlNGMtMGM1MC00YjU5LThiMjctOTE3ZWRmZTFjZTMwLmJhMTE4ZTgyLWZjZTUtNDYzMy1hOTEzLTIxZTQwM2FhNTI4NngxNzg1Njg0MjIxNTAzODU5MzMx",
+          "payload_bytes": 10000000,
+          "payload_sha256": "7922289ab02a036ccf8465b663fe58186e89f11ccda610e0f14a6b6e0d866c5e",
+          "start_ms": 4670,
+          "end_ms": 6008,
+          "duration_ms": 1338,
+          "http_status": 200,
+          "etag": "\"262cdc88d5e5f14e2c0e0b86ea28957f\"",
+          "finalize": "acknowledged",
+          "error": null,
+          "proxy": null
+        },
+        {
+          "key": "quarantine/i4-stage-b-direct-10-aa5ea248-ff01-4c12-9785-9457b798aa85/original",
+          "upload_id": "NjQyYjNlNGMtMGM1MC00YjU5LThiMjctOTE3ZWRmZTFjZTMwLjdhNGYyNTNkLTk1ODYtNGJhMC1iZGFmLWQ4YTBmNmViYzBkNXgxNzg1Njg0MjIxNTAzOTYwMDQw",
+          "payload_bytes": 10000000,
+          "payload_sha256": "7922289ab02a036ccf8465b663fe58186e89f11ccda610e0f14a6b6e0d866c5e",
+          "start_ms": 4730,
+          "end_ms": 6306,
+          "duration_ms": 1575,
+          "http_status": 200,
+          "etag": "\"262cdc88d5e5f14e2c0e0b86ea28957f\"",
+          "finalize": "acknowledged",
+          "error": null,
+          "proxy": null
+        },
+        {
+          "key": "quarantine/i4-stage-b-direct-11-4ee7f41a-4f80-4e48-924a-809ea8c503c0/original",
+          "upload_id": "NjQyYjNlNGMtMGM1MC00YjU5LThiMjctOTE3ZWRmZTFjZTMwLmQ2NmU0NWUyLWUxYTktNDJiZS1iY2Q3LTAwMzkyZWFkYmI1NHgxNzg1Njg0MjIxNTA0NTEzMzg4",
+          "payload_bytes": 10000000,
+          "payload_sha256": "7922289ab02a036ccf8465b663fe58186e89f11ccda610e0f14a6b6e0d866c5e",
+          "start_ms": 4780,
+          "end_ms": 6314,
+          "duration_ms": 1534,
+          "http_status": 200,
+          "etag": "\"262cdc88d5e5f14e2c0e0b86ea28957f\"",
+          "finalize": "acknowledged",
+          "error": null,
+          "proxy": null
+        },
+        {
+          "key": "quarantine/i4-stage-b-direct-12-53bdbbda-3ca6-44a7-a1b7-32438d7e750e/original",
+          "upload_id": "NjQyYjNlNGMtMGM1MC00YjU5LThiMjctOTE3ZWRmZTFjZTMwLjM4MzQ5Y2ViLWQzMWEtNDI3Ny04OWFlLWQ0YjRjMDY0YjU2OHgxNzg1Njg0MjIxNTA0NDk2Mjg3",
+          "payload_bytes": 10000000,
+          "payload_sha256": "7922289ab02a036ccf8465b663fe58186e89f11ccda610e0f14a6b6e0d866c5e",
+          "start_ms": 4807,
+          "end_ms": 6318,
+          "duration_ms": 1511,
+          "http_status": 200,
+          "etag": "\"262cdc88d5e5f14e2c0e0b86ea28957f\"",
+          "finalize": "acknowledged",
+          "error": null,
+          "proxy": null
+        },
+        {
+          "key": "quarantine/i4-stage-b-direct-13-ed775664-3d58-4fe9-a362-a60e70a38df3/original",
+          "upload_id": "NjQyYjNlNGMtMGM1MC00YjU5LThiMjctOTE3ZWRmZTFjZTMwLjFmYTIyNzVjLTBkMDItNGExMS1hZmM3LWM3OGZjM2FkYTY3YXgxNzg1Njg0MjIxNTA0ODk1NjIy",
+          "payload_bytes": 10000000,
+          "payload_sha256": "7922289ab02a036ccf8465b663fe58186e89f11ccda610e0f14a6b6e0d866c5e",
+          "start_ms": 4702,
+          "end_ms": 6300,
+          "duration_ms": 1598,
+          "http_status": 200,
+          "etag": "\"262cdc88d5e5f14e2c0e0b86ea28957f\"",
+          "finalize": "acknowledged",
+          "error": null,
+          "proxy": null
+        },
+        {
+          "key": "quarantine/i4-stage-b-direct-14-b3e5bcee-95bb-4468-84b6-b208be2a0858/original",
+          "upload_id": "NjQyYjNlNGMtMGM1MC00YjU5LThiMjctOTE3ZWRmZTFjZTMwLjE1MzI0NGZhLWJiNTMtNDE0OS04Y2Y2LTkwZGE5ZGQwOWM4NXgxNzg1Njg0MjIxNTA1MDc0MDM4",
+          "payload_bytes": 10000000,
+          "payload_sha256": "7922289ab02a036ccf8465b663fe58186e89f11ccda610e0f14a6b6e0d866c5e",
+          "start_ms": 4761,
+          "end_ms": 6316,
+          "duration_ms": 1554,
+          "http_status": 200,
+          "etag": "\"262cdc88d5e5f14e2c0e0b86ea28957f\"",
+          "finalize": "acknowledged",
+          "error": null,
+          "proxy": null
+        },
+        {
+          "key": "quarantine/i4-stage-b-direct-15-26c13622-33b7-4f30-a1cf-a0d013818c39/original",
+          "upload_id": "NjQyYjNlNGMtMGM1MC00YjU5LThiMjctOTE3ZWRmZTFjZTMwLjljZGI2NmY1LWZlM2EtNDU2OS1hMTVhLTc0NjFlNWNkOGI2ZngxNzg1Njg0MjIxNTA1MjcwNjU1",
+          "payload_bytes": 10000000,
+          "payload_sha256": "7922289ab02a036ccf8465b663fe58186e89f11ccda610e0f14a6b6e0d866c5e",
+          "start_ms": 4737,
+          "end_ms": 6307,
+          "duration_ms": 1570,
+          "http_status": 200,
+          "etag": "\"262cdc88d5e5f14e2c0e0b86ea28957f\"",
+          "finalize": "acknowledged",
+          "error": null,
+          "proxy": null
+        },
+        {
+          "key": "quarantine/i4-stage-b-direct-16-bcbfd040-cf1d-4ac4-a6b4-af28163e4de2/original",
+          "upload_id": "NjQyYjNlNGMtMGM1MC00YjU5LThiMjctOTE3ZWRmZTFjZTMwLmNiY2FhMTY2LTg0MDktNGI2My05MWQ1LTk5YWVjM2IwMGFkMHgxNzg1Njg0MjIxNTA1NTA4Nzc2",
+          "payload_bytes": 10000000,
+          "payload_sha256": "7922289ab02a036ccf8465b663fe58186e89f11ccda610e0f14a6b6e0d866c5e",
+          "start_ms": 4689,
+          "end_ms": 6011,
+          "duration_ms": 1322,
+          "http_status": 200,
+          "etag": "\"262cdc88d5e5f14e2c0e0b86ea28957f\"",
+          "finalize": "acknowledged",
+          "error": null,
+          "proxy": null
+        },
+        {
+          "key": "quarantine/i4-stage-b-direct-17-3e4b1a16-e3a6-4637-b60c-d613ab153e2b/original",
+          "upload_id": "NjQyYjNlNGMtMGM1MC00YjU5LThiMjctOTE3ZWRmZTFjZTMwLmI2NzE5MDNiLWI5MDktNDVjNy04ZTBkLWUzNTRkNmI0MWU4NngxNzg1Njg0MjIxNTA1OTQzNjE0",
+          "payload_bytes": 10000000,
+          "payload_sha256": "7922289ab02a036ccf8465b663fe58186e89f11ccda610e0f14a6b6e0d866c5e",
+          "start_ms": 4745,
+          "end_ms": 6315,
+          "duration_ms": 1570,
+          "http_status": 200,
+          "etag": "\"262cdc88d5e5f14e2c0e0b86ea28957f\"",
+          "finalize": "acknowledged",
+          "error": null,
+          "proxy": null
+        },
+        {
+          "key": "quarantine/i4-stage-b-direct-18-443c608b-b0d8-4b2b-b5d5-c73f3d240106/original",
+          "upload_id": "NjQyYjNlNGMtMGM1MC00YjU5LThiMjctOTE3ZWRmZTFjZTMwLjY5NjE0YTk4LTIxZWQtNDc5MC04OWFjLTFkMDY2ZDA2NmQ5ZngxNzg1Njg0MjIxNTA2NTE0NjY1",
+          "payload_bytes": 10000000,
+          "payload_sha256": "7922289ab02a036ccf8465b663fe58186e89f11ccda610e0f14a6b6e0d866c5e",
+          "start_ms": 4770,
+          "end_ms": 6308,
+          "duration_ms": 1539,
+          "http_status": 200,
+          "etag": "\"262cdc88d5e5f14e2c0e0b86ea28957f\"",
+          "finalize": "acknowledged",
+          "error": null,
+          "proxy": null
+        },
+        {
+          "key": "quarantine/i4-stage-b-direct-19-6a95ff6d-942f-4a26-8aa7-1eeaad32a751/original",
+          "upload_id": "NjQyYjNlNGMtMGM1MC00YjU5LThiMjctOTE3ZWRmZTFjZTMwLjBhMDhiNThmLWIwZmQtNGMyNi1hMDk2LWUyNmZjZWYyNTEzN3gxNzg1Njg0MjIxNTA2MTExMjI5",
+          "payload_bytes": 10000000,
+          "payload_sha256": "7922289ab02a036ccf8465b663fe58186e89f11ccda610e0f14a6b6e0d866c5e",
+          "start_ms": 4752,
+          "end_ms": 6313,
+          "duration_ms": 1561,
+          "http_status": 200,
+          "etag": "\"262cdc88d5e5f14e2c0e0b86ea28957f\"",
+          "finalize": "acknowledged",
+          "error": null,
+          "proxy": null
+        }
+      ],
+      "uniqueness": {
+        "keys": 20,
+        "upload_ids": 20
+      },
+      "pass_control": true
+    },
+    {
+      "stage": "c_application_path_concurrency_2",
+      "concurrency": 2,
+      "elapsed_ms": 384,
+      "results": [
+        {
+          "index": 0,
+          "document_id": "e1e4851e-c17b-4396-b8ae-fec4d3598cc5",
+          "revision_id": "07343dc1-68b1-40f3-bb69-29724196d3e2",
+          "file_id": "8ef1b4ba-3d14-4e23-a655-2db84bc9bf2f",
+          "upload_session_id": "02417fb4-efeb-47b2-9ee9-69abf69debe9",
+          "object_key": "quarantine/8ef1b4ba-3d14-4e23-a655-2db84bc9bf2f/original",
+          "payload_bytes": 10000000,
+          "payload_sha256": "7922289ab02a036ccf8465b663fe58186e89f11ccda610e0f14a6b6e0d866c5e",
+          "duration_ms": 265,
+          "http_status": 200,
+          "etag": "\"262cdc88d5e5f14e2c0e0b86ea28957f\"",
+          "complete": "acknowledged",
+          "error": null,
+          "shaping": null
+        },
+        {
+          "index": 1,
+          "document_id": "c11c8143-7f41-489d-967b-aa44fc10cb13",
+          "revision_id": "141d19f8-8cd2-43b7-b20c-28681d1f6b55",
+          "file_id": "66233931-8ca1-4e54-935b-a67f0aee05ad",
+          "upload_session_id": "ce893eeb-fc72-4cc5-bb40-46075f42a8e1",
+          "object_key": "quarantine/66233931-8ca1-4e54-935b-a67f0aee05ad/original",
+          "payload_bytes": 10000000,
+          "payload_sha256": "7922289ab02a036ccf8465b663fe58186e89f11ccda610e0f14a6b6e0d866c5e",
+          "duration_ms": 256,
+          "http_status": 200,
+          "etag": "\"262cdc88d5e5f14e2c0e0b86ea28957f\"",
+          "complete": "acknowledged",
+          "error": null,
+          "shaping": null
+        }
+      ],
+      "uniqueness": {
+        "documents": 2,
+        "revisions": 2,
+        "files": 2,
+        "sessions": 2,
+        "object_keys": 2
+      },
+      "pass_control": true
+    },
+    {
+      "stage": "c_application_path_concurrency_5",
+      "concurrency": 5,
+      "elapsed_ms": 564,
+      "results": [
+        {
+          "index": 0,
+          "document_id": "2b19d167-79a9-4b41-80ea-77d6b9ca9120",
+          "revision_id": "f43bd9ba-09a4-4315-96e2-1f7272277954",
+          "file_id": "e47f0e00-009b-47c5-a69d-58a424d1a319",
+          "upload_session_id": "955b639f-e0cb-4916-b2a9-4b91572bac93",
+          "object_key": "quarantine/e47f0e00-009b-47c5-a69d-58a424d1a319/original",
+          "payload_bytes": 10000000,
+          "payload_sha256": "7922289ab02a036ccf8465b663fe58186e89f11ccda610e0f14a6b6e0d866c5e",
+          "duration_ms": 433,
+          "http_status": 200,
+          "etag": "\"262cdc88d5e5f14e2c0e0b86ea28957f\"",
+          "complete": "acknowledged",
+          "error": null,
+          "shaping": null
+        },
+        {
+          "index": 1,
+          "document_id": "2d10e68f-7ae1-494a-81d7-6fbade7e9d4d",
+          "revision_id": "a653b4f6-7959-4eb3-be2a-8219c6025719",
+          "file_id": "766f96f1-c100-4807-b98a-7a11ba8a43a0",
+          "upload_session_id": "178e09b9-5b64-43d7-93ef-5dbfb26ed677",
+          "object_key": "quarantine/766f96f1-c100-4807-b98a-7a11ba8a43a0/original",
+          "payload_bytes": 10000000,
+          "payload_sha256": "7922289ab02a036ccf8465b663fe58186e89f11ccda610e0f14a6b6e0d866c5e",
+          "duration_ms": 375,
+          "http_status": 200,
+          "etag": "\"262cdc88d5e5f14e2c0e0b86ea28957f\"",
+          "complete": "acknowledged",
+          "error": null,
+          "shaping": null
+        },
+        {
+          "index": 2,
+          "document_id": "3e585cc4-6d1f-4ddf-ad7f-9d9f6e735eae",
+          "revision_id": "d3bc8b93-8b56-42ca-b683-d324942efddd",
+          "file_id": "44e3f40a-46a1-447d-a001-ebc82c7a3c5f",
+          "upload_session_id": "3c17c681-4105-4685-b242-086c463c5959",
+          "object_key": "quarantine/44e3f40a-46a1-447d-a001-ebc82c7a3c5f/original",
+          "payload_bytes": 10000000,
+          "payload_sha256": "7922289ab02a036ccf8465b663fe58186e89f11ccda610e0f14a6b6e0d866c5e",
+          "duration_ms": 408,
+          "http_status": 200,
+          "etag": "\"262cdc88d5e5f14e2c0e0b86ea28957f\"",
+          "complete": "acknowledged",
+          "error": null,
+          "shaping": null
+        },
+        {
+          "index": 3,
+          "document_id": "00cfd777-d00e-4717-9108-02fdc8dfd274",
+          "revision_id": "b7f30715-f18a-4a7f-acf5-067b292fba58",
+          "file_id": "009e2aac-39a0-470b-99f7-88f68972bbfc",
+          "upload_session_id": "932afb6f-6fc3-42a1-817c-2bb9f2695565",
+          "object_key": "quarantine/009e2aac-39a0-470b-99f7-88f68972bbfc/original",
+          "payload_bytes": 10000000,
+          "payload_sha256": "7922289ab02a036ccf8465b663fe58186e89f11ccda610e0f14a6b6e0d866c5e",
+          "duration_ms": 380,
+          "http_status": 200,
+          "etag": "\"262cdc88d5e5f14e2c0e0b86ea28957f\"",
+          "complete": "acknowledged",
+          "error": null,
+          "shaping": null
+        },
+        {
+          "index": 4,
+          "document_id": "05170f3b-c594-46fb-854b-005fc328c3bc",
+          "revision_id": "4a14c4e6-d3fe-415b-b710-c31e27cc7dcc",
+          "file_id": "86ed7941-9243-4b9a-9389-771ec1a9c092",
+          "upload_session_id": "4701609b-25bc-4c96-a89b-09fff2ffd57f",
+          "object_key": "quarantine/86ed7941-9243-4b9a-9389-771ec1a9c092/original",
+          "payload_bytes": 10000000,
+          "payload_sha256": "7922289ab02a036ccf8465b663fe58186e89f11ccda610e0f14a6b6e0d866c5e",
+          "duration_ms": 417,
+          "http_status": 200,
+          "etag": "\"262cdc88d5e5f14e2c0e0b86ea28957f\"",
+          "complete": "acknowledged",
+          "error": null,
+          "shaping": null
+        }
+      ],
+      "uniqueness": {
+        "documents": 5,
+        "revisions": 5,
+        "files": 5,
+        "sessions": 5,
+        "object_keys": 5
+      },
+      "pass_control": true
+    },
+    {
+      "stage": "c_application_path_concurrency_10",
+      "concurrency": 10,
+      "elapsed_ms": 1194,
+      "results": [
+        {
+          "index": 0,
+          "document_id": "8b81ed0f-eb9f-4f42-bded-b2af50f01922",
+          "revision_id": "6209bfca-79ce-483f-a3c4-3535fd0e6f4e",
+          "file_id": "f554f2c4-f48d-4d8e-b397-e5604ac8caf6",
+          "upload_session_id": "fa4925b2-46ab-41f7-af1b-7fd254774e5b",
+          "object_key": "quarantine/f554f2c4-f48d-4d8e-b397-e5604ac8caf6/original",
+          "payload_bytes": 10000000,
+          "payload_sha256": "7922289ab02a036ccf8465b663fe58186e89f11ccda610e0f14a6b6e0d866c5e",
+          "duration_ms": 574,
+          "http_status": 200,
+          "etag": "\"262cdc88d5e5f14e2c0e0b86ea28957f\"",
+          "complete": "acknowledged",
+          "error": null,
+          "shaping": null
+        },
+        {
+          "index": 1,
+          "document_id": "77a21e1b-7a6e-4306-99c1-0ee40dbc2f50",
+          "revision_id": "ca6ae203-50be-452d-a584-85e9120bb2ec",
+          "file_id": "dd4b13ca-9fe8-4f90-8464-6b8d435c12ea",
+          "upload_session_id": "0f994ee5-d37c-4bf0-90a7-a940a7f67478",
+          "object_key": "quarantine/dd4b13ca-9fe8-4f90-8464-6b8d435c12ea/original",
+          "payload_bytes": 10000000,
+          "payload_sha256": "7922289ab02a036ccf8465b663fe58186e89f11ccda610e0f14a6b6e0d866c5e",
+          "duration_ms": 782,
+          "http_status": 200,
+          "etag": "\"262cdc88d5e5f14e2c0e0b86ea28957f\"",
+          "complete": "acknowledged",
+          "error": null,
+          "shaping": null
+        },
+        {
+          "index": 2,
+          "document_id": "e43ed438-14ee-4ccb-9abb-29904fd1645b",
+          "revision_id": "9717ec3a-2944-4a58-b224-945ebd186551",
+          "file_id": "41bf814c-21db-4ad0-9ae2-499ed907092d",
+          "upload_session_id": "ba218691-eb13-4d6a-9ce4-65d2ad7a133b",
+          "object_key": "quarantine/41bf814c-21db-4ad0-9ae2-499ed907092d/original",
+          "payload_bytes": 10000000,
+          "payload_sha256": "7922289ab02a036ccf8465b663fe58186e89f11ccda610e0f14a6b6e0d866c5e",
+          "duration_ms": 934,
+          "http_status": 200,
+          "etag": "\"262cdc88d5e5f14e2c0e0b86ea28957f\"",
+          "complete": "acknowledged",
+          "error": null,
+          "shaping": null
+        },
+        {
+          "index": 3,
+          "document_id": "efe02bea-e2fc-4d59-800b-766b16734555",
+          "revision_id": "0f935bde-785b-4d8e-a0d4-37179589c428",
+          "file_id": "948560dc-937e-4fa6-b5fa-6ba97c7a527e",
+          "upload_session_id": "096c8177-5ff1-4d69-a8e0-e348659ed488",
+          "object_key": "quarantine/948560dc-937e-4fa6-b5fa-6ba97c7a527e/original",
+          "payload_bytes": 10000000,
+          "payload_sha256": "7922289ab02a036ccf8465b663fe58186e89f11ccda610e0f14a6b6e0d866c5e",
+          "duration_ms": 949,
+          "http_status": 200,
+          "etag": "\"262cdc88d5e5f14e2c0e0b86ea28957f\"",
+          "complete": "acknowledged",
+          "error": null,
+          "shaping": null
+        },
+        {
+          "index": 4,
+          "document_id": "40a52339-3713-4708-95a7-659680f9f43d",
+          "revision_id": "37df47ad-84b1-413c-ac9f-5a5f29a2bd1b",
+          "file_id": "57ce1a5c-fd8d-4b0a-a9c4-7eccefa28e41",
+          "upload_session_id": "4cc453a5-b865-4dca-a29f-e02027c26234",
+          "object_key": "quarantine/57ce1a5c-fd8d-4b0a-a9c4-7eccefa28e41/original",
+          "payload_bytes": 10000000,
+          "payload_sha256": "7922289ab02a036ccf8465b663fe58186e89f11ccda610e0f14a6b6e0d866c5e",
+          "duration_ms": 816,
+          "http_status": 200,
+          "etag": "\"262cdc88d5e5f14e2c0e0b86ea28957f\"",
+          "complete": "acknowledged",
+          "error": null,
+          "shaping": null
+        },
+        {
+          "index": 5,
+          "document_id": "9676c3bf-aabf-4254-9acb-6ba71258c4d5",
+          "revision_id": "2b3ab94b-fee8-46df-852c-ebc12b81e150",
+          "file_id": "2f2d709e-fe6f-4575-9259-3bfcc1aa3496",
+          "upload_session_id": "15741bcd-4250-41a5-91ed-5a6dcd76379f",
+          "object_key": "quarantine/2f2d709e-fe6f-4575-9259-3bfcc1aa3496/original",
+          "payload_bytes": 10000000,
+          "payload_sha256": "7922289ab02a036ccf8465b663fe58186e89f11ccda610e0f14a6b6e0d866c5e",
+          "duration_ms": 909,
+          "http_status": 200,
+          "etag": "\"262cdc88d5e5f14e2c0e0b86ea28957f\"",
+          "complete": "acknowledged",
+          "error": null,
+          "shaping": null
+        },
+        {
+          "index": 6,
+          "document_id": "baa69aed-dc6f-4af5-85ed-ed9a6a62d9a8",
+          "revision_id": "3419d73f-8691-45a8-990a-da71cc1ee8e2",
+          "file_id": "535b7424-6100-4fc4-bec3-2f6d4f17e292",
+          "upload_session_id": "9b31cf14-6727-4c21-893e-d881fc9e9250",
+          "object_key": "quarantine/535b7424-6100-4fc4-bec3-2f6d4f17e292/original",
+          "payload_bytes": 10000000,
+          "payload_sha256": "7922289ab02a036ccf8465b663fe58186e89f11ccda610e0f14a6b6e0d866c5e",
+          "duration_ms": 901,
+          "http_status": 200,
+          "etag": "\"262cdc88d5e5f14e2c0e0b86ea28957f\"",
+          "complete": "acknowledged",
+          "error": null,
+          "shaping": null
+        },
+        {
+          "index": 7,
+          "document_id": "4222742d-811e-4c2f-b8d5-391bd14356fa",
+          "revision_id": "6451f91f-1fbc-4266-80dc-d845c53fdfef",
+          "file_id": "cf19e755-1e9a-46f5-9bf4-3bbacf837da5",
+          "upload_session_id": "24fb2a7b-86f9-4817-b743-3991a49af56e",
+          "object_key": "quarantine/cf19e755-1e9a-46f5-9bf4-3bbacf837da5/original",
+          "payload_bytes": 10000000,
+          "payload_sha256": "7922289ab02a036ccf8465b663fe58186e89f11ccda610e0f14a6b6e0d866c5e",
+          "duration_ms": 918,
+          "http_status": 200,
+          "etag": "\"262cdc88d5e5f14e2c0e0b86ea28957f\"",
+          "complete": "acknowledged",
+          "error": null,
+          "shaping": null
+        },
+        {
+          "index": 8,
+          "document_id": "0d48c083-0492-4ba4-b17a-dfc8bf676465",
+          "revision_id": "a0fb3915-283c-423e-a34a-6ac9eeb0dbf8",
+          "file_id": "c618b310-654b-4f29-b74b-04bfa12ab7b5",
+          "upload_session_id": "4e47d994-9ede-48f2-ad1a-b5cc73c68857",
+          "object_key": "quarantine/c618b310-654b-4f29-b74b-04bfa12ab7b5/original",
+          "payload_bytes": 10000000,
+          "payload_sha256": "7922289ab02a036ccf8465b663fe58186e89f11ccda610e0f14a6b6e0d866c5e",
+          "duration_ms": 893,
+          "http_status": 200,
+          "etag": "\"262cdc88d5e5f14e2c0e0b86ea28957f\"",
+          "complete": "acknowledged",
+          "error": null,
+          "shaping": null
+        },
+        {
+          "index": 9,
+          "document_id": "d3bae1e9-83e4-4e17-8ac1-d6b99a27f153",
+          "revision_id": "0ceb235b-a94b-46e8-8304-b23fd576ba4e",
+          "file_id": "7271c176-2144-4d54-bd21-6fd58e052c42",
+          "upload_session_id": "4bdff429-b117-4025-b7e4-8033c53d74f4",
+          "object_key": "quarantine/7271c176-2144-4d54-bd21-6fd58e052c42/original",
+          "payload_bytes": 10000000,
+          "payload_sha256": "7922289ab02a036ccf8465b663fe58186e89f11ccda610e0f14a6b6e0d866c5e",
+          "duration_ms": 822,
+          "http_status": 200,
+          "etag": "\"262cdc88d5e5f14e2c0e0b86ea28957f\"",
+          "complete": "acknowledged",
+          "error": null,
+          "shaping": null
+        }
+      ],
+      "uniqueness": {
+        "documents": 10,
+        "revisions": 10,
+        "files": 10,
+        "sessions": 10,
+        "object_keys": 10
+      },
+      "pass_control": true
+    },
+    {
+      "stage": "d_final_application_path_20_independent_streams",
+      "concurrency": 20,
+      "elapsed_ms": 4913,
+      "results": [
+        {
+          "index": 0,
+          "document_id": "0dc66ab5-8877-4dbb-9e67-eb20ca22d3dc",
+          "revision_id": "23c09c52-cee5-4b2f-b048-9a854edbc807",
+          "file_id": "2dd32677-db34-41ee-b1fc-1b5676c32478",
+          "upload_session_id": "eb813131-da0d-4b50-8c24-8ee16317c6c0",
+          "object_key": "quarantine/2dd32677-db34-41ee-b1fc-1b5676c32478/original",
+          "payload_bytes": 10000000,
+          "payload_sha256": "7922289ab02a036ccf8465b663fe58186e89f11ccda610e0f14a6b6e0d866c5e",
+          "duration_ms": 4385,
+          "http_status": 200,
+          "etag": "\"262cdc88d5e5f14e2c0e0b86ea28957f\"",
+          "complete": "acknowledged",
+          "error": null,
+          "shaping": {
+            "domain": "proxy-59220",
+            "independent": true,
+            "rate_mbps": 20,
+            "token_bucket_before": 262144,
+            "token_bucket_after": 261568,
+            "wire_emitted_bytes": 10002829,
+            "measured_wire_bitrate_mbps": 18.248,
+            "progress_samples": [
+              {
+                "t_ms": 0,
+                "emitted_bytes": 653,
+                "tokens": 261491
+              },
+              {
+                "t_ms": 494,
+                "emitted_bytes": 66189,
+                "tokens": 196608
+              },
+              {
+                "t_ms": 494,
+                "emitted_bytes": 131725,
+                "tokens": 131751
+              },
+              {
+                "t_ms": 494,
+                "emitted_bytes": 197261,
+                "tokens": 66827
+              },
+              {
+                "t_ms": 495,
+                "emitted_bytes": 262797,
+                "tokens": 1847
+              },
+              {
+                "t_ms": 523,
+                "emitted_bytes": 328333,
+                "tokens": 7941
+              },
+              {
+                "t_ms": 4374,
+                "emitted_bytes": 9962125,
+                "tokens": 505
+              },
+              {
+                "t_ms": 4390,
+                "emitted_bytes": 10001326,
+                "tokens": 2747
+              },
+              {
+                "t_ms": 4697,
+                "emitted_bytes": 10002253,
+                "tokens": 261217
+              },
+              {
+                "t_ms": 4725,
+                "emitted_bytes": 10002829,
+                "tokens": 261568
+              }
+            ],
+            "max_progress_gap_ms": 494
+          }
+        },
+        {
+          "index": 1,
+          "document_id": "5fb8e0ef-3da0-40aa-a833-79f7443f3d55",
+          "revision_id": "89def807-ed98-4af9-9ba6-73c60549548e",
+          "file_id": "5cd4ca50-dda1-4523-bc80-8c8848d78185",
+          "upload_session_id": "6bd14b23-73c6-4c8b-8082-f6cca928891e",
+          "object_key": "quarantine/5cd4ca50-dda1-4523-bc80-8c8848d78185/original",
+          "payload_bytes": 10000000,
+          "payload_sha256": "7922289ab02a036ccf8465b663fe58186e89f11ccda610e0f14a6b6e0d866c5e",
+          "duration_ms": 4125,
+          "http_status": 200,
+          "etag": "\"262cdc88d5e5f14e2c0e0b86ea28957f\"",
+          "complete": "acknowledged",
+          "error": null,
+          "shaping": {
+            "domain": "proxy-59221",
+            "independent": true,
+            "rate_mbps": 20,
+            "token_bucket_before": 262144,
+            "token_bucket_after": 237701,
+            "wire_emitted_bytes": 10002829,
+            "measured_wire_bitrate_mbps": 19.398,
+            "progress_samples": [
+              {
+                "t_ms": 0,
+                "emitted_bytes": 653,
+                "tokens": 261491
+              },
+              {
+                "t_ms": 210,
+                "emitted_bytes": 66189,
+                "tokens": 196608
+              },
+              {
+                "t_ms": 210,
+                "emitted_bytes": 131725,
+                "tokens": 131668
+              },
+              {
+                "t_ms": 211,
+                "emitted_bytes": 197261,
+                "tokens": 66965
+              },
+              {
+                "t_ms": 211,
+                "emitted_bytes": 262797,
+                "tokens": 2028
+              },
+              {
+                "t_ms": 251,
+                "emitted_bytes": 328333,
+                "tokens": 37175
+              },
+              {
+                "t_ms": 4108,
+                "emitted_bytes": 9962125,
+                "tokens": 14093
+              },
+              {
+                "t_ms": 4118,
+                "emitted_bytes": 10001326,
+                "tokens": 617
+              },
+              {
+                "t_ms": 4190,
+                "emitted_bytes": 10002253,
+                "tokens": 178825
+              },
+              {
+                "t_ms": 4214,
+                "emitted_bytes": 10002829,
+                "tokens": 237701
+              }
+            ],
+            "max_progress_gap_ms": 210
+          }
+        },
+        {
+          "index": 2,
+          "document_id": "21e25e98-c6fb-4da2-9ba3-367c54fdb1b2",
+          "revision_id": "d6a1a870-9027-48ff-a9f5-ada63fd21eec",
+          "file_id": "d8cf1b7e-833b-4b85-be82-6211a271df6c",
+          "upload_session_id": "f385a0d6-8c5b-4034-ab67-f7d9fbadb4cb",
+          "object_key": "quarantine/d8cf1b7e-833b-4b85-be82-6211a271df6c/original",
+          "payload_bytes": 10000000,
+          "payload_sha256": "7922289ab02a036ccf8465b663fe58186e89f11ccda610e0f14a6b6e0d866c5e",
+          "duration_ms": 4116,
+          "http_status": 200,
+          "etag": "\"262cdc88d5e5f14e2c0e0b86ea28957f\"",
+          "complete": "acknowledged",
+          "error": null,
+          "shaping": {
+            "domain": "proxy-59222",
+            "independent": true,
+            "rate_mbps": 20,
+            "token_bucket_before": 262144,
+            "token_bucket_after": 261568,
+            "wire_emitted_bytes": 10002829,
+            "measured_wire_bitrate_mbps": 19.441,
+            "progress_samples": [
+              {
+                "t_ms": 0,
+                "emitted_bytes": 653,
+                "tokens": 261491
+              },
+              {
+                "t_ms": 157,
+                "emitted_bytes": 66189,
+                "tokens": 196608
+              },
+              {
+                "t_ms": 157,
+                "emitted_bytes": 131725,
+                "tokens": 131565
+              },
+              {
+                "t_ms": 157,
+                "emitted_bytes": 197261,
+                "tokens": 66644
+              },
+              {
+                "t_ms": 157,
+                "emitted_bytes": 262797,
+                "tokens": 1411
+              },
+              {
+                "t_ms": 210,
+                "emitted_bytes": 328333,
+                "tokens": 68222
+              },
+              {
+                "t_ms": 4067,
+                "emitted_bytes": 9962125,
+                "tokens": 2397
+              },
+              {
+                "t_ms": 4082,
+                "emitted_bytes": 10001326,
+                "tokens": 2329
+              },
+              {
+                "t_ms": 4172,
+                "emitted_bytes": 10002253,
+                "tokens": 225006
+              },
+              {
+                "t_ms": 4188,
+                "emitted_bytes": 10002829,
+                "tokens": 261568
+              }
+            ],
+            "max_progress_gap_ms": 157
+          }
+        },
+        {
+          "index": 3,
+          "document_id": "90a6bcdf-6b0e-48f4-82c6-9049892698c7",
+          "revision_id": "bda28a34-865d-4883-ae3a-b8bab71eb169",
+          "file_id": "2ec4a7b5-e5ff-4c7a-b05c-4d649a0ce08d",
+          "upload_session_id": "1f3bf1cb-84ba-40db-a902-2e336950440c",
+          "object_key": "quarantine/2ec4a7b5-e5ff-4c7a-b05c-4d649a0ce08d/original",
+          "payload_bytes": 10000000,
+          "payload_sha256": "7922289ab02a036ccf8465b663fe58186e89f11ccda610e0f14a6b6e0d866c5e",
+          "duration_ms": 4320,
+          "http_status": 200,
+          "etag": "\"262cdc88d5e5f14e2c0e0b86ea28957f\"",
+          "complete": "acknowledged",
+          "error": null,
+          "shaping": {
+            "domain": "proxy-59223",
+            "independent": true,
+            "rate_mbps": 20,
+            "token_bucket_before": 262144,
+            "token_bucket_after": 261568,
+            "wire_emitted_bytes": 10002829,
+            "measured_wire_bitrate_mbps": 18.523,
+            "progress_samples": [
+              {
+                "t_ms": 0,
+                "emitted_bytes": 653,
+                "tokens": 261491
+              },
+              {
+                "t_ms": 331,
+                "emitted_bytes": 66189,
+                "tokens": 196608
+              },
+              {
+                "t_ms": 331,
+                "emitted_bytes": 131725,
+                "tokens": 131766
+              },
+              {
+                "t_ms": 331,
+                "emitted_bytes": 197261,
+                "tokens": 67245
+              },
+              {
+                "t_ms": 332,
+                "emitted_bytes": 262797,
+                "tokens": 2312
+              },
+              {
+                "t_ms": 363,
+                "emitted_bytes": 328333,
+                "tokens": 14462
+              },
+              {
+                "t_ms": 4227,
+                "emitted_bytes": 9962125,
+                "tokens": 9651
+              },
+              {
+                "t_ms": 4239,
+                "emitted_bytes": 10001326,
+                "tokens": 224
+              },
+              {
+                "t_ms": 4406,
+                "emitted_bytes": 10002253,
+                "tokens": 261217
+              },
+              {
+                "t_ms": 4498,
+                "emitted_bytes": 10002829,
+                "tokens": 261568
+              }
+            ],
+            "max_progress_gap_ms": 331
+          }
+        },
+        {
+          "index": 4,
+          "document_id": "4ca33263-b1d6-4210-a22b-d83df05ca7ca",
+          "revision_id": "5325788f-8a68-4374-977b-641c2a237809",
+          "file_id": "016ace7f-56ca-455b-87f3-a9284673ff42",
+          "upload_session_id": "b0a35343-0265-4a95-88fa-127b04ae3c38",
+          "object_key": "quarantine/016ace7f-56ca-455b-87f3-a9284673ff42/original",
+          "payload_bytes": 10000000,
+          "payload_sha256": "7922289ab02a036ccf8465b663fe58186e89f11ccda610e0f14a6b6e0d866c5e",
+          "duration_ms": 4140,
+          "http_status": 200,
+          "etag": "\"262cdc88d5e5f14e2c0e0b86ea28957f\"",
+          "complete": "acknowledged",
+          "error": null,
+          "shaping": {
+            "domain": "proxy-59224",
+            "independent": true,
+            "rate_mbps": 20,
+            "token_bucket_before": 262144,
+            "token_bucket_after": 261568,
+            "wire_emitted_bytes": 10002829,
+            "measured_wire_bitrate_mbps": 19.329,
+            "progress_samples": [
+              {
+                "t_ms": 0,
+                "emitted_bytes": 653,
+                "tokens": 261491
+              },
+              {
+                "t_ms": 231,
+                "emitted_bytes": 66189,
+                "tokens": 196608
+              },
+              {
+                "t_ms": 231,
+                "emitted_bytes": 131725,
+                "tokens": 132030
+              },
+              {
+                "t_ms": 231,
+                "emitted_bytes": 197261,
+                "tokens": 67660
+              },
+              {
+                "t_ms": 232,
+                "emitted_bytes": 262797,
+                "tokens": 2639
+              },
+              {
+                "t_ms": 325,
+                "emitted_bytes": 328333,
+                "tokens": 170658
+              },
+              {
+                "t_ms": 4128,
+                "emitted_bytes": 9962125,
+                "tokens": 21762
+              },
+              {
+                "t_ms": 4140,
+                "emitted_bytes": 10001326,
+                "tokens": 12222
+              },
+              {
+                "t_ms": 4237,
+                "emitted_bytes": 10002253,
+                "tokens": 254992
+              },
+              {
+                "t_ms": 4271,
+                "emitted_bytes": 10002829,
+                "tokens": 261568
+              }
+            ],
+            "max_progress_gap_ms": 231
+          }
+        },
+        {
+          "index": 5,
+          "document_id": "3e015a45-6bb9-4757-850d-771a8fa61109",
+          "revision_id": "d7c4513c-6aa1-4fc7-a8bb-5e1d1e4ff175",
+          "file_id": "2f18b191-c59c-49c3-a5c7-e7ed562f6cf4",
+          "upload_session_id": "f8670dfc-479c-4cc8-a106-7d16d3f674d5",
+          "object_key": "quarantine/2f18b191-c59c-49c3-a5c7-e7ed562f6cf4/original",
+          "payload_bytes": 10000000,
+          "payload_sha256": "7922289ab02a036ccf8465b663fe58186e89f11ccda610e0f14a6b6e0d866c5e",
+          "duration_ms": 4370,
+          "http_status": 200,
+          "etag": "\"262cdc88d5e5f14e2c0e0b86ea28957f\"",
+          "complete": "acknowledged",
+          "error": null,
+          "shaping": {
+            "domain": "proxy-59225",
+            "independent": true,
+            "rate_mbps": 20,
+            "token_bucket_before": 262144,
+            "token_bucket_after": 261568,
+            "wire_emitted_bytes": 10002829,
+            "measured_wire_bitrate_mbps": 18.312,
+            "progress_samples": [
+              {
+                "t_ms": 0,
+                "emitted_bytes": 653,
+                "tokens": 261491
+              },
+              {
+                "t_ms": 344,
+                "emitted_bytes": 66189,
+                "tokens": 196608
+              },
+              {
+                "t_ms": 344,
+                "emitted_bytes": 131725,
+                "tokens": 131591
+              },
+              {
+                "t_ms": 344,
+                "emitted_bytes": 197261,
+                "tokens": 66787
+              },
+              {
+                "t_ms": 344,
+                "emitted_bytes": 262797,
+                "tokens": 1855
+              },
+              {
+                "t_ms": 372,
+                "emitted_bytes": 328333,
+                "tokens": 5945
+              },
+              {
+                "t_ms": 4236,
+                "emitted_bytes": 9962125,
+                "tokens": 8266
+              },
+              {
+                "t_ms": 4250,
+                "emitted_bytes": 10001326,
+                "tokens": 5307
+              },
+              {
+                "t_ms": 4415,
+                "emitted_bytes": 10002253,
+                "tokens": 261217
+              },
+              {
+                "t_ms": 4591,
+                "emitted_bytes": 10002829,
+                "tokens": 261568
+              }
+            ],
+            "max_progress_gap_ms": 344
+          }
+        },
+        {
+          "index": 6,
+          "document_id": "73784cc2-25a8-446e-98a5-518762249379",
+          "revision_id": "7f1a6293-c8a1-450a-8b0e-5939e471e781",
+          "file_id": "25b2cdc0-8221-4497-8a7e-677bb4d5c068",
+          "upload_session_id": "e7a196d8-c01a-41bf-847e-d4cc9e7f3002",
+          "object_key": "quarantine/25b2cdc0-8221-4497-8a7e-677bb4d5c068/original",
+          "payload_bytes": 10000000,
+          "payload_sha256": "7922289ab02a036ccf8465b663fe58186e89f11ccda610e0f14a6b6e0d866c5e",
+          "duration_ms": 4345,
+          "http_status": 200,
+          "etag": "\"262cdc88d5e5f14e2c0e0b86ea28957f\"",
+          "complete": "acknowledged",
+          "error": null,
+          "shaping": {
+            "domain": "proxy-59226",
+            "independent": true,
+            "rate_mbps": 20,
+            "token_bucket_before": 262144,
+            "token_bucket_after": 261568,
+            "wire_emitted_bytes": 10002829,
+            "measured_wire_bitrate_mbps": 18.416,
+            "progress_samples": [
+              {
+                "t_ms": 0,
+                "emitted_bytes": 653,
+                "tokens": 261491
+              },
+              {
+                "t_ms": 346,
+                "emitted_bytes": 66189,
+                "tokens": 196608
+              },
+              {
+                "t_ms": 346,
+                "emitted_bytes": 131725,
+                "tokens": 131756
+              },
+              {
+                "t_ms": 346,
+                "emitted_bytes": 197261,
+                "tokens": 66954
+              },
+              {
+                "t_ms": 346,
+                "emitted_bytes": 262797,
+                "tokens": 1773
+              },
+              {
+                "t_ms": 373,
+                "emitted_bytes": 328333,
+                "tokens": 2513
+              },
+              {
+                "t_ms": 4236,
+                "emitted_bytes": 9962125,
+                "tokens": 6578
+              },
+              {
+                "t_ms": 4250,
+                "emitted_bytes": 10001326,
+                "tokens": 3719
+              },
+              {
+                "t_ms": 4416,
+                "emitted_bytes": 10002253,
+                "tokens": 261217
+              },
+              {
+                "t_ms": 4508,
+                "emitted_bytes": 10002829,
+                "tokens": 261568
+              }
+            ],
+            "max_progress_gap_ms": 346
+          }
+        },
+        {
+          "index": 7,
+          "document_id": "d1eb9140-def6-4e79-aad0-77e2c1e47790",
+          "revision_id": "c5fe99c7-1c15-4e4c-9b14-0f2fe277ec5e",
+          "file_id": "531ee6cb-36be-4298-a980-2720b81cc7af",
+          "upload_session_id": "8602ea29-b3a9-42ce-aad7-9e61ea1f214c",
+          "object_key": "quarantine/531ee6cb-36be-4298-a980-2720b81cc7af/original",
+          "payload_bytes": 10000000,
+          "payload_sha256": "7922289ab02a036ccf8465b663fe58186e89f11ccda610e0f14a6b6e0d866c5e",
+          "duration_ms": 4395,
+          "http_status": 200,
+          "etag": "\"262cdc88d5e5f14e2c0e0b86ea28957f\"",
+          "complete": "acknowledged",
+          "error": null,
+          "shaping": {
+            "domain": "proxy-59227",
+            "independent": true,
+            "rate_mbps": 20,
+            "token_bucket_before": 262144,
+            "token_bucket_after": 261568,
+            "wire_emitted_bytes": 10002829,
+            "measured_wire_bitrate_mbps": 18.208,
+            "progress_samples": [
+              {
+                "t_ms": 0,
+                "emitted_bytes": 653,
+                "tokens": 261491
+              },
+              {
+                "t_ms": 471,
+                "emitted_bytes": 66189,
+                "tokens": 196608
+              },
+              {
+                "t_ms": 472,
+                "emitted_bytes": 131725,
+                "tokens": 131620
+              },
+              {
+                "t_ms": 472,
+                "emitted_bytes": 197261,
+                "tokens": 66902
+              },
+              {
+                "t_ms": 472,
+                "emitted_bytes": 262797,
+                "tokens": 1856
+              },
+              {
+                "t_ms": 502,
+                "emitted_bytes": 328333,
+                "tokens": 11142
+              },
+              {
+                "t_ms": 4351,
+                "emitted_bytes": 9962125,
+                "tokens": 889
+              },
+              {
+                "t_ms": 4369,
+                "emitted_bytes": 10001326,
+                "tokens": 5931
+              },
+              {
+                "t_ms": 4683,
+                "emitted_bytes": 10002253,
+                "tokens": 261217
+              },
+              {
+                "t_ms": 4708,
+                "emitted_bytes": 10002829,
+                "tokens": 261568
+              }
+            ],
+            "max_progress_gap_ms": 471
+          }
+        },
+        {
+          "index": 8,
+          "document_id": "318505ab-f488-43ec-8b60-f689e0c05b93",
+          "revision_id": "d0eeebcb-fc29-4363-9b6a-cd507d4bc412",
+          "file_id": "7db812e5-7303-4207-9435-53bc08330cfc",
+          "upload_session_id": "575c9330-d455-46b0-b9cc-648d822ac2fe",
+          "object_key": "quarantine/7db812e5-7303-4207-9435-53bc08330cfc/original",
+          "payload_bytes": 10000000,
+          "payload_sha256": "7922289ab02a036ccf8465b663fe58186e89f11ccda610e0f14a6b6e0d866c5e",
+          "duration_ms": 4162,
+          "http_status": 200,
+          "etag": "\"262cdc88d5e5f14e2c0e0b86ea28957f\"",
+          "complete": "acknowledged",
+          "error": null,
+          "shaping": {
+            "domain": "proxy-59228",
+            "independent": true,
+            "rate_mbps": 20,
+            "token_bucket_before": 262144,
+            "token_bucket_after": 261568,
+            "wire_emitted_bytes": 10002829,
+            "measured_wire_bitrate_mbps": 19.227,
+            "progress_samples": [
+              {
+                "t_ms": 0,
+                "emitted_bytes": 653,
+                "tokens": 261491
+              },
+              {
+                "t_ms": 276,
+                "emitted_bytes": 66189,
+                "tokens": 196608
+              },
+              {
+                "t_ms": 276,
+                "emitted_bytes": 131725,
+                "tokens": 131477
+              },
+              {
+                "t_ms": 276,
+                "emitted_bytes": 197261,
+                "tokens": 66654
+              },
+              {
+                "t_ms": 277,
+                "emitted_bytes": 262797,
+                "tokens": 1822
+              },
+              {
+                "t_ms": 318,
+                "emitted_bytes": 328333,
+                "tokens": 38392
+              },
+              {
+                "t_ms": 4164,
+                "emitted_bytes": 9962125,
+                "tokens": 2476
+              },
+              {
+                "t_ms": 4180,
+                "emitted_bytes": 10001326,
+                "tokens": 3332
+              },
+              {
+                "t_ms": 4251,
+                "emitted_bytes": 10002253,
+                "tokens": 180283
+              },
+              {
+                "t_ms": 4329,
+                "emitted_bytes": 10002829,
+                "tokens": 261568
+              }
+            ],
+            "max_progress_gap_ms": 276
+          }
+        },
+        {
+          "index": 9,
+          "document_id": "0cd3aeb8-191c-4273-9777-22e89579033c",
+          "revision_id": "16834560-41a2-4e7c-b973-b904d31e45a7",
+          "file_id": "f1ad9344-9ec4-435f-be23-f60d186e2e4b",
+          "upload_session_id": "f4e48d73-93f8-4167-8ece-6eeca3b892e2",
+          "object_key": "quarantine/f1ad9344-9ec4-435f-be23-f60d186e2e4b/original",
+          "payload_bytes": 10000000,
+          "payload_sha256": "7922289ab02a036ccf8465b663fe58186e89f11ccda610e0f14a6b6e0d866c5e",
+          "duration_ms": 4356,
+          "http_status": 200,
+          "etag": "\"262cdc88d5e5f14e2c0e0b86ea28957f\"",
+          "complete": "acknowledged",
+          "error": null,
+          "shaping": {
+            "domain": "proxy-59229",
+            "independent": true,
+            "rate_mbps": 20,
+            "token_bucket_before": 262144,
+            "token_bucket_after": 261568,
+            "wire_emitted_bytes": 10002829,
+            "measured_wire_bitrate_mbps": 18.37,
+            "progress_samples": [
+              {
+                "t_ms": 0,
+                "emitted_bytes": 653,
+                "tokens": 261491
+              },
+              {
+                "t_ms": 477,
+                "emitted_bytes": 66189,
+                "tokens": 196608
+              },
+              {
+                "t_ms": 477,
+                "emitted_bytes": 131725,
+                "tokens": 131853
+              },
+              {
+                "t_ms": 478,
+                "emitted_bytes": 197261,
+                "tokens": 67236
+              },
+              {
+                "t_ms": 478,
+                "emitted_bytes": 262797,
+                "tokens": 2223
+              },
+              {
+                "t_ms": 520,
+                "emitted_bytes": 328333,
+                "tokens": 42746
+              },
+              {
+                "t_ms": 4358,
+                "emitted_bytes": 9962125,
+                "tokens": 2578
+              },
+              {
+                "t_ms": 4374,
+                "emitted_bytes": 10001326,
+                "tokens": 4955
+              },
+              {
+                "t_ms": 4673,
+                "emitted_bytes": 10002253,
+                "tokens": 261217
+              },
+              {
+                "t_ms": 4696,
+                "emitted_bytes": 10002829,
+                "tokens": 261568
+              }
+            ],
+            "max_progress_gap_ms": 477
+          }
+        },
+        {
+          "index": 10,
+          "document_id": "fb066e8c-fbe1-421a-b084-fffa3ae57dd7",
+          "revision_id": "808504cf-fe03-4810-b6ad-892139c2df2b",
+          "file_id": "f9f4795a-740a-4e1d-bb8e-a18ba6b6a926",
+          "upload_session_id": "25db759a-e76d-46c3-973f-6b94706d0d84",
+          "object_key": "quarantine/f9f4795a-740a-4e1d-bb8e-a18ba6b6a926/original",
+          "payload_bytes": 10000000,
+          "payload_sha256": "7922289ab02a036ccf8465b663fe58186e89f11ccda610e0f14a6b6e0d866c5e",
+          "duration_ms": 4281,
+          "http_status": 200,
+          "etag": "\"262cdc88d5e5f14e2c0e0b86ea28957f\"",
+          "complete": "acknowledged",
+          "error": null,
+          "shaping": {
+            "domain": "proxy-59230",
+            "independent": true,
+            "rate_mbps": 20,
+            "token_bucket_before": 262144,
+            "token_bucket_after": 261568,
+            "wire_emitted_bytes": 10002829,
+            "measured_wire_bitrate_mbps": 18.691,
+            "progress_samples": [
+              {
+                "t_ms": 0,
+                "emitted_bytes": 653,
+                "tokens": 261491
+              },
+              {
+                "t_ms": 389,
+                "emitted_bytes": 66189,
+                "tokens": 196608
+              },
+              {
+                "t_ms": 389,
+                "emitted_bytes": 131725,
+                "tokens": 131505
+              },
+              {
+                "t_ms": 389,
+                "emitted_bytes": 197261,
+                "tokens": 66604
+              },
+              {
+                "t_ms": 390,
+                "emitted_bytes": 262797,
+                "tokens": 1405
+              },
+              {
+                "t_ms": 441,
+                "emitted_bytes": 328333,
+                "tokens": 65034
+              },
+              {
+                "t_ms": 4269,
+                "emitted_bytes": 9962125,
+                "tokens": 1984
+              },
+              {
+                "t_ms": 4285,
+                "emitted_bytes": 10001326,
+                "tokens": 800
+              },
+              {
+                "t_ms": 4372,
+                "emitted_bytes": 10002253,
+                "tokens": 218082
+              },
+              {
+                "t_ms": 4548,
+                "emitted_bytes": 10002829,
+                "tokens": 261568
+              }
+            ],
+            "max_progress_gap_ms": 389
+          }
+        },
+        {
+          "index": 11,
+          "document_id": "fdb75f1a-003b-42e1-8132-cb2ee7a0be44",
+          "revision_id": "7e097d88-9597-4ccb-8f10-a1a07395eff9",
+          "file_id": "219cd382-d039-4e7c-af23-4b80b683c358",
+          "upload_session_id": "1a791f94-059a-499b-90cb-b090908af21b",
+          "object_key": "quarantine/219cd382-d039-4e7c-af23-4b80b683c358/original",
+          "payload_bytes": 10000000,
+          "payload_sha256": "7922289ab02a036ccf8465b663fe58186e89f11ccda610e0f14a6b6e0d866c5e",
+          "duration_ms": 4386,
+          "http_status": 200,
+          "etag": "\"262cdc88d5e5f14e2c0e0b86ea28957f\"",
+          "complete": "acknowledged",
+          "error": null,
+          "shaping": {
+            "domain": "proxy-59231",
+            "independent": true,
+            "rate_mbps": 20,
+            "token_bucket_before": 262144,
+            "token_bucket_after": 261568,
+            "wire_emitted_bytes": 10002829,
+            "measured_wire_bitrate_mbps": 18.246,
+            "progress_samples": [
+              {
+                "t_ms": 0,
+                "emitted_bytes": 653,
+                "tokens": 261491
+              },
+              {
+                "t_ms": 467,
+                "emitted_bytes": 66189,
+                "tokens": 196608
+              },
+              {
+                "t_ms": 467,
+                "emitted_bytes": 131725,
+                "tokens": 131692
+              },
+              {
+                "t_ms": 467,
+                "emitted_bytes": 197261,
+                "tokens": 66962
+              },
+              {
+                "t_ms": 467,
+                "emitted_bytes": 262797,
+                "tokens": 2015
+              },
+              {
+                "t_ms": 500,
+                "emitted_bytes": 328333,
+                "tokens": 18337
+              },
+              {
+                "t_ms": 4347,
+                "emitted_bytes": 9962125,
+                "tokens": 1172
+              },
+              {
+                "t_ms": 4367,
+                "emitted_bytes": 10001326,
+                "tokens": 13050
+              },
+              {
+                "t_ms": 4664,
+                "emitted_bytes": 10002253,
+                "tokens": 261217
+              },
+              {
+                "t_ms": 4681,
+                "emitted_bytes": 10002829,
+                "tokens": 261568
+              }
+            ],
+            "max_progress_gap_ms": 467
+          }
+        },
+        {
+          "index": 12,
+          "document_id": "abcb0db9-4d3e-4707-a472-0db1922e4276",
+          "revision_id": "4a2c966b-bad7-433a-bacd-e31662f0837d",
+          "file_id": "51ff81fe-2b23-4aa0-a8ea-9dca04a7a04c",
+          "upload_session_id": "7a102936-661d-4b96-96ae-34b9d1c826b6",
+          "object_key": "quarantine/51ff81fe-2b23-4aa0-a8ea-9dca04a7a04c/original",
+          "payload_bytes": 10000000,
+          "payload_sha256": "7922289ab02a036ccf8465b663fe58186e89f11ccda610e0f14a6b6e0d866c5e",
+          "duration_ms": 4361,
+          "http_status": 200,
+          "etag": "\"262cdc88d5e5f14e2c0e0b86ea28957f\"",
+          "complete": "acknowledged",
+          "error": null,
+          "shaping": {
+            "domain": "proxy-59232",
+            "independent": true,
+            "rate_mbps": 20,
+            "token_bucket_before": 262144,
+            "token_bucket_after": 261568,
+            "wire_emitted_bytes": 10002829,
+            "measured_wire_bitrate_mbps": 18.348,
+            "progress_samples": [
+              {
+                "t_ms": 0,
+                "emitted_bytes": 653,
+                "tokens": 261491
+              },
+              {
+                "t_ms": 313,
+                "emitted_bytes": 66189,
+                "tokens": 196608
+              },
+              {
+                "t_ms": 314,
+                "emitted_bytes": 131725,
+                "tokens": 132007
+              },
+              {
+                "t_ms": 314,
+                "emitted_bytes": 197261,
+                "tokens": 67999
+              },
+              {
+                "t_ms": 315,
+                "emitted_bytes": 262797,
+                "tokens": 3413
+              },
+              {
+                "t_ms": 344,
+                "emitted_bytes": 328333,
+                "tokens": 10649
+              },
+              {
+                "t_ms": 4207,
+                "emitted_bytes": 9962125,
+                "tokens": 8881
+              },
+              {
+                "t_ms": 4222,
+                "emitted_bytes": 10001326,
+                "tokens": 6044
+              },
+              {
+                "t_ms": 4392,
+                "emitted_bytes": 10002253,
+                "tokens": 261217
+              },
+              {
+                "t_ms": 4479,
+                "emitted_bytes": 10002829,
+                "tokens": 261568
+              }
+            ],
+            "max_progress_gap_ms": 313
+          }
+        },
+        {
+          "index": 13,
+          "document_id": "6d6b8496-cf54-4d4e-91af-cf5fa759ad8e",
+          "revision_id": "4df864fe-2541-4aa8-ad05-b1e16c9d86b5",
+          "file_id": "58283739-b135-4ff5-a1bc-e2d2c34dd2ca",
+          "upload_session_id": "8d6958a9-0d68-4104-ac98-4521c7878054",
+          "object_key": "quarantine/58283739-b135-4ff5-a1bc-e2d2c34dd2ca/original",
+          "payload_bytes": 10000000,
+          "payload_sha256": "7922289ab02a036ccf8465b663fe58186e89f11ccda610e0f14a6b6e0d866c5e",
+          "duration_ms": 4402,
+          "http_status": 200,
+          "etag": "\"262cdc88d5e5f14e2c0e0b86ea28957f\"",
+          "complete": "acknowledged",
+          "error": null,
+          "shaping": {
+            "domain": "proxy-59233",
+            "independent": true,
+            "rate_mbps": 20,
+            "token_bucket_before": 262144,
+            "token_bucket_after": 261568,
+            "wire_emitted_bytes": 10002829,
+            "measured_wire_bitrate_mbps": 18.18,
+            "progress_samples": [
+              {
+                "t_ms": 0,
+                "emitted_bytes": 653,
+                "tokens": 261491
+              },
+              {
+                "t_ms": 451,
+                "emitted_bytes": 66189,
+                "tokens": 196608
+              },
+              {
+                "t_ms": 451,
+                "emitted_bytes": 131725,
+                "tokens": 131469
+              },
+              {
+                "t_ms": 451,
+                "emitted_bytes": 197261,
+                "tokens": 66439
+              },
+              {
+                "t_ms": 452,
+                "emitted_bytes": 262797,
+                "tokens": 1710
+              },
+              {
+                "t_ms": 486,
+                "emitted_bytes": 328333,
+                "tokens": 21304
+              },
+              {
+                "t_ms": 4332,
+                "emitted_bytes": 9962125,
+                "tokens": 4079
+              },
+              {
+                "t_ms": 4353,
+                "emitted_bytes": 10001326,
+                "tokens": 15420
+              },
+              {
+                "t_ms": 4651,
+                "emitted_bytes": 10002253,
+                "tokens": 261217
+              },
+              {
+                "t_ms": 4675,
+                "emitted_bytes": 10002829,
+                "tokens": 261568
+              }
+            ],
+            "max_progress_gap_ms": 451
+          }
+        },
+        {
+          "index": 14,
+          "document_id": "2f9f3f8b-24bf-43e6-95ba-62bac770c2b6",
+          "revision_id": "3218ac36-6815-4670-99a2-fd1aa3567912",
+          "file_id": "30993a97-44de-4d32-abe2-b7d0a1bd9458",
+          "upload_session_id": "7483c897-ba61-4e78-a389-fb2e02a2c885",
+          "object_key": "quarantine/30993a97-44de-4d32-abe2-b7d0a1bd9458/original",
+          "payload_bytes": 10000000,
+          "payload_sha256": "7922289ab02a036ccf8465b663fe58186e89f11ccda610e0f14a6b6e0d866c5e",
+          "duration_ms": 4239,
+          "http_status": 200,
+          "etag": "\"262cdc88d5e5f14e2c0e0b86ea28957f\"",
+          "complete": "acknowledged",
+          "error": null,
+          "shaping": {
+            "domain": "proxy-59234",
+            "independent": true,
+            "rate_mbps": 20,
+            "token_bucket_before": 262144,
+            "token_bucket_after": 261568,
+            "wire_emitted_bytes": 10002829,
+            "measured_wire_bitrate_mbps": 18.877,
+            "progress_samples": [
+              {
+                "t_ms": 0,
+                "emitted_bytes": 653,
+                "tokens": 261491
+              },
+              {
+                "t_ms": 520,
+                "emitted_bytes": 66189,
+                "tokens": 196608
+              },
+              {
+                "t_ms": 520,
+                "emitted_bytes": 131725,
+                "tokens": 132051
+              },
+              {
+                "t_ms": 520,
+                "emitted_bytes": 197261,
+                "tokens": 67670
+              },
+              {
+                "t_ms": 521,
+                "emitted_bytes": 262797,
+                "tokens": 3013
+              },
+              {
+                "t_ms": 552,
+                "emitted_bytes": 328333,
+                "tokens": 15946
+              },
+              {
+                "t_ms": 4406,
+                "emitted_bytes": 9962125,
+                "tokens": 16296
+              },
+              {
+                "t_ms": 4421,
+                "emitted_bytes": 10001326,
+                "tokens": 15240
+              },
+              {
+                "t_ms": 4667,
+                "emitted_bytes": 10002253,
+                "tokens": 261217
+              },
+              {
+                "t_ms": 4695,
+                "emitted_bytes": 10002829,
+                "tokens": 261568
+              }
+            ],
+            "max_progress_gap_ms": 520
+          }
+        },
+        {
+          "index": 15,
+          "document_id": "f0720fa9-cfd2-402c-9332-e73cbc7ec0c7",
+          "revision_id": "46aeac61-ca05-4c32-8004-2d471645a1c2",
+          "file_id": "0bfb8f99-e10f-45c0-8290-cd76518d0f47",
+          "upload_session_id": "44688dc7-71e0-41cb-8258-27966f2846f7",
+          "object_key": "quarantine/0bfb8f99-e10f-45c0-8290-cd76518d0f47/original",
+          "payload_bytes": 10000000,
+          "payload_sha256": "7922289ab02a036ccf8465b663fe58186e89f11ccda610e0f14a6b6e0d866c5e",
+          "duration_ms": 4401,
+          "http_status": 200,
+          "etag": "\"262cdc88d5e5f14e2c0e0b86ea28957f\"",
+          "complete": "acknowledged",
+          "error": null,
+          "shaping": {
+            "domain": "proxy-59235",
+            "independent": true,
+            "rate_mbps": 20,
+            "token_bucket_before": 262144,
+            "token_bucket_after": 261568,
+            "wire_emitted_bytes": 10002829,
+            "measured_wire_bitrate_mbps": 18.183,
+            "progress_samples": [
+              {
+                "t_ms": 0,
+                "emitted_bytes": 653,
+                "tokens": 261491
+              },
+              {
+                "t_ms": 468,
+                "emitted_bytes": 66189,
+                "tokens": 196608
+              },
+              {
+                "t_ms": 469,
+                "emitted_bytes": 131725,
+                "tokens": 131812
+              },
+              {
+                "t_ms": 469,
+                "emitted_bytes": 197261,
+                "tokens": 67105
+              },
+              {
+                "t_ms": 469,
+                "emitted_bytes": 262797,
+                "tokens": 1983
+              },
+              {
+                "t_ms": 500,
+                "emitted_bytes": 328333,
+                "tokens": 14610
+              },
+              {
+                "t_ms": 4349,
+                "emitted_bytes": 9962125,
+                "tokens": 1110
+              },
+              {
+                "t_ms": 4368,
+                "emitted_bytes": 10001326,
+                "tokens": 9391
+              },
+              {
+                "t_ms": 4671,
+                "emitted_bytes": 10002253,
+                "tokens": 261217
+              },
+              {
+                "t_ms": 4695,
+                "emitted_bytes": 10002829,
+                "tokens": 261568
+              }
+            ],
+            "max_progress_gap_ms": 468
+          }
+        },
+        {
+          "index": 16,
+          "document_id": "ba63ca25-a276-42f9-89c6-a1d1414d978a",
+          "revision_id": "217ae6f2-1e6e-4b08-af7b-e483bb8b6b9c",
+          "file_id": "f433db38-c5aa-4af4-8b5f-992cfb2ff29c",
+          "upload_session_id": "f175cdf6-1460-464d-a437-69508d453ddb",
+          "object_key": "quarantine/f433db38-c5aa-4af4-8b5f-992cfb2ff29c/original",
+          "payload_bytes": 10000000,
+          "payload_sha256": "7922289ab02a036ccf8465b663fe58186e89f11ccda610e0f14a6b6e0d866c5e",
+          "duration_ms": 4380,
+          "http_status": 200,
+          "etag": "\"262cdc88d5e5f14e2c0e0b86ea28957f\"",
+          "complete": "acknowledged",
+          "error": null,
+          "shaping": {
+            "domain": "proxy-59236",
+            "independent": true,
+            "rate_mbps": 20,
+            "token_bucket_before": 262144,
+            "token_bucket_after": 261568,
+            "wire_emitted_bytes": 10002829,
+            "measured_wire_bitrate_mbps": 18.27,
+            "progress_samples": [
+              {
+                "t_ms": 0,
+                "emitted_bytes": 653,
+                "tokens": 261491
+              },
+              {
+                "t_ms": 464,
+                "emitted_bytes": 66189,
+                "tokens": 196608
+              },
+              {
+                "t_ms": 464,
+                "emitted_bytes": 131725,
+                "tokens": 131561
+              },
+              {
+                "t_ms": 464,
+                "emitted_bytes": 197261,
+                "tokens": 66762
+              },
+              {
+                "t_ms": 464,
+                "emitted_bytes": 262797,
+                "tokens": 1763
+              },
+              {
+                "t_ms": 508,
+                "emitted_bytes": 328333,
+                "tokens": 45301
+              },
+              {
+                "t_ms": 4345,
+                "emitted_bytes": 9962125,
+                "tokens": 3262
+              },
+              {
+                "t_ms": 4362,
+                "emitted_bytes": 10001326,
+                "tokens": 8117
+              },
+              {
+                "t_ms": 4674,
+                "emitted_bytes": 10002253,
+                "tokens": 261217
+              },
+              {
+                "t_ms": 4708,
+                "emitted_bytes": 10002829,
+                "tokens": 261568
+              }
+            ],
+            "max_progress_gap_ms": 464
+          }
+        },
+        {
+          "index": 17,
+          "document_id": "7efaa65e-66ee-4ac3-9f65-0bab8bb09d49",
+          "revision_id": "2f08397e-5d90-409c-9f6c-48fab9237a87",
+          "file_id": "2d4e3f86-d480-4185-ba5f-3988d50505bd",
+          "upload_session_id": "ef68eff8-44b4-47c9-92c6-04da7df664b0",
+          "object_key": "quarantine/2d4e3f86-d480-4185-ba5f-3988d50505bd/original",
+          "payload_bytes": 10000000,
+          "payload_sha256": "7922289ab02a036ccf8465b663fe58186e89f11ccda610e0f14a6b6e0d866c5e",
+          "duration_ms": 4374,
+          "http_status": 200,
+          "etag": "\"262cdc88d5e5f14e2c0e0b86ea28957f\"",
+          "complete": "acknowledged",
+          "error": null,
+          "shaping": {
+            "domain": "proxy-59237",
+            "independent": true,
+            "rate_mbps": 20,
+            "token_bucket_before": 262144,
+            "token_bucket_after": 261568,
+            "wire_emitted_bytes": 10002829,
+            "measured_wire_bitrate_mbps": 18.293,
+            "progress_samples": [
+              {
+                "t_ms": 0,
+                "emitted_bytes": 653,
+                "tokens": 261491
+              },
+              {
+                "t_ms": 454,
+                "emitted_bytes": 66189,
+                "tokens": 196608
+              },
+              {
+                "t_ms": 454,
+                "emitted_bytes": 131725,
+                "tokens": 131528
+              },
+              {
+                "t_ms": 454,
+                "emitted_bytes": 197261,
+                "tokens": 66529
+              },
+              {
+                "t_ms": 454,
+                "emitted_bytes": 262797,
+                "tokens": 1339
+              },
+              {
+                "t_ms": 482,
+                "emitted_bytes": 328333,
+                "tokens": 4926
+              },
+              {
+                "t_ms": 4334,
+                "emitted_bytes": 9962125,
+                "tokens": 839
+              },
+              {
+                "t_ms": 4353,
+                "emitted_bytes": 10001326,
+                "tokens": 10502
+              },
+              {
+                "t_ms": 4652,
+                "emitted_bytes": 10002253,
+                "tokens": 261217
+              },
+              {
+                "t_ms": 4677,
+                "emitted_bytes": 10002829,
+                "tokens": 261568
+              }
+            ],
+            "max_progress_gap_ms": 454
+          }
+        },
+        {
+          "index": 18,
+          "document_id": "f29ad466-140c-4ada-9e02-bf4a1ff0c5d1",
+          "revision_id": "09ef6772-9ce7-44be-b821-4ca3322c10fd",
+          "file_id": "b19dc48c-4d35-4a81-958d-7fb4fc430cbf",
+          "upload_session_id": "f202dfde-bcbd-4565-b50d-9ea52690c8a7",
+          "object_key": "quarantine/b19dc48c-4d35-4a81-958d-7fb4fc430cbf/original",
+          "payload_bytes": 10000000,
+          "payload_sha256": "7922289ab02a036ccf8465b663fe58186e89f11ccda610e0f14a6b6e0d866c5e",
+          "duration_ms": 4266,
+          "http_status": 200,
+          "etag": "\"262cdc88d5e5f14e2c0e0b86ea28957f\"",
+          "complete": "acknowledged",
+          "error": null,
+          "shaping": {
+            "domain": "proxy-59238",
+            "independent": true,
+            "rate_mbps": 20,
+            "token_bucket_before": 262144,
+            "token_bucket_after": 261568,
+            "wire_emitted_bytes": 10002829,
+            "measured_wire_bitrate_mbps": 18.756,
+            "progress_samples": [
+              {
+                "t_ms": 0,
+                "emitted_bytes": 653,
+                "tokens": 261491
+              },
+              {
+                "t_ms": 490,
+                "emitted_bytes": 66189,
+                "tokens": 196608
+              },
+              {
+                "t_ms": 490,
+                "emitted_bytes": 131725,
+                "tokens": 131656
+              },
+              {
+                "t_ms": 490,
+                "emitted_bytes": 197261,
+                "tokens": 66773
+              },
+              {
+                "t_ms": 491,
+                "emitted_bytes": 262797,
+                "tokens": 1646
+              },
+              {
+                "t_ms": 521,
+                "emitted_bytes": 328333,
+                "tokens": 10979
+              },
+              {
+                "t_ms": 4371,
+                "emitted_bytes": 9962125,
+                "tokens": 2805
+              },
+              {
+                "t_ms": 4394,
+                "emitted_bytes": 10001326,
+                "tokens": 21947
+              },
+              {
+                "t_ms": 4651,
+                "emitted_bytes": 10002253,
+                "tokens": 261217
+              },
+              {
+                "t_ms": 4676,
+                "emitted_bytes": 10002829,
+                "tokens": 261568
+              }
+            ],
+            "max_progress_gap_ms": 490
+          }
+        },
+        {
+          "index": 19,
+          "document_id": "a5b16f12-175f-48fe-b551-090297257291",
+          "revision_id": "b9502725-afa7-48e1-a5ac-0bc04ed9426f",
+          "file_id": "af3e8765-730d-455c-95e0-d4c6fa138ecc",
+          "upload_session_id": "e72551dc-442d-4795-a0f8-ce46ddb357cd",
+          "object_key": "quarantine/af3e8765-730d-455c-95e0-d4c6fa138ecc/original",
+          "payload_bytes": 10000000,
+          "payload_sha256": "7922289ab02a036ccf8465b663fe58186e89f11ccda610e0f14a6b6e0d866c5e",
+          "duration_ms": 4259,
+          "http_status": 200,
+          "etag": "\"262cdc88d5e5f14e2c0e0b86ea28957f\"",
+          "complete": "acknowledged",
+          "error": null,
+          "shaping": {
+            "domain": "proxy-59239",
+            "independent": true,
+            "rate_mbps": 20,
+            "token_bucket_before": 262144,
+            "token_bucket_after": 261568,
+            "wire_emitted_bytes": 10002829,
+            "measured_wire_bitrate_mbps": 18.79,
+            "progress_samples": [
+              {
+                "t_ms": 0,
+                "emitted_bytes": 653,
+                "tokens": 261491
+              },
+              {
+                "t_ms": 502,
+                "emitted_bytes": 66189,
+                "tokens": 196608
+              },
+              {
+                "t_ms": 502,
+                "emitted_bytes": 131725,
+                "tokens": 131826
+              },
+              {
+                "t_ms": 502,
+                "emitted_bytes": 197261,
+                "tokens": 67052
+              },
+              {
+                "t_ms": 502,
+                "emitted_bytes": 262797,
+                "tokens": 1889
+              },
+              {
+                "t_ms": 528,
+                "emitted_bytes": 328333,
+                "tokens": 851
+              },
+              {
+                "t_ms": 4391,
+                "emitted_bytes": 9962125,
+                "tokens": 23299
+              },
+              {
+                "t_ms": 4406,
+                "emitted_bytes": 10001326,
+                "tokens": 22592
+              },
+              {
+                "t_ms": 4658,
+                "emitted_bytes": 10002253,
+                "tokens": 261217
+              },
+              {
+                "t_ms": 4682,
+                "emitted_bytes": 10002829,
+                "tokens": 261568
+              }
+            ],
+            "max_progress_gap_ms": 502
+          }
+        }
+      ],
+      "uniqueness": {
+        "documents": 20,
+        "revisions": 20,
+        "files": 20,
+        "sessions": 20,
+        "object_keys": 20
+      },
+      "p95_ms": 4401,
+      "success": 20,
+      "durations_le_8000": 20,
+      "max_progress_gap_ms": 520,
+      "pass_control": true
+    }
+  ],
+  "stage_progression": {
+    "stage_b_passed": true,
+    "skipped_larger_application_stages": [],
+    "reason": null
+  },
+  "correlations": [
+    {
+      "create": "ed4445c8-0b0d-498b-9bbe-55a41c34f2a5",
+      "revision": "ae057d04-8b3e-4efb-b854-11254aa50ad2",
+      "authorize": "3f55c9d2-5d09-4d60-8b47-54e1a4dfc51f"
+    },
+    {
+      "create": "e767ed50-ea7d-4f42-b110-fb8c8337f4c4",
+      "revision": "b582d27a-674c-4e60-bc72-2ce6c569cbbe",
+      "authorize": "085be1af-69a6-4083-a922-90b93290000e"
+    },
+    {
+      "create": "40c4c101-9081-4b08-b773-242c47de11b3",
+      "revision": "3243f216-f39e-4679-a423-5ca2a5eb4e0c",
+      "authorize": "56e51825-2052-4cad-b0ca-4ba2cf9c1473"
+    },
+    {
+      "create": "26d9435c-97f5-405a-a53f-e3c37ae14c45",
+      "revision": "0f076c71-11f2-4ddb-a60b-dda98e990174",
+      "authorize": "0849c05e-b6c9-4cac-a2e9-2ea0a009d8b2"
+    },
+    {
+      "create": "c987e387-990f-4b0c-99a0-4161a440401a",
+      "revision": "d1e3e53b-e0dd-49b1-9651-d77d67d0b3f3",
+      "authorize": "cba42e72-9b88-4155-884c-5c2d02a15f34"
+    },
+    {
+      "create": "5cd27d55-985b-4c5f-bd0c-28301199e6e6",
+      "revision": "97cd99cc-6e83-4246-bffe-7a774b974f4b",
+      "authorize": "855a592c-37c3-49b4-9e93-ac6a08d39fe7"
+    },
+    {
+      "create": "1c3e7d5f-01d6-4618-9325-35a8ff888042",
+      "revision": "74d8e8a1-fd55-43ee-a334-70a97606ae29",
+      "authorize": "0b1b097b-b97a-426c-ac83-210f92792194"
+    },
+    {
+      "create": "cb1a56b4-cc5b-4c4a-840e-f91eed0f317d",
+      "revision": "8f41a100-ac58-4ca4-a550-21ae951aff4a",
+      "authorize": "f45f1b3d-df61-4235-b4d9-f5cfabfacbf9"
+    },
+    {
+      "create": "4a073c1a-9f88-4402-8f43-8c70aef77b2b",
+      "revision": "c75ace94-bcb0-4e43-b817-84704b69c379",
+      "authorize": "a5a67ac4-f9ef-480b-ad09-fedb3ee3e57e"
+    },
+    {
+      "create": "846e3e27-8111-4df8-8b5f-2d8c9a2de884",
+      "revision": "70a34130-99a9-4d0b-be50-b194f936a8e0",
+      "authorize": "f2b801c8-f1c9-40d4-9dc3-96a6dc823b38"
+    },
+    {
+      "create": "e8159c05-bc88-46fe-91d9-e106e1eedd7d",
+      "revision": "62fe9c0b-721a-4933-9b34-b119482a5908",
+      "authorize": "64b83b3d-9537-4137-bcce-2a1f758fc180"
+    },
+    {
+      "create": "36d215f8-490e-4c29-96e5-54f674345453",
+      "revision": "4bf9c40c-40a9-4357-abca-f8459aec906e",
+      "authorize": "efbcaa15-9c18-4622-9941-7e75c0f8b1ea"
+    },
+    {
+      "create": "5faa8eff-d285-49c4-b883-a0f41b1144f5",
+      "revision": "39526320-bf3b-4821-93e1-ace9e54435e7",
+      "authorize": "837e2ad3-800d-4e70-853e-5a7c28606bc3"
+    },
+    {
+      "create": "c3649098-744d-48a0-a039-611a1cb1d3fa",
+      "revision": "25e5a0d8-6b99-4cab-bf63-98e60eb847b1",
+      "authorize": "d7dac428-0e77-4390-8933-25d068242ade"
+    },
+    {
+      "create": "ca777965-35b8-4f43-8b47-9fcc6b880370",
+      "revision": "65c1f10d-1faf-4fb1-919f-071f0732d3f5",
+      "authorize": "65023788-a3e4-4ff8-998c-434508f284a6"
+    },
+    {
+      "create": "10191b15-c4ce-4493-a422-3e4a184d12dd",
+      "revision": "17c2cd9a-f611-421e-ad76-d1e320297794",
+      "authorize": "ac73f808-3728-4963-8dc6-f0c626da8d2c"
+    },
+    {
+      "create": "b045b8d7-2552-4035-855c-1ae8697f2d88",
+      "revision": "24e384e2-6f38-47c7-92c2-b113e5519360",
+      "authorize": "48539075-4113-40a7-882b-b337358ca79f"
+    },
+    {
+      "create": "8afe62ae-5b53-43e1-acbe-889c6bf05bfe",
+      "revision": "3eb7c45e-6c51-4533-b136-ee0f6d7cf4a6",
+      "authorize": "0fe494c7-7a4b-4f45-b1ba-a30f54c41243"
+    },
+    {
+      "create": "ce8ec718-2d32-4ec7-8080-176db7073788",
+      "revision": "7e19bd00-9739-4ac4-b13a-42d01d6f28ab",
+      "authorize": "eb40cba9-b6f5-44f4-a52d-c751bd2e2a3e"
+    },
+    {
+      "create": "cb432c2f-fda6-4943-8e7f-a8d1608f493d",
+      "revision": "b95276e2-5474-4919-aff8-107b37c84df7",
+      "authorize": "f0f82775-6e6b-4dbc-a8f4-436b574f3882"
+    },
+    {
+      "create": "b849d42e-3759-4a07-95ef-180ce6be8f7b",
+      "revision": "68e3ff52-35f5-4eaf-ad4d-47dfe89d6c15",
+      "authorize": "a1d8269d-5a5f-42d3-ab3a-51c3f59c8221"
+    },
+    {
+      "create": "855a0cbd-bcb9-47a0-9f6a-df49d6c78194",
+      "revision": "cff0cea4-a0ce-4084-a4c2-7a4895d5cfe2",
+      "authorize": "dced2dc9-99a8-48cc-81a9-59642fc5d195"
+    },
+    {
+      "create": "7208a47c-c60b-42e9-bc36-8a81078b15eb",
+      "revision": "7fbf98fd-d261-4a1e-9fa7-68ac65d6980a",
+      "authorize": "be7767d0-ab6c-40ff-bb5b-fd3683fb2b5b"
+    },
+    {
+      "create": "4b272fed-d617-485c-8ec2-75ff9ee3ee4c",
+      "revision": "ca638957-6846-42db-b7f4-c6d413730202",
+      "authorize": "7c23c85d-602e-4bbe-aa98-248ce68ef942"
+    },
+    {
+      "create": "72449cd6-b544-41f9-af5d-e17696cf2c19",
+      "revision": "8bbe0546-2563-4db4-b538-e8a71f6ea371",
+      "authorize": "6e200c8d-2e12-455a-8a67-ce02ed91f8c9"
+    },
+    {
+      "create": "716c8ab0-5c28-449d-b801-23b78075720f",
+      "revision": "d50ee5c1-8a33-4fa6-9207-411fa29b6419",
+      "authorize": "4310566f-2cde-4fd5-a20d-be4da3f44ff4"
+    },
+    {
+      "create": "261d5562-6cd9-432e-bf00-f94d006c400c",
+      "revision": "46d077e6-0832-49d6-8c32-cf7114a1379d",
+      "authorize": "e82a9443-6858-4d82-a983-9f311efd9b39"
+    },
+    {
+      "create": "da57c5a1-8fd0-44c2-a89a-1b6fdcf91e7d",
+      "revision": "201c5585-b448-4d49-ac3d-efb7018b04d3",
+      "authorize": "2f4470b8-4a81-487b-ad79-1d966b545574"
+    },
+    {
+      "create": "eb88900e-62ae-46b3-adbb-7cd9a8a9c613",
+      "revision": "1421300b-4845-4e21-ac0e-2e61d2b0c46a",
+      "authorize": "61241501-ca1b-43d1-8c2e-e3cc486e6c3c"
+    },
+    {
+      "create": "5840d6ed-6cda-417b-9ff9-373fcb42d81b",
+      "revision": "82f5c33c-f2fd-486c-9756-e0a776b7cb7c",
+      "authorize": "59e42a0a-605a-4042-9eb9-a7565eb5c492"
+    },
+    {
+      "create": "c43ec1ba-2d7d-4fe1-ac69-fa8532302c8e",
+      "revision": "a8b84d6d-4ed0-4b33-9caa-17783e0d6320",
+      "authorize": "37b66bd7-d019-4f6c-b0be-c19860c8afb1"
+    },
+    {
+      "create": "eb93752e-eaec-43ce-b0ef-55f5ca188988",
+      "revision": "2074c174-1ede-41b1-acaa-7c59dd3e3aa9",
+      "authorize": "243cbd0b-9c56-4aa1-bed0-203d68bbe438"
+    },
+    {
+      "create": "83f6f098-a71d-4b73-8b81-7b2239e4a48b",
+      "revision": "05f3d76f-d3ce-4b28-827f-c8fdde22fe67",
+      "authorize": "ac438bda-85a7-4426-8470-7c156538d9dd"
+    },
+    {
+      "create": "8490b3d0-5e07-4442-b847-f749c5e1f250",
+      "revision": "a4b13ccf-d33b-4d27-a05e-f181e2e1e3c1",
+      "authorize": "c6e8b6ff-8d81-427e-b778-0966641ee5bf"
+    },
+    {
+      "create": "ba630e3f-bce1-4979-8301-dc327986642f",
+      "revision": "9dedae73-1eee-43a3-968c-1ca56d57b214",
+      "authorize": "6a01e80e-ba61-44cc-93ba-4b78afee7a8b"
+    },
+    {
+      "create": "45fd8037-1a2a-4572-b871-6395783e3aba",
+      "revision": "6ea451a3-0440-4b07-965c-911cfaf94e32",
+      "authorize": "9a7c3a17-609d-418c-8857-9fb60a0391cf"
+    },
+    {
+      "create": "0d728929-6ef0-4dbd-a39c-843c2a1f21a5",
+      "revision": "012f93c6-6fa4-460c-9132-cb0435562d77",
+      "authorize": "a1d7f460-3caa-42d3-a00b-a1048757d5ec"
+    }
+  ],
+  "postgres": {
+    "lock_snapshot": {
+      "waiting": 0,
+      "total": 2
+    },
+    "activity_snapshot": {
+      "active": 11
+    }
+  },
+  "root_cause_assessment": "The i3 503/resource-lock result was isolated to the reused i2 MinIO runtime state; a fresh labeled i4 MinIO passed direct distinct-key control and the real application path at concurrency 2, 5, 10 and 20. No product serialization bottleneck was identified.",
+  "verdict": "PASS"
+}

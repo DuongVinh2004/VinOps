@@ -1,0 +1,50 @@
+{
+  "name": "vinops",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@11.15.1",
+  "engines": {
+    "node": ">=24.0.0 <25.0.0",
+    "pnpm": ">=11.0.0 <12.0.0"
+  },
+  "scripts": {
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "lint": "eslint apps packages scripts --max-warnings=0",
+    "typecheck": "pnpm --recursive --sort run typecheck && tsc -b --pretty false",
+    "test": "vitest run",
+    "contracts:lint": "redocly lint packages/contracts/openapi/vinops.openapi.yaml --config packages/contracts/redocly.yaml",
+    "contracts:generate": "openapi-typescript packages/contracts/openapi/vinops.openapi.yaml -o packages/contracts/src/generated/openapi.ts",
+    "contracts:check": "node scripts/check-generated.mjs",
+    "contracts:verify": "pnpm contracts:lint && pnpm contracts:check",
+    "architecture:check": "depcruise --config .dependency-cruiser.cjs apps packages",
+    "build": "pnpm --recursive --sort --if-present run build",
+    "secret:scan": "node scripts/secret-scan.mjs",
+    "license:check": "node scripts/license-check.mjs",
+    "verify": "pnpm format:check && pnpm lint && pnpm typecheck && pnpm test && pnpm contracts:verify && pnpm architecture:check && pnpm build && pnpm secret:scan && pnpm license:check"
+  },
+  "devDependencies": {
+    "@eslint/js": "10.0.1",
+    "@redocly/cli": "2.40.0",
+    "@testing-library/jest-dom": "7.0.0",
+    "@testing-library/react": "16.3.2",
+    "@types/node": "24.13.3",
+    "@types/express": "5.0.6",
+    "@types/pg": "8.20.0",
+    "@types/react": "19.2.17",
+    "@types/react-dom": "19.2.3",
+    "@types/supertest": "7.2.1",
+    "dependency-cruiser": "18.1.0",
+    "eslint": "10.8.0",
+    "globals": "17.8.0",
+    "jsdom": "30.0.1",
+    "openapi-typescript": "7.13.0",
+    "prettier": "3.9.6",
+    "supertest": "7.2.2",
+    "typescript": "5.9.3",
+    "typescript-eslint": "8.65.0",
+    "vitest": "3.2.7",
+    "yaml": "2.9.0"
+  }
+}

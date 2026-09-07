@@ -1,0 +1,6 @@
+{
+  "status": "UNVERIFIED",
+  "xss": {"expected": 48, "executed": 0, "uncovered": 48, "failures": 0, "unique_sentinels": 0},
+  "deep_links": {"expected": 14, "executed": 0, "uncovered": 14, "failures": 0},
+  "reason": "No fresh Iteration 5 real-browser runtime evidence was captured; incomplete Iteration 4 results are preserved, not relabeled."
+}

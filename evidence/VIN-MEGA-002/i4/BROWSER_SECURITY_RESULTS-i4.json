@@ -1,0 +1,71 @@
+{
+  "iteration": 4,
+  "runtime": "http://127.0.0.1:4180",
+  "api": "http://127.0.0.1:4015/api/v1",
+  "expected_xss_cases": 48,
+  "executed_xss_cases": 2,
+  "xss_uncovered": 46,
+  "expected_deep_link_cases": 14,
+  "executed_deep_link_cases": 6,
+  "deep_link_uncovered": 8,
+  "failures": 0,
+  "coverage_gate": "UNVERIFIED",
+  "csp_present": false,
+  "security_headers": {
+    "content_security_policy": null,
+    "x_frame_options": null,
+    "referrer_policy": null
+  },
+  "browser": "Codex In-app Browser",
+  "observations": [
+    {
+      "case_id": "authorized_current",
+      "boundary": "authorized in-scope",
+      "revision": "current",
+      "observed": "Published current revision rendered in real browser",
+      "verdict": "PASS"
+    },
+    {
+      "case_id": "authorized_superseded",
+      "boundary": "authorized in-scope",
+      "revision": "superseded",
+      "observed": "Superseded deep-link metadata rendered with preserved banner and current link",
+      "verdict": "PASS"
+    },
+    {
+      "case_id": "active_outsider_current",
+      "boundary": "active outsider",
+      "revision": "current",
+      "observed": "No project context; protected metadata absent",
+      "verdict": "PASS"
+    },
+    {
+      "case_id": "active_outsider_superseded",
+      "boundary": "active outsider",
+      "revision": "superseded",
+      "observed": "No project context; protected metadata absent",
+      "verdict": "PASS"
+    },
+    {
+      "case_id": "unauthenticated_current",
+      "boundary": "unauthenticated",
+      "revision": "current",
+      "observed": "Sign-in surface shown; protected metadata absent",
+      "verdict": "PASS"
+    },
+    {
+      "case_id": "unauthenticated_superseded",
+      "boundary": "unauthenticated",
+      "revision": "superseded",
+      "observed": "Sign-in surface shown; protected metadata absent",
+      "verdict": "PASS"
+    }
+  ],
+  "uncovered_boundaries": [
+    "same-project out-of-scope",
+    "same-tenant other-project",
+    "cross-tenant",
+    "expired member",
+    "suspended member"
+  ]
+}

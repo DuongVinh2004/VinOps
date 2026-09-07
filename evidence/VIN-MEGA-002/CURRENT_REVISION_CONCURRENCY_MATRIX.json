@@ -1,0 +1,11 @@
+{
+  "result": "PASS",
+  "checks": [
+    "explicit current pointer per context",
+    "concurrent publish exactly one winner and one conflict",
+    "rollback injection leaves current/audit/outbox consistent"
+  ],
+  "evidence": [
+    "packages/database/test/document-postgres.integration.test.ts: 4/4"
+  ]
+}

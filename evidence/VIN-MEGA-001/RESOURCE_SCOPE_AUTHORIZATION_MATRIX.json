@@ -1,0 +1,23 @@
+{
+  "checkpoint": "VIN-MEGA-001",
+  "iteration": 4,
+  "status": "PASS",
+  "cases": {
+    "organization_admin_without_project_membership_404": "PASS",
+    "project_guest_only_allowed_location_and_work_scope": "PASS",
+    "project_guest_mutation_denied": "PASS",
+    "self_sensitive_role_assignment_denied": "PASS",
+    "outsider_and_random_uuid_same_404": "PASS",
+    "delegation_scope_and_validity_enforced": "PASS",
+    "self_delegation_denied": "PASS",
+    "expired_delegation_denied": "PASS",
+    "revoked_delegation_state_verified": "PASS",
+    "delegation_create_audited": "PASS",
+    "break_glass_ttl_bounded": "PASS",
+    "break_glass_self_approval_denied": "PASS",
+    "break_glass_separate_approval_and_audit": "PASS",
+    "break_glass_business_transition_denied": "PASS",
+    "partner_metadata_grants_no_implicit_project_membership": "PASS_POLICY_AND_NON_DISCLOSURE"
+  },
+  "note": "The contract exposes delegation creation but no delegation-revoke endpoint; exact revocation state was exercised with the isolated verifier role."
+}

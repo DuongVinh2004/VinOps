@@ -1,0 +1,51 @@
+﻿services:
+  postgres:
+    image: postgres:17
+    container_name: vinops-postgres
+    restart: unless-stopped
+    ports:
+      - '5432:5432'
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - ./docker/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U postgres']
+      interval: 3s
+      timeout: 3s
+      retries: 5
+
+  clamav:
+    image: clamav/clamav:stable_base
+    container_name: vinops-clamav
+    restart: unless-stopped
+    ports:
+      - '3310:3310'
+    environment:
+      CLAMAV_NO_FRESHCLAMD: 'true'
+
+  minio:
+    image: minio/minio:latest
+    container_name: vinops-minio
+    restart: unless-stopped
+    ports:
+      - '9000:9000'
+      - '9001:9001'
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+
+  minio-init:
+    image: minio/mc:latest
+    container_name: vinops-minio-init
+    depends_on:
+      - minio
+    entrypoint: >
+      /bin/sh -c "
+      sleep 2;
+      /usr/bin/mc alias set local http://minio:9000 minioadmin minioadmin;
+      /usr/bin/mc mb local/vinops-files;
+      exit 0;
+      "

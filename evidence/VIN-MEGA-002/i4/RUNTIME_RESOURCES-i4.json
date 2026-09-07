@@ -1,0 +1,333 @@
+{
+  "task": "VIN-MEGA-002",
+  "iteration": 4,
+  "containers": [
+    {
+      "name": "vinops-mega002-i4-minio-bootstrap-retry",
+      "id": "c9a15cdb957ea326ef34fcce9b237cf2f568d7a2d1d5634e7876a9bd9454f5f3",
+      "status": "exited",
+      "labels": {
+        "architecture": "x86_64",
+        "build-date": "2025-08-06T08:12:37",
+        "com.redhat.component": "ubi9-micro-container",
+        "com.redhat.license_terms": "https://www.redhat.com/en/about/red-hat-end-user-license-agreements#UBI",
+        "description": "Very small image which doesn't install the package manager.",
+        "desktop.docker.io/ports.scheme": "v2",
+        "distribution-scope": "public",
+        "io.buildah.version": "1.40.1",
+        "io.k8s.description": "Very small image which doesn't install the package manager.",
+        "io.k8s.display-name": "Red Hat Universal Base Image 9 Micro",
+        "io.openshift.expose-services": "",
+        "maintainer": "MinIO Inc <dev@min.io>",
+        "name": "ubi9/ubi-micro",
+        "release": "1754467928",
+        "summary": "ubi9 micro image",
+        "url": "https://catalog.redhat.com/en/search?searchType=containers",
+        "vcs-ref": "32d8e5209f029a1fb7235308ab32253bface1001",
+        "vcs-type": "git",
+        "vendor": "Red Hat",
+        "version": "9.6",
+        "vinops.iteration": "4",
+        "vinops.task": "VIN-MEGA-002"
+      }
+    },
+    {
+      "name": "vinops-mega002-i4-minio-bootstrap",
+      "id": "022736feb94a8b3ec4ae0fc9ec16c427838089fd2454a89cf53aace6a1314c42",
+      "status": "exited",
+      "labels": {
+        "architecture": "x86_64",
+        "build-date": "2025-08-06T08:12:37",
+        "com.redhat.component": "ubi9-micro-container",
+        "com.redhat.license_terms": "https://www.redhat.com/en/about/red-hat-end-user-license-agreements#UBI",
+        "description": "Very small image which doesn't install the package manager.",
+        "desktop.docker.io/ports.scheme": "v2",
+        "distribution-scope": "public",
+        "io.buildah.version": "1.40.1",
+        "io.k8s.description": "Very small image which doesn't install the package manager.",
+        "io.k8s.display-name": "Red Hat Universal Base Image 9 Micro",
+        "io.openshift.expose-services": "",
+        "maintainer": "MinIO Inc <dev@min.io>",
+        "name": "ubi9/ubi-micro",
+        "release": "1754467928",
+        "summary": "ubi9 micro image",
+        "url": "https://catalog.redhat.com/en/search?searchType=containers",
+        "vcs-ref": "32d8e5209f029a1fb7235308ab32253bface1001",
+        "vcs-type": "git",
+        "vendor": "Red Hat",
+        "version": "9.6",
+        "vinops.iteration": "4",
+        "vinops.task": "VIN-MEGA-002"
+      }
+    },
+    {
+      "name": "vinops-mega002-i4-minio",
+      "id": "9d6870144f1685cb9d590fe981c1921e1edf5c06a8ff94d969e2a643b0575ff2",
+      "status": "running",
+      "labels": {
+        "architecture": "x86_64",
+        "build-date": "2025-08-06T08:12:37",
+        "com.redhat.component": "ubi9-micro-container",
+        "com.redhat.license_terms": "https://www.redhat.com/en/about/red-hat-end-user-license-agreements#UBI",
+        "description": "MinIO object storage is fundamentally different. Designed for performance and the S3 API",
+        "desktop.docker.io/ports.scheme": "v2",
+        "desktop.docker.io/ports/9000/tcp": "127.0.0.1:59012",
+        "desktop.docker.io/ports/9001/tcp": "127.0.0.1:59013",
+        "distribution-scope": "public",
+        "io.buildah.version": "1.40.1",
+        "io.k8s.description": "Very small image which doesn't install the package manager.",
+        "io.k8s.display-name": "Red Hat Universal Base Image 9 Micro",
+        "io.openshift.expose-services": "",
+        "maintainer": "MinIO Inc <dev@min.io>",
+        "name": "MinIO",
+        "release": "RELEASE.2025-09-07T16-13-09Z",
+        "summary": "MinIO is a High Performance Object Storage",
+        "url": "https://catalog.redhat.com/en/search?searchType=containers",
+        "vcs-ref": "32d8e5209f029a1fb7235308ab32253bface1001",
+        "vcs-type": "git",
+        "vendor": "MinIO Inc <dev@min.io>",
+        "version": "RELEASE.2025-09-07T16-13-09Z",
+        "vinops.iteration": "4",
+        "vinops.task": "VIN-MEGA-002"
+      }
+    },
+    {
+      "name": "vinops-mega002-i3-benchmark-clientpool",
+      "id": "453827acac12161691fe4cce2df0453ea9430116db445a35f6f56e29710a9715",
+      "status": "running",
+      "labels": {
+        "desktop.docker.io/ports.scheme": "v2",
+        "vinops.iteration": "3",
+        "vinops.task": "VIN-MEGA-002"
+      }
+    },
+    {
+      "name": "vinops-mega002-i2-minio-bootstrap",
+      "id": "c31e9d4929f830922e89b2596c965124cdd4b75f13c1bff2cfb08c8b69392b3a",
+      "status": "exited",
+      "labels": {
+        "architecture": "x86_64",
+        "build-date": "2025-08-06T08:12:37",
+        "com.redhat.component": "ubi9-micro-container",
+        "com.redhat.license_terms": "https://www.redhat.com/en/about/red-hat-end-user-license-agreements#UBI",
+        "description": "Very small image which doesn't install the package manager.",
+        "desktop.docker.io/ports.scheme": "v2",
+        "distribution-scope": "public",
+        "io.buildah.version": "1.40.1",
+        "io.k8s.description": "Very small image which doesn't install the package manager.",
+        "io.k8s.display-name": "Red Hat Universal Base Image 9 Micro",
+        "io.openshift.expose-services": "",
+        "maintainer": "MinIO Inc <dev@min.io>",
+        "name": "ubi9/ubi-micro",
+        "release": "1754467928",
+        "summary": "ubi9 micro image",
+        "url": "https://catalog.redhat.com/en/search?searchType=containers",
+        "vcs-ref": "32d8e5209f029a1fb7235308ab32253bface1001",
+        "vcs-type": "git",
+        "vendor": "Red Hat",
+        "version": "9.6",
+        "vinops.iteration": "2",
+        "vinops.task": "VIN-MEGA-002"
+      }
+    },
+    {
+      "name": "vinops-mega002-i2-clamav",
+      "id": "d17abfb2079ac843e22dcf35fb74691488ebd23530f6f5c4f0d02ba56e290c8f",
+      "status": "running",
+      "labels": {
+        "desktop.docker.io/ports.scheme": "v2",
+        "desktop.docker.io/ports/3310/tcp": "127.0.0.1:53311",
+        "maintainer": "ClamAV bugs <clamav-bugs@external.cisco.com>",
+        "vinops.iteration": "2",
+        "vinops.task": "VIN-MEGA-002"
+      }
+    },
+    {
+      "name": "vinops-mega002-i2-minio",
+      "id": "cd41553f0ec6814d31a585c00415a7ce337fbbbd7cd2dcb80563f499e1d6befc",
+      "status": "running",
+      "labels": {
+        "architecture": "x86_64",
+        "build-date": "2025-08-06T08:12:37",
+        "com.redhat.component": "ubi9-micro-container",
+        "com.redhat.license_terms": "https://www.redhat.com/en/about/red-hat-end-user-license-agreements#UBI",
+        "description": "MinIO object storage is fundamentally different. Designed for performance and the S3 API",
+        "desktop.docker.io/ports.scheme": "v2",
+        "desktop.docker.io/ports/9000/tcp": "127.0.0.1:59002",
+        "desktop.docker.io/ports/9001/tcp": "127.0.0.1:59003",
+        "distribution-scope": "public",
+        "io.buildah.version": "1.40.1",
+        "io.k8s.description": "Very small image which doesn't install the package manager.",
+        "io.k8s.display-name": "Red Hat Universal Base Image 9 Micro",
+        "io.openshift.expose-services": "",
+        "maintainer": "MinIO Inc <dev@min.io>",
+        "name": "MinIO",
+        "release": "RELEASE.2025-09-07T16-13-09Z",
+        "summary": "MinIO is a High Performance Object Storage",
+        "url": "https://catalog.redhat.com/en/search?searchType=containers",
+        "vcs-ref": "32d8e5209f029a1fb7235308ab32253bface1001",
+        "vcs-type": "git",
+        "vendor": "MinIO Inc <dev@min.io>",
+        "version": "RELEASE.2025-09-07T16-13-09Z",
+        "vinops.iteration": "2",
+        "vinops.task": "VIN-MEGA-002"
+      }
+    },
+    {
+      "name": "vinops-mega002-i2-postgres",
+      "id": "ecdcbaabfd97a5d20255b79239263b21c0e8aec9b65b5c002e98f515de452adb",
+      "status": "running",
+      "labels": {
+        "desktop.docker.io/ports.scheme": "v2",
+        "desktop.docker.io/ports/5432/tcp": "127.0.0.1:55443",
+        "vinops.iteration": "2",
+        "vinops.task": "VIN-MEGA-002"
+      }
+    },
+    {
+      "name": "vinops-mega002-i1-minio-bootstrap",
+      "id": "06f74c949318c89beb29e320c22a39e008f3266228ab81a63b20645ba3e86c1c",
+      "status": "exited",
+      "labels": {
+        "architecture": "x86_64",
+        "build-date": "2025-08-06T08:12:37",
+        "com.redhat.component": "ubi9-micro-container",
+        "com.redhat.license_terms": "https://www.redhat.com/en/about/red-hat-end-user-license-agreements#UBI",
+        "description": "Very small image which doesn't install the package manager.",
+        "desktop.docker.io/ports.scheme": "v2",
+        "distribution-scope": "public",
+        "io.buildah.version": "1.40.1",
+        "io.k8s.description": "Very small image which doesn't install the package manager.",
+        "io.k8s.display-name": "Red Hat Universal Base Image 9 Micro",
+        "io.openshift.expose-services": "",
+        "maintainer": "MinIO Inc <dev@min.io>",
+        "name": "ubi9/ubi-micro",
+        "release": "1754467928",
+        "summary": "ubi9 micro image",
+        "url": "https://catalog.redhat.com/en/search?searchType=containers",
+        "vcs-ref": "32d8e5209f029a1fb7235308ab32253bface1001",
+        "vcs-type": "git",
+        "vendor": "Red Hat",
+        "version": "9.6",
+        "vinops.task": "VIN-MEGA-002"
+      }
+    },
+    {
+      "name": "vinops-mega002-i1-clamav",
+      "id": "fc2e77285819e7acb75d0137eab59b2d246fcd5aa5f3e7e10cf74524b9ae51ae",
+      "status": "exited",
+      "labels": {
+        "desktop.docker.io/ports.scheme": "v2",
+        "desktop.docker.io/ports/3310/tcp": "127.0.0.1:53310",
+        "maintainer": "ClamAV bugs <clamav-bugs@external.cisco.com>",
+        "vinops.task": "VIN-MEGA-002"
+      }
+    },
+    {
+      "name": "vinops-mega002-i1-minio",
+      "id": "d8c9335bced50a143586b04f003d9d1753d2c82195eda29f704f23f72642bfb7",
+      "status": "exited",
+      "labels": {
+        "architecture": "x86_64",
+        "build-date": "2025-08-06T08:12:37",
+        "com.redhat.component": "ubi9-micro-container",
+        "com.redhat.license_terms": "https://www.redhat.com/en/about/red-hat-end-user-license-agreements#UBI",
+        "description": "MinIO object storage is fundamentally different. Designed for performance and the S3 API",
+        "desktop.docker.io/ports.scheme": "v2",
+        "desktop.docker.io/ports/9000/tcp": "127.0.0.1:59000",
+        "desktop.docker.io/ports/9001/tcp": "127.0.0.1:59001",
+        "distribution-scope": "public",
+        "io.buildah.version": "1.40.1",
+        "io.k8s.description": "Very small image which doesn't install the package manager.",
+        "io.k8s.display-name": "Red Hat Universal Base Image 9 Micro",
+        "io.openshift.expose-services": "",
+        "maintainer": "MinIO Inc <dev@min.io>",
+        "name": "MinIO",
+        "release": "RELEASE.2025-09-07T16-13-09Z",
+        "summary": "MinIO is a High Performance Object Storage",
+        "url": "https://catalog.redhat.com/en/search?searchType=containers",
+        "vcs-ref": "32d8e5209f029a1fb7235308ab32253bface1001",
+        "vcs-type": "git",
+        "vendor": "MinIO Inc <dev@min.io>",
+        "version": "RELEASE.2025-09-07T16-13-09Z",
+        "vinops.task": "VIN-MEGA-002"
+      }
+    },
+    {
+      "name": "vinops-mega002-i1-postgres",
+      "id": "14b5e725d506b0a87b67b30144358981d5f08429c9e9df5d0b6af60d08afad9c",
+      "status": "exited",
+      "labels": {
+        "desktop.docker.io/ports.scheme": "v2",
+        "desktop.docker.io/ports/5432/tcp": "127.0.0.1:55442",
+        "vinops.iteration": "1",
+        "vinops.task": "VIN-MEGA-002"
+      }
+    }
+  ],
+  "networks": [
+    {
+      "name": "vinops-mega002-i1-runtime",
+      "id": "351a569583864d1df27e90695bd9174711308bbf27d37f57b7f4fcaac3c90ebd",
+      "labels": {
+        "vinops.task": "VIN-MEGA-002"
+      }
+    },
+    {
+      "name": "vinops-mega002-i2-runtime",
+      "id": "275c51377b22f823268faf214117b05ffc5cb8903fc43b392c05f42b2ba208f6",
+      "labels": {
+        "vinops.iteration": "2",
+        "vinops.task": "VIN-MEGA-002"
+      }
+    },
+    {
+      "name": "vinops-mega002-i3-benchmark",
+      "id": "3d02e9eebead3e64d39601b550734b2873a780b10264a3ad1d8854fafab89c52",
+      "labels": {
+        "vinops.iteration": "3",
+        "vinops.task": "VIN-MEGA-002"
+      }
+    },
+    {
+      "name": "vinops-mega002-i4-diagnostics",
+      "id": "c0aab7922f7df45d4ac35ed9fe8dfa84eb0705f4445952b8a2f0230694f89667",
+      "labels": {
+        "vinops.iteration": "4",
+        "vinops.task": "VIN-MEGA-002"
+      }
+    }
+  ],
+  "volumes": [
+    {
+      "name": "vinops-mega002-i2-clamav-data",
+      "labels": {
+        "vinops.iteration": "2",
+        "vinops.task": "VIN-MEGA-002"
+      }
+    },
+    {
+      "name": "vinops-mega002-i2-minio-data",
+      "labels": {
+        "vinops.iteration": "2",
+        "vinops.task": "VIN-MEGA-002"
+      }
+    },
+    {
+      "name": "vinops-mega002-i2-postgres-data",
+      "labels": {
+        "vinops.iteration": "2",
+        "vinops.task": "VIN-MEGA-002"
+      }
+    },
+    {
+      "name": "vinops-mega002-i4-minio-data",
+      "labels": {
+        "vinops.iteration": "4",
+        "vinops.task": "VIN-MEGA-002"
+      }
+    }
+  ],
+  "i4_diagnostic_container": "vinops-mega002-i4-minio",
+  "i4_minio_endpoint": "http://127.0.0.1:59012"
+}

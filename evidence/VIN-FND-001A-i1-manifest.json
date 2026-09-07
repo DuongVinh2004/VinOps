@@ -1,0 +1,60 @@
+{
+  "checkpoint": "VIN-FND-001A",
+  "iteration": 1,
+  "artifact_kind": "repository_foundation_evidence",
+  "hash_algorithm": "SHA-256",
+  "repository": "C:\\Users\\Duong Vinh\\Downloads\\VinOps\\vinops\\",
+  "archive": {
+    "filename": "VIN-FND-001A-i1-evidence.zip",
+    "source_file_count": 80,
+    "auxiliary_evidence_files": 4,
+    "expected_entry_count": 84,
+    "exclusions": [
+      ".git",
+      ".tmp",
+      "node_modules",
+      "dist",
+      "coverage",
+      ".cache",
+      ".pnpm-store",
+      "*.tsbuildinfo",
+      ".env",
+      "evidence/*.zip",
+      "evidence/*.patch"
+    ],
+    "sha256": "091D0D8F9BD28B49CA38CD2822E65EE90D5EDD7809EDC4B9D018F7D0D54470CF"
+  },
+  "source_tree": {
+    "file_count": 80,
+    "canonical_tree_algorithm": "Sort paths ordinally; for each source file append path + TAB + byte-size + TAB + uppercase SHA-256 + LF; SHA-256 the UTF-8 byte sequence.",
+    "sha256": "C6F987153E3FD0D9B84949111D4B9F562D8105A788CD1FC1C3CAD4064E63D9BF"
+  },
+  "auxiliary_evidence": [
+    {
+      "filename": "COMMAND_EVIDENCE.json",
+      "size": 2237,
+      "sha256": "1899C2785B8F6E6D2A0E795B168F989CE5D6D936E8E80D4A014F7390A1A1DF6A"
+    },
+    {
+      "filename": "TEST_SUMMARY.json",
+      "size": 1254,
+      "sha256": "7D60C9B76B20511609544D18CA07E234EB6C489C224B8C5C0510266DD4581E9E"
+    },
+    {
+      "filename": "DEPENDENCY_LICENSE_SUMMARY.json",
+      "size": 1195,
+      "sha256": "C93BFBE4623A831342EA568F710B0DEB5647B5290497F5063157F03B7FE46483"
+    },
+    {
+      "filename": "CHANGED_FILES_MANIFEST.json",
+      "size": 3467,
+      "sha256": "E0742059D448570212955DC08D9CC0B1D568AB66C14EB0E061FDA990E199A028"
+    }
+  ],
+  "patch_review_artifact": "Not generated: this is a new repository with no tracked baseline; CHANGED_FILES_MANIFEST.json is the review inventory.",
+  "status": "BLOCKED_EXTERNAL_POLICY",
+  "blockers": [
+    "Registry-backed High/Critical advisory audit is not verified because egress of dependency-graph metadata was denied.",
+    "Task-created clean-room source copy passed, but package-manager hardlinks prevent safe deletion under workspace boundary policy."
+  ]
+}

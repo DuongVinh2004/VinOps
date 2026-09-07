@@ -1,0 +1,12 @@
+{
+  "checkpoint": "VIN-MEGA-001",
+  "iteration": 3,
+  "baseline": {"head":"UNBORN","remote":"NONE","source_files":116,"source_fingerprint_before":"bad57a9afd26cb826bc4837cde81a0f25f6d20cad230f8f781c12cc770ae5afd"},
+  "source_fingerprint_after": "bad57a9afd26cb826bc4837cde81a0f25f6d20cad230f8f781c12cc770ae5afd",
+  "source_review_archive_content_match": true,
+  "source_changes": [],
+  "evidence_changes": ["evidence/VIN-MEGA-001/i3/*","evidence/VIN-MEGA-001/VIN-MEGA-001-i3-manifest.json"],
+  "patch": "NOT_APPLICABLE_UNBORN_REPOSITORY",
+  "user_work_preserved": true,
+  "no_commit_push_pr_deploy": true
+}

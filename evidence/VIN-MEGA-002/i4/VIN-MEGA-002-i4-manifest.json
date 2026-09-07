@@ -1,0 +1,64 @@
+{
+  "project": "VinOps",
+  "checkpoint_id": "VIN-MEGA-002",
+  "iteration": 4,
+  "status": "BLOCKED",
+  "context_mode": "STRICT",
+  "evidence_mode": "PATCH_FILE",
+  "source_fingerprint_before": "94ff9f64896bf640f89d80fd993aeb8dc6871a05c87f6bf6b02cff556c41e9ae",
+  "source_fingerprint_after": "94ff9f64896bf640f89d80fd993aeb8dc6871a05c87f6bf6b02cff556c41e9ae",
+  "source_files_before": 183,
+  "source_files_after": 183,
+  "additional_source_test_script_files": [],
+  "cumulative_changed_source_test_script_files": [
+    "apps/worker/src/file-processing-worker.ts",
+    "apps/worker/test/file-processing.integration.test.ts",
+    "packages/database/src/seed.ts",
+    "packages/database/test/document-postgres.integration.test.ts"
+  ],
+  "change_budget": {
+    "additional_source_test_script_changed": 0,
+    "cumulative_source_test_script_changed": 4,
+    "additional_limit": 8,
+    "cumulative_limit": 12,
+    "migrations_changed": 0,
+    "dependencies_changed": 0
+  },
+  "acceptance": {
+    "AC_01": "PASS",
+    "AC_02": "PASS",
+    "AC_03": "PASS",
+    "AC_04": "PASS",
+    "AC_05": "UNVERIFIED",
+    "AC_06": "UNVERIFIED",
+    "AC_07": "PASS",
+    "AC_08": "BLOCKED"
+  },
+  "ac03": {
+    "verdict": "PASS",
+    "root_cause_assessment": "The i3 503/resource-lock result was isolated to the reused i2 MinIO runtime state; a fresh labeled i4 MinIO passed direct distinct-key control and the real application path at concurrency 2, 5, 10 and 20. No product serialization bottleneck was identified.",
+    "payload_sha256": "7922289ab02a036ccf8465b663fe58186e89f11ccda610e0f14a6b6e0d866c5e"
+  },
+  "authorization_matrix": {
+    "expected": 10800,
+    "executed": 0,
+    "uncovered": 10800,
+    "unexpected": 0
+  },
+  "browser_matrix": {
+    "xss_expected": 48,
+    "xss_executed": 2,
+    "xss_uncovered": 46,
+    "deep_link_expected": 14,
+    "deep_link_executed": 6,
+    "deep_link_uncovered": 8,
+    "failures": 0
+  },
+  "cleanup": "BLOCKED_BY_SAFETY_AUTHORIZATION",
+  "required_artifacts": [
+    "VIN-MEGA-002-i4-evidence-verifiable.zip",
+    "VIN-MEGA-002-i4-review-verifiable.zip",
+    "VIN-MEGA-002-i4-source.delta.patch"
+  ],
+  "artifact_hashes": "see ARCHIVE_HASHES.json"
+}

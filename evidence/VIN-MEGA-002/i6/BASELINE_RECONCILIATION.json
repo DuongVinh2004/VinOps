@@ -1,0 +1,17 @@
+{
+  "status": "PASS",
+  "branch": "main",
+  "head": "UNBORN",
+  "source_fingerprint_before": "94ff9f64896bf640f89d80fd993aeb8dc6871a05c87f6bf6b02cff556c41e9ae",
+  "source_fingerprint_after": "94ff9f64896bf640f89d80fd993aeb8dc6871a05c87f6bf6b02cff556c41e9ae",
+  "cumulative_changed_source_test_script_files": 4,
+  "migrations": 0,
+  "dependencies": 0,
+  "i5_manifest_sha256": "76435098A505CBFFDF6587F59704626317C64EE8D2BE6FD74676B50650312CF7",
+  "i5_evidence_sha256": "74EF45B37E049309FCBC898F2AD47B015C31A5BC6C51FAD837C2A1325A86E532",
+  "i5_review_sha256": "9439FBFCB17795D564A0A82644BA120E17709A8329307C4497AEB8771AC3FB3C",
+  "i5_delta_sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+  "frozen_expected_matrix_sha256": "10da18fe95aaddd84998a674c9ca00f43da710590a781aeb57406a450294fe0a",
+  "reconciliation": {"routes": 18, "rows": 10800, "canonical_row_ids": 10800, "semantic_keys": 10800, "collisions": 0, "conflicts": 0},
+  "protected_prior_evidence": "i1-i5 preserved; no prior evidence overwritten"
+}

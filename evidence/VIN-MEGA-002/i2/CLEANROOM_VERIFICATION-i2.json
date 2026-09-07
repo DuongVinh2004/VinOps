@@ -1,0 +1,54 @@
+{
+  "result": "PASS_WITH_LIMITATIONS",
+  "cleanroom_path": ".tmp/vinops-mega002-i2-cleanroom",
+  "source_extraction": {
+    "source_only": true,
+    "inventory_entries": 183,
+    "byte_mismatches": 0,
+    "fingerprint": "b819f50a568c6da11c2b2b8f258053fc0536fe19f6e9faa8b8e02cc179a6a1f7"
+  },
+  "frozen_install": {
+    "command": "pnpm install --frozen-lockfile --offline",
+    "exit": 0,
+    "result": "PASS",
+    "node": "24.18.0",
+    "pnpm": "11.15.1"
+  },
+  "migration_verify": {
+    "applied": 10,
+    "exit": 0,
+    "result": "PASS"
+  },
+  "deterministic_seed": {
+    "exit": 0,
+    "result": "PASS",
+    "database": "vinops_mega002_i2_test",
+    "allowlist_fix": "seed.ts accepts _i2_test task database"
+  },
+  "source_byte_identity_after_i2": {
+    "main_entries": 183,
+    "cleanroom_entries": 183,
+    "byte_mismatches": 0
+  },
+  "full_regression": {
+    "command": "pnpm verify",
+    "exit": 0,
+    "result": "PASS",
+    "passed": 49,
+    "skipped": 16,
+    "failed": 0
+  },
+  "focused_runtime": {
+    "command": "vitest file-runtime + file-processing + document-postgres",
+    "exit": 0,
+    "result": "PASS",
+    "passed": 9,
+    "skipped": 0,
+    "failed": 0
+  },
+  "cleanup": {
+    "status": "BLOCKED_BY_SAFETY_AUTHORIZATION",
+    "task_resources_retained": true
+  },
+  "recorded_at": "2026-08-02T13:44:50.797Z"
+}

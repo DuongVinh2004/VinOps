@@ -1,0 +1,57 @@
+{
+  "checkpoint": "VIN-MEGA-001",
+  "recorded_on": "2026-08-01",
+  "artifact_status": "FINAL_STATIC_VERIFICATION",
+  "toolchain": {
+    "pnpm": "11.15.1",
+    "node_observed": "v26.5.1",
+    "node_pinned_by_repository": "24.18.0",
+    "target_node_evidence": "UNVERIFIED_TARGET_TOOLCHAIN"
+  },
+  "command_results": [
+    {
+      "command": "pnpm format:check",
+      "result": "PASS"
+    },
+    {
+      "command": "pnpm lint",
+      "result": "PASS"
+    },
+    {
+      "command": "pnpm --recursive --sort run typecheck; pnpm exec tsc -b --pretty false",
+      "result": "PASS"
+    },
+    {
+      "command": "pnpm test",
+      "result": "PASS_WITH_INTENTIONAL_RUNTIME_SKIP",
+      "detail": "38 passed, 1 skipped: packages/database/test/postgres.integration.test.ts requires VINOPS_TEST_DATABASE_URL."
+    },
+    {
+      "command": "pnpm contracts:lint; pnpm contracts:check",
+      "result": "PASS",
+      "generated_openapi_sha256": "e82dcf918c337819e2b921b785b3bfa5f34decf3b79ef282bb5a0d4720f88b65"
+    },
+    {
+      "command": "pnpm architecture:check",
+      "result": "PASS",
+      "detail": "126 modules and 122 dependencies cruised."
+    },
+    {
+      "command": "pnpm --recursive --sort --if-present run build",
+      "result": "PASS"
+    },
+    {
+      "command": "pnpm secret:scan",
+      "result": "PASS",
+      "detail": "154 text files scanned; 1 archive or binary file excluded."
+    },
+    {
+      "command": "pnpm license:check",
+      "result": "PASS",
+      "detail": "43 direct dependency declarations comply with the policy."
+    }
+  ],
+  "execution_note": "The package scripts that call corepack could not be invoked because corepack was absent from the final environment PATH. Equivalent pinned pnpm 11.15.1 commands above were run directly; no dependency installation or version substitution occurred.",
+  "runtime_status": "BLOCKED_RUNTIME",
+  "runtime_blocker": "Docker daemon was unavailable on the single permitted Docker check. PostgreSQL migration, seed, RLS role/policy and live API/worker/browser checks were not run."
+}

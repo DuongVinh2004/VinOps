@@ -1,0 +1,14 @@
+{
+  "checkpoint": "VIN-MEGA-001",
+  "iteration": 4,
+  "status": "PASS",
+  "cases": {
+    "same_expected_version_parallel_requests": { "statuses": [200, 409], "winners": 1, "conflicts": 1 },
+    "winner_version": "2",
+    "winner_audit_events": 1,
+    "winner_outbox_events": 1,
+    "same_key_same_payload": { "business_effects": 1, "response_replayed": true },
+    "same_key_different_payload": { "status": 409, "code": "IDEMPOTENCY_KEY_REUSE", "denial_audit": 1 },
+    "duplicate_entity_audit_outbox": 0
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "result": "PASS",
+  "checks": [
+    "quarantine namespace",
+    "S3 multipart and signed URL expiry",
+    "MIME/magic validation",
+    "ClamAV clean and EICAR runtime-injected malware detection",
+    "available derivative and file.available.v1 deduplication",
+    "cross-scope authorization before signed URL"
+  ],
+  "evidence": [
+    "packages/file/test/file-runtime.integration.test.ts: 2/2",
+    "apps/worker/test/file-processing.integration.test.ts: 2/2"
+  ]
+}

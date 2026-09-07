@@ -1,0 +1,122 @@
+{
+  "status": "PASS",
+  "artifacts": [
+    {
+      "path": "i7/VIN-MEGA-002-i7-manifest.json",
+      "expected_sha256": "CAABC71C9F86FE1830324D203BC31AAD64CBA6BA73D9422C9312280BF5D61F46",
+      "actual_sha256": "CAABC71C9F86FE1830324D203BC31AAD64CBA6BA73D9422C9312280BF5D61F46",
+      "match": true
+    },
+    {
+      "path": "i7/VIN-MEGA-002-i7-evidence-verifiable.zip",
+      "expected_sha256": "8BBE4754C66D12316FA124A4CD58D8351E83EE58FFFD7A6F90797341CFE39CB7",
+      "actual_sha256": "8BBE4754C66D12316FA124A4CD58D8351E83EE58FFFD7A6F90797341CFE39CB7",
+      "match": true
+    },
+    {
+      "path": "i7/VIN-MEGA-002-i7-review-verifiable.zip",
+      "expected_sha256": "E0FE71EBC40EDA136206AE48B94982D21423E0228B5205E3313A16DA0DCAEE74",
+      "actual_sha256": "E0FE71EBC40EDA136206AE48B94982D21423E0228B5205E3313A16DA0DCAEE74",
+      "match": true
+    },
+    {
+      "path": "i8/VIN-MEGA-002-i8-manifest.json",
+      "expected_sha256": "7C9D4CE5CA573C506249F3501E3D2C793C97BF6477F698457A8BE3BA19EE0434",
+      "actual_sha256": "7C9D4CE5CA573C506249F3501E3D2C793C97BF6477F698457A8BE3BA19EE0434",
+      "match": true
+    },
+    {
+      "path": "i8/VIN-MEGA-002-i8-evidence-verifiable.zip",
+      "expected_sha256": "D4DAFBA5621366628606BA86867B8D27D9B5A6CB945E49B4499BBABCE88CD884",
+      "actual_sha256": "D4DAFBA5621366628606BA86867B8D27D9B5A6CB945E49B4499BBABCE88CD884",
+      "match": true
+    },
+    {
+      "path": "i8/VIN-MEGA-002-i8-review-verifiable.zip",
+      "expected_sha256": "12B6A17D0A8031B0553BA65B1FBF05BF0B37E69C2218F9410CCE1A6BE31EF5D0",
+      "actual_sha256": "12B6A17D0A8031B0553BA65B1FBF05BF0B37E69C2218F9410CCE1A6BE31EF5D0",
+      "match": true
+    },
+    {
+      "path": "i9/VIN-MEGA-002-i9-manifest.json",
+      "expected_sha256": "C4D656E783494FF5010E3A839161BAD16AB8EAE67F051DEA81418140DF63BAB4",
+      "actual_sha256": "C4D656E783494FF5010E3A839161BAD16AB8EAE67F051DEA81418140DF63BAB4",
+      "match": true
+    },
+    {
+      "path": "i9/VIN-MEGA-002-i9-evidence-verifiable.zip",
+      "expected_sha256": "B5BB461A52C064520FDC7CEDF2C4A4CBA81F4CF6062B5D4B89429E210C2C2B6F",
+      "actual_sha256": "B5BB461A52C064520FDC7CEDF2C4A4CBA81F4CF6062B5D4B89429E210C2C2B6F",
+      "match": true
+    },
+    {
+      "path": "i9/VIN-MEGA-002-i9-review-verifiable.zip",
+      "expected_sha256": "A77A569BEE86E49E0567060F141D25A45383A5C9FFDD5975FFD95D0443B8E16D",
+      "actual_sha256": "A77A569BEE86E49E0567060F141D25A45383A5C9FFDD5975FFD95D0443B8E16D",
+      "match": true
+    }
+  ],
+  "historical_migrations_001_010": [
+    {
+      "path": "packages/database/migrations/001_platform_foundation.sql",
+      "expected_sha256": "920c16c01026dd4d5c4a7fdac67b2dad68ef7e7a78165ebf477deef0c3ffdf1e",
+      "actual_sha256": "920c16c01026dd4d5c4a7fdac67b2dad68ef7e7a78165ebf477deef0c3ffdf1e",
+      "match": true
+    },
+    {
+      "path": "packages/database/migrations/002_tenant_rls.sql",
+      "expected_sha256": "3c00a7765d616f36d044254c149aa7321cf0d2ab3e606968fb53d79b005fc826",
+      "actual_sha256": "3c00a7765d616f36d044254c149aa7321cf0d2ab3e606968fb53d79b005fc826",
+      "match": true
+    },
+    {
+      "path": "packages/database/migrations/003_security_runtime_closure.sql",
+      "expected_sha256": "2bf2681efcb639752532ecd1ea76b5eeac3958e8437070f0eabc4de1e37de203",
+      "actual_sha256": "2bf2681efcb639752532ecd1ea76b5eeac3958e8437070f0eabc4de1e37de203",
+      "match": true
+    },
+    {
+      "path": "packages/database/migrations/004_invitation_and_member_visibility.sql",
+      "expected_sha256": "3bc85d37d4dbd2da806fabb90662346c71b36489a4ac3487666c1c2b8a7ce0cc",
+      "actual_sha256": "3bc85d37d4dbd2da806fabb90662346c71b36489a4ac3487666c1c2b8a7ce0cc",
+      "match": true
+    },
+    {
+      "path": "packages/database/migrations/005_membership_session_revocation.sql",
+      "expected_sha256": "14f48408e533f30021ac9635168addc308fce2e7c844eb9382a1f78d5c2b1da1",
+      "actual_sha256": "14f48408e533f30021ac9635168addc308fce2e7c844eb9382a1f78d5c2b1da1",
+      "match": true
+    },
+    {
+      "path": "packages/database/migrations/006_runtime_actor_context_fix.sql",
+      "expected_sha256": "9905dd238b39d9c1bc1ab3cdea2466b36ad54a441be96de6714738bc6d572064",
+      "actual_sha256": "9905dd238b39d9c1bc1ab3cdea2466b36ad54a441be96de6714738bc6d572064",
+      "match": true
+    },
+    {
+      "path": "packages/database/migrations/007_document_control.sql",
+      "expected_sha256": "8865bf08ce096341a8564ac3f33421ed0251d7f0bec8ab99ee9a87608998150b",
+      "actual_sha256": "8865bf08ce096341a8564ac3f33421ed0251d7f0bec8ab99ee9a87608998150b",
+      "match": true
+    },
+    {
+      "path": "packages/database/migrations/008_document_control_publish_fix.sql",
+      "expected_sha256": "2998f0fa97432ad8c9c12cbeac49110f1e71e488735673bfd2383c92e6d92e8a",
+      "actual_sha256": "2998f0fa97432ad8c9c12cbeac49110f1e71e488735673bfd2383c92e6d92e8a",
+      "match": true
+    },
+    {
+      "path": "packages/database/migrations/009_document_file_reconciliation.sql",
+      "expected_sha256": "a30747e58e0ea26be9e8d66833703ce46646a39c53e36d292c39ae1708666b7c",
+      "actual_sha256": "a30747e58e0ea26be9e8d66833703ce46646a39c53e36d292c39ae1708666b7c",
+      "match": true
+    },
+    {
+      "path": "packages/database/migrations/010_file_job_type_claim.sql",
+      "expected_sha256": "88821b6b5c2c1fdc678ac6256d3f8e4c73d7f959486e07653fa94b0be311b769",
+      "actual_sha256": "88821b6b5c2c1fdc678ac6256d3f8e4c73d7f959486e07653fa94b0be311b769",
+      "match": true
+    }
+  ],
+  "migration_count": 11
+}

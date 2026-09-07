@@ -1,0 +1,24 @@
+{
+  "result": "FAIL_STRICT_NFR",
+  "target": "NFR-FILE-001: p95 of 20 concurrent 10 MB uploads <= 8 seconds at 20 Mbps",
+  "shaping": {
+    "boundary": "local aggregate client-to-MinIO TCP proxy",
+    "aggregate": true,
+    "direction": "client_to_minio",
+    "configured_mbps": 20,
+    "configured_bytes_per_second": 2500000,
+    "burst_capacity_bytes": 65536
+  },
+  "raw": {
+    "objects": 20,
+    "object_bytes": 10485760,
+    "total_bytes": 209715200,
+    "elapsed_ms": 100475,
+    "p95_object_upload_ms": 100312,
+    "throughput_mbps": 16.698,
+    "physical_lower_bound_ms": 83886,
+    "command_exit": 0
+  },
+  "semantics": "Aggregate shaping; all 20 concurrent uploads share one 20 Mbps token bucket.",
+  "interpretation": "Measured p95 exceeds 8 seconds; strict work order forbids PASS_WITH_LIMITATIONS for this NFR."
+}

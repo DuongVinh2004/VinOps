@@ -1,0 +1,143 @@
+{
+  "protocol_version": "2.0",
+  "checkpoint_id": "VIN-MEGA-002",
+  "iteration": 11,
+  "status": "BLOCKED",
+  "source_fingerprint_before": "a9ec3c2a437bb8d1ab6c30a69e8b711eb203fd075e0e4db19e573369aecd7a1b",
+  "source_fingerprint_after": "46462000a1ff765243d2d69e8ec7f2b560d77a6bfcfc93125ca846badd501431",
+  "changed_paths": [
+    "package.json"
+  ],
+  "product_tool_files": 1,
+  "test_files": 0,
+  "migrations": 0,
+  "dependencies_lockfiles": 0,
+  "entries": [
+    {
+      "path": "AC06_UPLOAD_PERFORMANCE_RAW.json",
+      "bytes": 122171,
+      "sha256": "5dc6a9b2dd8d5905a4f9224fb04eac1344230ea57daea2148bfe0eeb6ef73b5e"
+    },
+    {
+      "path": "AC06_UPLOAD_PERFORMANCE_SUMMARY.json",
+      "bytes": 1302,
+      "sha256": "015bff27ba102204746c5f636d35d697c1057b830d48b722b9adbc9738142e82"
+    },
+    {
+      "path": "AC07_PACKAGE_MANAGER_CLOSURE.json",
+      "bytes": 455,
+      "sha256": "0afeb1ca9421fee69bc663bfa1029b87b560c7bd69f92a1bfbba8c38030a66aa"
+    },
+    {
+      "path": "BASELINE_RECONCILIATION.json",
+      "bytes": 610,
+      "sha256": "ef156e8a8f910a5d7f90039124b787e3417dadfea017a85d02aefe0923c79504"
+    },
+    {
+      "path": "CONTROL_STATE_RECONCILIATION.json",
+      "bytes": 318,
+      "sha256": "5cc6726daaf27dc8b1b3f6f5d993607b418c5d1cdd8af4b0d082d58c9f630faa"
+    },
+    {
+      "path": "FINAL_REGRESSION_AND_ADVERSARIAL_REVIEW.json",
+      "bytes": 940,
+      "sha256": "92b917a9de1d37ffe8df9c30709b3534d1039f3ee639064a5d6b5ec16a15c191"
+    },
+    {
+      "path": "I11_AUTHORIZATION_CANARIES.json",
+      "bytes": 1870,
+      "sha256": "1574f430b3642cbc792d3c8743b729369927ca88645a9eb288f16240d291972e"
+    },
+    {
+      "path": "I11_SOURCE_INVENTORY.json",
+      "bytes": 31270,
+      "sha256": "f32615a1f39b26196f0264c6869bc1c0ce062ee02bc93f887f3774479de6bef4"
+    },
+    {
+      "path": "pnpm-verify-i11.stderr.log",
+      "bytes": 1895,
+      "sha256": "1e96fddc8eaafc4ae7c55eb23c0a4bdc95ba9c7020b0b96dda16fd9b5efded27"
+    },
+    {
+      "path": "pnpm-verify-i11.stdout.log",
+      "bytes": 8075,
+      "sha256": "ca91daa51f5aaf7ac6f6ad49cbced0b38b18f6d5707e45f369d3cd8b67452dd9"
+    },
+    {
+      "path": "POST_CLEANUP_PROOF.json",
+      "bytes": 863,
+      "sha256": "c8d67b3079ca2f63c33670a7e5d07a1aa4fba0c5b274b821eb781c3b8e4d0dfc"
+    },
+    {
+      "path": "PRE_CLEANUP_INVENTORY.json",
+      "bytes": 739,
+      "sha256": "e0d9b84231b870b53d6c91d7930914dd2eececf9d73096cf2ea558da9158d561"
+    },
+    {
+      "path": "RESOURCE_CLEANUP_PROOF.json",
+      "bytes": 596,
+      "sha256": "1a3e4b5b384d6dbdee6ecd32ca5757d471ccb357a4b445b0bfb631586604ab7d"
+    },
+    {
+      "path": "RESOURCE_PROCESS_PRE.json",
+      "bytes": 8284,
+      "sha256": "977c43b789493acd52d29bc4e140f22c72960591e2de36725004c8f6f6b110cb"
+    },
+    {
+      "path": "VIN-MEGA-002-i11-evidence-verifiable.zip",
+      "bytes": 85668,
+      "sha256": "f07f17df693c6357e41139839da0775fd6c12760540792f9b47ffeac795057e8"
+    },
+    {
+      "path": "VIN-MEGA-002-i11-review-verifiable.zip",
+      "bytes": 70795,
+      "sha256": "b972b151a92d2a07e08b78e65d9bd658ba70d9c685c25906400cadca7372c85b"
+    },
+    {
+      "path": "VIN-MEGA-002-i11-source.delta.patch",
+      "bytes": 1917,
+      "sha256": "e1f052b3e5ea72835f8b276c5ebe44d968302586dafa1fa5ba18887157def750"
+    },
+    {
+      "path": "worker-i11.stderr.log",
+      "bytes": 1608,
+      "sha256": "bfcee787ca839eafa8f3e4b98548839b4584a9b2d480a83983d13242f9b68388"
+    },
+    {
+      "path": "worker-i11.stdout.log",
+      "bytes": 274689,
+      "sha256": "ef7b0d6fe3c89e6997052fbcebc6a21306adfb43802b4f93fa051249e4e63d8a"
+    }
+  ],
+  "evidence_zip": {
+    "file": "final/VIN-MEGA-002-i11-evidence-verifiable-final3.zip",
+    "bytes": 85541,
+    "sha256": "144dac57b11a085a5a5582987f2618dd47c6c6876125639388daae1c50934502",
+    "entry_count": 23,
+    "duplicate_entries": 0,
+    "nested_archives": 0,
+    "source_byte_mismatches": 0
+  },
+  "review_zip": {
+    "file": "final/VIN-MEGA-002-i11-review-verifiable-final3.zip",
+    "bytes": 70659,
+    "sha256": "cd958b666ab276fb24a589ca3861842e2d77fad1a6028ae5a056275199d9e569",
+    "entry_count": 16,
+    "duplicate_entries": 0,
+    "nested_archives": 0,
+    "source_byte_mismatches": 0
+  },
+  "acceptance": {
+    "AC-01": "PASS",
+    "AC-02": "PASS",
+    "AC-03": "PASS",
+    "AC-04": "PASS",
+    "AC-05": "PASS",
+    "AC-06": "PASS",
+    "AC-07": "PASS",
+    "AC-08": "BLOCKED"
+  },
+  "RLS_GATE": "PASS",
+  "POST_FIX_REGRESSION_GATE": "PASS",
+  "proposed_control_state": "BLOCKED"
+}

@@ -1,0 +1,16 @@
+{
+  "status": "PASS",
+  "source_fingerprint": "72e0ba48f357efd8a63be58c08e1615eae65c85936763e62746cc6045c28feb4",
+  "expected_rows": 10800,
+  "reused_rows": 9600,
+  "invalidated_rows": 1200,
+  "rerun_rows": 1200,
+  "final_rows": 10800,
+  "rerun_unexpected": 0,
+  "final_unexpected": 0,
+  "duplicate_row_ids": 0,
+  "affected_operations": [
+    "createTransmittal",
+    "transmittalDetail"
+  ]
+}

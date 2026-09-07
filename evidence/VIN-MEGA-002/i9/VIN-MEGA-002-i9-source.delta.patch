@@ -1,0 +1,9 @@
+diff --git a/packages/database/migrations/011_transmittal_rls_recursion_fix.sql b/packages/database/migrations/011_transmittal_rls_recursion_fix.sql
+new file mode 100644
+--- /dev/null
++++ b/packages/database/migrations/011_transmittal_rls_recursion_fix.sql
+@@
++DROP POLICY transmittal_items_scoped ON vinops.transmittal_items;
++CREATE POLICY transmittal_items_scoped ON vinops.transmittal_items
++  USING (vinops.can_access_project(project_id))
++  WITH CHECK (vinops.can_access_project(project_id));

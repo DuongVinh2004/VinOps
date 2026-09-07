@@ -1,0 +1,23 @@
+{
+  "result": "PASS",
+  "migration_versions": [
+    "007_document_control.sql",
+    "008_document_control_publish_fix.sql",
+    "009_document_file_reconciliation.sql",
+    "010_file_job_type_claim.sql"
+  ],
+  "checks": [
+    "stable document container",
+    "project/context and revision uniqueness",
+    "explicit current pointer",
+    "append-only review/audit records",
+    "RLS and no-delete policies",
+    "empty and accepted-schema migration tests",
+    "typed validation/reconciliation worker claims"
+  ],
+  "tests": [
+    "packages/database/test/document-migration.static.test.ts: 2/2",
+    "packages/database/test/document-postgres.integration.test.ts: 4/4",
+    "migration runner: 10/10 applied and verified"
+  ]
+}

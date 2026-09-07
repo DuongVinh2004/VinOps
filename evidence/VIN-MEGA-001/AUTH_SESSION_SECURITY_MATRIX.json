@@ -1,0 +1,67 @@
+{
+  "checkpoint": "VIN-MEGA-001",
+  "artifact_status": "PRELIMINARY_STATIC_SECURITY_MATRIX",
+  "recorded_on": "2026-07-30",
+  "static_controls": [
+    {
+      "area": "Password handling",
+      "candidate": "Node scrypt with encoded parameters and per-password salt; password verification uses timing-safe comparison.",
+      "anchors": ["apps/api/src/security.ts", "apps/api/test/security.test.ts"],
+      "runtime_verified": false
+    },
+    {
+      "area": "Access credentials",
+      "candidate": "Short-lived HMAC-signed access token carries subject, session and auth/authorization versions.",
+      "anchors": ["apps/api/src/security.ts", "apps/api/src/platform.service.ts"],
+      "runtime_verified": false
+    },
+    {
+      "area": "Refresh rotation and reuse response",
+      "candidate": "Opaque refresh credentials are hashed at rest; credential families/sessions support rotation, reuse detection and family revocation.",
+      "anchors": ["apps/api/src/platform.service.ts", "packages/database/migrations/001_platform_foundation.sql"],
+      "runtime_verified": false
+    },
+    {
+      "area": "Cookie boundary",
+      "candidate": "vinops_refresh cookie builder uses HttpOnly and SameSite=Lax; Secure is configuration-driven and no Domain attribute is emitted by the builder.",
+      "anchors": ["apps/api/src/security.ts", "apps/api/src/platform.controller.ts"],
+      "runtime_verified": false
+    },
+    {
+      "area": "CSRF and origin",
+      "candidate": "Refresh checks a session-bound CSRF secret and allowed Origin/Referer; bootstrap config sets exact CORS origins and allowed headers.",
+      "anchors": ["apps/api/src/platform.service.ts", "apps/api/src/bootstrap.ts"],
+      "runtime_verified": false
+    },
+    {
+      "area": "Abuse controls",
+      "candidate": "In-process rate-limit service is wired for login and password-reset operations.",
+      "anchors": ["apps/api/src/auth-rate-limit.service.ts", "apps/api/src/platform.service.ts"],
+      "runtime_verified": false
+    },
+    {
+      "area": "Browser credential storage",
+      "candidate": "Web API client holds access/CSRF values in memory and uses credentialed fetch for the HttpOnly refresh cookie.",
+      "anchors": ["apps/web/src/api.ts", "apps/web/src/app.tsx"],
+      "runtime_verified": false
+    }
+  ],
+  "static_test_sources": [
+    "apps/api/test/security.test.ts",
+    "apps/api/test/api.test.ts"
+  ],
+  "required_runtime_assertions": [
+    "Generic login/reset failures do not reveal account existence.",
+    "Refresh cookie, CSRF token and allowed origin are all required and rotation revokes a reused family.",
+    "Logout/session revocation invalidates protected access on the server.",
+    "Password reset increments auth/authorization versions and revokes active refresh families.",
+    "Cache-Control: no-store and production Secure/CORS configuration are observed over the running API.",
+    "No token, cookie or auth secret is emitted in logs or evidence."
+  ],
+  "known_non_proof": [
+    "Unit/source inspection is not an end-to-end authentication proof.",
+    "No external identity provider, email service or production secret was selected or exercised.",
+    "The in-process rate limiter has no demonstrated multi-instance coordination."
+  ],
+  "runtime_status": "BLOCKED_RUNTIME"
+}

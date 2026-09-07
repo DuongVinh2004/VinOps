@@ -1,0 +1,23 @@
+{
+  "checkpoint": "VIN-MEGA-001",
+  "iteration": 3,
+  "status": "PASS_WITH_SCOPE_LIMITATION",
+  "live_api": "http://127.0.0.1:3301",
+  "checks": {
+    "health_live": 200,
+    "login": 200,
+    "access_and_csrf_issued": true,
+    "refresh_rotation": 200,
+    "refresh_rotated_access_and_csrf": true,
+    "revoke_session": 204,
+    "revoked_access_rejected": 401,
+    "password_reset_request": 202,
+    "bad_csrf_refresh": 401,
+    "cookie_flags": "HttpOnly; SameSite=Lax; Max-Age=2592000; local test cookie is not Secure",
+    "cors_origin_checked": true
+  },
+  "negative_or_deferred": [
+    "Refresh-family reuse detection, revoke-all, membership-revocation propagation and single-use reset-token redemption were not separately exercised in this pass."
+  ],
+  "secrets_in_evidence": false
+}

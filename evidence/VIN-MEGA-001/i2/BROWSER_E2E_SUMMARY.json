@@ -1,0 +1,1 @@
+{"checkpoint":"VIN-MEGA-001","iteration":2,"status":"NOT_RUN","reason":"No live API/PostgreSQL stack; browser E2E would not satisfy the real-runtime boundary.","token_storage":"UNVERIFIED_RUNTIME","console_network_log_leakage":"UNVERIFIED_RUNTIME"}

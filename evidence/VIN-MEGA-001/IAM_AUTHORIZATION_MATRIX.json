@@ -1,0 +1,69 @@
+{
+  "checkpoint": "VIN-MEGA-001",
+  "artifact_status": "PRELIMINARY_STATIC_IAM_MATRIX",
+  "recorded_on": "2026-07-30",
+  "candidate_roles": [
+    "organization_owner",
+    "project_admin",
+    "security_admin"
+  ],
+  "candidate_controls": [
+    {
+      "control": "Project lifecycle transitions",
+      "implementation_anchor": "packages/domain/src/index.ts",
+      "static_behavior": "Setup activates to Active; Active suspends or starts archiving; Suspended resumes or starts archiving; Archiving completes to Archived; Archived restores to Suspended.",
+      "runtime_verified": false
+    },
+    {
+      "control": "Activation prerequisites",
+      "implementation_anchor": "packages/domain/src/index.ts",
+      "static_behavior": "Timezone, numbering profile and active owner membership are required before activation.",
+      "runtime_verified": false
+    },
+    {
+      "control": "Sensitive self-escalation",
+      "implementation_anchor": "packages/domain/src/index.ts",
+      "static_behavior": "Domain guard rejects a user granting themselves a sensitive role.",
+      "runtime_verified": false
+    },
+    {
+      "control": "Resource scope",
+      "implementation_anchor": "packages/domain/src/index.ts and packages/database/migrations/002_tenant_rls.sql",
+      "static_behavior": "Project/location/work/discipline/classification scopes are modeled; scoped reads are routed through candidate policy functions.",
+      "runtime_verified": false
+    },
+    {
+      "control": "Membership suspension/end",
+      "implementation_anchor": "apps/api/src/platform.service.ts",
+      "static_behavior": "Candidate mutation updates membership state and increments user authorization version with refresh-family revocation for relevant changes.",
+      "runtime_verified": false
+    },
+    {
+      "control": "Delegation",
+      "implementation_anchor": "packages/domain/src/index.ts and apps/api/src/platform.service.ts",
+      "static_behavior": "Delegation captures delegatee, scope, actions, validity window and reason; effective-window check exists.",
+      "runtime_verified": false
+    },
+    {
+      "control": "Break-glass",
+      "implementation_anchor": "apps/api/src/platform.service.ts and packages/domain/src/index.ts",
+      "static_behavior": "Request/approval/session candidate carries validity, reason and banner information.",
+      "runtime_verified": false
+    },
+    {
+      "control": "Audit and outbox",
+      "implementation_anchor": "apps/api/src/platform.service.ts and packages/database/migrations/001_platform_foundation.sql",
+      "static_behavior": "Candidate material mutations record audit/outbox data in the same database transaction abstraction.",
+      "runtime_verified": false
+    }
+  ],
+  "required_runtime_authorization_tests": [
+    "Default deny and nonexistent-resource non-disclosure for a user outside the tenant/project.",
+    "Cross-tenant role and scope mutation denial.",
+    "Self-sensitive-role escalation denial.",
+    "Suspension/end invalidates server-side authorization and sessions without waiting for the client.",
+    "Delegation and break-glass separation-of-duty, date-window, reason, TTL and audit checks.",
+    "Transition role, expected-version and state prerequisite checks."
+  ],
+  "runtime_status": "BLOCKED_RUNTIME"
+}

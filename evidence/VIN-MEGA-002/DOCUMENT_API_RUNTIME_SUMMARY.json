@@ -1,0 +1,29 @@
+{
+  "result": "PASS_WITH_LIMITATIONS",
+  "runtime": {
+    "api": "http://127.0.0.1 task-owned process (URL omitted)",
+    "postgres": "16.14 task-owned container",
+    "minio": "S3-compatible task-owned container",
+    "clamav": "task-owned scanner container",
+    "node": "24.18.0",
+    "pnpm": "11.15.1"
+  },
+  "flow": [
+    "login",
+    "create/list document",
+    "multipart upload",
+    "worker Available",
+    "submit review",
+    "approve",
+    "publish A",
+    "upload/process/publish B",
+    "current pointer B",
+    "transmittal snapshot",
+    "archive/restore"
+  ],
+  "security": [
+    "no credentials in evidence",
+    "signed URLs omitted",
+    "access tokens/cookies omitted"
+  ]
+}

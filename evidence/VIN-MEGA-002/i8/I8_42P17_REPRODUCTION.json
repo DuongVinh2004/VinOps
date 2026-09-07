@@ -1,0 +1,32 @@
+{
+  "label": "retained",
+  "http_request": { "method": "GET", "path": "/api/v1/transmittals/00000000-0000-4000-8000-000000000941", "status": 404, "correlation_id": "f0e1f157-ce65-4fac-b84f-f0d2d2ef1fd4" },
+  "tenant_context": { "organization_id": "00000000-0000-4000-8000-000000000201", "project_id": "00000000-0000-4000-8000-000000000301", "actor_user_id": "00000000-0000-4000-8000-000000000101", "actor_email": "owner@vinops.test", "uploader_context": "owner/project_admin; complete-upload valid path unavailable because no isolated upload graph" },
+  "actor_id": "00000000-0000-4000-8000-000000000101",
+  "project_id": "00000000-0000-4000-8000-000000000301",
+  "transmittal_id": "00000000-0000-4000-8000-000000000941",
+  "correlation_id": "7b1d5383-bb26-4fb1-9f0e-310389111fa1",
+  "statement": "SELECT id, project_id, code, purpose, status, created_by, created_at, issued_at, snapshot_sha256, version::text FROM vinops.transmittals WHERE id = $1::uuid",
+  "status": "PASS",
+  "session": {
+    "current_user": "vinops_app",
+    "app_user_id": "00000000-0000-4000-8000-000000000101",
+    "app_correlation_id": "7b1d5383-bb26-4fb1-9f0e-310389111fa1"
+  },
+  "error": {
+    "message": "infinite recursion detected in policy for relation \"transmittals\"",
+    "code": "42P17",
+    "detail": null,
+    "hint": null,
+    "schema": null,
+    "table": null,
+    "column": null,
+    "constraint": null,
+    "position": null,
+    "routine": "fireRIRrules",
+    "query": null,
+    "sqlstate": "42P17",
+    "relation": "transmittals",
+    "statement": "SELECT id, project_id, code, purpose, status, created_by, created_at, issued_at, snapshot_sha256, version::text FROM vinops.transmittals WHERE id = $1::uuid"
+  }
+}

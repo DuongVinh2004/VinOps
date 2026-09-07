@@ -1,0 +1,14 @@
+{
+  "checkpoint": "VIN-MEGA-001",
+  "iteration": 3,
+  "status": "PASS_FOR_TASK_OWNED_RESOURCES",
+  "created_after_primary_archives": true,
+  "task_owned_resources": {
+    "container": {"name":"vinops-mega001-i3-postgres","identity_verified":"postgres:16; running; anonymous synthetic data volume only","remove_command":"docker rm -f vinops-mega001-i3-postgres","removed":true},
+    "anonymous_volume": {"name":"837f49378443f464bf86ca167e0a7f4e7318162b658e951781fe9abbd8998386","identity_verified":"The exact volume was attached only to the verified i3 PostgreSQL container.","remove_command":"docker volume rm exact-name","removed":true},
+    "node_processes": {"verified_pids":[8292,17904,19012,19064],"roles":["web preview","API :3301","API :3000","worker"],"removed_or_exited":true}
+  },
+  "post_check": {"container_absent":true,"volume_absent":true,"task_node_process_count":0},
+  "obsolete_fnd_cleanroom": {"path":"C:\\Users\\Duong Vinh\\Downloads\\VinOps\\vinops\\.tmp\\vinops-fnd001a-cleanroom","still_exists":true,"status":"BLOCKED_SAFETY_TOOL_POLICY"},
+  "scope": "No sibling .tmp path, user work, ACL or external resource was modified."
+}

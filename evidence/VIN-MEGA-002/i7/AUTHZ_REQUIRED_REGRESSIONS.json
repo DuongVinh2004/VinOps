@@ -1,0 +1,5 @@
+{
+  "completeUpload": {"unauthenticated_malformed": "PASS", "authenticated_malformed": "PASS", "authenticated_valid_uploader_path": "UNVERIFIED", "reason": "No isolated upload-session/file graph was available without altering protected migration/runtime state."},
+  "transmittalDetail": {"authorized_existing": "UNVERIFIED", "authorized_nonexistent": "PASS", "forbidden_no_metadata_leakage": "PASS", "reason": "The retained database transmittals RLS policy raises 42P17 infinite recursion for all table reads; product maps that boundary to canonical 404."},
+  "status": "UNVERIFIED"
+}

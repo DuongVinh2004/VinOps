@@ -1,0 +1,32 @@
+{
+  "checkpoint": "VIN-MEGA-001",
+  "iteration": 4,
+  "status": "READY_FOR_REVIEW_WITH_RECOVERABLE_QUARANTINE",
+  "disposition": "QUARANTINED_RECOVERABLE",
+  "source": "C:\\Users\\Duong Vinh\\Downloads\\VinOps\\vinops\\.tmp\\vinops-fnd001a-cleanroom",
+  "canonical_verified": true,
+  "direct_child_of_repo_tmp": true,
+  "target_reparse_point": false,
+  "nested_reparse_points": 0,
+  "inventory": { "top_level": ["node_modules"], "files": 16644, "directories": 2841, "bytes": 184399687 },
+  "authorization": {
+    "confirmation_phrase_verified": true,
+    "exact_target_scope_matched": true,
+    "permanent_deletion_used": false
+  },
+  "quarantine_destination_scope": "active workspace root outside repository",
+  "blocker": null,
+  "source_exists_after": false,
+  "quarantine_recovery_path": "C:\\Users\\Duong Vinh\\Downloads\\VinOps\\.vinops-quarantine\\VIN-MEGA-001-i4\\vinops-fnd001a-cleanroom",
+  "destination_exists_after": true,
+  "same_volume_atomic_move": true,
+  "destination_inventory_verified_equal": true,
+  "recovery": {
+    "source_must_be_absent": true,
+    "operation": "Move-Item -LiteralPath 'C:\\Users\\Duong Vinh\\Downloads\\VinOps\\.vinops-quarantine\\VIN-MEGA-001-i4\\vinops-fnd001a-cleanroom' -Destination 'C:\\Users\\Duong Vinh\\Downloads\\VinOps\\vinops\\.tmp\\vinops-fnd001a-cleanroom'"
+  },
+  "delete_or_move_attempted": true,
+  "false_deletion_claim": false,
+  "runtime_batches_continued": true,
+  "completed_utc": "2026-08-01T17:23:43Z"
+}

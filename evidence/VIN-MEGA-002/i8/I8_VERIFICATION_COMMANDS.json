@@ -1,0 +1,14 @@
+{
+  "commands": [
+    { "command": "C:\\Users\\Duong Vinh\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\bin\\fallback\\pnpm.cmd --filter @vinops/api build", "exit_code": 0 },
+    { "command": "VINOPS_I7_API_URL=http://127.0.0.1:4610 C:\\Users\\Duong Vinh\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\bin\\fallback\\pnpm.cmd exec vitest run apps/api/test/document-boundary.integration.test.ts --reporter=dot", "exit_code": 0, "tests": 2, "passed": 2 },
+    { "command": "C:\\Users\\Duong Vinh\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\bin\\fallback\\pnpm.cmd exec prettier --check apps/api/src/platform.controller.ts apps/api/src/document.service.ts apps/api/test/document-boundary.integration.test.ts", "exit_code": 0 },
+    { "command": "C:\\Users\\Duong Vinh\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\bin\\fallback\\pnpm.cmd exec prettier --check evidence/VIN-MEGA-002/i8/*.json evidence/VIN-MEGA-002/i8/harness/*.mjs", "exit_code": 0 },
+    { "command": "git diff --check", "exit_code": 0 },
+    { "command": "C:\\Users\\Duong Vinh\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\bin\\fallback\\pnpm.cmd verify", "exit_code": 1, "runs": 1, "status": "BLOCKED" }
+  ],
+  "source_product_changes_i8": 0,
+  "migrations_i8": 0,
+  "dependencies_i8": 0,
+  "lockfile_changed": false
+}

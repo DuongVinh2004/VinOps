@@ -1,0 +1,38 @@
+﻿{
+    "project":  "VinOps",
+    "checkpoint_id":  "VIN-MEGA-002",
+    "iteration":  1,
+    "status":  "BLOCKED",
+    "context_mode":  "STRICT",
+    "evidence_mode":  "PATCH_FILE",
+    "generated_at":  "2026-08-02T06:43:55.233Z",
+    "source_fingerprint":  "b819f50a568c6da11c2b2b8f258053fc0536fe19f6e9faa8b8e02cc179a6a1f7",
+    "required_artifacts":  [
+                               "VIN-MEGA-002-i1-evidence-verifiable.zip",
+                               "VIN-MEGA-002-i1-review-verifiable.zip"
+                           ],
+    "evidence_files":  [
+                           "BASELINE_RECONCILIATION.json",
+                           "CHANGED_FILES_MANIFEST.json",
+                           "CLEANROOM_VERIFICATION.json",
+                           "CURRENT_REVISION_CONCURRENCY_MATRIX.json",
+                           "DOCUMENT_API_RUNTIME_SUMMARY.json",
+                           "DOCUMENT_AUTHORIZATION_MATRIX.json",
+                           "DOCUMENT_SCHEMA_MIGRATION_MATRIX.json",
+                           "DOCUMENT_WEB_BROWSER_E2E_SUMMARY.json",
+                           "DOCUMENT_WORKFLOW_STATE_MATRIX.json",
+                           "FILE_COMPENSATION_RECONCILIATION_MATRIX.json",
+                           "FILE_PERFORMANCE_MATRIX.json",
+                           "FILE_UPLOAD_SCAN_SECURITY_MATRIX.json",
+                           "KNOWN_LIMITATIONS.json",
+                           "REQUIREMENTS_TRACEABILITY_DELTA.json",
+                           "REVIEW_QUORUM_SOD_MATRIX.json",
+                           "TEST_SUMMARY.json",
+                           "TRANSMITTAL_ANNOTATION_MATRIX.json",
+                           "VIN-MEGA-002-i1-manifest.json"
+                       ],
+    "zip_sha256":  {
+                       "evidence":  "1a1c62e0e42ffb8da5c4c807ebc0ff37619db074daab2b838748a6f37424d7ed",
+                       "review":  "82adc046469b8558088953ec2da049902ac3d895f14b1195cea6856c9073b1e5"
+                   }
+}

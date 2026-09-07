@@ -1,0 +1,125 @@
+name: Foundation CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: foundation-ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  CI: 'true'
+  COREPACK_ENABLE_DOWNLOAD_PROMPT: '0'
+
+jobs:
+  foundation-linux:
+    name: Foundation gates (Linux)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: Set up Node.js
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: 24.18.0
+          check-latest: false
+
+      - name: Activate the pinned pnpm version
+        run: |
+          corepack enable
+          corepack prepare pnpm@11.15.1 --activate
+          node --version
+          pnpm --version
+
+      - name: Install from the lockfile
+        run: pnpm install --frozen-lockfile
+
+      - name: Check formatting
+        run: pnpm format:check
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Typecheck
+        run: pnpm typecheck
+
+      - name: Run unit tests
+        run: pnpm test -- --reporter=default --reporter=junit --outputFile.junit=test-report.xml
+
+      - name: Verify the OpenAPI contract
+        run: pnpm contracts:verify
+
+      - name: Check architecture boundaries and cycles
+        run: pnpm architecture:check
+
+      - name: Build all workspaces
+        run: pnpm build
+
+      - name: Scan repository sources for secrets
+        run: pnpm secret:scan
+
+      - name: Check direct dependency licenses
+        run: pnpm license:check
+
+      - name: Audit dependencies
+        run: pnpm audit --audit-level high
+
+      - name: Upload test report after a failure
+        if: failure()
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5
+        with:
+          name: foundation-test-report-${{ github.run_id }}
+          path: test-report.xml
+          if-no-files-found: ignore
+          include-hidden-files: false
+          retention-days: 7
+
+  portability-windows:
+    name: Portability checks (Windows)
+    runs-on: windows-2022
+    timeout-minutes: 20
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: Set up Node.js
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: 24.18.0
+          check-latest: false
+
+      - name: Activate the pinned pnpm version
+        run: |
+          corepack enable
+          corepack prepare pnpm@11.15.1 --activate
+          node --version
+          pnpm --version
+
+      - name: Install from the lockfile
+        run: pnpm install --frozen-lockfile
+
+      - name: Typecheck across Windows paths
+        run: pnpm typecheck
+
+      - name: Verify deterministic contract generation
+        run: pnpm contracts:verify
+
+      - name: Verify portable supply-chain scripts
+        run: |
+          pnpm secret:scan
+          pnpm license:check

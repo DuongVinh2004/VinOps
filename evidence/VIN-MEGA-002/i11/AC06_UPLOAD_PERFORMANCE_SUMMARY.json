@@ -1,0 +1,49 @@
+{
+  "status": "PASS",
+  "environment": {
+    "api": "http://127.0.0.1:4610/api/v1",
+    "database": "vinops_mega002_test",
+    "storage_backend": "MinIO S3-compatible HTTP on task-owned Docker container",
+    "payload_bytes": 10000000,
+    "payload_sha256": "351a780b2f1cdb5f3283405ac67b3ea2d11408acd832d90beb3418ea45520854",
+    "network_model": "deterministic per-client token-bucket pacing",
+    "client_cap_mbps": 20,
+    "pacing_mbps": 19.5,
+    "chunk_bytes": 65536,
+    "warmup_rounds": 1,
+    "measured_rounds": 3,
+    "clients_per_round": 20
+  },
+  "summary": {
+    "measured_uploads": 60,
+    "success_count": 60,
+    "checksum_pass_count": 60,
+    "progress_pass_count": 60,
+    "within_8_seconds_count": 60,
+    "within_8_seconds_percent": 100,
+    "p50_seconds": 4.752,
+    "p95_seconds": 4.849,
+    "p99_seconds": 4.857,
+    "max_progress_stall_seconds": 0.759,
+    "max_concurrency": 20,
+    "transfer_errors": 0,
+    "completion_errors": 0,
+    "scan_queue_seconds_separate": 12.854,
+    "scan_queue_included_in_transfer_timing": false
+  },
+  "cross_tenant_canary": {
+    "status": 404,
+    "body_keys": [
+      "code",
+      "message_key",
+      "correlation_id",
+      "retryable"
+    ],
+    "state_unchanged": true
+  },
+  "measured_round_concurrency": [
+    20,
+    20,
+    20
+  ]
+}

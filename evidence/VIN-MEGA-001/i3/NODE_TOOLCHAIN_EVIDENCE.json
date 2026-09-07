@@ -1,0 +1,13 @@
+{
+  "checkpoint": "VIN-MEGA-001",
+  "iteration": 3,
+  "status": "PASS",
+  "node_version": "v24.18.0",
+  "node_executable": "C:\\Users\\Duong Vinh\\Downloads\\VinOps\\vinops\\.tmp\\vinops-mega001-i2-toolchain\\node-v24.18.0-win-x64\\node.exe",
+  "node_executable_sha256": "9a4eb5f1c29c6a2e93852ead46b999e284a6a5ca8bab4d4e241d587d025a52de",
+  "official_zip_sha256": "0ae68406b42d7725661da979b1403ec9926da205c6770827f33aac9d8f26e821",
+  "official_checksum_match": true,
+  "pnpm_version": "11.15.1",
+  "global_install": false,
+  "path_changed": false
+}

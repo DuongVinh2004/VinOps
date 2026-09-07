@@ -1,0 +1,57 @@
+{
+  "task": "VIN-MEGA-002",
+  "iteration": 2,
+  "network": {
+    "name": "vinops-mega002-i2-runtime",
+    "id": "275c51377b22f823268faf214117b05ffc5cb8903fc43b392c05f42b2ba208f6",
+    "labels": {
+      "vinops.task": "VIN-MEGA-002",
+      "vinops.iteration": "2"
+    }
+  },
+  "containers": [
+    {
+      "name": "vinops-mega002-i2-postgres",
+      "id": "ecdcbaabfd97a5d20255b79239263b21c0e8aec9b65b5c002e98f515de452adb",
+      "status": "running",
+      "image": "postgres:16.14",
+      "digest": "sha256:33f923b05f64ca54ac4401c01126a6b92afe839a0aa0a52bc5aeb5cc958e5f20",
+      "port": "127.0.0.1:55443->5432"
+    },
+    {
+      "name": "vinops-mega002-i2-minio",
+      "id": "cd41553f0ec6814d31a585c00415a7ce337fbbbd7cd2dcb80563f499e1d6befc",
+      "status": "running",
+      "image": "minio/minio",
+      "digest": "sha256:14cea493d9a34af32f524e538b8346cf79f3321eff8e708c1e2960462bd8936e",
+      "ports": [
+        "127.0.0.1:59002->9000",
+        "127.0.0.1:59003->9001"
+      ]
+    },
+    {
+      "name": "vinops-mega002-i2-clamav",
+      "id": "d17abfb2079ac843e22dcf35fb74691488ebd23530f6f5c4f0d02ba56e290c8f",
+      "status": "running",
+      "image": "clamav/clamav",
+      "digest": "sha256:24cab211a882e9f767b84b76afe197d82554306ad6d43b782f80cd6aa1e61427",
+      "port": "127.0.0.1:53311->3310",
+      "health": "healthy"
+    },
+    {
+      "name": "vinops-mega002-i2-minio-bootstrap",
+      "id": "c31e9d4929f830922e89b2596c965124cdd4b75f13c1bff2cfb08c8b69392b3a",
+      "status": "exited(0)",
+      "image": "minio/mc",
+      "digest": "sha256:a7fe349ef4bd8521fb8497f55c6042871b2ae640607cf99d9bede5e9bdf11727"
+    }
+  ],
+  "volumes": [
+    "vinops-mega002-i2-postgres-data",
+    "vinops-mega002-i2-minio-data",
+    "vinops-mega002-i2-clamav-data"
+  ],
+  "database": "vinops_mega002_i2_test",
+  "bucket": "vinops-files",
+  "secrets": "omitted; synthetic credentials not included"
+}

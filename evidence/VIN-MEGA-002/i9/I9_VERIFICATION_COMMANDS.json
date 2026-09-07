@@ -1,0 +1,14 @@
+{
+  "commands": [
+    { "command": "pnpm exec vitest run packages/database/test/document-migration.static.test.ts --reporter=dot", "exit_code": 0, "tests": 4 },
+    { "command": "VINOPS_TEST_DATABASE_URL=postgresql://.../vinops_mega002_i2_test9 pnpm exec vitest run packages/database/test/document-postgres.integration.test.ts --reporter=dot", "exit_code": 0, "tests": 5 },
+    { "command": "pnpm exec vitest run apps/api/test/document-boundary.integration.test.ts --reporter=dot", "exit_code": 0, "tests": 2 },
+    { "command": "pnpm --filter @vinops/api build", "exit_code": 0 },
+    { "command": "pnpm --filter @vinops/worker build", "exit_code": 0 },
+    { "command": "pnpm secret:scan", "exit_code": 0 },
+    { "command": "pnpm verify", "runs": 1, "exit_code": 0, "persistent_child_pid": 7976 },
+    { "command": "git diff --check", "exit_code": 0 }
+  ],
+  "final_verify_status": "PASS",
+  "lockfile_changed": false
+}

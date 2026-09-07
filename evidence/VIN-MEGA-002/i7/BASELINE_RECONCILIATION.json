@@ -1,0 +1,17 @@
+{
+  "checkpoint_id": "VIN-MEGA-002",
+  "iteration": 7,
+  "i1_i6_protected": true,
+  "expected_source_fingerprint_before": "94ff9f64896bf640f89d80fd993aeb8dc6871a05c87f6bf6b02cff556c41e9ae",
+  "source_fingerprint_after": "45c68e8314962e35a3e3c29fd713df13d037c3fe418955cfd4341d48f533ece3",
+  "cumulative_product_files": 7,
+  "additional_product_files": 3,
+  "migrations": 0,
+  "dependencies": 0,
+  "i6_manifest_sha256": "B9E2D0D1736ABEC0A21883F82384897CFC4DDCF9B4D4BE02C517CED34E2D2A21",
+  "i6_evidence_sha256": "5806A3B85E150C6A96FD0F692A653145AC284E6475B42D64157100FE9CC7FADF",
+  "i6_review_sha256": "C9263CD4403C04383131FBD49C7EF008DE1A0184CEF2F17CF09E6F7F14A5F645",
+  "frozen_expected_rows": 10800,
+  "frozen_routes": 18,
+  "protected_evidence_untouched": true
+}
