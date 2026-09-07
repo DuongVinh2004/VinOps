@@ -74,4 +74,19 @@ export declare function assertAnnotation(input: {
     body?: string | null | undefined;
 }): void;
 export declare function signedUrlExpiry(now: Date, ttlSeconds: number): Date;
-//# sourceMappingURL=document-control.d.ts.map
+export declare function assertSingleCurrentRevision(input: {
+    revisions: readonly {
+        id: string;
+        isCurrent?: boolean;
+        status?: RevisionStatus;
+    }[];
+}): void;
+export declare function generateTransmittalSignature(snapshotSha256: string, secret: string): string;
+export declare function buildDrawingQrPayload(input: {
+    transmittalId: string;
+    documentCode: string;
+    revisionCode: string;
+    fileSha256: string;
+    signature: string;
+    issuedAt: string;
+}): string;

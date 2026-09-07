@@ -143,6 +143,17 @@ export type OutboxWorkerTransaction = {
     errorCode: string,
     retryAt: Date | null,
   ): Promise<void>;
+  cleanupExpiredUploadSessions(now?: Date): Promise<number>;
+  claimExpiredQuarantineFiles(
+    cutoff: Date,
+    limit?: number,
+  ): Promise<readonly { id: string; quarantine_object_key: string }[]>;
+  purgeQuarantineFile(fileId: string, failureCode?: string): Promise<boolean>;
+  query<Row extends QueryResultRow>(
+    text: string,
+    values?: readonly unknown[],
+  ): Promise<readonly Row[]>;
+  execute(text: string, values?: readonly unknown[]): Promise<number>;
 };
 
 class PostgreSqlTransaction implements Transaction {
@@ -252,6 +263,49 @@ class PostgreSqlOutboxWorkerTransaction implements OutboxWorkerTransaction {
       'SELECT vinops.retry_file_processing_job($1::uuid, $2, $3, $4::timestamptz)',
       [jobId, workerName, errorCode, retryAt],
     );
+  }
+
+  async cleanupExpiredUploadSessions(now: Date = new Date()): Promise<number> {
+    const result = await this.client.query<{ cleanup_expired_upload_sessions: number }>(
+      'SELECT vinops.cleanup_expired_upload_sessions($1::timestamptz)',
+      [now],
+    );
+    return Number(result.rows[0]?.cleanup_expired_upload_sessions ?? 0);
+  }
+
+  async claimExpiredQuarantineFiles(
+    cutoff: Date,
+    limit = 50,
+  ): Promise<readonly { id: string; quarantine_object_key: string }[]> {
+    const result = await this.client.query<{ id: string; quarantine_object_key: string }>(
+      'SELECT id, quarantine_object_key FROM vinops.claim_expired_quarantine_files($1::timestamptz, $2::integer)',
+      [cutoff, limit],
+    );
+    return result.rows;
+  }
+
+  async purgeQuarantineFile(
+    fileId: string,
+    failureCode = 'QUARANTINE_EXPIRED_PURGED',
+  ): Promise<boolean> {
+    const result = await this.client.query<{ purge_quarantine_file: boolean }>(
+      'SELECT vinops.purge_quarantine_file($1::uuid, $2)',
+      [fileId, failureCode],
+    );
+    return Boolean(result.rows[0]?.purge_quarantine_file);
+  }
+
+  async query<Row extends QueryResultRow>(
+    text: string,
+    values: readonly unknown[] = [],
+  ): Promise<readonly Row[]> {
+    const result = await this.client.query<Row>(text, [...values]);
+    return result.rows;
+  }
+
+  async execute(text: string, values: readonly unknown[] = []): Promise<number> {
+    const result = await this.client.query(text, [...values]);
+    return result.rowCount ?? 0;
   }
 }
 

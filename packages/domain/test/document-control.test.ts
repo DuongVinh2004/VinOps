@@ -7,9 +7,12 @@ import {
   assertReviewerMayDecide,
   assertSafeFilename,
   assertUploadCompletion,
+  assertSingleCurrentRevision,
   assertWithdrawAllowed,
+  buildDrawingQrPayload,
   DomainError,
   evaluateReviewRoute,
+  generateTransmittalSignature,
   normalizeContextKey,
   revisionTransitionTarget,
   signedUrlExpiry,
@@ -160,5 +163,49 @@ describe('Document Control domain invariants', () => {
     expect(signedUrlExpiry(new Date('2026-01-01T00:00:00Z'), 60).toISOString()).toBe(
       '2026-01-01T00:01:00.000Z',
     );
+  });
+
+  it('enforces single current revision invariant, digital signature and QR payload', () => {
+    expect(() =>
+      assertSingleCurrentRevision({
+        revisions: [
+          { id: 'rev-1', isCurrent: true, status: 'Published' },
+          { id: 'rev-2', isCurrent: false, status: 'Superseded' },
+        ],
+      }),
+    ).not.toThrow();
+
+    expectCode(
+      () =>
+        assertSingleCurrentRevision({
+          revisions: [
+            { id: 'rev-1', isCurrent: true, status: 'Published' },
+            { id: 'rev-2', isCurrent: true, status: 'Draft' },
+          ],
+        }),
+      'MULTIPLE_CURRENT_REVISIONS_FORBIDDEN',
+    );
+
+    const hash = 'a'.repeat(64);
+    const signature = generateTransmittalSignature(hash, 'secret-key');
+    expect(signature).toHaveLength(64);
+
+    const qr = buildDrawingQrPayload({
+      transmittalId: 't-001',
+      documentCode: 'DWG-001',
+      revisionCode: 'P01',
+      fileSha256: hash,
+      signature,
+      issuedAt: '2026-09-07T12:00:00Z',
+    });
+    expect(qr.length).toBeGreaterThan(10);
+    const decoded = JSON.parse(Buffer.from(qr, 'base64url').toString('utf8')) as {
+      tId: string;
+      doc: string;
+      rev: string;
+    };
+    expect(decoded.tId).toBe('t-001');
+    expect(decoded.doc).toBe('DWG-001');
+    expect(decoded.rev).toBe('P01');
   });
 });

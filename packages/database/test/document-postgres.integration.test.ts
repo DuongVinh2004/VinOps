@@ -192,8 +192,10 @@ describePostgres('Document Control PostgreSQL invariants', () => {
   beforeAll(async () => {
     if (connectionString === undefined) return;
     const database = new URL(connectionString).pathname.replace(/^\//u, '');
-    if (!/^vinops_mega002_i[12]_test\d*$/u.test(database)) {
-      throw new Error('VINOPS_TEST_DATABASE_URL must name an explicit VIN-MEGA-002 task database.');
+    if (!/^(vinops_mega002_i[12]_test\d*|vinops_chat1_test)$/u.test(database)) {
+      throw new Error(
+        'VINOPS_TEST_DATABASE_URL must name an explicit VIN-MEGA-002 or chat1 task database.',
+      );
     }
     await runMigrations(connectionString);
     pool = new Pool({

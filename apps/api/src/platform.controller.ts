@@ -645,6 +645,10 @@ export class PlatformController {
     @Param('projectId') projectId: string,
     @Query('search') search: string | undefined,
     @Query('include_archived') includeArchived: string | undefined,
+    @Query('location_id') locationId: string | undefined,
+    @Query('discipline_id') disciplineId: string | undefined,
+    @Query('work_id') workId: string | undefined,
+    @Query('document_type') documentType: string | undefined,
     @Req() request: Request,
   ): Promise<{ items: readonly unknown[]; page: Record<string, unknown> }> {
     const items = await this.documents.listDocuments(
@@ -653,6 +657,7 @@ export class PlatformController {
       search,
       includeArchived === 'true',
       request.vinopsCorrelationId,
+      { locationId, disciplineId, workId, documentType },
     );
     return this.page(items);
   }
@@ -672,6 +677,7 @@ export class PlatformController {
       'discipline_id',
       'classification_id',
       'work_id',
+      'location_id',
       'confidentiality',
     ]);
     const confidentiality = input.confidentiality;
@@ -694,6 +700,7 @@ export class PlatformController {
         disciplineId: optionalString(input, 'discipline_id'),
         classificationId: optionalString(input, 'classification_id'),
         workId: optionalString(input, 'work_id'),
+        locationId: optionalString(input, 'location_id'),
         confidentiality,
       },
       idempotencyKey(request),

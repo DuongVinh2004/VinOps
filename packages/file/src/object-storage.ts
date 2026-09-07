@@ -25,6 +25,7 @@ export interface ObjectStorage {
   getObject(key: string): Promise<Uint8Array>;
   putObject(key: string, bytes: Uint8Array, mediaType: string): Promise<void>;
   copyObject(sourceKey: string, destinationKey: string, mediaType: string): Promise<void>;
+  deleteObject(key: string): Promise<void>;
   authorizeGet(key: string, expiresSeconds: number, filename?: string): Promise<string>;
 }
 
@@ -39,7 +40,7 @@ export type S3ObjectStorageOptions = {
 };
 
 type SignedRequest = {
-  method: 'GET' | 'HEAD' | 'POST' | 'PUT';
+  method: 'GET' | 'HEAD' | 'POST' | 'PUT' | 'DELETE';
   key: string;
   query?: Readonly<Record<string, string>>;
   headers?: Readonly<Record<string, string>>;
@@ -223,6 +224,11 @@ export class S3ObjectStorage implements ObjectStorage {
         'x-amz-metadata-directive': 'REPLACE',
       },
     });
+  }
+
+  async deleteObject(key: string): Promise<void> {
+    assertObjectKey(key);
+    await this.send({ method: 'DELETE', key });
   }
 
   authorizeGet(key: string, expiresSeconds: number, filename?: string): Promise<string> {

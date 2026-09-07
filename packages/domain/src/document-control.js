@@ -144,7 +144,9 @@ export function normalizeDocumentCode(value) {
 }
 export function normalizeContextKey(value) {
     const context = value?.trim().normalize('NFKC') ?? 'default';
-    if (context.length < 1 || context.length > 120 || !/^[a-zA-Z0-9][a-zA-Z0-9._:-]*$/u.test(context)) {
+    if (context.length < 1 ||
+        context.length > 120 ||
+        !/^[a-zA-Z0-9][a-zA-Z0-9._:-]*$/u.test(context)) {
         throw new DomainError('DISTRIBUTION_CONTEXT_INVALID', 'Distribution context is invalid.');
     }
     return context;
@@ -157,8 +159,10 @@ export function assertSafeFilename(value) {
         filename === '..' ||
         filename.includes('/') ||
         filename.includes('\\') ||
-        filename.includes('\0') ||
-        /[\u0000-\u001f\u007f]/u.test(filename) ||
+        Array.from(filename).some((character) => {
+            const codePoint = character.codePointAt(0) ?? 0;
+            return codePoint < 0x20 || codePoint === 0x7f;
+        }) ||
         /(^|\.)\.(\.|$)/u.test(filename)) {
         throw new DomainError('UNSAFE_FILENAME', 'Filename is unsafe.');
     }
@@ -231,4 +235,28 @@ export function signedUrlExpiry(now, ttlSeconds) {
     }
     return new Date(now.getTime() + ttlSeconds * 1_000);
 }
-//# sourceMappingURL=document-control.js.map
+export function assertSingleCurrentRevision(input) {
+    const currentCount = input.revisions.filter((rev) => rev.isCurrent === true || rev.status === 'Published').length;
+    if (currentCount > 1) {
+        throw new DomainError('MULTIPLE_CURRENT_REVISIONS_FORBIDDEN', 'Only a single revision may be current or published at any time.');
+    }
+}
+export function generateTransmittalSignature(snapshotSha256, secret) {
+    if (!/^[a-f0-9]{64}$/u.test(snapshotSha256)) {
+        throw new DomainError('SNAPSHOT_HASH_INVALID', 'Snapshot SHA-256 is invalid.');
+    }
+    return createHash('sha256')
+        .update(`${snapshotSha256}:${secret}`)
+        .digest('hex');
+}
+export function buildDrawingQrPayload(input) {
+    const data = {
+        tId: input.transmittalId,
+        doc: input.documentCode,
+        rev: input.revisionCode,
+        sha: input.fileSha256.slice(0, 16),
+        sig: input.signature.slice(0, 16),
+        iat: input.issuedAt,
+    };
+    return Buffer.from(JSON.stringify(data)).toString('base64url');
+}

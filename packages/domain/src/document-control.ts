@@ -375,3 +375,43 @@ export function signedUrlExpiry(now: Date, ttlSeconds: number): Date {
   }
   return new Date(now.getTime() + ttlSeconds * 1_000);
 }
+
+export function assertSingleCurrentRevision(input: {
+  revisions: readonly { id: string; isCurrent?: boolean; status?: RevisionStatus }[];
+}): void {
+  const currentCount = input.revisions.filter(
+    (rev) => rev.isCurrent === true || rev.status === 'Published',
+  ).length;
+  if (currentCount > 1) {
+    throw new DomainError(
+      'MULTIPLE_CURRENT_REVISIONS_FORBIDDEN',
+      'Only a single revision may be current or published at any time.',
+    );
+  }
+}
+
+export function generateTransmittalSignature(snapshotSha256: string, secret: string): string {
+  if (!/^[a-f0-9]{64}$/u.test(snapshotSha256)) {
+    throw new DomainError('SNAPSHOT_HASH_INVALID', 'Snapshot SHA-256 is invalid.');
+  }
+  return createHash('sha256').update(`${snapshotSha256}:${secret}`).digest('hex');
+}
+
+export function buildDrawingQrPayload(input: {
+  transmittalId: string;
+  documentCode: string;
+  revisionCode: string;
+  fileSha256: string;
+  signature: string;
+  issuedAt: string;
+}): string {
+  const data = {
+    tId: input.transmittalId,
+    doc: input.documentCode,
+    rev: input.revisionCode,
+    sha: input.fileSha256.slice(0, 16),
+    sig: input.signature.slice(0, 16),
+    iat: input.issuedAt,
+  };
+  return Buffer.from(JSON.stringify(data)).toString('base64url');
+}

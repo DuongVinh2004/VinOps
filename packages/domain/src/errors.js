@@ -1,4 +1,6 @@
 export class DomainError extends Error {
+    code;
+    retryable;
     constructor(code, message, retryable = false) {
         super(message);
         this.name = 'DomainError';
@@ -6,4 +8,3 @@ export class DomainError extends Error {
         this.retryable = retryable;
     }
 }
-//# sourceMappingURL=errors.js.map

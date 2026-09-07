@@ -8,6 +8,7 @@ import { NestStructuredLogger } from './nest-logger.js';
 import { createOutboxPoller, type OutboxPoller } from './outbox-poller.js';
 import { createFileProcessingPoller, type FileProcessingPoller } from './file-processing-poller.js';
 import { FileProcessingWorker } from './file-processing-worker.js';
+import { createDocumentEventHandlers } from './document-event-handler.js';
 import { DeterministicInProcessPublisher } from './outbox-publisher.js';
 import { OutboxWorker } from './outbox-worker.js';
 import { PostgreSqlOutboxStore } from './postgres-outbox-store.js';
@@ -45,9 +46,10 @@ function createOptionalWorkerRuntime(
     applicationName: `vinops-worker:${config.VINOPS_WORKER_NAME}`,
     runtimeRole: 'vinops_worker',
   });
+  const documentHandlers = createDocumentEventHandlers(logger);
   const worker = new OutboxWorker(
     new PostgreSqlOutboxStore(database),
-    new DeterministicInProcessPublisher(),
+    new DeterministicInProcessPublisher([documentHandlers.handler]),
     logger,
     { workerName: config.VINOPS_WORKER_NAME },
   );
