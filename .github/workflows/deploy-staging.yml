@@ -133,7 +133,7 @@ jobs:
           load: true
 
       - name: Scan API Image with Trivy
-        uses: aquasecurity/trivy-action@5665893d9804eb58957e1be5ddff8ff0ebfa9c8b # v0.34.0
+        uses: aquasecurity/trivy-action@c1824fd6edce30d7ab345a9989de00bbd46ef284 # v0.34.0
         with:
           image-ref: vinops/api:scan-target
           format: table
