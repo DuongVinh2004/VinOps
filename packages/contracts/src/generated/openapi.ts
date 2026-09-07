@@ -690,6 +690,230 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/projects/{projectId}/issues": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List field issues for a project */
+        get: operations["listFieldIssues"];
+        put?: never;
+        /** Quick-create a field issue with GPS and photos */
+        post: operations["quickCreateFieldIssue"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/projects/{projectId}/issues/{issueId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get field issue details */
+        get: operations["getFieldIssue"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/projects/{projectId}/issues/{issueId}/transitions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Transition field issue lifecycle state */
+        post: operations["transitionFieldIssue"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/projects/{projectId}/issues/{issueId}/comments": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Add a comment to a field issue */
+        post: operations["createIssueComment"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/projects/{projectId}/issues/{issueId}/escalate-to-rfi": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Escalate a field issue into an official technical RFI */
+        post: operations["escalateIssueToRfi"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/projects/{projectId}/rfis": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List RFIs for a project */
+        get: operations["listRfiRequests"];
+        put?: never;
+        /** Create an RFI */
+        post: operations["createRfiRequest"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/projects/{projectId}/rfis/{rfiId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get RFI detail with answers and documents */
+        get: operations["getRfiRequest"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/projects/{projectId}/rfis/{rfiId}/transitions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Transition RFI state */
+        post: operations["transitionRfiRequest"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/projects/{projectId}/rfis/{rfiId}/responses": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Submit clarification or official response with revised document attachment */
+        post: operations["createRfiResponse"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/projects/{projectId}/submittals": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List submittals for a project */
+        get: operations["listSubmittals"];
+        put?: never;
+        /** Create a submittal */
+        post: operations["createSubmittal"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/projects/{projectId}/submittals/{submittalId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get submittal details with items and review timeline */
+        get: operations["getSubmittal"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/projects/{projectId}/submittals/{submittalId}/transitions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Transition submittal state */
+        post: operations["transitionSubmittal"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/projects/{projectId}/submittals/{submittalId}/reviews": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Submit a review decision in maker-checker workflow */
+        post: operations["createSubmittalReview"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -1445,6 +1669,387 @@ export interface components {
             items: components["schemas"]["AuditEvent"][];
             page: components["schemas"]["PageMeta"];
         };
+        GpsCoordinates: {
+            latitude: number;
+            longitude: number;
+            accuracy_meters?: number;
+        };
+        FieldIssueCreate: {
+            code: string;
+            title: string;
+            description: string;
+            category: string;
+            /** @enum {string} */
+            severity: "low" | "medium" | "high" | "critical";
+            /** Format: uuid */
+            location_node_id?: string;
+            /** Format: uuid */
+            work_node_id?: string;
+            /** Format: uuid */
+            contractor_organization_id?: string;
+            /** Format: uuid */
+            suggested_contractor_organization_id?: string;
+            /** Format: uuid */
+            assigned_to_user_id?: string;
+            gps?: components["schemas"]["GpsCoordinates"];
+            /** Format: date-time */
+            due_at?: string;
+            attachment_file_ids?: string[];
+        };
+        FieldIssueTransition: {
+            /** @enum {string} */
+            action: "triage" | "assign" | "start_progress" | "resolve" | "close" | "reopen";
+            /** Format: uuid */
+            assigned_to_user_id?: string;
+            /** Format: uuid */
+            contractor_organization_id?: string;
+            comment?: string;
+        };
+        FieldIssue: {
+            /** Format: uuid */
+            id: string;
+            /** Format: uuid */
+            project_id: string;
+            /** Format: uuid */
+            organization_id: string;
+            code: string;
+            title: string;
+            description: string;
+            category: string;
+            /** @enum {string} */
+            severity: "low" | "medium" | "high" | "critical";
+            /** @enum {string} */
+            status: "Open" | "Under Triage" | "Assigned" | "In Progress" | "Resolved" | "Closed";
+            /** Format: uuid */
+            location_node_id?: string;
+            /** Format: uuid */
+            work_node_id?: string;
+            /** Format: uuid */
+            contractor_organization_id?: string;
+            /** Format: uuid */
+            suggested_contractor_organization_id?: string;
+            /** Format: uuid */
+            assigned_to_user_id?: string;
+            gps_latitude?: number;
+            gps_longitude?: number;
+            gps_accuracy_meters?: number;
+            /** Format: date-time */
+            due_at?: string;
+            /** Format: date-time */
+            resolved_at?: string;
+            /** Format: date-time */
+            closed_at?: string;
+            /** Format: uuid */
+            escalated_to_rfi_id?: string;
+            version: string;
+            /** Format: uuid */
+            created_by: string;
+            /** Format: date-time */
+            created_at: string;
+            /** Format: date-time */
+            updated_at: string;
+            attachments?: components["schemas"]["IssueAttachment"][];
+            comments?: components["schemas"]["IssueComment"][];
+        };
+        FieldIssueList: {
+            items: components["schemas"]["FieldIssue"][];
+            page: components["schemas"]["PageMeta"];
+        };
+        IssueAttachment: {
+            /** Format: uuid */
+            id: string;
+            /** Format: uuid */
+            issue_id: string;
+            /** Format: uuid */
+            file_id: string;
+            /** @enum {string} */
+            attachment_type: "site_photo" | "evidence" | "document" | "resolution_photo";
+            caption?: string;
+            /** Format: date-time */
+            created_at: string;
+        };
+        IssueCommentCreate: {
+            content: string;
+        };
+        IssueComment: {
+            /** Format: uuid */
+            id: string;
+            /** Format: uuid */
+            issue_id: string;
+            /** Format: uuid */
+            author_user_id: string;
+            content: string;
+            /** Format: date-time */
+            created_at: string;
+        };
+        IssueEscalateToRfi: {
+            rfi_code: string;
+            title: string;
+            question: string;
+            suggested_solution?: string;
+            /** @enum {string} */
+            priority?: "low" | "normal" | "high" | "urgent";
+            /** Format: uuid */
+            requesting_partner_organization_id: string;
+            /** Format: uuid */
+            responding_partner_organization_id?: string;
+            /** @default 5 */
+            sla_business_days: number;
+        };
+        RfiRequestCreate: {
+            code: string;
+            title: string;
+            question: string;
+            suggested_solution?: string;
+            /**
+             * @default normal
+             * @enum {string}
+             */
+            priority: "low" | "normal" | "high" | "urgent";
+            /** Format: uuid */
+            location_node_id?: string;
+            /** Format: uuid */
+            work_node_id?: string;
+            /** Format: uuid */
+            document_id?: string;
+            /** Format: uuid */
+            requesting_partner_organization_id: string;
+            /** Format: uuid */
+            responding_partner_organization_id?: string;
+            /** Format: uuid */
+            source_issue_id?: string;
+            /** @default 5 */
+            sla_business_days: number;
+        };
+        RfiTransition: {
+            /** @enum {string} */
+            action: "submit" | "start_review" | "request_clarification" | "provide_clarification" | "answer_official" | "close" | "reopen";
+            comment?: string;
+        };
+        RfiResponseCreate: {
+            /** @enum {string} */
+            response_type: "clarification_request" | "clarification_answer" | "official_answer";
+            content: string;
+            /** Format: uuid */
+            revised_document_id?: string;
+            /** Format: uuid */
+            revised_document_revision_id?: string;
+            /** Format: uuid */
+            file_id?: string;
+        };
+        RfiResponse: {
+            /** Format: uuid */
+            id: string;
+            /** Format: uuid */
+            rfi_id: string;
+            /** @enum {string} */
+            response_type: "clarification_request" | "clarification_answer" | "official_answer";
+            content: string;
+            /** Format: uuid */
+            author_user_id: string;
+            /** Format: uuid */
+            author_partner_organization_id?: string;
+            /** Format: uuid */
+            revised_document_id?: string;
+            /** Format: uuid */
+            revised_document_revision_id?: string;
+            /** Format: uuid */
+            file_id?: string;
+            /** Format: date-time */
+            created_at: string;
+        };
+        RfiRequest: {
+            /** Format: uuid */
+            id: string;
+            /** Format: uuid */
+            project_id: string;
+            /** Format: uuid */
+            organization_id: string;
+            code: string;
+            title: string;
+            question: string;
+            suggested_solution?: string;
+            /** @enum {string} */
+            status: "Draft" | "Submitted" | "Under Review" | "Clarification Required" | "Official Answered" | "Closed";
+            /** @enum {string} */
+            priority?: "low" | "normal" | "high" | "urgent";
+            /** Format: uuid */
+            location_node_id?: string;
+            /** Format: uuid */
+            work_node_id?: string;
+            /** Format: uuid */
+            document_id?: string;
+            /** Format: uuid */
+            requesting_partner_organization_id: string;
+            /** Format: uuid */
+            responding_partner_organization_id?: string;
+            /** Format: uuid */
+            ball_in_court_organization_id?: string;
+            /** Format: uuid */
+            source_issue_id?: string;
+            sla_business_days?: number;
+            /** Format: date-time */
+            submitted_at?: string;
+            /** Format: date-time */
+            due_at?: string;
+            /** Format: date-time */
+            answered_at?: string;
+            /** Format: date-time */
+            closed_at?: string;
+            /** @enum {string} */
+            sla_status?: "ok" | "warning_48h" | "warning_24h" | "breached";
+            sla_hours_remaining?: number;
+            version: string;
+            /** Format: uuid */
+            created_by: string;
+            /** Format: date-time */
+            created_at: string;
+            /** Format: date-time */
+            updated_at: string;
+            responses?: components["schemas"]["RfiResponse"][];
+        };
+        RfiRequestList: {
+            items: components["schemas"]["RfiRequest"][];
+            page: components["schemas"]["PageMeta"];
+        };
+        SubmittalItemCreate: {
+            item_number: number;
+            description: string;
+            manufacturer?: string;
+            model_or_grade?: string;
+            /** @default 1 */
+            sample_quantity: number;
+            /** @default false */
+            physical_sample_received: boolean;
+            /** Format: uuid */
+            document_id?: string;
+            /** Format: uuid */
+            file_id?: string;
+        };
+        SubmittalItem: {
+            /** Format: uuid */
+            id: string;
+            /** Format: uuid */
+            submittal_id: string;
+            item_number: number;
+            description: string;
+            manufacturer?: string;
+            model_or_grade?: string;
+            sample_quantity: number;
+            physical_sample_received: boolean;
+            /** Format: uuid */
+            document_id?: string;
+            /** Format: uuid */
+            file_id?: string;
+            /** Format: date-time */
+            created_at: string;
+        };
+        SubmittalCreate: {
+            code: string;
+            title: string;
+            /** @enum {string} */
+            submittal_type: "material_sample" | "shop_drawing" | "method_statement" | "product_data" | "other";
+            /** Format: uuid */
+            maker_partner_organization_id: string;
+            /** Format: uuid */
+            lead_contractor_partner_organization_id?: string;
+            /** Format: uuid */
+            consultant_partner_organization_id?: string;
+            /** Format: uuid */
+            location_node_id?: string;
+            /** Format: uuid */
+            work_node_id?: string;
+            /** Format: uuid */
+            specification_document_id?: string;
+            /** Format: uuid */
+            drawing_document_id?: string;
+            /** @default 7 */
+            sla_business_days: number;
+            items?: components["schemas"]["SubmittalItemCreate"][];
+        };
+        SubmittalTransition: {
+            /** @enum {string} */
+            action: "submit" | "start_review" | "approve" | "approve_with_comments" | "request_revision" | "reject" | "close" | "resubmit";
+            comment?: string;
+        };
+        SubmittalReviewCreate: {
+            /** @enum {string} */
+            stage: "checker" | "consultant_lead" | "owner_final";
+            /** @enum {string} */
+            decision: "Approved" | "Approved with Comments" | "Revise and Resubmit" | "Rejected";
+            comments: string;
+            /** Format: uuid */
+            attached_file_id?: string;
+        };
+        SubmittalReview: {
+            /** Format: uuid */
+            id: string;
+            /** Format: uuid */
+            submittal_id: string;
+            /** @enum {string} */
+            stage: "checker" | "consultant_lead" | "owner_final";
+            /** Format: uuid */
+            reviewer_user_id: string;
+            /** Format: uuid */
+            reviewer_partner_organization_id?: string;
+            /** @enum {string} */
+            decision: "Approved" | "Approved with Comments" | "Revise and Resubmit" | "Rejected";
+            comments: string;
+            /** Format: uuid */
+            attached_file_id?: string;
+            /** Format: date-time */
+            reviewed_at: string;
+        };
+        Submittal: {
+            /** Format: uuid */
+            id: string;
+            /** Format: uuid */
+            project_id: string;
+            /** Format: uuid */
+            organization_id: string;
+            code: string;
+            title: string;
+            /** @enum {string} */
+            submittal_type: "material_sample" | "shop_drawing" | "method_statement" | "product_data" | "other";
+            /** @enum {string} */
+            status: "Draft" | "Submitted" | "Under Review" | "Approved" | "Approved with Comments" | "Revise and Resubmit" | "Rejected" | "Closed";
+            /** Format: uuid */
+            maker_partner_organization_id: string;
+            /** Format: uuid */
+            lead_contractor_partner_organization_id?: string;
+            /** Format: uuid */
+            consultant_partner_organization_id?: string;
+            /** Format: uuid */
+            ball_in_court_organization_id?: string;
+            /** Format: uuid */
+            location_node_id?: string;
+            /** Format: uuid */
+            work_node_id?: string;
+            /** Format: uuid */
+            specification_document_id?: string;
+            /** Format: uuid */
+            drawing_document_id?: string;
+            /** Format: date-time */
+            submitted_at?: string;
+            /** Format: date-time */
+            due_at?: string;
+            sla_business_days?: number;
+            /** @enum {string} */
+            sla_status?: "ok" | "warning_48h" | "warning_24h" | "breached";
+            version: string;
+            /** Format: uuid */
+            created_by: string;
+            /** Format: date-time */
+            created_at: string;
+            /** Format: date-time */
+            updated_at: string;
+            items?: components["schemas"]["SubmittalItem"][];
+            reviews?: components["schemas"]["SubmittalReview"][];
+        };
+        SubmittalList: {
+            items: components["schemas"]["Submittal"][];
+            page: components["schemas"]["PageMeta"];
+        };
     };
     responses: {
         /** @description Malformed request */
@@ -1555,6 +2160,9 @@ export interface components {
         SessionId: string;
         ContextImportId: string;
         BreakGlassRequestId: string;
+        IssueId: string;
+        RfiId: string;
+        SubmittalId: string;
         ProjectContextKind: "partner" | "calendar" | "numbering_profile" | "location_node" | "work_node" | "discipline" | "classification";
         Cursor: string;
         PageSize: number;
@@ -3081,6 +3689,492 @@ export interface operations {
             403: components["responses"]["Forbidden"];
             409: components["responses"]["Conflict"];
             422: components["responses"]["Validation"];
+        };
+    };
+    listFieldIssues: {
+        parameters: {
+            query?: {
+                status?: string;
+                severity?: string;
+                location_node_id?: string;
+                work_node_id?: string;
+                contractor_organization_id?: string;
+                cursor?: components["parameters"]["Cursor"];
+                page_size?: components["parameters"]["PageSize"];
+            };
+            header?: never;
+            path: {
+                projectId: components["parameters"]["ProjectId"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Success */
+            200: {
+                headers: {
+                    "X-Correlation-ID": components["headers"]["CorrelationId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FieldIssueList"];
+                };
+            };
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+        };
+    };
+    quickCreateFieldIssue: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                projectId: components["parameters"]["ProjectId"];
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["FieldIssueCreate"];
+            };
+        };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    "X-Correlation-ID": components["headers"]["CorrelationId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FieldIssue"];
+                };
+            };
+            400: components["responses"]["BadRequest"];
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+            422: components["responses"]["Validation"];
+        };
+    };
+    getFieldIssue: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                projectId: components["parameters"]["ProjectId"];
+                issueId: components["parameters"]["IssueId"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Success */
+            200: {
+                headers: {
+                    "X-Correlation-ID": components["headers"]["CorrelationId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FieldIssue"];
+                };
+            };
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+            404: components["responses"]["ResourceNotVisible"];
+        };
+    };
+    transitionFieldIssue: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                projectId: components["parameters"]["ProjectId"];
+                issueId: components["parameters"]["IssueId"];
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["FieldIssueTransition"];
+            };
+        };
+        responses: {
+            /** @description Success */
+            200: {
+                headers: {
+                    "X-Correlation-ID": components["headers"]["CorrelationId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FieldIssue"];
+                };
+            };
+            400: components["responses"]["BadRequest"];
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+            409: components["responses"]["Conflict"];
+        };
+    };
+    createIssueComment: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                projectId: components["parameters"]["ProjectId"];
+                issueId: components["parameters"]["IssueId"];
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["IssueCommentCreate"];
+            };
+        };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    "X-Correlation-ID": components["headers"]["CorrelationId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["IssueComment"];
+                };
+            };
+            400: components["responses"]["BadRequest"];
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+        };
+    };
+    escalateIssueToRfi: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                projectId: components["parameters"]["ProjectId"];
+                issueId: components["parameters"]["IssueId"];
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["IssueEscalateToRfi"];
+            };
+        };
+        responses: {
+            /** @description Created RFI */
+            201: {
+                headers: {
+                    "X-Correlation-ID": components["headers"]["CorrelationId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RfiRequest"];
+                };
+            };
+            400: components["responses"]["BadRequest"];
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+            409: components["responses"]["Conflict"];
+        };
+    };
+    listRfiRequests: {
+        parameters: {
+            query?: {
+                status?: string;
+                ball_in_court_organization_id?: string;
+                cursor?: components["parameters"]["Cursor"];
+                page_size?: components["parameters"]["PageSize"];
+            };
+            header?: never;
+            path: {
+                projectId: components["parameters"]["ProjectId"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Success */
+            200: {
+                headers: {
+                    "X-Correlation-ID": components["headers"]["CorrelationId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RfiRequestList"];
+                };
+            };
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+        };
+    };
+    createRfiRequest: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                projectId: components["parameters"]["ProjectId"];
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RfiRequestCreate"];
+            };
+        };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    "X-Correlation-ID": components["headers"]["CorrelationId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RfiRequest"];
+                };
+            };
+            400: components["responses"]["BadRequest"];
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+        };
+    };
+    getRfiRequest: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                projectId: components["parameters"]["ProjectId"];
+                rfiId: components["parameters"]["RfiId"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Success */
+            200: {
+                headers: {
+                    "X-Correlation-ID": components["headers"]["CorrelationId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RfiRequest"];
+                };
+            };
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+            404: components["responses"]["ResourceNotVisible"];
+        };
+    };
+    transitionRfiRequest: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                projectId: components["parameters"]["ProjectId"];
+                rfiId: components["parameters"]["RfiId"];
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RfiTransition"];
+            };
+        };
+        responses: {
+            /** @description Success */
+            200: {
+                headers: {
+                    "X-Correlation-ID": components["headers"]["CorrelationId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RfiRequest"];
+                };
+            };
+            400: components["responses"]["BadRequest"];
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+            409: components["responses"]["Conflict"];
+        };
+    };
+    createRfiResponse: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                projectId: components["parameters"]["ProjectId"];
+                rfiId: components["parameters"]["RfiId"];
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RfiResponseCreate"];
+            };
+        };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    "X-Correlation-ID": components["headers"]["CorrelationId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RfiResponse"];
+                };
+            };
+            400: components["responses"]["BadRequest"];
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+        };
+    };
+    listSubmittals: {
+        parameters: {
+            query?: {
+                status?: string;
+                submittal_type?: string;
+                cursor?: components["parameters"]["Cursor"];
+                page_size?: components["parameters"]["PageSize"];
+            };
+            header?: never;
+            path: {
+                projectId: components["parameters"]["ProjectId"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Success */
+            200: {
+                headers: {
+                    "X-Correlation-ID": components["headers"]["CorrelationId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SubmittalList"];
+                };
+            };
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+        };
+    };
+    createSubmittal: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                projectId: components["parameters"]["ProjectId"];
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SubmittalCreate"];
+            };
+        };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    "X-Correlation-ID": components["headers"]["CorrelationId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Submittal"];
+                };
+            };
+            400: components["responses"]["BadRequest"];
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+        };
+    };
+    getSubmittal: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                projectId: components["parameters"]["ProjectId"];
+                submittalId: components["parameters"]["SubmittalId"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Success */
+            200: {
+                headers: {
+                    "X-Correlation-ID": components["headers"]["CorrelationId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Submittal"];
+                };
+            };
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+            404: components["responses"]["ResourceNotVisible"];
+        };
+    };
+    transitionSubmittal: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                projectId: components["parameters"]["ProjectId"];
+                submittalId: components["parameters"]["SubmittalId"];
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SubmittalTransition"];
+            };
+        };
+        responses: {
+            /** @description Success */
+            200: {
+                headers: {
+                    "X-Correlation-ID": components["headers"]["CorrelationId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Submittal"];
+                };
+            };
+            400: components["responses"]["BadRequest"];
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+            409: components["responses"]["Conflict"];
+        };
+    };
+    createSubmittalReview: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                projectId: components["parameters"]["ProjectId"];
+                submittalId: components["parameters"]["SubmittalId"];
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SubmittalReviewCreate"];
+            };
+        };
+        responses: {
+            /** @description Created review */
+            201: {
+                headers: {
+                    "X-Correlation-ID": components["headers"]["CorrelationId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SubmittalReview"];
+                };
+            };
+            400: components["responses"]["BadRequest"];
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
         };
     };
 }

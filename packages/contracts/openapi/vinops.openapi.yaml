@@ -64,6 +64,12 @@ tags:
     description: Immutable controlled-distribution snapshots.
   - name: Audit
     description: Redacted audit timeline under the caller's resource scope.
+  - name: FieldIssues
+    description: Field issue quick-create, triage, lifecycle, and comments.
+  - name: RFI
+    description: Request for information lifecycle, official response pipeline, and SLA tracking.
+  - name: Submittals
+    description: Submittal review engine, material samples, and shop drawings.
 security:
   - bearerAuth: []
 paths:
@@ -1674,6 +1680,507 @@ paths:
           $ref: '#/components/responses/Conflict'
         '422':
           $ref: '#/components/responses/Validation'
+  /projects/{projectId}/issues:
+    get:
+      operationId: listFieldIssues
+      tags:
+        - FieldIssues
+      summary: List field issues for a project
+      parameters:
+        - $ref: '#/components/parameters/ProjectId'
+        - name: status
+          in: query
+          schema:
+            type: string
+        - name: severity
+          in: query
+          schema:
+            type: string
+        - name: location_node_id
+          in: query
+          schema:
+            type: string
+            format: uuid
+        - name: work_node_id
+          in: query
+          schema:
+            type: string
+            format: uuid
+        - name: contractor_organization_id
+          in: query
+          schema:
+            type: string
+            format: uuid
+        - $ref: '#/components/parameters/Cursor'
+        - $ref: '#/components/parameters/PageSize'
+      responses:
+        '200':
+          description: Success
+          headers:
+            X-Correlation-ID:
+              $ref: '#/components/headers/CorrelationId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FieldIssueList'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    post:
+      operationId: quickCreateFieldIssue
+      tags:
+        - FieldIssues
+      summary: Quick-create a field issue with GPS and photos
+      parameters:
+        - $ref: '#/components/parameters/ProjectId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FieldIssueCreate'
+      responses:
+        '201':
+          description: Created
+          headers:
+            X-Correlation-ID:
+              $ref: '#/components/headers/CorrelationId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FieldIssue'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/Validation'
+  /projects/{projectId}/issues/{issueId}:
+    get:
+      operationId: getFieldIssue
+      tags:
+        - FieldIssues
+      summary: Get field issue details
+      parameters:
+        - $ref: '#/components/parameters/ProjectId'
+        - $ref: '#/components/parameters/IssueId'
+      responses:
+        '200':
+          description: Success
+          headers:
+            X-Correlation-ID:
+              $ref: '#/components/headers/CorrelationId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FieldIssue'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/ResourceNotVisible'
+  /projects/{projectId}/issues/{issueId}/transitions:
+    post:
+      operationId: transitionFieldIssue
+      tags:
+        - FieldIssues
+      summary: Transition field issue lifecycle state
+      parameters:
+        - $ref: '#/components/parameters/ProjectId'
+        - $ref: '#/components/parameters/IssueId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FieldIssueTransition'
+      responses:
+        '200':
+          description: Success
+          headers:
+            X-Correlation-ID:
+              $ref: '#/components/headers/CorrelationId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FieldIssue'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '409':
+          $ref: '#/components/responses/Conflict'
+  /projects/{projectId}/issues/{issueId}/comments:
+    post:
+      operationId: createIssueComment
+      tags:
+        - FieldIssues
+      summary: Add a comment to a field issue
+      parameters:
+        - $ref: '#/components/parameters/ProjectId'
+        - $ref: '#/components/parameters/IssueId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IssueCommentCreate'
+      responses:
+        '201':
+          description: Created
+          headers:
+            X-Correlation-ID:
+              $ref: '#/components/headers/CorrelationId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IssueComment'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /projects/{projectId}/issues/{issueId}/escalate-to-rfi:
+    post:
+      operationId: escalateIssueToRfi
+      tags:
+        - FieldIssues
+      summary: Escalate a field issue into an official technical RFI
+      parameters:
+        - $ref: '#/components/parameters/ProjectId'
+        - $ref: '#/components/parameters/IssueId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IssueEscalateToRfi'
+      responses:
+        '201':
+          description: Created RFI
+          headers:
+            X-Correlation-ID:
+              $ref: '#/components/headers/CorrelationId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RfiRequest'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '409':
+          $ref: '#/components/responses/Conflict'
+  /projects/{projectId}/rfis:
+    get:
+      operationId: listRfiRequests
+      tags:
+        - RFI
+      summary: List RFIs for a project
+      parameters:
+        - $ref: '#/components/parameters/ProjectId'
+        - name: status
+          in: query
+          schema:
+            type: string
+        - name: ball_in_court_organization_id
+          in: query
+          schema:
+            type: string
+            format: uuid
+        - $ref: '#/components/parameters/Cursor'
+        - $ref: '#/components/parameters/PageSize'
+      responses:
+        '200':
+          description: Success
+          headers:
+            X-Correlation-ID:
+              $ref: '#/components/headers/CorrelationId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RfiRequestList'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    post:
+      operationId: createRfiRequest
+      tags:
+        - RFI
+      summary: Create an RFI
+      parameters:
+        - $ref: '#/components/parameters/ProjectId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RfiRequestCreate'
+      responses:
+        '201':
+          description: Created
+          headers:
+            X-Correlation-ID:
+              $ref: '#/components/headers/CorrelationId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RfiRequest'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /projects/{projectId}/rfis/{rfiId}:
+    get:
+      operationId: getRfiRequest
+      tags:
+        - RFI
+      summary: Get RFI detail with answers and documents
+      parameters:
+        - $ref: '#/components/parameters/ProjectId'
+        - $ref: '#/components/parameters/RfiId'
+      responses:
+        '200':
+          description: Success
+          headers:
+            X-Correlation-ID:
+              $ref: '#/components/headers/CorrelationId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RfiRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/ResourceNotVisible'
+  /projects/{projectId}/rfis/{rfiId}/transitions:
+    post:
+      operationId: transitionRfiRequest
+      tags:
+        - RFI
+      summary: Transition RFI state
+      parameters:
+        - $ref: '#/components/parameters/ProjectId'
+        - $ref: '#/components/parameters/RfiId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RfiTransition'
+      responses:
+        '200':
+          description: Success
+          headers:
+            X-Correlation-ID:
+              $ref: '#/components/headers/CorrelationId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RfiRequest'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '409':
+          $ref: '#/components/responses/Conflict'
+  /projects/{projectId}/rfis/{rfiId}/responses:
+    post:
+      operationId: createRfiResponse
+      tags:
+        - RFI
+      summary: Submit clarification or official response with revised document attachment
+      parameters:
+        - $ref: '#/components/parameters/ProjectId'
+        - $ref: '#/components/parameters/RfiId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RfiResponseCreate'
+      responses:
+        '201':
+          description: Created
+          headers:
+            X-Correlation-ID:
+              $ref: '#/components/headers/CorrelationId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RfiResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /projects/{projectId}/submittals:
+    get:
+      operationId: listSubmittals
+      tags:
+        - Submittals
+      summary: List submittals for a project
+      parameters:
+        - $ref: '#/components/parameters/ProjectId'
+        - name: status
+          in: query
+          schema:
+            type: string
+        - name: submittal_type
+          in: query
+          schema:
+            type: string
+        - $ref: '#/components/parameters/Cursor'
+        - $ref: '#/components/parameters/PageSize'
+      responses:
+        '200':
+          description: Success
+          headers:
+            X-Correlation-ID:
+              $ref: '#/components/headers/CorrelationId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubmittalList'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    post:
+      operationId: createSubmittal
+      tags:
+        - Submittals
+      summary: Create a submittal
+      parameters:
+        - $ref: '#/components/parameters/ProjectId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubmittalCreate'
+      responses:
+        '201':
+          description: Created
+          headers:
+            X-Correlation-ID:
+              $ref: '#/components/headers/CorrelationId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Submittal'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /projects/{projectId}/submittals/{submittalId}:
+    get:
+      operationId: getSubmittal
+      tags:
+        - Submittals
+      summary: Get submittal details with items and review timeline
+      parameters:
+        - $ref: '#/components/parameters/ProjectId'
+        - $ref: '#/components/parameters/SubmittalId'
+      responses:
+        '200':
+          description: Success
+          headers:
+            X-Correlation-ID:
+              $ref: '#/components/headers/CorrelationId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Submittal'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/ResourceNotVisible'
+  /projects/{projectId}/submittals/{submittalId}/transitions:
+    post:
+      operationId: transitionSubmittal
+      tags:
+        - Submittals
+      summary: Transition submittal state
+      parameters:
+        - $ref: '#/components/parameters/ProjectId'
+        - $ref: '#/components/parameters/SubmittalId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubmittalTransition'
+      responses:
+        '200':
+          description: Success
+          headers:
+            X-Correlation-ID:
+              $ref: '#/components/headers/CorrelationId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Submittal'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '409':
+          $ref: '#/components/responses/Conflict'
+  /projects/{projectId}/submittals/{submittalId}/reviews:
+    post:
+      operationId: createSubmittalReview
+      tags:
+        - Submittals
+      summary: Submit a review decision in maker-checker workflow
+      parameters:
+        - $ref: '#/components/parameters/ProjectId'
+        - $ref: '#/components/parameters/SubmittalId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubmittalReviewCreate'
+      responses:
+        '201':
+          description: Created review
+          headers:
+            X-Correlation-ID:
+              $ref: '#/components/headers/CorrelationId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubmittalReview'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
 components:
   securitySchemes:
     bearerAuth:
@@ -1738,6 +2245,27 @@ components:
         format: uuid
     BreakGlassRequestId:
       name: requestId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    IssueId:
+      name: issueId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    RfiId:
+      name: rfiId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    SubmittalId:
+      name: submittalId
       in: path
       required: true
       schema:
@@ -3888,5 +4416,794 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/AuditEvent'
+        page:
+          $ref: '#/components/schemas/PageMeta'
+    GpsCoordinates:
+      type: object
+      required:
+        - latitude
+        - longitude
+      properties:
+        latitude:
+          type: number
+          minimum: -90
+          maximum: 90
+        longitude:
+          type: number
+          minimum: -180
+          maximum: 180
+        accuracy_meters:
+          type: number
+          minimum: 0
+    FieldIssueCreate:
+      type: object
+      required:
+        - code
+        - title
+        - description
+        - category
+        - severity
+      properties:
+        code:
+          type: string
+          minLength: 1
+          maxLength: 60
+        title:
+          type: string
+          minLength: 1
+          maxLength: 255
+        description:
+          type: string
+        category:
+          type: string
+        severity:
+          type: string
+          enum: [low, medium, high, critical]
+        location_node_id:
+          type: string
+          format: uuid
+        work_node_id:
+          type: string
+          format: uuid
+        contractor_organization_id:
+          type: string
+          format: uuid
+        suggested_contractor_organization_id:
+          type: string
+          format: uuid
+        assigned_to_user_id:
+          type: string
+          format: uuid
+        gps:
+          $ref: '#/components/schemas/GpsCoordinates'
+        due_at:
+          type: string
+          format: date-time
+        attachment_file_ids:
+          type: array
+          items:
+            type: string
+            format: uuid
+    FieldIssueTransition:
+      type: object
+      required:
+        - action
+      properties:
+        action:
+          type: string
+          enum: [triage, assign, start_progress, resolve, close, reopen]
+        assigned_to_user_id:
+          type: string
+          format: uuid
+        contractor_organization_id:
+          type: string
+          format: uuid
+        comment:
+          type: string
+    FieldIssue:
+      type: object
+      required:
+        - id
+        - project_id
+        - organization_id
+        - code
+        - title
+        - description
+        - category
+        - severity
+        - status
+        - version
+        - created_by
+        - created_at
+        - updated_at
+      properties:
+        id:
+          type: string
+          format: uuid
+        project_id:
+          type: string
+          format: uuid
+        organization_id:
+          type: string
+          format: uuid
+        code:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        category:
+          type: string
+        severity:
+          type: string
+          enum: [low, medium, high, critical]
+        status:
+          type: string
+          enum: [Open, Under Triage, Assigned, In Progress, Resolved, Closed]
+        location_node_id:
+          type: string
+          format: uuid
+        work_node_id:
+          type: string
+          format: uuid
+        contractor_organization_id:
+          type: string
+          format: uuid
+        suggested_contractor_organization_id:
+          type: string
+          format: uuid
+        assigned_to_user_id:
+          type: string
+          format: uuid
+        gps_latitude:
+          type: number
+        gps_longitude:
+          type: number
+        gps_accuracy_meters:
+          type: number
+        due_at:
+          type: string
+          format: date-time
+        resolved_at:
+          type: string
+          format: date-time
+        closed_at:
+          type: string
+          format: date-time
+        escalated_to_rfi_id:
+          type: string
+          format: uuid
+        version:
+          type: string
+        created_by:
+          type: string
+          format: uuid
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        attachments:
+          type: array
+          items:
+            $ref: '#/components/schemas/IssueAttachment'
+        comments:
+          type: array
+          items:
+            $ref: '#/components/schemas/IssueComment'
+    FieldIssueList:
+      type: object
+      required:
+        - items
+        - page
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldIssue'
+        page:
+          $ref: '#/components/schemas/PageMeta'
+    IssueAttachment:
+      type: object
+      required:
+        - id
+        - issue_id
+        - file_id
+        - attachment_type
+        - created_at
+      properties:
+        id:
+          type: string
+          format: uuid
+        issue_id:
+          type: string
+          format: uuid
+        file_id:
+          type: string
+          format: uuid
+        attachment_type:
+          type: string
+          enum: [site_photo, evidence, document, resolution_photo]
+        caption:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+    IssueCommentCreate:
+      type: object
+      required:
+        - content
+      properties:
+        content:
+          type: string
+          minLength: 1
+    IssueComment:
+      type: object
+      required:
+        - id
+        - issue_id
+        - author_user_id
+        - content
+        - created_at
+      properties:
+        id:
+          type: string
+          format: uuid
+        issue_id:
+          type: string
+          format: uuid
+        author_user_id:
+          type: string
+          format: uuid
+        content:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+    IssueEscalateToRfi:
+      type: object
+      required:
+        - rfi_code
+        - title
+        - question
+        - requesting_partner_organization_id
+      properties:
+        rfi_code:
+          type: string
+        title:
+          type: string
+        question:
+          type: string
+        suggested_solution:
+          type: string
+        priority:
+          type: string
+          enum: [low, normal, high, urgent]
+        requesting_partner_organization_id:
+          type: string
+          format: uuid
+        responding_partner_organization_id:
+          type: string
+          format: uuid
+        sla_business_days:
+          type: integer
+          default: 5
+    RfiRequestCreate:
+      type: object
+      required:
+        - code
+        - title
+        - question
+        - requesting_partner_organization_id
+      properties:
+        code:
+          type: string
+        title:
+          type: string
+        question:
+          type: string
+        suggested_solution:
+          type: string
+        priority:
+          type: string
+          enum: [low, normal, high, urgent]
+          default: normal
+        location_node_id:
+          type: string
+          format: uuid
+        work_node_id:
+          type: string
+          format: uuid
+        document_id:
+          type: string
+          format: uuid
+        requesting_partner_organization_id:
+          type: string
+          format: uuid
+        responding_partner_organization_id:
+          type: string
+          format: uuid
+        source_issue_id:
+          type: string
+          format: uuid
+        sla_business_days:
+          type: integer
+          default: 5
+    RfiTransition:
+      type: object
+      required:
+        - action
+      properties:
+        action:
+          type: string
+          enum:
+            [
+              submit,
+              start_review,
+              request_clarification,
+              provide_clarification,
+              answer_official,
+              close,
+              reopen,
+            ]
+        comment:
+          type: string
+    RfiResponseCreate:
+      type: object
+      required:
+        - response_type
+        - content
+      properties:
+        response_type:
+          type: string
+          enum: [clarification_request, clarification_answer, official_answer]
+        content:
+          type: string
+        revised_document_id:
+          type: string
+          format: uuid
+        revised_document_revision_id:
+          type: string
+          format: uuid
+        file_id:
+          type: string
+          format: uuid
+    RfiResponse:
+      type: object
+      required:
+        - id
+        - rfi_id
+        - response_type
+        - content
+        - author_user_id
+        - created_at
+      properties:
+        id:
+          type: string
+          format: uuid
+        rfi_id:
+          type: string
+          format: uuid
+        response_type:
+          type: string
+          enum: [clarification_request, clarification_answer, official_answer]
+        content:
+          type: string
+        author_user_id:
+          type: string
+          format: uuid
+        author_partner_organization_id:
+          type: string
+          format: uuid
+        revised_document_id:
+          type: string
+          format: uuid
+        revised_document_revision_id:
+          type: string
+          format: uuid
+        file_id:
+          type: string
+          format: uuid
+        created_at:
+          type: string
+          format: date-time
+    RfiRequest:
+      type: object
+      required:
+        - id
+        - project_id
+        - organization_id
+        - code
+        - title
+        - question
+        - status
+        - requesting_partner_organization_id
+        - version
+        - created_by
+        - created_at
+        - updated_at
+      properties:
+        id:
+          type: string
+          format: uuid
+        project_id:
+          type: string
+          format: uuid
+        organization_id:
+          type: string
+          format: uuid
+        code:
+          type: string
+        title:
+          type: string
+        question:
+          type: string
+        suggested_solution:
+          type: string
+        status:
+          type: string
+          enum: [Draft, Submitted, Under Review, Clarification Required, Official Answered, Closed]
+        priority:
+          type: string
+          enum: [low, normal, high, urgent]
+        location_node_id:
+          type: string
+          format: uuid
+        work_node_id:
+          type: string
+          format: uuid
+        document_id:
+          type: string
+          format: uuid
+        requesting_partner_organization_id:
+          type: string
+          format: uuid
+        responding_partner_organization_id:
+          type: string
+          format: uuid
+        ball_in_court_organization_id:
+          type: string
+          format: uuid
+        source_issue_id:
+          type: string
+          format: uuid
+        sla_business_days:
+          type: integer
+        submitted_at:
+          type: string
+          format: date-time
+        due_at:
+          type: string
+          format: date-time
+        answered_at:
+          type: string
+          format: date-time
+        closed_at:
+          type: string
+          format: date-time
+        sla_status:
+          type: string
+          enum: [ok, warning_48h, warning_24h, breached]
+        sla_hours_remaining:
+          type: number
+        version:
+          type: string
+        created_by:
+          type: string
+          format: uuid
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        responses:
+          type: array
+          items:
+            $ref: '#/components/schemas/RfiResponse'
+    RfiRequestList:
+      type: object
+      required:
+        - items
+        - page
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/RfiRequest'
+        page:
+          $ref: '#/components/schemas/PageMeta'
+    SubmittalItemCreate:
+      type: object
+      required:
+        - item_number
+        - description
+      properties:
+        item_number:
+          type: integer
+        description:
+          type: string
+        manufacturer:
+          type: string
+        model_or_grade:
+          type: string
+        sample_quantity:
+          type: integer
+          default: 1
+        physical_sample_received:
+          type: boolean
+          default: false
+        document_id:
+          type: string
+          format: uuid
+        file_id:
+          type: string
+          format: uuid
+    SubmittalItem:
+      type: object
+      required:
+        - id
+        - submittal_id
+        - item_number
+        - description
+        - sample_quantity
+        - physical_sample_received
+        - created_at
+      properties:
+        id:
+          type: string
+          format: uuid
+        submittal_id:
+          type: string
+          format: uuid
+        item_number:
+          type: integer
+        description:
+          type: string
+        manufacturer:
+          type: string
+        model_or_grade:
+          type: string
+        sample_quantity:
+          type: integer
+        physical_sample_received:
+          type: boolean
+        document_id:
+          type: string
+          format: uuid
+        file_id:
+          type: string
+          format: uuid
+        created_at:
+          type: string
+          format: date-time
+    SubmittalCreate:
+      type: object
+      required:
+        - code
+        - title
+        - submittal_type
+        - maker_partner_organization_id
+      properties:
+        code:
+          type: string
+        title:
+          type: string
+        submittal_type:
+          type: string
+          enum: [material_sample, shop_drawing, method_statement, product_data, other]
+        maker_partner_organization_id:
+          type: string
+          format: uuid
+        lead_contractor_partner_organization_id:
+          type: string
+          format: uuid
+        consultant_partner_organization_id:
+          type: string
+          format: uuid
+        location_node_id:
+          type: string
+          format: uuid
+        work_node_id:
+          type: string
+          format: uuid
+        specification_document_id:
+          type: string
+          format: uuid
+        drawing_document_id:
+          type: string
+          format: uuid
+        sla_business_days:
+          type: integer
+          default: 7
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubmittalItemCreate'
+    SubmittalTransition:
+      type: object
+      required:
+        - action
+      properties:
+        action:
+          type: string
+          enum:
+            [
+              submit,
+              start_review,
+              approve,
+              approve_with_comments,
+              request_revision,
+              reject,
+              close,
+              resubmit,
+            ]
+        comment:
+          type: string
+    SubmittalReviewCreate:
+      type: object
+      required:
+        - stage
+        - decision
+        - comments
+      properties:
+        stage:
+          type: string
+          enum: [checker, consultant_lead, owner_final]
+        decision:
+          type: string
+          enum: [Approved, Approved with Comments, Revise and Resubmit, Rejected]
+        comments:
+          type: string
+        attached_file_id:
+          type: string
+          format: uuid
+    SubmittalReview:
+      type: object
+      required:
+        - id
+        - submittal_id
+        - stage
+        - reviewer_user_id
+        - decision
+        - comments
+        - reviewed_at
+      properties:
+        id:
+          type: string
+          format: uuid
+        submittal_id:
+          type: string
+          format: uuid
+        stage:
+          type: string
+          enum: [checker, consultant_lead, owner_final]
+        reviewer_user_id:
+          type: string
+          format: uuid
+        reviewer_partner_organization_id:
+          type: string
+          format: uuid
+        decision:
+          type: string
+          enum: [Approved, Approved with Comments, Revise and Resubmit, Rejected]
+        comments:
+          type: string
+        attached_file_id:
+          type: string
+          format: uuid
+        reviewed_at:
+          type: string
+          format: date-time
+    Submittal:
+      type: object
+      required:
+        - id
+        - project_id
+        - organization_id
+        - code
+        - title
+        - submittal_type
+        - status
+        - maker_partner_organization_id
+        - version
+        - created_by
+        - created_at
+        - updated_at
+      properties:
+        id:
+          type: string
+          format: uuid
+        project_id:
+          type: string
+          format: uuid
+        organization_id:
+          type: string
+          format: uuid
+        code:
+          type: string
+        title:
+          type: string
+        submittal_type:
+          type: string
+          enum: [material_sample, shop_drawing, method_statement, product_data, other]
+        status:
+          type: string
+          enum:
+            [
+              Draft,
+              Submitted,
+              Under Review,
+              Approved,
+              Approved with Comments,
+              Revise and Resubmit,
+              Rejected,
+              Closed,
+            ]
+        maker_partner_organization_id:
+          type: string
+          format: uuid
+        lead_contractor_partner_organization_id:
+          type: string
+          format: uuid
+        consultant_partner_organization_id:
+          type: string
+          format: uuid
+        ball_in_court_organization_id:
+          type: string
+          format: uuid
+        location_node_id:
+          type: string
+          format: uuid
+        work_node_id:
+          type: string
+          format: uuid
+        specification_document_id:
+          type: string
+          format: uuid
+        drawing_document_id:
+          type: string
+          format: uuid
+        submitted_at:
+          type: string
+          format: date-time
+        due_at:
+          type: string
+          format: date-time
+        sla_business_days:
+          type: integer
+        sla_status:
+          type: string
+          enum: [ok, warning_48h, warning_24h, breached]
+        version:
+          type: string
+        created_by:
+          type: string
+          format: uuid
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubmittalItem'
+        reviews:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubmittalReview'
+    SubmittalList:
+      type: object
+      required:
+        - items
+        - page
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Submittal'
         page:
           $ref: '#/components/schemas/PageMeta'

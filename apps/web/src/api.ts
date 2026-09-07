@@ -123,6 +123,84 @@ export type FileAccessAuthorization = {
   filename: string;
 };
 
+export type FieldIssue = {
+  id: string;
+  organizationId: string;
+  projectId: string;
+  issueNumber: string;
+  title: string;
+  description: string;
+  status: 'Open' | 'Under Triage' | 'Assigned' | 'In Progress' | 'Resolved' | 'Closed';
+  severity: 'Low' | 'Medium' | 'High' | 'Critical';
+  locationNodeId?: string;
+  workNodeId?: string;
+  contractorOrganizationId?: string;
+  assignedToUserId?: string;
+  gpsLat?: number;
+  gpsLng?: number;
+  rfiId?: string;
+  version: string;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type RfiRequest = {
+  id: string;
+  organizationId: string;
+  projectId: string;
+  rfiNumber: string;
+  title: string;
+  question: string;
+  status:
+    | 'Draft'
+    | 'Submitted'
+    | 'Under Review'
+    | 'Clarification Required'
+    | 'Official Answered'
+    | 'Closed';
+  priority: 'Low' | 'Normal' | 'High' | 'Urgent';
+  ballInCourtOrganizationId?: string;
+  dueDate?: string;
+  leadContractorPartnerOrganizationId?: string;
+  consultantPartnerOrganizationId?: string;
+  locationNodeId?: string;
+  workNodeId?: string;
+  sourceIssueId?: string;
+  costImpact?: boolean;
+  scheduleImpact?: boolean;
+  version: string;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type Submittal = {
+  id: string;
+  organizationId: string;
+  projectId: string;
+  submittalNumber: string;
+  title: string;
+  description?: string;
+  submittalType: string;
+  status:
+    | 'Draft'
+    | 'Submitted'
+    | 'Under Review'
+    | 'Approved'
+    | 'Approved as Noted'
+    | 'Revise and Resubmit'
+    | 'Rejected';
+  makerPartnerOrganizationId: string;
+  leadContractorPartnerOrganizationId?: string;
+  consultantPartnerOrganizationId?: string;
+  ballInCourtOrganizationId?: string;
+  reviewDecisionCode?: string;
+  reviewRemarks?: string;
+  dueDate?: string;
+  version: string;
+  createdAt: string;
+  updatedAt: string;
+};
+
 export type ContextEntity = {
   id: string;
   code?: string;
@@ -139,6 +217,123 @@ export type ProjectContext = {
   numberingProfiles: readonly ContextEntity[];
   partners: readonly ContextEntity[];
   workNodes: readonly ContextEntity[];
+};
+
+export type ChecklistItem = {
+  id: string;
+  templateId: string;
+  itemKey: string;
+  title: string;
+  description?: string;
+  sequence: number;
+  isMandatory: boolean;
+  requiresEvidence: boolean;
+  criterionType: 'pass_fail' | 'measurement' | 'text';
+  unit?: string;
+  minValue?: number;
+  maxValue?: number;
+};
+
+export type InspectionTemplate = {
+  id: string;
+  projectId: string;
+  code: string;
+  name: string;
+  category: string;
+  checklistItems?: readonly ChecklistItem[];
+};
+
+export type ChecklistResult = {
+  id: string;
+  checklistItemId: string;
+  result: 'Pass' | 'Fail' | 'NA' | 'Pending';
+  measurementValue?: number;
+  remarks?: string;
+  evidenceFileIds?: readonly string[];
+};
+
+export type Inspection = {
+  id: string;
+  projectId: string;
+  templateId?: string;
+  code: string;
+  title: string;
+  status: string;
+  inspectionDate: string;
+  notes?: string;
+  results?: readonly ChecklistResult[];
+};
+
+export type AcceptanceRecord = {
+  id: string;
+  projectId: string;
+  code: string;
+  recordType: string;
+  legalBasis: string;
+  result: string;
+  status: string;
+  contractorSignedBy?: string;
+  contractorSignedAt?: string;
+  supervisorSignedBy?: string;
+  supervisorSignedAt?: string;
+  pmuSignedBy?: string;
+  pmuSignedAt?: string;
+  conditionsNotes?: string;
+  recordedAt: string;
+};
+
+export type DailyManpower = {
+  id: string;
+  dailyLogId: string;
+  tradeOrSubcontractor: string;
+  skillLevel: string;
+  headcount: number;
+  hoursWorked: number;
+  notes?: string;
+};
+
+export type DailyEquipment = {
+  id: string;
+  dailyLogId: string;
+  equipmentName: string;
+  equipmentType: string;
+  quantity: number;
+  hoursWorked: number;
+  operationalStatus: string;
+  notes?: string;
+};
+
+export type DailyWeather = {
+  id: string;
+  dailyLogId: string;
+  timeOfDay: 'morning' | 'noon' | 'afternoon';
+  temperatureC: number;
+  weatherCondition: string;
+  rainfallMm: number;
+  windForce: string;
+  gpsLat?: number;
+  gpsLng?: number;
+  source: 'manual' | 'crawled';
+  notes?: string;
+};
+
+export type DailyLog = {
+  id: string;
+  projectId: string;
+  contractPackageId: string;
+  logDate: string;
+  shiftCode: string;
+  status: 'Draft' | 'Submitted' | 'Confirmed' | 'Amended';
+  authorUnit: string;
+  workSummary?: string;
+  notes?: string;
+  siteManagerSignedBy?: string;
+  siteManagerSignedAt?: string;
+  supervisorSignedBy?: string;
+  supervisorSignedAt?: string;
+  manpower?: readonly DailyManpower[];
+  equipment?: readonly DailyEquipment[];
+  weather?: readonly DailyWeather[];
 };
 
 type Fetcher = typeof fetch;
@@ -273,6 +468,113 @@ function toDocument(value: unknown): ProjectDocument {
     ...(nullableString(record.archived_at) === undefined
       ? {}
       : { archivedAt: nullableString(record.archived_at) }),
+  };
+}
+
+function toFieldIssue(value: unknown): FieldIssue {
+  const row = asRecord(value);
+  const locationNodeId = optionalString(row.location_node_id);
+  const workNodeId = optionalString(row.work_node_id);
+  const contractorOrganizationId = optionalString(row.contractor_organization_id);
+  const assignedToUserId = optionalString(row.assigned_to_user_id);
+  const rfiId = optionalString(row.rfi_id);
+
+  return {
+    id: requiredString(row.id, 'issue_id'),
+    organizationId: requiredString(row.organization_id, 'organization_id'),
+    projectId: requiredString(row.project_id, 'project_id'),
+    issueNumber: requiredString(row.issue_number, 'issue_number'),
+    title: requiredString(row.title, 'title'),
+    description: requiredString(row.description, 'description'),
+    status: (row.status as FieldIssue['status']) ?? 'Open',
+    severity: (row.severity as FieldIssue['severity']) ?? 'Medium',
+    ...(locationNodeId !== undefined ? { locationNodeId } : {}),
+    ...(workNodeId !== undefined ? { workNodeId } : {}),
+    ...(contractorOrganizationId !== undefined ? { contractorOrganizationId } : {}),
+    ...(assignedToUserId !== undefined ? { assignedToUserId } : {}),
+    ...(row.gps_lat !== null && row.gps_lat !== undefined ? { gpsLat: Number(row.gps_lat) } : {}),
+    ...(row.gps_lng !== null && row.gps_lng !== undefined ? { gpsLng: Number(row.gps_lng) } : {}),
+    ...(rfiId !== undefined ? { rfiId } : {}),
+    version: optionalString(row.version) ?? '1',
+    createdAt: optionalString(row.created_at) ?? '',
+    updatedAt: optionalString(row.updated_at) ?? '',
+  };
+}
+
+function toRfiRequest(value: unknown): RfiRequest {
+  const row = asRecord(value);
+  const ballInCourtOrganizationId = optionalString(row.ball_in_court_organization_id);
+  const dueDate = optionalString(row.due_date);
+  const leadContractorPartnerOrganizationId = optionalString(
+    row.lead_contractor_partner_organization_id,
+  );
+  const consultantPartnerOrganizationId = optionalString(row.consultant_partner_organization_id);
+  const locationNodeId = optionalString(row.location_node_id);
+  const workNodeId = optionalString(row.work_node_id);
+  const sourceIssueId = optionalString(row.source_issue_id);
+
+  return {
+    id: requiredString(row.id, 'rfi_id'),
+    organizationId: requiredString(row.organization_id, 'organization_id'),
+    projectId: requiredString(row.project_id, 'project_id'),
+    rfiNumber: requiredString(row.rfi_number, 'rfi_number'),
+    title: requiredString(row.title, 'title'),
+    question: requiredString(row.question, 'question'),
+    status: (row.status as RfiRequest['status']) ?? 'Draft',
+    priority: (row.priority as RfiRequest['priority']) ?? 'Normal',
+    ...(ballInCourtOrganizationId !== undefined ? { ballInCourtOrganizationId } : {}),
+    ...(dueDate !== undefined ? { dueDate } : {}),
+    ...(leadContractorPartnerOrganizationId !== undefined
+      ? { leadContractorPartnerOrganizationId }
+      : {}),
+    ...(consultantPartnerOrganizationId !== undefined ? { consultantPartnerOrganizationId } : {}),
+    ...(locationNodeId !== undefined ? { locationNodeId } : {}),
+    ...(workNodeId !== undefined ? { workNodeId } : {}),
+    ...(sourceIssueId !== undefined ? { sourceIssueId } : {}),
+    costImpact: Boolean(row.cost_impact),
+    scheduleImpact: Boolean(row.schedule_impact),
+    version: optionalString(row.version) ?? '1',
+    createdAt: optionalString(row.created_at) ?? '',
+    updatedAt: optionalString(row.updated_at) ?? '',
+  };
+}
+
+function toSubmittal(value: unknown): Submittal {
+  const row = asRecord(value);
+  const description = optionalString(row.description);
+  const leadContractorPartnerOrganizationId = optionalString(
+    row.lead_contractor_partner_organization_id,
+  );
+  const consultantPartnerOrganizationId = optionalString(row.consultant_partner_organization_id);
+  const ballInCourtOrganizationId = optionalString(row.ball_in_court_organization_id);
+  const reviewDecisionCode = optionalString(row.review_decision_code);
+  const reviewRemarks = optionalString(row.review_remarks);
+  const dueDate = optionalString(row.due_date);
+
+  return {
+    id: requiredString(row.id, 'submittal_id'),
+    organizationId: requiredString(row.organization_id, 'organization_id'),
+    projectId: requiredString(row.project_id, 'project_id'),
+    submittalNumber: requiredString(row.submittal_number, 'submittal_number'),
+    title: requiredString(row.title, 'title'),
+    submittalType: requiredString(row.submittal_type, 'submittal_type'),
+    status: (row.status as Submittal['status']) ?? 'Draft',
+    makerPartnerOrganizationId: requiredString(
+      row.maker_partner_organization_id,
+      'maker_partner_organization_id',
+    ),
+    ...(description !== undefined ? { description } : {}),
+    ...(leadContractorPartnerOrganizationId !== undefined
+      ? { leadContractorPartnerOrganizationId }
+      : {}),
+    ...(consultantPartnerOrganizationId !== undefined ? { consultantPartnerOrganizationId } : {}),
+    ...(ballInCourtOrganizationId !== undefined ? { ballInCourtOrganizationId } : {}),
+    ...(reviewDecisionCode !== undefined ? { reviewDecisionCode } : {}),
+    ...(reviewRemarks !== undefined ? { reviewRemarks } : {}),
+    ...(dueDate !== undefined ? { dueDate } : {}),
+    version: optionalString(row.version) ?? '1',
+    createdAt: optionalString(row.created_at) ?? '',
+    updatedAt: optionalString(row.updated_at) ?? '',
   };
 }
 
@@ -830,6 +1132,420 @@ export class VinopsApiClient {
           body: JSON.stringify({ expected_version: expectedVersion }),
         },
       ),
+    );
+  }
+
+  async listIssues(
+    projectId: string,
+    filters?: {
+      status?: string;
+      severity?: string;
+      locationNodeId?: string;
+      workNodeId?: string;
+      contractorOrganizationId?: string;
+    },
+  ): Promise<readonly FieldIssue[]> {
+    const params = new URLSearchParams();
+    if (filters?.status) params.set('status', filters.status);
+    if (filters?.severity) params.set('severity', filters.severity);
+    if (filters?.locationNodeId) params.set('location_node_id', filters.locationNodeId);
+    if (filters?.workNodeId) params.set('work_node_id', filters.workNodeId);
+    if (filters?.contractorOrganizationId)
+      params.set('contractor_organization_id', filters.contractorOrganizationId);
+
+    const query = params.toString();
+    const path = `projects/${encodeURIComponent(projectId)}/issues${query ? `?${query}` : ''}`;
+    const response = asRecord(await this.request<unknown>(path));
+    return pageItems(response).map(toFieldIssue);
+  }
+
+  async quickCreateIssue(
+    projectId: string,
+    input: {
+      title: string;
+      description: string;
+      severity?: string;
+      location_node_id?: string;
+      work_node_id?: string;
+      contractor_organization_id?: string;
+      gps_lat?: number;
+      gps_lng?: number;
+      gps_accuracy_meters?: number;
+      photo_file_ids?: readonly string[];
+    },
+  ): Promise<FieldIssue> {
+    const response = asRecord(
+      await this.request<unknown>(`projects/${encodeURIComponent(projectId)}/issues`, {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json',
+          'idempotency-key': createIdempotencyKey(),
+        },
+        body: JSON.stringify(input),
+      }),
+    );
+    return toFieldIssue(response);
+  }
+
+  async transitionIssue(
+    projectId: string,
+    issueId: string,
+    status: string,
+    comment?: string,
+  ): Promise<FieldIssue> {
+    const response = asRecord(
+      await this.request<unknown>(
+        `projects/${encodeURIComponent(projectId)}/issues/${encodeURIComponent(issueId)}/transition`,
+        {
+          method: 'POST',
+          headers: {
+            'content-type': 'application/json',
+            'idempotency-key': createIdempotencyKey(),
+          },
+          body: JSON.stringify({ status, ...(comment ? { comment } : {}) }),
+        },
+      ),
+    );
+    return toFieldIssue(response);
+  }
+
+  async escalateIssueToRfi(
+    projectId: string,
+    issueId: string,
+    input: {
+      title?: string;
+      question?: string;
+      priority?: string;
+      due_date?: string;
+      lead_contractor_partner_organization_id?: string;
+      consultant_partner_organization_id?: string;
+    },
+  ): Promise<RfiRequest> {
+    const response = asRecord(
+      await this.request<unknown>(
+        `projects/${encodeURIComponent(projectId)}/issues/${encodeURIComponent(issueId)}/escalate-rfi`,
+        {
+          method: 'POST',
+          headers: {
+            'content-type': 'application/json',
+            'idempotency-key': createIdempotencyKey(),
+          },
+          body: JSON.stringify(input),
+        },
+      ),
+    );
+    return toRfiRequest(response);
+  }
+
+  async listRfis(projectId: string): Promise<readonly RfiRequest[]> {
+    const response = asRecord(
+      await this.request<unknown>(`projects/${encodeURIComponent(projectId)}/rfis`),
+    );
+    return pageItems(response).map(toRfiRequest);
+  }
+
+  async createRfi(
+    projectId: string,
+    input: {
+      title: string;
+      question: string;
+      priority?: string;
+      due_date?: string;
+      lead_contractor_partner_organization_id?: string;
+      consultant_partner_organization_id?: string;
+      location_node_id?: string;
+      work_node_id?: string;
+      cost_impact?: boolean;
+      schedule_impact?: boolean;
+    },
+  ): Promise<RfiRequest> {
+    const response = asRecord(
+      await this.request<unknown>(`projects/${encodeURIComponent(projectId)}/rfis`, {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json',
+          'idempotency-key': createIdempotencyKey(),
+        },
+        body: JSON.stringify(input),
+      }),
+    );
+    return toRfiRequest(response);
+  }
+
+  async transitionRfi(
+    projectId: string,
+    rfiId: string,
+    action: string,
+    ballInCourtOrganizationId?: string,
+  ): Promise<RfiRequest> {
+    const response = asRecord(
+      await this.request<unknown>(
+        `projects/${encodeURIComponent(projectId)}/rfis/${encodeURIComponent(rfiId)}/transition`,
+        {
+          method: 'POST',
+          headers: {
+            'content-type': 'application/json',
+            'idempotency-key': createIdempotencyKey(),
+          },
+          body: JSON.stringify({
+            action,
+            ...(ballInCourtOrganizationId
+              ? { ball_in_court_organization_id: ballInCourtOrganizationId }
+              : {}),
+          }),
+        },
+      ),
+    );
+    return toRfiRequest(response);
+  }
+
+  async addRfiResponse(
+    projectId: string,
+    rfiId: string,
+    input: {
+      response_text: string;
+      is_official?: boolean;
+      cost_impact?: boolean;
+      schedule_impact?: boolean;
+    },
+  ): Promise<unknown> {
+    return this.request<unknown>(
+      `projects/${encodeURIComponent(projectId)}/rfis/${encodeURIComponent(rfiId)}/responses`,
+      {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json',
+          'idempotency-key': createIdempotencyKey(),
+        },
+        body: JSON.stringify(input),
+      },
+    );
+  }
+
+  async listSubmittals(projectId: string): Promise<readonly Submittal[]> {
+    const response = asRecord(
+      await this.request<unknown>(`projects/${encodeURIComponent(projectId)}/submittals`),
+    );
+    return pageItems(response).map(toSubmittal);
+  }
+
+  async createSubmittal(
+    projectId: string,
+    input: {
+      title: string;
+      submittal_type: string;
+      maker_partner_organization_id: string;
+      description?: string;
+      lead_contractor_partner_organization_id?: string;
+      consultant_partner_organization_id?: string;
+      due_date?: string;
+      items?: Array<{
+        item_number: number;
+        description: string;
+        material_trade_name?: string;
+        manufacturer_name?: string;
+        model_or_grade?: string;
+      }>;
+    },
+  ): Promise<Submittal> {
+    const response = asRecord(
+      await this.request<unknown>(`projects/${encodeURIComponent(projectId)}/submittals`, {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json',
+          'idempotency-key': createIdempotencyKey(),
+        },
+        body: JSON.stringify(input),
+      }),
+    );
+    return toSubmittal(response);
+  }
+
+  async transitionSubmittal(
+    projectId: string,
+    submittalId: string,
+    status: string,
+    notes?: string,
+  ): Promise<Submittal> {
+    const response = asRecord(
+      await this.request<unknown>(
+        `projects/${encodeURIComponent(projectId)}/submittals/${encodeURIComponent(submittalId)}/transition`,
+        {
+          method: 'POST',
+          headers: {
+            'content-type': 'application/json',
+            'idempotency-key': createIdempotencyKey(),
+          },
+          body: JSON.stringify({ status, ...(notes ? { notes } : {}) }),
+        },
+      ),
+    );
+    return toSubmittal(response);
+  }
+
+  async reviewSubmittal(
+    projectId: string,
+    submittalId: string,
+    input: {
+      decision_code: 'A' | 'B' | 'C' | 'D';
+      review_comments: string;
+      notes?: string;
+    },
+  ): Promise<unknown> {
+    return this.request<unknown>(
+      `projects/${encodeURIComponent(projectId)}/submittals/${encodeURIComponent(submittalId)}/reviews`,
+      {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json',
+          'idempotency-key': createIdempotencyKey(),
+        },
+        body: JSON.stringify(input),
+      },
+    );
+  }
+
+  // Quality & Inspections
+  async listInspections(projectId: string): Promise<readonly Inspection[]> {
+    const res = await this.request<{ items: readonly Inspection[] }>(
+      `projects/${encodeURIComponent(projectId)}/inspections`,
+    );
+    return res.items ?? [];
+  }
+
+  async createInspection(projectId: string, input: Record<string, unknown>): Promise<Inspection> {
+    return this.request<Inspection>(`projects/${encodeURIComponent(projectId)}/inspections`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json', 'idempotency-key': createIdempotencyKey() },
+      body: JSON.stringify(input),
+    });
+  }
+
+  async submitChecklistResults(
+    inspectionId: string,
+    results: readonly Record<string, unknown>[],
+  ): Promise<unknown> {
+    return this.request<unknown>(`inspections/${encodeURIComponent(inspectionId)}/results`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json', 'idempotency-key': createIdempotencyKey() },
+      body: JSON.stringify({ results }),
+    });
+  }
+
+  // Acceptance Records
+  async listAcceptanceRecords(projectId: string): Promise<readonly AcceptanceRecord[]> {
+    const res = await this.request<{ items: readonly AcceptanceRecord[] }>(
+      `projects/${encodeURIComponent(projectId)}/acceptance-records`,
+    );
+    return res.items ?? [];
+  }
+
+  async createAcceptanceRecord(
+    projectId: string,
+    input: Record<string, unknown>,
+  ): Promise<AcceptanceRecord> {
+    return this.request<AcceptanceRecord>(
+      `projects/${encodeURIComponent(projectId)}/acceptance-records`,
+      {
+        method: 'POST',
+        headers: { 'content-type': 'application/json', 'idempotency-key': createIdempotencyKey() },
+        body: JSON.stringify(input),
+      },
+    );
+  }
+
+  async signAcceptance(
+    recordId: string,
+    role: 'contractor' | 'supervisor' | 'pmu',
+    signatureData: string,
+  ): Promise<AcceptanceRecord> {
+    return this.request<AcceptanceRecord>(
+      `acceptance-records/${encodeURIComponent(recordId)}/sign/${encodeURIComponent(role)}`,
+      {
+        method: 'POST',
+        headers: { 'content-type': 'application/json', 'idempotency-key': createIdempotencyKey() },
+        body: JSON.stringify({ signature_data: signatureData }),
+      },
+    );
+  }
+
+  // Daily Logs
+  async listDailyLogs(projectId: string): Promise<readonly DailyLog[]> {
+    const res = await this.request<{ items: readonly DailyLog[] }>(
+      `projects/${encodeURIComponent(projectId)}/daily-logs`,
+    );
+    return res.items ?? [];
+  }
+
+  async createDailyLog(projectId: string, input: Record<string, unknown>): Promise<DailyLog> {
+    return this.request<DailyLog>(`projects/${encodeURIComponent(projectId)}/daily-logs`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json', 'idempotency-key': createIdempotencyKey() },
+      body: JSON.stringify(input),
+    });
+  }
+
+  async updateDailyLog(logId: string, input: Record<string, unknown>): Promise<DailyLog> {
+    return this.request<DailyLog>(`daily-logs/${encodeURIComponent(logId)}`, {
+      method: 'PUT',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify(input),
+    });
+  }
+
+  async saveDailyManpower(logId: string, items: readonly unknown[]): Promise<DailyLog> {
+    return this.request<DailyLog>(`daily-logs/${encodeURIComponent(logId)}/manpower`, {
+      method: 'PUT',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ items }),
+    });
+  }
+
+  async saveDailyEquipment(logId: string, items: readonly unknown[]): Promise<DailyLog> {
+    return this.request<DailyLog>(`daily-logs/${encodeURIComponent(logId)}/equipment`, {
+      method: 'PUT',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ items }),
+    });
+  }
+
+  async crawlDailyWeather(logId: string, gps?: { lat: number; lng: number }): Promise<DailyLog> {
+    return this.request<DailyLog>(`daily-logs/${encodeURIComponent(logId)}/weather/crawl`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify(gps ?? {}),
+    });
+  }
+
+  async signDailyLogSiteManager(logId: string, signatureData: string): Promise<DailyLog> {
+    return this.request<DailyLog>(`daily-logs/${encodeURIComponent(logId)}/sign/site-manager`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ signature_data: signatureData }),
+    });
+  }
+
+  async signDailyLogSupervisor(logId: string, signatureData: string): Promise<DailyLog> {
+    return this.request<DailyLog>(`daily-logs/${encodeURIComponent(logId)}/sign/supervisor`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ signature_data: signatureData }),
+    });
+  }
+
+  // Offline Sync
+  async syncOfflineBatch(projectId: string, input: Record<string, unknown>): Promise<unknown> {
+    return this.request<unknown>(`projects/${encodeURIComponent(projectId)}/offline-sync/batches`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify(input),
+    });
+  }
+
+  async getOfflineChanges(projectId: string, cursor?: string): Promise<unknown> {
+    const q = cursor ? `?cursor=${encodeURIComponent(cursor)}` : '';
+    return this.request<unknown>(
+      `projects/${encodeURIComponent(projectId)}/offline-sync/changes${q}`,
     );
   }
 

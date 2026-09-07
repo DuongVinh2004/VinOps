@@ -13,6 +13,9 @@ import { OutboxWorker } from './outbox-worker.js';
 import { PostgreSqlOutboxStore } from './postgres-outbox-store.js';
 import { WorkerLifecycle } from './worker-lifecycle.js';
 import { WorkerModule } from './worker.module.js';
+import { SlaMonitorWorker, PostgresSlaMonitorStore } from './sla/sla-monitor.js';
+import { EscalationNotifier, LoggingEscalationSink } from './sla/escalation-notifier.js';
+import { createSlaPoller, type SlaPoller } from './sla/sla-poller.js';
 
 export type WorkerApplication = {
   app: INestApplicationContext;
@@ -33,7 +36,12 @@ function createOptionalWorkerRuntime(
   config: WorkerConfig,
   logger: ReturnType<typeof createLogger>,
 ):
-  | { database: VinopsDatabase; outboxPoller: OutboxPoller; filePoller?: FileProcessingPoller }
+  | {
+      database: VinopsDatabase;
+      outboxPoller: OutboxPoller;
+      slaPoller: SlaPoller;
+      filePoller?: FileProcessingPoller;
+    }
   | undefined {
   const connectionString = config.VINOPS_DATABASE_URL;
   if (connectionString === undefined) {
@@ -76,9 +84,19 @@ function createOptionalWorkerRuntime(
         config.VINOPS_FILE_JOB_POLL_INTERVAL_MS,
       )
     : undefined;
+  const slaPoller = createSlaPoller(
+    new SlaMonitorWorker(
+      new PostgresSlaMonitorStore(database),
+      new EscalationNotifier(new LoggingEscalationSink(logger)),
+      logger,
+    ),
+    logger,
+    60_000,
+  );
   return {
     database,
     outboxPoller: createOutboxPoller(worker, logger, config.VINOPS_OUTBOX_POLL_INTERVAL_MS),
+    slaPoller,
     ...(filePoller === undefined ? {} : { filePoller }),
   };
 }
@@ -98,6 +116,7 @@ export async function createWorkerApplication(
   const workerRuntime = createOptionalWorkerRuntime(config, logger);
   workerRuntime?.outboxPoller.start();
   workerRuntime?.filePoller?.start();
+  workerRuntime?.slaPoller.start();
   logger.info({ worker_name: config.VINOPS_WORKER_NAME }, 'worker application context started');
   if (workerRuntime === undefined) {
     logger.info(
@@ -123,6 +142,7 @@ export async function createWorkerApplication(
         'worker application context stopping',
       );
       await workerRuntime?.filePoller?.stop();
+      await workerRuntime?.slaPoller?.stop();
       await workerRuntime?.outboxPoller.stop();
       await workerRuntime?.database.close();
       await app.close();
