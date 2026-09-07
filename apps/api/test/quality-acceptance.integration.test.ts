@@ -54,6 +54,20 @@ beforeAll(async () => {
     INSERT INTO vinops.projects (id, organization_id, code, name, timezone, created_by)
     VALUES ('${fixture.projectId}', '${fixture.orgId}', 'PRJ-API-Q', 'Dự án Nghiệm thu API', 'Asia/Bangkok', '${fixture.pmuUser}')
     ON CONFLICT (id) DO NOTHING;
+
+    INSERT INTO vinops.organization_members (id, organization_id, user_id, roles, status)
+    VALUES
+      ('${randomUUID()}', '${fixture.orgId}', '${fixture.contractorUser}', ARRAY['member'], 'Active'),
+      ('${randomUUID()}', '${fixture.orgId}', '${fixture.supervisorUser}', ARRAY['member'], 'Active'),
+      ('${randomUUID()}', '${fixture.orgId}', '${fixture.pmuUser}', ARRAY['organization_owner'], 'Active')
+    ON CONFLICT (organization_id, user_id) DO NOTHING;
+
+    INSERT INTO vinops.project_members (id, organization_id, project_id, user_id, roles, status, valid_from)
+    VALUES
+      ('${randomUUID()}', '${fixture.orgId}', '${fixture.projectId}', '${fixture.contractorUser}', ARRAY['contractor'], 'Active', now()),
+      ('${randomUUID()}', '${fixture.orgId}', '${fixture.projectId}', '${fixture.supervisorUser}', ARRAY['supervisor'], 'Active', now()),
+      ('${randomUUID()}', '${fixture.orgId}', '${fixture.projectId}', '${fixture.pmuUser}', ARRAY['project_admin'], 'Active', now())
+    ON CONFLICT (project_id, user_id) DO NOTHING;
   `);
 
   const mockConfig = { VINOPS_DATABASE_URL: connectionString } as unknown as ApiRuntimeConfig;
