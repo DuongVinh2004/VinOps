@@ -73,7 +73,8 @@ beforeAll(async () => {
     VALUES
       ('00000000-0000-4000-8000-000000008040', '${projectA.orgId}', '${projectA.projectId}', '${projectA.userId}', ARRAY['project_admin'], 'Active'),
       ('00000000-0000-4000-8000-000000009040', '${projectB.orgId}', '${projectB.projectId}', '${projectB.userId}', ARRAY['project_admin'], 'Active')
-    ON CONFLICT (project_id, user_id) DO NOTHING;
+    ON CONFLICT (project_id, user_id) DO UPDATE SET id = EXCLUDED.id;
+
 
     INSERT INTO vinops.member_scopes (id, organization_id, project_id, project_member_id, scope_type, scope_id, actions)
     VALUES
