@@ -690,6 +690,626 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/projects/{projectId}/issues": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List field issues for a project */
+        get: operations["listFieldIssues"];
+        put?: never;
+        /** Quick-create a field issue with GPS and photos */
+        post: operations["quickCreateFieldIssue"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/projects/{projectId}/issues/{issueId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get field issue details */
+        get: operations["getFieldIssue"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/projects/{projectId}/issues/{issueId}/transitions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Transition field issue lifecycle state */
+        post: operations["transitionFieldIssue"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/projects/{projectId}/issues/{issueId}/comments": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Add a comment to a field issue */
+        post: operations["createIssueComment"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/projects/{projectId}/issues/{issueId}/escalate-to-rfi": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Escalate a field issue into an official technical RFI */
+        post: operations["escalateIssueToRfi"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/projects/{projectId}/rfis": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List RFIs for a project */
+        get: operations["listRfiRequests"];
+        put?: never;
+        /** Create an RFI */
+        post: operations["createRfiRequest"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/projects/{projectId}/rfis/{rfiId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get RFI detail with answers and documents */
+        get: operations["getRfiRequest"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/projects/{projectId}/rfis/{rfiId}/transitions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Transition RFI state */
+        post: operations["transitionRfiRequest"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/projects/{projectId}/rfis/{rfiId}/responses": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Submit clarification or official response with revised document attachment */
+        post: operations["createRfiResponse"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/projects/{projectId}/submittals": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List submittals for a project */
+        get: operations["listSubmittals"];
+        put?: never;
+        /** Create a submittal */
+        post: operations["createSubmittal"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/projects/{projectId}/submittals/{submittalId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get submittal details with items and review timeline */
+        get: operations["getSubmittal"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/projects/{projectId}/submittals/{submittalId}/transitions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Transition submittal state */
+        post: operations["transitionSubmittal"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/projects/{projectId}/submittals/{submittalId}/reviews": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Submit a review decision in maker-checker workflow */
+        post: operations["createSubmittalReview"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/projects/{projectId}/inspection-templates": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List inspection templates */
+        get: operations["listInspectionTemplates"];
+        put?: never;
+        /** Create inspection template */
+        post: operations["createInspectionTemplate"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/projects/{projectId}/inspections": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List inspections */
+        get: operations["listInspections"];
+        put?: never;
+        /** Create inspection */
+        post: operations["createInspection"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/inspections/{inspectionId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get inspection detail */
+        get: operations["getInspection"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/inspections/{inspectionId}/results/{itemKey}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** Save inspection item result */
+        put: operations["saveInspectionResult"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/inspections/{inspectionId}/findings": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Create finding for inspection */
+        post: operations["createInspectionFinding"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/findings/{findingId}/corrections": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Submit corrective action */
+        post: operations["submitCorrectiveAction"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/findings/{findingId}/transitions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Transition finding (Verify/Close/Reject with SoD) */
+        post: operations["transitionFinding"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/projects/{projectId}/acceptance-records": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List acceptance records */
+        get: operations["listAcceptanceRecords"];
+        put?: never;
+        /** Create 3-party acceptance record under ND 207/2026/ND-CP */
+        post: operations["createAcceptanceRecord"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/acceptance-records/{acceptanceRecordId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get acceptance record detail */
+        get: operations["getAcceptanceRecord"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/acceptance-records/{acceptanceRecordId}/sign-contractor": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Sign acceptance record by Contractor */
+        post: operations["signAcceptanceContractor"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/acceptance-records/{acceptanceRecordId}/sign-supervisor": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Sign acceptance record by Supervisor (TVGS) */
+        post: operations["signAcceptanceSupervisor"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/acceptance-records/{acceptanceRecordId}/sign-pmu": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Sign acceptance record by PMU (Ban QLDA) */
+        post: operations["signAcceptancePmu"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/projects/{projectId}/daily-logs": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List daily logs */
+        get: operations["listDailyLogs"];
+        put?: never;
+        /** Create daily log (unique 1 log/day/package) */
+        post: operations["createDailyLog"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/daily-logs/{dailyLogId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get daily log detail */
+        get: operations["getDailyLog"];
+        /** Update daily log content (blocked if Confirmed) */
+        put: operations["updateDailyLog"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/daily-logs/{dailyLogId}/manpower": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Add or replace manpower entries (blocked if Confirmed) */
+        post: operations["saveDailyManpower"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/daily-logs/{dailyLogId}/equipment": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Add or replace equipment entries (blocked if Confirmed) */
+        post: operations["saveDailyEquipment"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/daily-logs/{dailyLogId}/weather": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Add or replace weather entries (blocked if Confirmed) */
+        post: operations["saveDailyWeather"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/daily-logs/{dailyLogId}/crawl-weather": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Auto-crawl weather by GPS coordinates */
+        post: operations["crawlDailyWeather"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/daily-logs/{dailyLogId}/sign-site-manager": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Sign daily log by Site Manager (Chỉ huy trưởng) */
+        post: operations["signDailyLogSiteManager"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/daily-logs/{dailyLogId}/sign-supervisor": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Sign daily log by Supervisor (TVGS) - Confirms and freezes log */
+        post: operations["signDailyLogSupervisor"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/projects/{projectId}/sync/batches": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Bulk ingest offline ledger operations */
+        post: operations["ingestOfflineBatch"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/projects/{projectId}/changes": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Incremental sync change feed */
+        get: operations["getProjectChanges"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/projects/{projectId}/exports/as-built-dossier": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Create sealed as-built dossier ZIP package */
+        post: operations["createAsBuiltDossier"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -1445,6 +2065,800 @@ export interface components {
             items: components["schemas"]["AuditEvent"][];
             page: components["schemas"]["PageMeta"];
         };
+        GpsCoordinates: {
+            latitude: number;
+            longitude: number;
+            accuracy_meters?: number;
+        };
+        FieldIssueCreate: {
+            code: string;
+            title: string;
+            description: string;
+            category: string;
+            /** @enum {string} */
+            severity: "low" | "medium" | "high" | "critical";
+            /** Format: uuid */
+            location_node_id?: string;
+            /** Format: uuid */
+            work_node_id?: string;
+            /** Format: uuid */
+            contractor_organization_id?: string;
+            /** Format: uuid */
+            suggested_contractor_organization_id?: string;
+            /** Format: uuid */
+            assigned_to_user_id?: string;
+            gps?: components["schemas"]["GpsCoordinates"];
+            /** Format: date-time */
+            due_at?: string;
+            attachment_file_ids?: string[];
+        };
+        FieldIssueTransition: {
+            /** @enum {string} */
+            action: "triage" | "assign" | "start_progress" | "resolve" | "close" | "reopen";
+            /** Format: uuid */
+            assigned_to_user_id?: string;
+            /** Format: uuid */
+            contractor_organization_id?: string;
+            comment?: string;
+        };
+        FieldIssue: {
+            /** Format: uuid */
+            id: string;
+            /** Format: uuid */
+            project_id: string;
+            /** Format: uuid */
+            organization_id: string;
+            code: string;
+            title: string;
+            description: string;
+            category: string;
+            /** @enum {string} */
+            severity: "low" | "medium" | "high" | "critical";
+            /** @enum {string} */
+            status: "Open" | "Under Triage" | "Assigned" | "In Progress" | "Resolved" | "Closed";
+            /** Format: uuid */
+            location_node_id?: string;
+            /** Format: uuid */
+            work_node_id?: string;
+            /** Format: uuid */
+            contractor_organization_id?: string;
+            /** Format: uuid */
+            suggested_contractor_organization_id?: string;
+            /** Format: uuid */
+            assigned_to_user_id?: string;
+            gps_latitude?: number;
+            gps_longitude?: number;
+            gps_accuracy_meters?: number;
+            /** Format: date-time */
+            due_at?: string;
+            /** Format: date-time */
+            resolved_at?: string;
+            /** Format: date-time */
+            closed_at?: string;
+            /** Format: uuid */
+            escalated_to_rfi_id?: string;
+            version: string;
+            /** Format: uuid */
+            created_by: string;
+            /** Format: date-time */
+            created_at: string;
+            /** Format: date-time */
+            updated_at: string;
+            attachments?: components["schemas"]["IssueAttachment"][];
+            comments?: components["schemas"]["IssueComment"][];
+        };
+        FieldIssueList: {
+            items: components["schemas"]["FieldIssue"][];
+            page: components["schemas"]["PageMeta"];
+        };
+        IssueAttachment: {
+            /** Format: uuid */
+            id: string;
+            /** Format: uuid */
+            issue_id: string;
+            /** Format: uuid */
+            file_id: string;
+            /** @enum {string} */
+            attachment_type: "site_photo" | "evidence" | "document" | "resolution_photo";
+            caption?: string;
+            /** Format: date-time */
+            created_at: string;
+        };
+        IssueCommentCreate: {
+            content: string;
+        };
+        IssueComment: {
+            /** Format: uuid */
+            id: string;
+            /** Format: uuid */
+            issue_id: string;
+            /** Format: uuid */
+            author_user_id: string;
+            content: string;
+            /** Format: date-time */
+            created_at: string;
+        };
+        IssueEscalateToRfi: {
+            rfi_code: string;
+            title: string;
+            question: string;
+            suggested_solution?: string;
+            /** @enum {string} */
+            priority?: "low" | "normal" | "high" | "urgent";
+            /** Format: uuid */
+            requesting_partner_organization_id: string;
+            /** Format: uuid */
+            responding_partner_organization_id?: string;
+            /** @default 5 */
+            sla_business_days: number;
+        };
+        RfiRequestCreate: {
+            code: string;
+            title: string;
+            question: string;
+            suggested_solution?: string;
+            /**
+             * @default normal
+             * @enum {string}
+             */
+            priority: "low" | "normal" | "high" | "urgent";
+            /** Format: uuid */
+            location_node_id?: string;
+            /** Format: uuid */
+            work_node_id?: string;
+            /** Format: uuid */
+            document_id?: string;
+            /** Format: uuid */
+            requesting_partner_organization_id: string;
+            /** Format: uuid */
+            responding_partner_organization_id?: string;
+            /** Format: uuid */
+            source_issue_id?: string;
+            /** @default 5 */
+            sla_business_days: number;
+        };
+        RfiTransition: {
+            /** @enum {string} */
+            action: "submit" | "start_review" | "request_clarification" | "provide_clarification" | "answer_official" | "close" | "reopen";
+            comment?: string;
+        };
+        RfiResponseCreate: {
+            /** @enum {string} */
+            response_type: "clarification_request" | "clarification_answer" | "official_answer";
+            content: string;
+            /** Format: uuid */
+            revised_document_id?: string;
+            /** Format: uuid */
+            revised_document_revision_id?: string;
+            /** Format: uuid */
+            file_id?: string;
+        };
+        RfiResponse: {
+            /** Format: uuid */
+            id: string;
+            /** Format: uuid */
+            rfi_id: string;
+            /** @enum {string} */
+            response_type: "clarification_request" | "clarification_answer" | "official_answer";
+            content: string;
+            /** Format: uuid */
+            author_user_id: string;
+            /** Format: uuid */
+            author_partner_organization_id?: string;
+            /** Format: uuid */
+            revised_document_id?: string;
+            /** Format: uuid */
+            revised_document_revision_id?: string;
+            /** Format: uuid */
+            file_id?: string;
+            /** Format: date-time */
+            created_at: string;
+        };
+        RfiRequest: {
+            /** Format: uuid */
+            id: string;
+            /** Format: uuid */
+            project_id: string;
+            /** Format: uuid */
+            organization_id: string;
+            code: string;
+            title: string;
+            question: string;
+            suggested_solution?: string;
+            /** @enum {string} */
+            status: "Draft" | "Submitted" | "Under Review" | "Clarification Required" | "Official Answered" | "Closed";
+            /** @enum {string} */
+            priority?: "low" | "normal" | "high" | "urgent";
+            /** Format: uuid */
+            location_node_id?: string;
+            /** Format: uuid */
+            work_node_id?: string;
+            /** Format: uuid */
+            document_id?: string;
+            /** Format: uuid */
+            requesting_partner_organization_id: string;
+            /** Format: uuid */
+            responding_partner_organization_id?: string;
+            /** Format: uuid */
+            ball_in_court_organization_id?: string;
+            /** Format: uuid */
+            source_issue_id?: string;
+            sla_business_days?: number;
+            /** Format: date-time */
+            submitted_at?: string;
+            /** Format: date-time */
+            due_at?: string;
+            /** Format: date-time */
+            answered_at?: string;
+            /** Format: date-time */
+            closed_at?: string;
+            /** @enum {string} */
+            sla_status?: "ok" | "warning_48h" | "warning_24h" | "breached";
+            sla_hours_remaining?: number;
+            version: string;
+            /** Format: uuid */
+            created_by: string;
+            /** Format: date-time */
+            created_at: string;
+            /** Format: date-time */
+            updated_at: string;
+            responses?: components["schemas"]["RfiResponse"][];
+        };
+        RfiRequestList: {
+            items: components["schemas"]["RfiRequest"][];
+            page: components["schemas"]["PageMeta"];
+        };
+        SubmittalItemCreate: {
+            item_number: number;
+            description: string;
+            manufacturer?: string;
+            model_or_grade?: string;
+            /** @default 1 */
+            sample_quantity: number;
+            /** @default false */
+            physical_sample_received: boolean;
+            /** Format: uuid */
+            document_id?: string;
+            /** Format: uuid */
+            file_id?: string;
+        };
+        SubmittalItem: {
+            /** Format: uuid */
+            id: string;
+            /** Format: uuid */
+            submittal_id: string;
+            item_number: number;
+            description: string;
+            manufacturer?: string;
+            model_or_grade?: string;
+            sample_quantity: number;
+            physical_sample_received: boolean;
+            /** Format: uuid */
+            document_id?: string;
+            /** Format: uuid */
+            file_id?: string;
+            /** Format: date-time */
+            created_at: string;
+        };
+        SubmittalCreate: {
+            code: string;
+            title: string;
+            /** @enum {string} */
+            submittal_type: "material_sample" | "shop_drawing" | "method_statement" | "product_data" | "other";
+            /** Format: uuid */
+            maker_partner_organization_id: string;
+            /** Format: uuid */
+            lead_contractor_partner_organization_id?: string;
+            /** Format: uuid */
+            consultant_partner_organization_id?: string;
+            /** Format: uuid */
+            location_node_id?: string;
+            /** Format: uuid */
+            work_node_id?: string;
+            /** Format: uuid */
+            specification_document_id?: string;
+            /** Format: uuid */
+            drawing_document_id?: string;
+            /** @default 7 */
+            sla_business_days: number;
+            items?: components["schemas"]["SubmittalItemCreate"][];
+        };
+        SubmittalTransition: {
+            /** @enum {string} */
+            action: "submit" | "start_review" | "approve" | "approve_with_comments" | "request_revision" | "reject" | "close" | "resubmit";
+            comment?: string;
+        };
+        SubmittalReviewCreate: {
+            /** @enum {string} */
+            stage: "checker" | "consultant_lead" | "owner_final";
+            /** @enum {string} */
+            decision: "Approved" | "Approved with Comments" | "Revise and Resubmit" | "Rejected";
+            comments: string;
+            /** Format: uuid */
+            attached_file_id?: string;
+        };
+        SubmittalReview: {
+            /** Format: uuid */
+            id: string;
+            /** Format: uuid */
+            submittal_id: string;
+            /** @enum {string} */
+            stage: "checker" | "consultant_lead" | "owner_final";
+            /** Format: uuid */
+            reviewer_user_id: string;
+            /** Format: uuid */
+            reviewer_partner_organization_id?: string;
+            /** @enum {string} */
+            decision: "Approved" | "Approved with Comments" | "Revise and Resubmit" | "Rejected";
+            comments: string;
+            /** Format: uuid */
+            attached_file_id?: string;
+            /** Format: date-time */
+            reviewed_at: string;
+        };
+        Submittal: {
+            /** Format: uuid */
+            id: string;
+            /** Format: uuid */
+            project_id: string;
+            /** Format: uuid */
+            organization_id: string;
+            code: string;
+            title: string;
+            /** @enum {string} */
+            submittal_type: "material_sample" | "shop_drawing" | "method_statement" | "product_data" | "other";
+            /** @enum {string} */
+            status: "Draft" | "Submitted" | "Under Review" | "Approved" | "Approved with Comments" | "Revise and Resubmit" | "Rejected" | "Closed";
+            /** Format: uuid */
+            maker_partner_organization_id: string;
+            /** Format: uuid */
+            lead_contractor_partner_organization_id?: string;
+            /** Format: uuid */
+            consultant_partner_organization_id?: string;
+            /** Format: uuid */
+            ball_in_court_organization_id?: string;
+            /** Format: uuid */
+            location_node_id?: string;
+            /** Format: uuid */
+            work_node_id?: string;
+            /** Format: uuid */
+            specification_document_id?: string;
+            /** Format: uuid */
+            drawing_document_id?: string;
+            /** Format: date-time */
+            submitted_at?: string;
+            /** Format: date-time */
+            due_at?: string;
+            sla_business_days?: number;
+            /** @enum {string} */
+            sla_status?: "ok" | "warning_48h" | "warning_24h" | "breached";
+            version: string;
+            /** Format: uuid */
+            created_by: string;
+            /** Format: date-time */
+            created_at: string;
+            /** Format: date-time */
+            updated_at: string;
+            items?: components["schemas"]["SubmittalItem"][];
+            reviews?: components["schemas"]["SubmittalReview"][];
+        };
+        SubmittalList: {
+            items: components["schemas"]["Submittal"][];
+            page: components["schemas"]["PageMeta"];
+        };
+        InspectionTemplateCreate: {
+            code: string;
+            name: string;
+            category?: string;
+            checklist_items?: components["schemas"]["ChecklistItemCreate"][];
+        };
+        ChecklistItemCreate: {
+            item_key: string;
+            title: string;
+            description?: string;
+            sequence?: number;
+            is_mandatory?: boolean;
+            requires_evidence?: boolean;
+            /** @enum {string} */
+            criterion_type?: "pass_fail" | "measurement" | "text";
+            unit?: string;
+            min_value?: number;
+            max_value?: number;
+        };
+        ChecklistItem: {
+            /** Format: uuid */
+            id: string;
+            item_key: string;
+            title: string;
+            description?: string;
+            sequence?: number;
+            is_mandatory?: boolean;
+            requires_evidence?: boolean;
+            criterion_type?: string;
+            unit?: string;
+            min_value?: number;
+            max_value?: number;
+        };
+        InspectionTemplate: {
+            /** Format: uuid */
+            id: string;
+            /** Format: uuid */
+            project_id: string;
+            code: string;
+            name: string;
+            /** @enum {string} */
+            status: "Draft" | "Published" | "Archived";
+            category?: string;
+            version: string;
+            items?: components["schemas"]["ChecklistItem"][];
+        };
+        InspectionTemplateList: {
+            items: components["schemas"]["InspectionTemplate"][];
+            page: components["schemas"]["PageMeta"];
+        };
+        InspectionCreate: {
+            code: string;
+            title: string;
+            /** Format: uuid */
+            template_id?: string;
+            /** Format: uuid */
+            location_id?: string;
+            /** Format: uuid */
+            work_item_id?: string;
+            /** Format: date */
+            inspection_date?: string;
+            notes?: string;
+        };
+        InspectionResultSave: {
+            /** @enum {string} */
+            result: "Pass" | "Fail" | "NA" | "Pending";
+            value_decimal?: number;
+            unit?: string;
+            notes?: string;
+            evidence_file_ids?: string[];
+        };
+        InspectionResult: {
+            /** Format: uuid */
+            id: string;
+            /** Format: uuid */
+            inspection_id: string;
+            item_key: string;
+            result: string;
+            value_decimal?: number;
+            unit?: string;
+            notes?: string;
+            evidence_file_ids?: string[];
+            /** Format: date-time */
+            recorded_at?: string;
+        };
+        InspectionFindingCreate: {
+            code: string;
+            description: string;
+            /** @enum {string} */
+            severity?: "Low" | "Medium" | "High" | "Critical";
+            location_detail?: string;
+            /** Format: uuid */
+            owner_id?: string;
+            /** Format: date-time */
+            due_at?: string;
+        };
+        InspectionFinding: {
+            /** Format: uuid */
+            id: string;
+            /** Format: uuid */
+            project_id: string;
+            /** Format: uuid */
+            inspection_id?: string;
+            code: string;
+            severity: string;
+            /** @enum {string} */
+            status: "Open" | "Pending Verification" | "Resolved" | "Closed" | "Waived";
+            description: string;
+            location_detail?: string;
+            /** Format: uuid */
+            owner_id?: string;
+            /** Format: date-time */
+            due_at?: string;
+            version: string;
+            /** Format: date-time */
+            created_at?: string;
+            corrections?: components["schemas"]["CorrectiveAction"][];
+        };
+        CorrectiveActionCreate: {
+            description: string;
+            evidence_file_ids?: string[];
+        };
+        CorrectiveAction: {
+            /** Format: uuid */
+            id: string;
+            /** Format: uuid */
+            finding_id: string;
+            attempt_no: number;
+            description: string;
+            /** Format: uuid */
+            performer_id: string;
+            /** @enum {string} */
+            status: "Submitted" | "Verified" | "Rejected";
+            /** Format: date-time */
+            submitted_at?: string;
+            /** Format: uuid */
+            verified_by?: string;
+            /** Format: date-time */
+            verified_at?: string;
+            rejection_reason?: string;
+            evidence_file_ids?: string[];
+        };
+        FindingTransitionCreate: {
+            /** @enum {string} */
+            action: "verify" | "reject" | "waive" | "close";
+            reason?: string;
+        };
+        Inspection: {
+            /** Format: uuid */
+            id: string;
+            /** Format: uuid */
+            project_id: string;
+            /** Format: uuid */
+            template_id?: string;
+            code: string;
+            title: string;
+            /** @enum {string} */
+            status: "Draft" | "In Progress" | "Completed" | "Accepted" | "Rejected" | "Cancelled";
+            /** Format: uuid */
+            inspector_id?: string;
+            /** Format: uuid */
+            location_id?: string;
+            /** Format: uuid */
+            work_item_id?: string;
+            /** Format: date */
+            inspection_date?: string;
+            attempt_no?: number;
+            notes?: string;
+            version: string;
+            results?: components["schemas"]["InspectionResult"][];
+            findings?: components["schemas"]["InspectionFinding"][];
+        };
+        InspectionList: {
+            items: components["schemas"]["Inspection"][];
+            page: components["schemas"]["PageMeta"];
+        };
+        AcceptanceRecordCreate: {
+            code: string;
+            /** Format: uuid */
+            inspection_id?: string;
+            /** @enum {string} */
+            record_type?: "work_acceptance" | "stage_acceptance" | "completion_acceptance";
+            legal_basis?: string;
+            /** @enum {string} */
+            result?: "Accepted" | "Rejected" | "Conditional";
+            conditions_notes?: string;
+        };
+        AcceptanceSignInput: {
+            signature_data: string;
+            notes?: string;
+        };
+        AcceptanceRecord: {
+            /** Format: uuid */
+            id: string;
+            /** Format: uuid */
+            project_id: string;
+            /** Format: uuid */
+            inspection_id?: string;
+            code: string;
+            record_type: string;
+            legal_basis: string;
+            result: string;
+            /** @enum {string} */
+            status: "Draft" | "Contractor Signed" | "Supervisor Signed" | "Completed" | "Rejected";
+            /** Format: uuid */
+            contractor_signed_by?: string;
+            /** Format: date-time */
+            contractor_signed_at?: string;
+            contractor_signature_data?: string;
+            /** Format: uuid */
+            supervisor_signed_by?: string;
+            /** Format: date-time */
+            supervisor_signed_at?: string;
+            supervisor_signature_data?: string;
+            /** Format: uuid */
+            pmu_signed_by?: string;
+            /** Format: date-time */
+            pmu_signed_at?: string;
+            pmu_signature_data?: string;
+            conditions_notes?: string;
+            version: string;
+            /** Format: date-time */
+            created_at?: string;
+        };
+        AcceptanceRecordList: {
+            items: components["schemas"]["AcceptanceRecord"][];
+            page: components["schemas"]["PageMeta"];
+        };
+        DailyLogCreate: {
+            /** Format: uuid */
+            contract_package_id: string;
+            /** Format: date */
+            log_date: string;
+            shift_code?: string;
+            author_unit?: string;
+            work_summary?: string;
+            notes?: string;
+        };
+        DailyLogUpdate: {
+            work_summary?: string;
+            notes?: string;
+            author_unit?: string;
+        };
+        DailyLogSignInput: {
+            signature_data: string;
+            notes?: string;
+        };
+        DailyManpowerCreate: {
+            items: {
+                trade_or_subcontractor: string;
+                skill_level?: string;
+                headcount: number;
+                hours_worked?: number;
+                notes?: string;
+            }[];
+        };
+        DailyManpower: {
+            /** Format: uuid */
+            id: string;
+            trade_or_subcontractor: string;
+            skill_level?: string;
+            headcount: number;
+            hours_worked?: number;
+            notes?: string;
+        };
+        DailyEquipmentCreate: {
+            items: {
+                equipment_name: string;
+                equipment_type?: string;
+                quantity: number;
+                hours_worked?: number;
+                operational_status?: string;
+                notes?: string;
+            }[];
+        };
+        DailyEquipment: {
+            /** Format: uuid */
+            id: string;
+            equipment_name: string;
+            equipment_type?: string;
+            quantity: number;
+            hours_worked?: number;
+            operational_status?: string;
+            notes?: string;
+        };
+        DailyWeatherCreate: {
+            items: {
+                /** @enum {string} */
+                time_of_day: "morning" | "noon" | "afternoon";
+                temperature_c: number;
+                weather_condition?: string;
+                rainfall_mm?: number;
+                wind_force?: string;
+                gps_lat?: number;
+                gps_lng?: number;
+                source?: string;
+                notes?: string;
+            }[];
+        };
+        DailyWeather: {
+            /** Format: uuid */
+            id: string;
+            time_of_day: string;
+            temperature_c: number;
+            weather_condition?: string;
+            rainfall_mm?: number;
+            wind_force?: string;
+            gps_lat?: number;
+            gps_lng?: number;
+            source?: string;
+            notes?: string;
+            /** Format: date-time */
+            recorded_at?: string;
+        };
+        WeatherCrawlInput: {
+            gps_lat?: number;
+            gps_lng?: number;
+        };
+        DailyLog: {
+            /** Format: uuid */
+            id: string;
+            /** Format: uuid */
+            project_id: string;
+            /** Format: uuid */
+            contract_package_id: string;
+            /** Format: date */
+            log_date: string;
+            shift_code?: string;
+            /** @enum {string} */
+            status: "Draft" | "Submitted" | "Confirmed" | "Amended";
+            author_unit?: string;
+            work_summary?: string;
+            notes?: string;
+            /** Format: uuid */
+            site_manager_signed_by?: string;
+            /** Format: date-time */
+            site_manager_signed_at?: string;
+            site_manager_signature_data?: string;
+            /** Format: uuid */
+            supervisor_signed_by?: string;
+            /** Format: date-time */
+            supervisor_signed_at?: string;
+            supervisor_signature_data?: string;
+            version: string;
+            /** Format: date-time */
+            created_at?: string;
+            manpower?: components["schemas"]["DailyManpower"][];
+            equipment?: components["schemas"]["DailyEquipment"][];
+            weather?: components["schemas"]["DailyWeather"][];
+        };
+        DailyLogList: {
+            items: components["schemas"]["DailyLog"][];
+            page: components["schemas"]["PageMeta"];
+        };
+        SyncOperationInput: {
+            /** Format: uuid */
+            operation_id: string;
+            entity_type: string;
+            entity_temp_id: string;
+            command: string;
+            base_version: number;
+            payload: Record<string, never>;
+            payload_hash?: string;
+            /** Format: date-time */
+            client_created_at: string;
+            dependency_ids?: string[];
+        };
+        SyncBatchCreate: {
+            /** Format: uuid */
+            device_id: string;
+            operations: components["schemas"]["SyncOperationInput"][];
+        };
+        SyncOperationResult: {
+            /** Format: uuid */
+            operation_id: string;
+            /** @enum {string} */
+            status: "applied" | "conflict" | "rejected" | "failed";
+            /** Format: uuid */
+            canonical_id?: string;
+            canonical_version?: number;
+            error_code?: string;
+            conflict_details?: Record<string, never>;
+        };
+        SyncBatchResponse: {
+            /** Format: uuid */
+            batch_id: string;
+            status: string;
+            operation_count?: number;
+            applied_count?: number;
+            conflict_count?: number;
+            operations: components["schemas"]["SyncOperationResult"][];
+        };
+        ChangeFeedResponse: {
+            changes: {
+                entity_type: string;
+                /** Format: uuid */
+                entity_id: string;
+                version: number;
+                action: string;
+                data?: Record<string, never>;
+            }[];
+            next_cursor?: string;
+        };
+        AsBuiltDossierResponse: {
+            /** Format: uuid */
+            project_id: string;
+            package_name: string;
+            sha256: string;
+            size_bytes: number;
+            /** Format: date-time */
+            generated_at?: string;
+            manifest: Record<string, never>;
+        };
     };
     responses: {
         /** @description Malformed request */
@@ -1555,6 +2969,14 @@ export interface components {
         SessionId: string;
         ContextImportId: string;
         BreakGlassRequestId: string;
+        IssueId: string;
+        RfiId: string;
+        SubmittalId: string;
+        InspectionId: string;
+        FindingId: string;
+        AcceptanceRecordId: string;
+        DailyLogId: string;
+        ItemKey: string;
         ProjectContextKind: "partner" | "calendar" | "numbering_profile" | "location_node" | "work_node" | "discipline" | "classification";
         Cursor: string;
         PageSize: number;
@@ -3081,6 +4503,1283 @@ export interface operations {
             403: components["responses"]["Forbidden"];
             409: components["responses"]["Conflict"];
             422: components["responses"]["Validation"];
+        };
+    };
+    listFieldIssues: {
+        parameters: {
+            query?: {
+                status?: string;
+                severity?: string;
+                location_node_id?: string;
+                work_node_id?: string;
+                contractor_organization_id?: string;
+                cursor?: components["parameters"]["Cursor"];
+                page_size?: components["parameters"]["PageSize"];
+            };
+            header?: never;
+            path: {
+                projectId: components["parameters"]["ProjectId"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Success */
+            200: {
+                headers: {
+                    "X-Correlation-ID": components["headers"]["CorrelationId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FieldIssueList"];
+                };
+            };
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+        };
+    };
+    quickCreateFieldIssue: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                projectId: components["parameters"]["ProjectId"];
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["FieldIssueCreate"];
+            };
+        };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    "X-Correlation-ID": components["headers"]["CorrelationId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FieldIssue"];
+                };
+            };
+            400: components["responses"]["BadRequest"];
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+            422: components["responses"]["Validation"];
+        };
+    };
+    getFieldIssue: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                projectId: components["parameters"]["ProjectId"];
+                issueId: components["parameters"]["IssueId"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Success */
+            200: {
+                headers: {
+                    "X-Correlation-ID": components["headers"]["CorrelationId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FieldIssue"];
+                };
+            };
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+            404: components["responses"]["ResourceNotVisible"];
+        };
+    };
+    transitionFieldIssue: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                projectId: components["parameters"]["ProjectId"];
+                issueId: components["parameters"]["IssueId"];
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["FieldIssueTransition"];
+            };
+        };
+        responses: {
+            /** @description Success */
+            200: {
+                headers: {
+                    "X-Correlation-ID": components["headers"]["CorrelationId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FieldIssue"];
+                };
+            };
+            400: components["responses"]["BadRequest"];
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+            409: components["responses"]["Conflict"];
+        };
+    };
+    createIssueComment: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                projectId: components["parameters"]["ProjectId"];
+                issueId: components["parameters"]["IssueId"];
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["IssueCommentCreate"];
+            };
+        };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    "X-Correlation-ID": components["headers"]["CorrelationId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["IssueComment"];
+                };
+            };
+            400: components["responses"]["BadRequest"];
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+        };
+    };
+    escalateIssueToRfi: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                projectId: components["parameters"]["ProjectId"];
+                issueId: components["parameters"]["IssueId"];
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["IssueEscalateToRfi"];
+            };
+        };
+        responses: {
+            /** @description Created RFI */
+            201: {
+                headers: {
+                    "X-Correlation-ID": components["headers"]["CorrelationId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RfiRequest"];
+                };
+            };
+            400: components["responses"]["BadRequest"];
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+            409: components["responses"]["Conflict"];
+        };
+    };
+    listRfiRequests: {
+        parameters: {
+            query?: {
+                status?: string;
+                ball_in_court_organization_id?: string;
+                cursor?: components["parameters"]["Cursor"];
+                page_size?: components["parameters"]["PageSize"];
+            };
+            header?: never;
+            path: {
+                projectId: components["parameters"]["ProjectId"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Success */
+            200: {
+                headers: {
+                    "X-Correlation-ID": components["headers"]["CorrelationId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RfiRequestList"];
+                };
+            };
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+        };
+    };
+    createRfiRequest: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                projectId: components["parameters"]["ProjectId"];
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RfiRequestCreate"];
+            };
+        };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    "X-Correlation-ID": components["headers"]["CorrelationId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RfiRequest"];
+                };
+            };
+            400: components["responses"]["BadRequest"];
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+        };
+    };
+    getRfiRequest: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                projectId: components["parameters"]["ProjectId"];
+                rfiId: components["parameters"]["RfiId"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Success */
+            200: {
+                headers: {
+                    "X-Correlation-ID": components["headers"]["CorrelationId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RfiRequest"];
+                };
+            };
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+            404: components["responses"]["ResourceNotVisible"];
+        };
+    };
+    transitionRfiRequest: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                projectId: components["parameters"]["ProjectId"];
+                rfiId: components["parameters"]["RfiId"];
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RfiTransition"];
+            };
+        };
+        responses: {
+            /** @description Success */
+            200: {
+                headers: {
+                    "X-Correlation-ID": components["headers"]["CorrelationId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RfiRequest"];
+                };
+            };
+            400: components["responses"]["BadRequest"];
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+            409: components["responses"]["Conflict"];
+        };
+    };
+    createRfiResponse: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                projectId: components["parameters"]["ProjectId"];
+                rfiId: components["parameters"]["RfiId"];
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RfiResponseCreate"];
+            };
+        };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    "X-Correlation-ID": components["headers"]["CorrelationId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RfiResponse"];
+                };
+            };
+            400: components["responses"]["BadRequest"];
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+        };
+    };
+    listSubmittals: {
+        parameters: {
+            query?: {
+                status?: string;
+                submittal_type?: string;
+                cursor?: components["parameters"]["Cursor"];
+                page_size?: components["parameters"]["PageSize"];
+            };
+            header?: never;
+            path: {
+                projectId: components["parameters"]["ProjectId"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Success */
+            200: {
+                headers: {
+                    "X-Correlation-ID": components["headers"]["CorrelationId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SubmittalList"];
+                };
+            };
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+        };
+    };
+    createSubmittal: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                projectId: components["parameters"]["ProjectId"];
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SubmittalCreate"];
+            };
+        };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    "X-Correlation-ID": components["headers"]["CorrelationId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Submittal"];
+                };
+            };
+            400: components["responses"]["BadRequest"];
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+        };
+    };
+    getSubmittal: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                projectId: components["parameters"]["ProjectId"];
+                submittalId: components["parameters"]["SubmittalId"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Success */
+            200: {
+                headers: {
+                    "X-Correlation-ID": components["headers"]["CorrelationId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Submittal"];
+                };
+            };
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+            404: components["responses"]["ResourceNotVisible"];
+        };
+    };
+    transitionSubmittal: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                projectId: components["parameters"]["ProjectId"];
+                submittalId: components["parameters"]["SubmittalId"];
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SubmittalTransition"];
+            };
+        };
+        responses: {
+            /** @description Success */
+            200: {
+                headers: {
+                    "X-Correlation-ID": components["headers"]["CorrelationId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Submittal"];
+                };
+            };
+            400: components["responses"]["BadRequest"];
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+            409: components["responses"]["Conflict"];
+        };
+    };
+    createSubmittalReview: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                projectId: components["parameters"]["ProjectId"];
+                submittalId: components["parameters"]["SubmittalId"];
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SubmittalReviewCreate"];
+            };
+        };
+        responses: {
+            /** @description Created review */
+            201: {
+                headers: {
+                    "X-Correlation-ID": components["headers"]["CorrelationId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SubmittalReview"];
+                };
+            };
+            400: components["responses"]["BadRequest"];
+            401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+        };
+    };
+    listInspectionTemplates: {
+        parameters: {
+            query?: {
+                cursor?: components["parameters"]["Cursor"];
+                page_size?: components["parameters"]["PageSize"];
+            };
+            header?: never;
+            path: {
+                projectId: components["parameters"]["ProjectId"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    "X-Correlation-ID": components["headers"]["CorrelationId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["InspectionTemplateList"];
+                };
+            };
+            400: components["responses"]["BadRequest"];
+            401: components["responses"]["Unauthorized"];
+        };
+    };
+    createInspectionTemplate: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                projectId: components["parameters"]["ProjectId"];
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["InspectionTemplateCreate"];
+            };
+        };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    "X-Correlation-ID": components["headers"]["CorrelationId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["InspectionTemplate"];
+                };
+            };
+            400: components["responses"]["BadRequest"];
+            401: components["responses"]["Unauthorized"];
+        };
+    };
+    listInspections: {
+        parameters: {
+            query?: {
+                cursor?: components["parameters"]["Cursor"];
+                page_size?: components["parameters"]["PageSize"];
+            };
+            header?: never;
+            path: {
+                projectId: components["parameters"]["ProjectId"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    "X-Correlation-ID": components["headers"]["CorrelationId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["InspectionList"];
+                };
+            };
+            400: components["responses"]["BadRequest"];
+            401: components["responses"]["Unauthorized"];
+        };
+    };
+    createInspection: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                projectId: components["parameters"]["ProjectId"];
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["InspectionCreate"];
+            };
+        };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    "X-Correlation-ID": components["headers"]["CorrelationId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Inspection"];
+                };
+            };
+            400: components["responses"]["BadRequest"];
+            401: components["responses"]["Unauthorized"];
+        };
+    };
+    getInspection: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                inspectionId: components["parameters"]["InspectionId"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    "X-Correlation-ID": components["headers"]["CorrelationId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Inspection"];
+                };
+            };
+            400: components["responses"]["BadRequest"];
+            401: components["responses"]["Unauthorized"];
+        };
+    };
+    saveInspectionResult: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                inspectionId: components["parameters"]["InspectionId"];
+                itemKey: components["parameters"]["ItemKey"];
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["InspectionResultSave"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    "X-Correlation-ID": components["headers"]["CorrelationId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["InspectionResult"];
+                };
+            };
+            400: components["responses"]["BadRequest"];
+            401: components["responses"]["Unauthorized"];
+        };
+    };
+    createInspectionFinding: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                inspectionId: components["parameters"]["InspectionId"];
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["InspectionFindingCreate"];
+            };
+        };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    "X-Correlation-ID": components["headers"]["CorrelationId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["InspectionFinding"];
+                };
+            };
+            400: components["responses"]["BadRequest"];
+            401: components["responses"]["Unauthorized"];
+        };
+    };
+    submitCorrectiveAction: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                findingId: components["parameters"]["FindingId"];
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CorrectiveActionCreate"];
+            };
+        };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    "X-Correlation-ID": components["headers"]["CorrelationId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CorrectiveAction"];
+                };
+            };
+            400: components["responses"]["BadRequest"];
+            401: components["responses"]["Unauthorized"];
+        };
+    };
+    transitionFinding: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                findingId: components["parameters"]["FindingId"];
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["FindingTransitionCreate"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    "X-Correlation-ID": components["headers"]["CorrelationId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["InspectionFinding"];
+                };
+            };
+            400: components["responses"]["BadRequest"];
+            401: components["responses"]["Unauthorized"];
+        };
+    };
+    listAcceptanceRecords: {
+        parameters: {
+            query?: {
+                cursor?: components["parameters"]["Cursor"];
+                page_size?: components["parameters"]["PageSize"];
+            };
+            header?: never;
+            path: {
+                projectId: components["parameters"]["ProjectId"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    "X-Correlation-ID": components["headers"]["CorrelationId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AcceptanceRecordList"];
+                };
+            };
+            400: components["responses"]["BadRequest"];
+            401: components["responses"]["Unauthorized"];
+        };
+    };
+    createAcceptanceRecord: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                projectId: components["parameters"]["ProjectId"];
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AcceptanceRecordCreate"];
+            };
+        };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    "X-Correlation-ID": components["headers"]["CorrelationId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AcceptanceRecord"];
+                };
+            };
+            400: components["responses"]["BadRequest"];
+            401: components["responses"]["Unauthorized"];
+        };
+    };
+    getAcceptanceRecord: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                acceptanceRecordId: components["parameters"]["AcceptanceRecordId"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    "X-Correlation-ID": components["headers"]["CorrelationId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AcceptanceRecord"];
+                };
+            };
+            400: components["responses"]["BadRequest"];
+            401: components["responses"]["Unauthorized"];
+        };
+    };
+    signAcceptanceContractor: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                acceptanceRecordId: components["parameters"]["AcceptanceRecordId"];
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AcceptanceSignInput"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    "X-Correlation-ID": components["headers"]["CorrelationId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AcceptanceRecord"];
+                };
+            };
+            400: components["responses"]["BadRequest"];
+            401: components["responses"]["Unauthorized"];
+        };
+    };
+    signAcceptanceSupervisor: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                acceptanceRecordId: components["parameters"]["AcceptanceRecordId"];
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AcceptanceSignInput"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    "X-Correlation-ID": components["headers"]["CorrelationId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AcceptanceRecord"];
+                };
+            };
+            400: components["responses"]["BadRequest"];
+            401: components["responses"]["Unauthorized"];
+        };
+    };
+    signAcceptancePmu: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                acceptanceRecordId: components["parameters"]["AcceptanceRecordId"];
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AcceptanceSignInput"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    "X-Correlation-ID": components["headers"]["CorrelationId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AcceptanceRecord"];
+                };
+            };
+            400: components["responses"]["BadRequest"];
+            401: components["responses"]["Unauthorized"];
+        };
+    };
+    listDailyLogs: {
+        parameters: {
+            query?: {
+                cursor?: components["parameters"]["Cursor"];
+                page_size?: components["parameters"]["PageSize"];
+            };
+            header?: never;
+            path: {
+                projectId: components["parameters"]["ProjectId"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    "X-Correlation-ID": components["headers"]["CorrelationId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DailyLogList"];
+                };
+            };
+            400: components["responses"]["BadRequest"];
+            401: components["responses"]["Unauthorized"];
+        };
+    };
+    createDailyLog: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                projectId: components["parameters"]["ProjectId"];
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DailyLogCreate"];
+            };
+        };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    "X-Correlation-ID": components["headers"]["CorrelationId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DailyLog"];
+                };
+            };
+            400: components["responses"]["BadRequest"];
+            401: components["responses"]["Unauthorized"];
+        };
+    };
+    getDailyLog: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                dailyLogId: components["parameters"]["DailyLogId"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    "X-Correlation-ID": components["headers"]["CorrelationId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DailyLog"];
+                };
+            };
+            400: components["responses"]["BadRequest"];
+            401: components["responses"]["Unauthorized"];
+        };
+    };
+    updateDailyLog: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                dailyLogId: components["parameters"]["DailyLogId"];
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DailyLogUpdate"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    "X-Correlation-ID": components["headers"]["CorrelationId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DailyLog"];
+                };
+            };
+            400: components["responses"]["BadRequest"];
+            401: components["responses"]["Unauthorized"];
+        };
+    };
+    saveDailyManpower: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                dailyLogId: components["parameters"]["DailyLogId"];
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DailyManpowerCreate"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    "X-Correlation-ID": components["headers"]["CorrelationId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DailyLog"];
+                };
+            };
+            400: components["responses"]["BadRequest"];
+            401: components["responses"]["Unauthorized"];
+        };
+    };
+    saveDailyEquipment: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                dailyLogId: components["parameters"]["DailyLogId"];
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DailyEquipmentCreate"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    "X-Correlation-ID": components["headers"]["CorrelationId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DailyLog"];
+                };
+            };
+            400: components["responses"]["BadRequest"];
+            401: components["responses"]["Unauthorized"];
+        };
+    };
+    saveDailyWeather: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                dailyLogId: components["parameters"]["DailyLogId"];
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DailyWeatherCreate"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    "X-Correlation-ID": components["headers"]["CorrelationId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DailyLog"];
+                };
+            };
+            400: components["responses"]["BadRequest"];
+            401: components["responses"]["Unauthorized"];
+        };
+    };
+    crawlDailyWeather: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                dailyLogId: components["parameters"]["DailyLogId"];
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["WeatherCrawlInput"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    "X-Correlation-ID": components["headers"]["CorrelationId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DailyLog"];
+                };
+            };
+            400: components["responses"]["BadRequest"];
+            401: components["responses"]["Unauthorized"];
+        };
+    };
+    signDailyLogSiteManager: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                dailyLogId: components["parameters"]["DailyLogId"];
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DailyLogSignInput"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    "X-Correlation-ID": components["headers"]["CorrelationId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DailyLog"];
+                };
+            };
+            400: components["responses"]["BadRequest"];
+            401: components["responses"]["Unauthorized"];
+        };
+    };
+    signDailyLogSupervisor: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                dailyLogId: components["parameters"]["DailyLogId"];
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DailyLogSignInput"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    "X-Correlation-ID": components["headers"]["CorrelationId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DailyLog"];
+                };
+            };
+            400: components["responses"]["BadRequest"];
+            401: components["responses"]["Unauthorized"];
+        };
+    };
+    ingestOfflineBatch: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                projectId: components["parameters"]["ProjectId"];
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SyncBatchCreate"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    "X-Correlation-ID": components["headers"]["CorrelationId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SyncBatchResponse"];
+                };
+            };
+            400: components["responses"]["BadRequest"];
+            401: components["responses"]["Unauthorized"];
+        };
+    };
+    getProjectChanges: {
+        parameters: {
+            query?: {
+                cursor?: components["parameters"]["Cursor"];
+            };
+            header?: never;
+            path: {
+                projectId: components["parameters"]["ProjectId"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    "X-Correlation-ID": components["headers"]["CorrelationId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ChangeFeedResponse"];
+                };
+            };
+            400: components["responses"]["BadRequest"];
+            401: components["responses"]["Unauthorized"];
+        };
+    };
+    createAsBuiltDossier: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                projectId: components["parameters"]["ProjectId"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    "X-Correlation-ID": components["headers"]["CorrelationId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AsBuiltDossierResponse"];
+                };
+            };
+            400: components["responses"]["BadRequest"];
+            401: components["responses"]["Unauthorized"];
         };
     };
 }

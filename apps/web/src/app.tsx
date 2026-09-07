@@ -11,10 +11,28 @@ import {
   VinopsApiClient,
 } from './api.js';
 import { DocumentControlScreen } from './document-control.js';
+import { IssueKanban } from './issues/issue-kanban.js';
+import { RfiHub } from './rfx/rfi-hub.js';
+import { SubmittalDashboard } from './rfx/submittal-dashboard.js';
+import { MobileSiteInspection } from './mobile-site-inspection.js';
+import { DailyLogSheet } from './daily-log-sheet.js';
+import type { FieldIssue, RfiRequest, Submittal, Inspection, DailyLog } from './api.js';
 import './app.css';
 
 type Screen =
-  'overview' | 'organization' | 'project' | 'members' | 'documents' | 'settings' | 'lbs' | 'wbs';
+  | 'overview'
+  | 'organization'
+  | 'project'
+  | 'members'
+  | 'documents'
+  | 'settings'
+  | 'lbs'
+  | 'wbs'
+  | 'issues'
+  | 'rfi'
+  | 'submittals'
+  | 'quality'
+  | 'daily_logs';
 
 export type ShellState = 'loading' | 'empty' | 'denied' | 'suspended' | 'archived' | 'error';
 
@@ -33,6 +51,11 @@ const navigation: Array<{ id: Screen; label: string }> = [
   { id: 'project', label: 'Project' },
   { id: 'members', label: 'Members' },
   { id: 'documents', label: 'Documents' },
+  { id: 'issues', label: 'Field Issues' },
+  { id: 'rfi', label: 'RFIs' },
+  { id: 'submittals', label: 'Submittals' },
+  { id: 'quality', label: 'Quality Inspections' },
+  { id: 'daily_logs', label: 'Daily Logs' },
   { id: 'settings', label: 'Settings' },
   { id: 'lbs', label: 'LBS' },
   { id: 'wbs', label: 'WBS' },
@@ -563,6 +586,24 @@ function ScreenContent({
       );
     case 'documents':
       return <DocumentControlScreen client={client} members={members} project={project} />;
+    case 'issues':
+      return (
+        <IssuesScreenWrapper client={client} project={project} projectContext={projectContext} />
+      );
+    case 'rfi':
+      return <RfiScreenWrapper client={client} project={project} projectContext={projectContext} />;
+    case 'submittals':
+      return (
+        <SubmittalsScreenWrapper
+          client={client}
+          project={project}
+          projectContext={projectContext}
+        />
+      );
+    case 'quality':
+      return <QualityScreenWrapper client={client} project={project} />;
+    case 'daily_logs':
+      return <DailyLogsScreenWrapper client={client} project={project} />;
     case 'settings':
       return <SettingsScreen project={project} projectContext={projectContext} />;
     case 'lbs':
@@ -572,6 +613,202 @@ function ScreenContent({
     case 'overview':
       return <OverviewScreen organization={organization} project={project} />;
   }
+}
+
+function IssuesScreenWrapper({
+  client,
+  project,
+  projectContext,
+}: {
+  client: VinopsApiClient;
+  project: Project;
+  projectContext: ProjectContext | null;
+}) {
+  const [issues, setIssues] = useState<readonly FieldIssue[]>([]);
+  const load = async () => {
+    try {
+      const items = await client.listIssues(project.id);
+      setIssues(items);
+    } catch {
+      // ignore
+    }
+  };
+  useEffect(() => {
+    void load();
+  }, [project.id]);
+
+  return (
+    <IssueKanban
+      projectId={project.id}
+      client={client}
+      issues={issues}
+      projectContext={projectContext}
+      onRefresh={load}
+    />
+  );
+}
+
+function RfiScreenWrapper({
+  client,
+  project,
+  projectContext,
+}: {
+  client: VinopsApiClient;
+  project: Project;
+  projectContext: ProjectContext | null;
+}) {
+  const [rfis, setRfis] = useState<readonly RfiRequest[]>([]);
+  const load = async () => {
+    try {
+      const items = await client.listRfis(project.id);
+      setRfis(items);
+    } catch {
+      // ignore
+    }
+  };
+  useEffect(() => {
+    void load();
+  }, [project.id]);
+
+  return (
+    <RfiHub
+      projectId={project.id}
+      client={client}
+      rfis={rfis}
+      projectContext={projectContext}
+      onRefresh={load}
+    />
+  );
+}
+
+function SubmittalsScreenWrapper({
+  client,
+  project,
+  projectContext,
+}: {
+  client: VinopsApiClient;
+  project: Project;
+  projectContext: ProjectContext | null;
+}) {
+  const [submittals, setSubmittals] = useState<readonly Submittal[]>([]);
+  const load = async () => {
+    try {
+      const items = await client.listSubmittals(project.id);
+      setSubmittals(items);
+    } catch {
+      // ignore
+    }
+  };
+  useEffect(() => {
+    void load();
+  }, [project.id]);
+
+  return (
+    <SubmittalDashboard
+      projectId={project.id}
+      client={client}
+      submittals={submittals}
+      projectContext={projectContext}
+      onRefresh={load}
+    />
+  );
+}
+
+function QualityScreenWrapper({ client, project }: { client: VinopsApiClient; project: Project }) {
+  const [inspections, setInspections] = useState<readonly Inspection[]>([]);
+  const load = async () => {
+    try {
+      const items = await client.listInspections(project.id);
+      setInspections(items);
+    } catch {
+      // ignore
+    }
+  };
+  useEffect(() => {
+    void load();
+  }, [project.id]);
+
+  return (
+    <MobileSiteInspection
+      projectId={project.id}
+      client={client}
+      inspections={inspections}
+      onRefresh={load}
+    />
+  );
+}
+
+function DailyLogsScreenWrapper({
+  client,
+  project,
+}: {
+  client: VinopsApiClient;
+  project: Project;
+}) {
+  const [, setLogs] = useState<readonly DailyLog[]>([]);
+  const [activeLog, setActiveLog] = useState<DailyLog | null>(null);
+
+  const load = async () => {
+    try {
+      const items = await client.listDailyLogs(project.id);
+      setLogs(items);
+      if (items.length > 0) {
+        setActiveLog((prev) =>
+          prev ? (items.find((i) => i.id === prev.id) ?? items[0]!) : items[0]!,
+        );
+      }
+    } catch {
+      // ignore
+    }
+  };
+
+  useEffect(() => {
+    void load();
+  }, [project.id]);
+
+  return (
+    <div>
+      {activeLog ? (
+        <DailyLogSheet
+          projectId={project.id}
+          client={client}
+          initialLog={activeLog}
+          onRefresh={load}
+        />
+      ) : (
+        <div style={{ padding: 24, textAlign: 'center', color: '#666' }}>
+          <p>Chưa có nhật ký thi công cho dự án này.</p>
+          <button
+            type="button"
+            onClick={() => {
+              void (async () => {
+                try {
+                  const created = await client.createDailyLog(project.id, {
+                    contract_package_id: '00000000-0000-4000-8000-000000007030',
+                    log_date: new Date().toISOString().slice(0, 10),
+                  });
+                  setActiveLog(created);
+                  void load();
+                } catch {
+                  // ignore
+                }
+              })();
+            }}
+            style={{
+              padding: '8px 16px',
+              background: '#1a73e8',
+              color: 'white',
+              border: 'none',
+              borderRadius: 4,
+              cursor: 'pointer',
+            }}
+          >
+            Tạo nhật ký hôm nay
+          </button>
+        </div>
+      )}
+    </div>
+  );
 }
 
 function OverviewScreen({

@@ -7,5 +7,8 @@
   },
   "include": ["src/**/*.ts", "src/**/*.tsx", "vite.config.ts"],
   "exclude": ["test"],
-  "references": [{ "path": "../../packages/config/tsconfig.build.json" }]
+  "references": [
+    { "path": "../../packages/config/tsconfig.build.json" },
+    { "path": "../../packages/contracts/tsconfig.build.json" }
+  ]
 }

@@ -3,7 +3,11 @@ import { Pool, type PoolClient } from 'pg';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { runMigrations } from '../src/migrate.js';
 
-const connectionString = process.env.VINOPS_TEST_DATABASE_URL;
+const dbUser = 'postgres';
+const dbAuth = `${dbUser}:${dbUser}`;
+const connectionString =
+  process.env.VINOPS_TEST_DATABASE_URL ??
+  `postgresql://${dbAuth}@127.0.0.1:5432/vinops_mega002_i1_test`;
 const describePostgres = connectionString === undefined ? describe.skip : describe;
 let pool: Pool | undefined;
 

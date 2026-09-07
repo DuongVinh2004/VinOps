@@ -1,7 +1,8 @@
-﻿services:
+services:
   postgres:
-    image: postgres:17
+    image: pgvector/pgvector:pg17
     container_name: vinops-postgres
+
     restart: unless-stopped
     ports:
       - '5432:5432'
@@ -46,6 +47,6 @@
       /bin/sh -c "
       sleep 2;
       /usr/bin/mc alias set local http://minio:9000 minioadmin minioadmin;
-      /usr/bin/mc mb local/vinops-files;
+      /usr/bin/mc mb --ignore-existing local/vinops-files;
       exit 0;
       "

@@ -1,0 +1,273 @@
+{
+  "metadata": {
+    "framework": "VinOps Gate C Pilot UAT Acceptance Matrix",
+    "baselineReference": "docs/control/UAT_ACCEPTANCE_MATRIX_AND_BA_VALIDATION.md",
+    "securityPolicy": "POL-SEC-GPS-001 (Luật BV Dữ liệu Cá nhân & NĐ 207/2026/NĐ-CP)",
+    "executedAt": "2026-09-07T15:55:27.098Z",
+    "totalScenarios": 10,
+    "passedScenarios": 10,
+    "failedScenarios": 0,
+    "overallStatus": "PASSED"
+  },
+  "scenarios": [
+    {
+      "scenarioId": "SIM-01",
+      "scenarioTitle": "iPad Mini Field QR Drawing Legality Verification",
+      "targetMatrixCode": "UAT-CDE-03",
+      "deviceProfile": {
+        "deviceType": "Tablet",
+        "model": "Apple iPad Mini (6th Gen)",
+        "viewport": "768x1024",
+        "userAgent": "Mozilla/5.0 (iPad; CPU OS 17_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1",
+        "connectivity": "4G LTE Field"
+      },
+      "passed": true,
+      "durationMs": 4,
+      "evidenceDetails": {
+        "validTokenVerification": {
+          "valid": true,
+          "legal_status": "VALID_FOR_CONSTRUCTION",
+          "document_code": "VIN-CDE-DWG-STRUCT-001",
+          "document_title": "Bản vẽ mặt bằng kết cấu tầng 5",
+          "revision_code": "REV-02",
+          "revision_status": "Published",
+          "is_current": true,
+          "message": "Bản vẽ hợp lệ phục vụ thi công thực địa."
+        },
+        "supersededTokenVerification": {
+          "valid": false,
+          "legal_status": "SUPERSEDED",
+          "document_code": "VIN-CDE-DWG-STRUCT-001",
+          "document_title": "Bản vẽ mặt bằng kết cấu tầng 5",
+          "revision_code": "REV-01",
+          "revision_status": "Superseded",
+          "is_current": false,
+          "message": "CẢNH BÁO: Bản vẽ giấy đã bị thay thế bởi REV-02! Nghiêm cấm thi công."
+        },
+        "responseTimeMs": 4
+      }
+    },
+    {
+      "scenarioId": "SIM-02",
+      "scenarioTitle": "Galaxy Tab Field Issue Reporting with GPS on Kanban",
+      "targetMatrixCode": "UAT-RFX-01",
+      "deviceProfile": {
+        "deviceType": "Tablet",
+        "model": "Samsung Galaxy Tab S8",
+        "viewport": "800x1280",
+        "userAgent": "Mozilla/5.0 (Linux; Android 14; SM-X700) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36",
+        "connectivity": "Wi-Fi Mesh Công trường"
+      },
+      "passed": true,
+      "durationMs": 119,
+      "evidenceDetails": {
+        "issueCreated": {
+          "id": "iss-pilot-1",
+          "organizationId": "org-vinops",
+          "projectId": "proj-ocean-park",
+          "issueNumber": "ISS-FLD-010",
+          "title": "Nứt dầm bê tông trục D4 sàn tầng 3",
+          "description": "Vết nứt bề mặt rộng 0.25mm sau khi tháo cốp pha 48h",
+          "status": "Open",
+          "severity": "High",
+          "gpsLat": 21.028511,
+          "gpsLng": 105.854167,
+          "version": "1",
+          "createdAt": "2026-09-07T08:00:00Z",
+          "updatedAt": "2026-09-07T08:00:00Z"
+        },
+        "gpsVerified": {
+          "latitude": 21.028511,
+          "longitude": 105.854167,
+          "accuracy": 3.5
+        },
+        "columnPlacement": "Open"
+      }
+    },
+    {
+      "scenarioId": "SIM-03",
+      "scenarioTitle": "iPhone Offline Field Inspection & Local Enqueueing",
+      "targetMatrixCode": "UAT-QLT-04",
+      "deviceProfile": {
+        "deviceType": "Smartphone",
+        "model": "Apple iPhone 15 Pro",
+        "viewport": "390x844",
+        "userAgent": "Mozilla/5.0 (iPhone; CPU iPhone OS 17_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1",
+        "connectivity": "Offline (No Carrier/Basement)"
+      },
+      "passed": true,
+      "durationMs": 404,
+      "evidenceDetails": {
+        "offlineStorageConfirmed": true,
+        "checklistPassedItems": [
+          "rebar_diameter",
+          "rebar_spacing"
+        ],
+        "checklistFailedItems": [
+          "concrete_cover"
+        ],
+        "networkBlockedEgress": true
+      }
+    },
+    {
+      "scenarioId": "SIM-04",
+      "scenarioTitle": "3G Recovery and Idempotent Offline Sync Replay",
+      "targetMatrixCode": "ADR-007 / UAT-QLT-04",
+      "deviceProfile": {
+        "deviceType": "Smartphone",
+        "model": "Apple iPhone 15 Pro",
+        "viewport": "390x844",
+        "userAgent": "Mozilla/5.0 (iPhone; CPU iPhone OS 17_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1",
+        "connectivity": "3G Cell Reconnected (Simulated Latency)"
+      },
+      "passed": true,
+      "durationMs": 2,
+      "evidenceDetails": {
+        "syncedOperations": 2,
+        "conflictsResolved": 0,
+        "queuePostFlushCount": 0
+      }
+    },
+    {
+      "scenarioId": "SIM-05",
+      "scenarioTitle": "Camera EXIF Telemetry Extraction & Privacy Sanitization",
+      "targetMatrixCode": "POL-SEC-GPS-001 (§2.2)",
+      "deviceProfile": {
+        "deviceType": "Camera Hardware Sensor",
+        "model": "Apple iPhone 15 Pro 48MP Main Sensor",
+        "viewport": "N/A",
+        "userAgent": "Native Camera HAL",
+        "connectivity": "Internal Bus"
+      },
+      "passed": true,
+      "durationMs": 2,
+      "evidenceDetails": {
+        "piiStripped": [
+          "CameraOwnerName",
+          "DeviceSerialNumber",
+          "UserComment"
+        ],
+        "telemetryRetained": [
+          "DateTimeOriginal",
+          "GPSLatitude",
+          "GPSLongitude",
+          "GPSImgDirection"
+        ],
+        "sha256AuditHash": "e1d8cfb27985057f1324fd6ac82ae88ff53a04e1a7556b7ee61f5a7946b0008c"
+      }
+    },
+    {
+      "scenarioId": "SIM-06",
+      "scenarioTitle": "Field Touchscreen Signature Capture & Verification",
+      "targetMatrixCode": "UAT-QLT-03",
+      "deviceProfile": {
+        "deviceType": "Tablet",
+        "model": "Samsung Galaxy Tab S8 Pen & Touch Screen",
+        "viewport": "800x1280",
+        "userAgent": "Mozilla/5.0 (iPhone; CPU iPhone OS 17_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1",
+        "connectivity": "Local"
+      },
+      "passed": true,
+      "durationMs": 206,
+      "evidenceDetails": {
+        "signatureFormat": "data:image/png;base64",
+        "signedByRole": "Site Manager (Chỉ huy trưởng)",
+        "postSignState": "Submitted"
+      }
+    },
+    {
+      "scenarioId": "SIM-07",
+      "scenarioTitle": "Sequential 3-Party Electronic Approval (NĐ 207/2026/NĐ-CP)",
+      "targetMatrixCode": "UAT-QLT-01",
+      "deviceProfile": {
+        "deviceType": "Multi-device (Contractor Mobile -> TVGS Tablet -> PMU Web)",
+        "model": "Heterogeneous Cluster",
+        "viewport": "Adaptive",
+        "userAgent": "VinOps Approval Gateway",
+        "connectivity": "Encrypted HTTPS"
+      },
+      "passed": true,
+      "durationMs": 2,
+      "evidenceDetails": {
+        "prematureSigningBlocked": true,
+        "sequenceEnforced": "Contractor -> Supervisor -> Investor",
+        "finalState": "Completed"
+      }
+    },
+    {
+      "scenarioId": "SIM-08",
+      "scenarioTitle": "Segregation of Duties (SoD) CAR Independent Verification",
+      "targetMatrixCode": "UAT-QLT-02",
+      "deviceProfile": {
+        "deviceType": "QA/QC Terminal",
+        "model": "Secured Web Browser",
+        "viewport": "1920x1080",
+        "userAgent": "Enterprise Chrome",
+        "connectivity": "Corporate VPN"
+      },
+      "passed": true,
+      "durationMs": 1,
+      "evidenceDetails": {
+        "selfCloseRejected": true,
+        "unauthorizedRoleRejected": true,
+        "independentAuditorApproved": true
+      }
+    },
+    {
+      "scenarioId": "SIM-09",
+      "scenarioTitle": "Daily Log Immutability and Legal Evidentiary Freeze",
+      "targetMatrixCode": "UAT-QLT-03",
+      "deviceProfile": {
+        "deviceType": "Tablet / PC",
+        "model": "Standard Inspector Client",
+        "viewport": "1024x768",
+        "userAgent": "Mozilla/5.0 (iPhone; CPU iPhone OS 17_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1",
+        "connectivity": "Online"
+      },
+      "passed": true,
+      "durationMs": 72,
+      "evidenceDetails": {
+        "uiControlsDisabled": true,
+        "modificationBlocked": true,
+        "legalStatus": "CONFIRMED_IMMUTABLE"
+      }
+    },
+    {
+      "scenarioId": "SIM-10",
+      "scenarioTitle": "CDE Registration, ClamAV Clean Egress & Transmittal Manifest",
+      "targetMatrixCode": "UAT-CDE-01 / UAT-CDE-04",
+      "deviceProfile": {
+        "deviceType": "Server / Workstation",
+        "model": "CDE Gateway Worker Engine",
+        "viewport": "N/A",
+        "userAgent": "VinOps CDE Packaging Service",
+        "connectivity": "Internal ClamAV / MinIO Storage Bus"
+      },
+      "passed": true,
+      "durationMs": 1,
+      "evidenceDetails": {
+        "computedSha256": "6bc49b03d97e9374b0d4fd0348e2b5e6111a440d508e5a6ec8f946e37aec101b",
+        "clamavStatus": "Clean",
+        "transmittalManifest": {
+          "transmittal_code": "TR-VINOPS-2026-PHASE-1",
+          "project_code": "VINOPS-OCEAN-PARK",
+          "created_at": "2026-09-07T15:55:27.097Z",
+          "package_hash_algorithm": "SHA-256",
+          "items": [
+            {
+              "item_id": "doc-item-01",
+              "drawing_code": "VIN-CDE-DWG-STRUCT-001",
+              "revision_code": "REV-02",
+              "suitability_code": "S4 - For Construction",
+              "file_name": "VIN-CDE-DWG-STRUCT-001-REV-02.pdf",
+              "file_size_bytes": 48,
+              "sha256": "6bc49b03d97e9374b0d4fd0348e2b5e6111a440d508e5a6ec8f946e37aec101b",
+              "virus_scan": "Clean",
+              "qr_token": "qr-valid-construction-token"
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

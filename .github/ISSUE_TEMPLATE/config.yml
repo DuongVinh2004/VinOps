@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: VinOps Architectural Decisions (ADRs)
+    url: https://github.com/DuongVinh2004/VinOps/tree/main/docs/adr
+    about: Read architectural specifications and decision records before proposing major changes.
+  - name: Security Vulnerability Reporting
+    url: mailto:security@vinops.dev
+    about: Privately disclose sensitive security vulnerabilities.

@@ -70,4 +70,66 @@ describe('PostgreSQL platform migration design', () => {
     expect(sql).toContain('GRANT EXECUTE ON FUNCTION vinops.current_actor_id() TO vinops_app');
     expect(sql).not.toContain('BYPASSRLS');
   });
+
+  it('maintains strict sequential 001-014 migration files without duplicate numbers or gaps', async () => {
+    const { readdir } = await import('node:fs/promises');
+    const entries = (await readdir(path.join(packageRoot, 'migrations'), { withFileTypes: true }))
+      .filter((entry) => entry.isFile() && /^\d{3}_[a-z0-9_]+\.sql$/u.test(entry.name))
+      .map((entry) => entry.name)
+      .sort((left, right) => left.localeCompare(right, 'en'))
+      .filter((name) => name <= '014_quality_inspection_and_field_records.sql');
+
+    expect(entries).toHaveLength(14);
+    for (const [index, name] of entries.entries()) {
+      const expectedPrefix = String(index + 1).padStart(3, '0');
+      expect(name.startsWith(`${expectedPrefix}_`)).toBe(true);
+    }
+    expect(entries[entries.length - 1]).toBe('014_quality_inspection_and_field_records.sql');
+  });
+
+  it('defines quality inspection, daily logs and offline sync tables with RLS and no bypass in 014', async () => {
+    const sql = await migration('014_quality_inspection_and_field_records.sql');
+    for (const table of [
+      'inspection_templates',
+      'checklist_items',
+      'inspections',
+      'daily_logs',
+      'sync_batches',
+      'sync_operations',
+    ]) {
+      expect(sql).toContain(`vinops.${table}`);
+    }
+    expect(sql).toContain('ENABLE ROW LEVEL SECURITY');
+    expect(sql).not.toContain('BYPASSRLS');
+  });
+
+  it('defines BIM space models, revisions, elements, spatial links, viewpoints and topics with RLS in 015', async () => {
+    const sql = await migration('015_bim_space_model_and_spatial_linking.sql');
+    for (const table of [
+      'bim_models',
+      'bim_model_revisions',
+      'bim_elements',
+      'bim_element_links',
+      'bim_viewpoints',
+      'bcf_topics',
+    ]) {
+      expect(sql).toContain(`vinops.${table}`);
+    }
+    expect(sql).toContain('ENABLE ROW LEVEL SECURITY');
+    expect(sql).not.toContain('BYPASSRLS');
+  });
+
+  it('defines realtime push notification tables with RLS in 018', async () => {
+    const sql = await migration('018_realtime_push_notification.sql');
+    for (const table of [
+      'user_device_tokens',
+      'notification_preferences',
+      'push_notification_log',
+      'realtime_subscriptions',
+    ]) {
+      expect(sql).toContain(`vinops.${table}`);
+    }
+    expect(sql).toContain('ENABLE ROW LEVEL SECURITY');
+    expect(sql).not.toContain('BYPASSRLS');
+  });
 });

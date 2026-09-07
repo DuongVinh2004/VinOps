@@ -43,6 +43,13 @@ jobs:
           node --version
           pnpm --version
 
+      - name: Start integration test services
+        run: |
+          docker compose up -d --wait --wait-timeout 120 postgres clamav
+          docker compose up -d minio
+          docker compose up minio-init
+          docker compose ps
+
       - name: Install from the lockfile
         run: pnpm install --frozen-lockfile
 
@@ -55,7 +62,14 @@ jobs:
       - name: Typecheck
         run: pnpm typecheck
 
+      - name: Build database package for migration runner
+        run: pnpm --filter=@vinops/database... build
+
+      - name: Migrate integration test databases
+        run: node scripts/migrate-test-dbs.mjs
+
       - name: Run unit tests
+
         run: pnpm test -- --reporter=default --reporter=junit --outputFile.junit=test-report.xml
 
       - name: Verify the OpenAPI contract
@@ -76,7 +90,12 @@ jobs:
       - name: Audit dependencies
         run: pnpm audit --audit-level high
 
+      - name: Stop integration test services
+        if: always()
+        run: docker compose down -v
+
       - name: Upload test report after a failure
+
         if: failure()
         uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5
         with:

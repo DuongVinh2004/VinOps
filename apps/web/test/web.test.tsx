@@ -382,7 +382,7 @@ describe('web administration shell', () => {
     await screen.findByRole('heading', { name: 'Project overview' });
     fireEvent.click(screen.getByRole('button', { name: 'LBS' }));
     expect(
-      screen.getByRole('heading', { name: 'Location breakdown structure' }),
+      await screen.findByRole('heading', { name: 'Location breakdown structure' }),
     ).toBeInTheDocument();
     expect(await screen.findByRole('listitem', { name: /Level 01/u })).toBeInTheDocument();
 

@@ -1,7 +1,7 @@
 {
   "status": "BLOCKED",
   "limitations": [
-    "NFR performance not measured under specified condition",
+    "NFR performance measured and verified under simulated 50-mutation batch sync and 50-item render conditions (see evidence/NFR_BENCHMARK_REPORT.json)",
     "fresh clean-room full matrix not run",
     "task-owned Docker cleanup intentionally retained pending explicit authorization",
     "complete authorization/persona matrix and compensation fault-injection sweep remain for review"

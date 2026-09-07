@@ -9,11 +9,21 @@ import { createOutboxPoller, type OutboxPoller } from './outbox-poller.js';
 import { createFileProcessingPoller, type FileProcessingPoller } from './file-processing-poller.js';
 import { FileProcessingWorker } from './file-processing-worker.js';
 import { createDocumentEventHandlers } from './document-event-handler.js';
+import { createBimEventHandlers } from './bim/bim-event-handler.js';
 import { DeterministicInProcessPublisher } from './outbox-publisher.js';
 import { OutboxWorker } from './outbox-worker.js';
 import { PostgreSqlOutboxStore } from './postgres-outbox-store.js';
 import { WorkerLifecycle } from './worker-lifecycle.js';
 import { WorkerModule } from './worker.module.js';
+import { SlaMonitorWorker, PostgresSlaMonitorStore } from './sla/sla-monitor.js';
+import { EscalationNotifier, LoggingEscalationSink } from './sla/escalation-notifier.js';
+import { createSlaPoller, type SlaPoller } from './sla/sla-poller.js';
+import {
+  WeatherIngestionWorker,
+  createWeatherPoller,
+  type WeatherPoller,
+} from './weather-ingestion-worker.js';
+import { AsBuiltDossierBundler } from './as-built-dossier-bundler.js';
 
 export type WorkerApplication = {
   app: INestApplicationContext;
@@ -34,7 +44,15 @@ function createOptionalWorkerRuntime(
   config: WorkerConfig,
   logger: ReturnType<typeof createLogger>,
 ):
-  | { database: VinopsDatabase; outboxPoller: OutboxPoller; filePoller?: FileProcessingPoller }
+  | {
+      database: VinopsDatabase;
+      outboxPoller: OutboxPoller;
+      slaPoller: SlaPoller;
+      weatherPoller: WeatherPoller;
+      weatherWorker: WeatherIngestionWorker;
+      dossierBundler: AsBuiltDossierBundler;
+      filePoller?: FileProcessingPoller;
+    }
   | undefined {
   const connectionString = config.VINOPS_DATABASE_URL;
   if (connectionString === undefined) {
@@ -47,9 +65,10 @@ function createOptionalWorkerRuntime(
     runtimeRole: 'vinops_worker',
   });
   const documentHandlers = createDocumentEventHandlers(logger);
+  const bimHandlers = createBimEventHandlers(database, undefined, logger);
   const worker = new OutboxWorker(
     new PostgreSqlOutboxStore(database),
-    new DeterministicInProcessPublisher([documentHandlers.handler]),
+    new DeterministicInProcessPublisher([documentHandlers.handler, bimHandlers.handler]),
     logger,
     { workerName: config.VINOPS_WORKER_NAME },
   );
@@ -78,9 +97,27 @@ function createOptionalWorkerRuntime(
         config.VINOPS_FILE_JOB_POLL_INTERVAL_MS,
       )
     : undefined;
+  const slaPoller = createSlaPoller(
+    new SlaMonitorWorker(
+      new PostgresSlaMonitorStore(database),
+      new EscalationNotifier(new LoggingEscalationSink(logger)),
+      logger,
+    ),
+    logger,
+    60_000,
+  );
+
+  const weatherWorker = new WeatherIngestionWorker(database, logger);
+  const weatherPoller = createWeatherPoller(weatherWorker, logger, 300_000);
+  const dossierBundler = new AsBuiltDossierBundler(database, logger);
+
   return {
     database,
     outboxPoller: createOutboxPoller(worker, logger, config.VINOPS_OUTBOX_POLL_INTERVAL_MS),
+    slaPoller,
+    weatherPoller,
+    weatherWorker,
+    dossierBundler,
     ...(filePoller === undefined ? {} : { filePoller }),
   };
 }
@@ -100,6 +137,8 @@ export async function createWorkerApplication(
   const workerRuntime = createOptionalWorkerRuntime(config, logger);
   workerRuntime?.outboxPoller.start();
   workerRuntime?.filePoller?.start();
+  workerRuntime?.slaPoller.start();
+  workerRuntime?.weatherPoller.start();
   logger.info({ worker_name: config.VINOPS_WORKER_NAME }, 'worker application context started');
   if (workerRuntime === undefined) {
     logger.info(
@@ -124,7 +163,9 @@ export async function createWorkerApplication(
         { worker_name: config.VINOPS_WORKER_NAME },
         'worker application context stopping',
       );
+      await workerRuntime?.weatherPoller?.stop();
       await workerRuntime?.filePoller?.stop();
+      await workerRuntime?.slaPoller?.stop();
       await workerRuntime?.outboxPoller.stop();
       await workerRuntime?.database.close();
       await app.close();

@@ -1,0 +1,61 @@
+config:
+  target: 'ws://127.0.0.1:3000'
+  phases:
+    # Phase 1: Warm-up ramp
+    - name: 'Warm-up ramp (0 to 1,000 connections)'
+      duration: 30
+      arrivalRate: 35
+      rampTo: 100
+    # Phase 2: Scale up to 5,000 concurrent connections
+    - name: 'Scale to peak (1,000 to 5,000 connections)'
+      duration: 60
+      arrivalRate: 100
+      rampTo: 500
+    # Phase 3: Sustained peak load with 5,000 active connections
+    - name: 'Sustained peak load (5,000 concurrent connections)'
+      duration: 120
+      arrivalRate: 500
+  ws:
+    rejectUnauthorized: false
+  ensure:
+    thresholds:
+      - 'ws.response_time.p99': 200 # ADR-016 SLA: p99 latency < 200ms
+  variables:
+    projectId: 'p101-grand-tower'
+    token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c2VyLTEwMSIsInNpZCI6InNlc3MtMTAxIiwiYXYiOjEsImF6diI6MSwiaWF0IjoxNzg4Nzk2MDAwLCJleHAiOjE3ODg4OTYwMDAsImp0aSI6ImFydGlsbGVyeS10ZXN0In0.mockSignature'
+
+scenarios:
+  - name: 'Realtime WebSocket Session - Auto-join and Multi-room subscription'
+    engine: ws
+    flow:
+      # Step 1: Handshake with JWT token
+      - connect:
+          url: '/ws?token={{ token }}&projectId={{ projectId }}'
+      - think: 1
+
+      # Step 2: Subscribe to Room 1 (Issues)
+      - send:
+          action: 'subscribe'
+          channel: 'issues'
+          projectId: '{{ projectId }}'
+      - think: 0.5
+
+      # Step 3: Subscribe to Room 2 (RFIs)
+      - send:
+          action: 'subscribe'
+          channel: 'rfis'
+          projectId: '{{ projectId }}'
+      - think: 0.5
+
+      # Step 4: Subscribe to Room 3 (Inspections)
+      - send:
+          action: 'subscribe'
+          channel: 'inspections'
+          projectId: '{{ projectId }}'
+
+      # Step 5: Keepalive ping loop every 20 seconds during broadcast reception
+      - loop:
+          - think: 20
+          - send:
+              type: 'ping'
+        count: 5
