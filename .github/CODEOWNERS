@@ -1,0 +1,39 @@
+# ==============================================================================
+# VinOps - Code Owners & Review Routing
+# Reference: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+# ==============================================================================
+
+# Default global owner for any unlisted path
+* @DuongVinh2004
+
+# CI/CD and GitHub Repository Governance
+/.github/ @DuongVinh2004
+/.github/workflows/ @DuongVinh2004
+/.github/ISSUE_TEMPLATE/ @DuongVinh2004
+
+# Security and Infrastructure
+/docker/ @DuongVinh2004
+/docker-compose.yml @DuongVinh2004
+/docker-compose.prod.yml @DuongVinh2004
+/SECURITY.md @DuongVinh2004
+
+# Database Schema & Migrations
+/packages/database/ @DuongVinh2004
+/packages/database/src/migrations/ @DuongVinh2004
+/docker/postgres/ @DuongVinh2004
+
+# Applications
+/apps/api/ @DuongVinh2004
+/apps/worker/ @DuongVinh2004
+/apps/web/ @DuongVinh2004
+
+# Shared Domain Packages & Contracts
+/packages/contracts/ @DuongVinh2004
+/packages/telemetry/ @DuongVinh2004
+/packages/workflow-engine/ @DuongVinh2004
+/packages/redis-client/ @DuongVinh2004
+
+# Specifications & Architecture Documentation
+/docs/ @DuongVinh2004
+/specs/ @DuongVinh2004
+/ARCHITECTURE.md @DuongVinh2004

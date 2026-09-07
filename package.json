@@ -22,6 +22,7 @@
     "build": "pnpm --recursive --sort --if-present run build",
     "secret:scan": "node scripts/secret-scan.mjs",
     "license:check": "node scripts/license-check.mjs",
+    "github:rules": "node scripts/configure-github-rules.mjs",
     "verify": "pnpm format:check && pnpm lint && pnpm typecheck && pnpm test && pnpm contracts:verify && pnpm architecture:check && pnpm build && pnpm secret:scan && pnpm license:check"
   },
   "devDependencies": {
