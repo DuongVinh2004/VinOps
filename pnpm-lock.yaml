@@ -17,8 +17,8 @@ importers:
         specifier: 10.0.1
         version: 10.0.1(eslint@10.8.0(supports-color@10.2.2))
       '@redocly/cli':
-        specifier: 2.40.0
-        version: 2.40.0
+        specifier: 2.51.1
+        version: 2.51.1
       '@testing-library/jest-dom':
         specifier: 7.0.1
         version: 7.0.1(@testing-library/dom@10.4.1)(vitest@3.2.7(@types/node@24.13.3)(jsdom@30.0.1(@noble/hashes@1.8.0))(lightningcss@1.33.0)(supports-color@10.2.2)(yaml@2.9.0))
@@ -738,8 +738,8 @@ packages:
   '@redocly/ajv@8.11.2':
     resolution: {integrity: sha512-io1JpnwtIcvojV7QKDUSIuMN/ikdOUd1ReEnUnMKGfDVridQZ31J0MmIuqwuRjWDZfmvr+Q0MqCcfHM2gTivOg==}
 
-  '@redocly/cli@2.40.0':
-    resolution: {integrity: sha512-1uQ4GeNjhApy9EtypZgp70ZN5GC2JFfst3UkNEXSqkXgVIPGdEAnlz5Xwgax/4cEUGOvaZoM3X25iSQcqbplFg==}
+  '@redocly/cli@2.51.1':
+    resolution: {integrity: sha512-GjXcRrRsuvdXxDO88HKYHeiTdelZwxpqJn7+h6nwGcNRukSJt5G1lODuudNb9XTFRM5pStgDKpn8ylfFkHr0IQ==}
     engines: {node: '>=22.12.0 || >=20.19.0 <21.0.0', npm: '>=10'}
     hasBin: true
 
@@ -3323,7 +3323,7 @@ snapshots:
       require-from-string: 2.0.2
       uri-js-replace: 1.0.1
 
-  '@redocly/cli@2.40.0': {}
+  '@redocly/cli@2.51.1': {}
 
   '@redocly/config@0.22.0': {}
 
