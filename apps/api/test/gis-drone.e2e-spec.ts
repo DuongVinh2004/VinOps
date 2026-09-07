@@ -42,6 +42,32 @@ beforeAll(async () => {
     pool = new Pool({ connectionString, connectionTimeoutMillis: 2000, max: 1 });
     await pool.query('SELECT 1');
     isDbAvailable = true;
+
+    await pool.query(`
+      INSERT INTO vinops.users (id, email_normalized, display_name, password_hash)
+      VALUES
+        ('${tenantA.userId}', 'gis-user-a@vinops.test', 'GIS User A', 'hash'),
+        ('${tenantB.userId}', 'gis-user-b@vinops.test', 'GIS User B', 'hash')
+      ON CONFLICT (id) DO NOTHING;
+
+      INSERT INTO vinops.organizations (id, code, name, created_by)
+      VALUES
+        ('${tenantA.orgId}', 'ORG-GIS-A', 'GIS Org A', '${tenantA.userId}'),
+        ('${tenantB.orgId}', 'ORG-GIS-B', 'GIS Org B', '${tenantB.userId}')
+      ON CONFLICT (id) DO NOTHING;
+
+      INSERT INTO vinops.projects (id, organization_id, code, name, timezone, created_by)
+      VALUES
+        ('${tenantA.projectId}', '${tenantA.orgId}', 'PRJ-GIS-A', 'GIS Project A', 'Asia/Bangkok', '${tenantA.userId}'),
+        ('${tenantB.projectId}', '${tenantB.orgId}', 'PRJ-GIS-B', 'GIS Project B', 'Asia/Bangkok', '${tenantB.userId}')
+      ON CONFLICT (id) DO NOTHING;
+
+      INSERT INTO vinops.project_members (id, organization_id, project_id, user_id, roles, status, valid_from)
+      VALUES
+        ('${randomUUID()}', '${tenantA.orgId}', '${tenantA.projectId}', '${tenantA.userId}', ARRAY['project_admin'], 'Active', now()),
+        ('${randomUUID()}', '${tenantB.orgId}', '${tenantB.projectId}', '${tenantB.userId}', ARRAY['project_admin'], 'Active', now())
+      ON CONFLICT (project_id, user_id) DO NOTHING;
+    `);
   } catch {
     isDbAvailable = false;
   }

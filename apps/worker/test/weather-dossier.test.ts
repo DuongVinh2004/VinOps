@@ -33,7 +33,7 @@ const fixture = {
   userId: '00000000-0000-4000-8000-000000007001',
 };
 
-beforeAll(() => {
+beforeAll(async () => {
   pool = new Pool({ connectionString, max: 2 });
   database = new VinopsDatabase({
     connectionString,
@@ -43,6 +43,26 @@ beforeAll(() => {
 
   weatherWorker = new WeatherIngestionWorker(database, mockLogger, fixture.userId);
   dossierBundler = new AsBuiltDossierBundler(database, mockLogger, fixture.userId);
+
+  await pool.query(`
+    INSERT INTO vinops.users (id, email_normalized, display_name, password_hash)
+    VALUES ('${fixture.userId}', 'weather-dossier-user@vinops.test', 'Weather User', 'hash')
+    ON CONFLICT (id) DO NOTHING;
+
+    INSERT INTO vinops.organizations (id, code, name, created_by)
+    VALUES ('${fixture.orgId}', 'ORG-WD', 'Weather Org', '${fixture.userId}')
+    ON CONFLICT (id) DO NOTHING;
+
+    INSERT INTO vinops.projects (id, organization_id, code, name, timezone, created_by)
+    VALUES ('${fixture.projectId}', '${fixture.orgId}', 'PRJ-WD', 'Weather Project', 'Asia/Bangkok', '${fixture.userId}')
+    ON CONFLICT (id) DO NOTHING;
+
+    INSERT INTO vinops.acceptance_records (
+      id, organization_id, project_id, code, record_type, result, status, created_by
+    ) VALUES (
+      '${randomUUID()}', '${fixture.orgId}', '${fixture.projectId}', 'BB-NT-WD-01', 'work_acceptance', 'Accepted', 'Completed', '${fixture.userId}'
+    ) ON CONFLICT (project_id, code) DO NOTHING;
+  `);
 });
 
 afterAll(async () => {

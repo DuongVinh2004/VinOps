@@ -1,19 +1,19 @@
 {
-  "timestamp": "2026-09-07T15:35:40.951Z",
+  "timestamp": "2026-09-07T15:55:26.349Z",
   "batchSync50Mutations": {
     "mutationCount": 50,
-    "elapsedMs": 33.1,
+    "elapsedMs": 29.88,
     "targetMs": 500,
     "pass": true
   },
   "kanbanRender50Issues": {
     "issueCount": 50,
-    "elapsedMs": 99.18,
+    "elapsedMs": 132.16,
     "targetMs": 500,
     "pass": true
   },
   "dailyLogRender": {
-    "elapsedMs": 65.25,
+    "elapsedMs": 95.64,
     "targetMs": 500,
     "pass": true
   },

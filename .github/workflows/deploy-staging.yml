@@ -52,6 +52,12 @@ jobs:
       - name: Install dependencies from lockfile
         run: pnpm install --frozen-lockfile
 
+      - name: Build database package for migration runner
+        run: pnpm --filter=@vinops/database... build
+
+      - name: Migrate integration test databases
+        run: node scripts/migrate-test-dbs.mjs
+
       - name: Run comprehensive verification pipeline
         run: pnpm verify
 
