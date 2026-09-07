@@ -473,12 +473,11 @@ function toDocument(value: unknown): ProjectDocument {
 
 function toFieldIssue(value: unknown): FieldIssue {
   const row = asRecord(value);
-  const locationNodeId = optionalString(row.location_node_id);
-  const workNodeId = optionalString(row.work_node_id);
-  const contractorOrganizationId = optionalString(row.contractor_organization_id);
-  const assignedToUserId = optionalString(row.assigned_to_user_id);
-  const rfiId = optionalString(row.rfi_id);
-
+  const locationNodeId = nullableString(row.location_node_id);
+  const workNodeId = nullableString(row.work_node_id);
+  const contractorOrganizationId = nullableString(row.contractor_organization_id);
+  const assignedToUserId = nullableString(row.assigned_to_user_id);
+  const rfiId = nullableString(row.rfi_id);
   return {
     id: requiredString(row.id, 'issue_id'),
     organizationId: requiredString(row.organization_id, 'organization_id'),
@@ -495,24 +494,23 @@ function toFieldIssue(value: unknown): FieldIssue {
     ...(row.gps_lat !== null && row.gps_lat !== undefined ? { gpsLat: Number(row.gps_lat) } : {}),
     ...(row.gps_lng !== null && row.gps_lng !== undefined ? { gpsLng: Number(row.gps_lng) } : {}),
     ...(rfiId !== undefined ? { rfiId } : {}),
-    version: optionalString(row.version) ?? '1',
-    createdAt: optionalString(row.created_at) ?? '',
-    updatedAt: optionalString(row.updated_at) ?? '',
+    version: nullableString(row.version) ?? '1',
+    createdAt: nullableString(row.created_at) ?? '',
+    updatedAt: nullableString(row.updated_at) ?? '',
   };
 }
 
 function toRfiRequest(value: unknown): RfiRequest {
   const row = asRecord(value);
-  const ballInCourtOrganizationId = optionalString(row.ball_in_court_organization_id);
-  const dueDate = optionalString(row.due_date);
-  const leadContractorPartnerOrganizationId = optionalString(
+  const ballInCourtOrganizationId = nullableString(row.ball_in_court_organization_id);
+  const dueDate = nullableString(row.due_date);
+  const leadContractorPartnerOrganizationId = nullableString(
     row.lead_contractor_partner_organization_id,
   );
-  const consultantPartnerOrganizationId = optionalString(row.consultant_partner_organization_id);
-  const locationNodeId = optionalString(row.location_node_id);
-  const workNodeId = optionalString(row.work_node_id);
-  const sourceIssueId = optionalString(row.source_issue_id);
-
+  const consultantPartnerOrganizationId = nullableString(row.consultant_partner_organization_id);
+  const locationNodeId = nullableString(row.location_node_id);
+  const workNodeId = nullableString(row.work_node_id);
+  const sourceIssueId = nullableString(row.source_issue_id);
   return {
     id: requiredString(row.id, 'rfi_id'),
     organizationId: requiredString(row.organization_id, 'organization_id'),
@@ -533,24 +531,23 @@ function toRfiRequest(value: unknown): RfiRequest {
     ...(sourceIssueId !== undefined ? { sourceIssueId } : {}),
     costImpact: Boolean(row.cost_impact),
     scheduleImpact: Boolean(row.schedule_impact),
-    version: optionalString(row.version) ?? '1',
-    createdAt: optionalString(row.created_at) ?? '',
-    updatedAt: optionalString(row.updated_at) ?? '',
+    version: nullableString(row.version) ?? '1',
+    createdAt: nullableString(row.created_at) ?? '',
+    updatedAt: nullableString(row.updated_at) ?? '',
   };
 }
 
 function toSubmittal(value: unknown): Submittal {
   const row = asRecord(value);
-  const description = optionalString(row.description);
-  const leadContractorPartnerOrganizationId = optionalString(
+  const description = nullableString(row.description);
+  const leadContractorPartnerOrganizationId = nullableString(
     row.lead_contractor_partner_organization_id,
   );
-  const consultantPartnerOrganizationId = optionalString(row.consultant_partner_organization_id);
-  const ballInCourtOrganizationId = optionalString(row.ball_in_court_organization_id);
-  const reviewDecisionCode = optionalString(row.review_decision_code);
-  const reviewRemarks = optionalString(row.review_remarks);
-  const dueDate = optionalString(row.due_date);
-
+  const consultantPartnerOrganizationId = nullableString(row.consultant_partner_organization_id);
+  const ballInCourtOrganizationId = nullableString(row.ball_in_court_organization_id);
+  const reviewDecisionCode = nullableString(row.review_decision_code);
+  const reviewRemarks = nullableString(row.review_remarks);
+  const dueDate = nullableString(row.due_date);
   return {
     id: requiredString(row.id, 'submittal_id'),
     organizationId: requiredString(row.organization_id, 'organization_id'),
@@ -572,9 +569,9 @@ function toSubmittal(value: unknown): Submittal {
     ...(reviewDecisionCode !== undefined ? { reviewDecisionCode } : {}),
     ...(reviewRemarks !== undefined ? { reviewRemarks } : {}),
     ...(dueDate !== undefined ? { dueDate } : {}),
-    version: optionalString(row.version) ?? '1',
-    createdAt: optionalString(row.created_at) ?? '',
-    updatedAt: optionalString(row.updated_at) ?? '',
+    version: nullableString(row.version) ?? '1',
+    createdAt: nullableString(row.created_at) ?? '',
+    updatedAt: nullableString(row.updated_at) ?? '',
   };
 }
 
