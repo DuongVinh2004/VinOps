@@ -29,6 +29,14 @@ const fixture = {
 
 describe('Field Issues & RFX Database Invariants and RLS', () => {
   beforeAll(async () => {
+    const initPool = new Pool({ connectionString, max: 1 });
+    try {
+      await initPool.query("DELETE FROM vinops.schema_migrations WHERE name LIKE '013_%'");
+    } catch {
+      // Table may not exist prior to first migration
+    } finally {
+      await initPool.end();
+    }
     await runMigrations(connectionString);
     pool = new Pool({
       connectionString,
