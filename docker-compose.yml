@@ -1,7 +1,8 @@
 services:
   postgres:
-    image: postgres:17
+    image: pgvector/pgvector:pg17
     container_name: vinops-postgres
+
     restart: unless-stopped
     ports:
       - '5432:5432'
