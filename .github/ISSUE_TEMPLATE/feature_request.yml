@@ -1,0 +1,37 @@
+name: Feature Request
+description: Propose a new capability, enhancement, or standard compliance feature for VinOps
+title: 'feat: '
+labels: ['enhancement', 'discussion']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        We welcome feature proposals aligned with openBIM, digital engineering, and construction management standards!
+  - type: textarea
+    id: problem-statement
+    attributes:
+      label: Problem or Business Need
+      description: Is your feature request related to a specific site workflow, regulatory decree, or client requirement?
+      placeholder: As a TVGS supervising engineer, I need to...
+    validations:
+      required: true
+  - type: textarea
+    id: proposed-solution
+    attributes:
+      label: Proposed Solution
+      description: Describe your proposed technical design, API additions, or UI interactions.
+    validations:
+      required: true
+  - type: textarea
+    id: regulatory-standards
+    attributes:
+      label: Relevant Engineering & Regulatory Standards
+      description: e.g., NĐ 207/2026/NĐ-CP, TT 32/2026/BXD, ISO 19650-2, openBIM IFC 4.3, BCF 3.0, RFC 3161
+    validations:
+      required: false
+  - type: checkboxes
+    id: willingness
+    attributes:
+      label: Contribution
+      options:
+        - label: I am willing to submit a Pull Request for this feature

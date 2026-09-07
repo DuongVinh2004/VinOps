@@ -1,0 +1,59 @@
+name: Bug Report
+description: Report a reproducible defect or unexpected behavior in VinOps
+title: 'fix: '
+labels: ['bug', 'triage']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for reporting an issue! Please verify that this is not a security vulnerability (see [SECURITY.md](https://github.com/DuongVinh2004/VinOps/blob/main/SECURITY.md)).
+  - type: input
+    id: component
+    attributes:
+      label: Affected Component
+      description: e.g., apps/api, apps/worker, apps/web, BIM viewer, PKI signing, GIS drone, Offline sync
+      placeholder: apps/api
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: Problem Description
+      description: A clear and concise description of what the bug is.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to Reproduce
+      description: Precise steps to reproduce the behavior.
+      placeholder: |
+        1. Open '...'
+        2. Execute '...'
+        3. See error
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected Behavior
+      description: What you expected to happen according to PRD / ADR specifications.
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant Logs or Error Output
+      description: Please copy and paste any relevant terminal, browser console, or Docker logs.
+      render: shell
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Severity
+      options:
+        - Critical (Blocks production or core workflow)
+        - High (Major feature degraded without workaround)
+        - Medium (Workaround available)
+        - Low (Cosmetic / UI inconsistency)
+    validations:
+      required: true
