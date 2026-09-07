@@ -72,6 +72,10 @@ export type ProjectDocument = {
   version: string;
   archivedAt?: string | undefined;
   currentRevision: DocumentRevision | null;
+  locationId?: string | undefined;
+  disciplineId?: string | undefined;
+  classificationId?: string | undefined;
+  workId?: string | undefined;
 };
 
 export type DocumentDetail = ProjectDocument & {
@@ -468,6 +472,18 @@ function toDocument(value: unknown): ProjectDocument {
     ...(nullableString(record.archived_at) === undefined
       ? {}
       : { archivedAt: nullableString(record.archived_at) }),
+    ...(nullableString(record.location_id) === undefined
+      ? {}
+      : { locationId: nullableString(record.location_id) }),
+    ...(nullableString(record.discipline_id) === undefined
+      ? {}
+      : { disciplineId: nullableString(record.discipline_id) }),
+    ...(nullableString(record.classification_id) === undefined
+      ? {}
+      : { classificationId: nullableString(record.classification_id) }),
+    ...(nullableString(record.work_id) === undefined
+      ? {}
+      : { workId: nullableString(record.work_id) }),
   };
 }
 
@@ -852,11 +868,21 @@ export class VinopsApiClient {
     projectId: string,
     search = '',
     includeArchived = false,
+    filters?: {
+      locationId?: string | undefined;
+      disciplineId?: string | undefined;
+      workId?: string | undefined;
+      documentType?: string | undefined;
+    },
   ): Promise<readonly ProjectDocument[]> {
     const query = new URLSearchParams({
       search,
       include_archived: String(includeArchived),
     });
+    if (filters?.locationId) query.set('location_id', filters.locationId);
+    if (filters?.disciplineId) query.set('discipline_id', filters.disciplineId);
+    if (filters?.workId) query.set('work_id', filters.workId);
+    if (filters?.documentType) query.set('document_type', filters.documentType);
     const response = await this.request<unknown>(
       `projects/${encodeURIComponent(projectId)}/documents?${query.toString()}`,
     );
@@ -869,6 +895,10 @@ export class VinopsApiClient {
     title: string;
     documentType: string;
     numberingContext?: string | undefined;
+    locationId?: string | undefined;
+    disciplineId?: string | undefined;
+    classificationId?: string | undefined;
+    workId?: string | undefined;
   }): Promise<ProjectDocument> {
     return toDocument(
       await this.request<unknown>(`projects/${encodeURIComponent(input.projectId)}/documents`, {
@@ -882,6 +912,10 @@ export class VinopsApiClient {
           title: input.title,
           document_type: input.documentType,
           numbering_context: input.numberingContext ?? 'default',
+          ...(input.locationId ? { location_id: input.locationId } : {}),
+          ...(input.disciplineId ? { discipline_id: input.disciplineId } : {}),
+          ...(input.classificationId ? { classification_id: input.classificationId } : {}),
+          ...(input.workId ? { work_id: input.workId } : {}),
         }),
       }),
     );
@@ -1112,6 +1146,22 @@ export class VinopsApiClient {
           ],
         }),
       }),
+    );
+  }
+
+  async getTransmittalManifest(transmittalId: string): Promise<JsonRecord> {
+    return asRecord(
+      await this.request<unknown>(`transmittals/${encodeURIComponent(transmittalId)}/manifest`),
+    );
+  }
+
+  async verifyDrawingToken(token: string): Promise<JsonRecord> {
+    return asRecord(
+      await this.request<unknown>(
+        `drawings/verify?token=${encodeURIComponent(token)}`,
+        {},
+        { authenticated: false },
+      ),
     );
   }
 

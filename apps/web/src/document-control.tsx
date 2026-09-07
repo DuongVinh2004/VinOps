@@ -5,6 +5,7 @@ import {
   type DocumentRevision,
   type FileAccessAuthorization,
   type Project,
+  type ProjectContext,
   type ProjectDocument,
   type ProjectMember,
   type ReviewInboxItem,
@@ -18,6 +19,23 @@ type Props = {
 };
 
 type LoadState = 'loading' | 'ready' | 'empty' | 'denied' | 'not-found' | 'error';
+
+function isoState(status: string): { label: string; className: string } {
+  switch (status) {
+    case 'Draft':
+      return { label: 'WIP', className: 'badge-iso badge-iso-wip' };
+    case 'Under Review':
+      return { label: 'SHARED', className: 'badge-iso badge-iso-shared' };
+    case 'Approved':
+    case 'Published':
+      return { label: 'PUBLISHED', className: 'badge-iso badge-iso-published' };
+    case 'Superseded':
+    case 'Withdrawn':
+      return { label: 'ARCHIVED', className: 'badge-iso badge-iso-archived' };
+    default:
+      return { label: status, className: 'badge-iso' };
+  }
+}
 
 function loadState(error: unknown): LoadState {
   if (error instanceof ApiError && error.status === 403) return 'denied';
@@ -57,7 +75,13 @@ export function DocumentControlScreen({ client, project, members }: Props) {
   const [documents, setDocuments] = useState<readonly ProjectDocument[]>([]);
   const [detail, setDetail] = useState<DocumentDetail | null>(null);
   const [reviewInbox, setReviewInbox] = useState<readonly ReviewInboxItem[]>([]);
+  const [context, setContext] = useState<ProjectContext | null>(null);
   const [search, setSearch] = useState('');
+  const [debouncedSearch, setDebouncedSearch] = useState('');
+  const [filterLocation, setFilterLocation] = useState<string>('');
+  const [filterDiscipline, setFilterDiscipline] = useState<string>('');
+  const [filterWork, setFilterWork] = useState<string>('');
+  const [filterDocType, setFilterDocType] = useState<string>('');
   const [includeArchived, setIncludeArchived] = useState(false);
   const [state, setState] = useState<LoadState>('loading');
   const [detailState, setDetailState] = useState<LoadState>('empty');
@@ -79,11 +103,30 @@ export function DocumentControlScreen({ client, project, members }: Props) {
   );
 
   useEffect(() => {
+    client
+      .getProjectContext(project.id)
+      .then(setContext)
+      .catch(() => {});
+  }, [client, project.id]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearch(search);
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [search]);
+
+  useEffect(() => {
     let disposed = false;
     setState('loading');
     setMessage(null);
     void Promise.all([
-      client.listDocuments(project.id, search, includeArchived),
+      client.listDocuments(project.id, debouncedSearch, includeArchived, {
+        locationId: filterLocation || undefined,
+        disciplineId: filterDiscipline || undefined,
+        workId: filterWork || undefined,
+        documentType: filterDocType || undefined,
+      }),
       client.listReviewInbox(project.id),
     ])
       .then(([items, inbox]) => {
@@ -107,7 +150,17 @@ export function DocumentControlScreen({ client, project, members }: Props) {
     return () => {
       disposed = true;
     };
-  }, [client, includeArchived, project.id, refresh]);
+  }, [
+    client,
+    includeArchived,
+    project.id,
+    refresh,
+    debouncedSearch,
+    filterLocation,
+    filterDiscipline,
+    filterWork,
+    filterDocType,
+  ]);
 
   async function openDocument(documentId: string, revisionId?: string): Promise<void> {
     setDetailState('loading');
@@ -178,14 +231,80 @@ export function DocumentControlScreen({ client, project, members }: Props) {
               setRefresh((value) => value + 1);
             }}
           >
+            <h3>CDE Explorer Filters</h3>
             <label htmlFor="document-search">
-              Search code or title
+              Search code or title (FTS)
               <input
                 id="document-search"
                 value={search}
+                placeholder="Debounced search…"
                 onChange={(event) => setSearch(event.target.value)}
               />
             </label>
+            <div className="cde-tree-nav">
+              <div className="cde-filter-group">
+                <label htmlFor="filter-lbs">Location (LBS)</label>
+                <select
+                  id="filter-lbs"
+                  value={filterLocation}
+                  onChange={(e) => setFilterLocation(e.target.value)}
+                >
+                  <option value="">All Locations</option>
+                  {(context?.locationNodes ?? []).map((node) => (
+                    <option key={node.id} value={node.id}>
+                      {node.code ? `${node.code} - ` : ''}
+                      {node.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="cde-filter-group">
+                <label htmlFor="filter-wbs">Work Package (WBS)</label>
+                <select
+                  id="filter-wbs"
+                  value={filterWork}
+                  onChange={(e) => setFilterWork(e.target.value)}
+                >
+                  <option value="">All Work Packages</option>
+                  {(context?.workNodes ?? []).map((node) => (
+                    <option key={node.id} value={node.id}>
+                      {node.code ? `${node.code} - ` : ''}
+                      {node.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="cde-filter-group">
+                <label htmlFor="filter-discipline">Discipline</label>
+                <select
+                  id="filter-discipline"
+                  value={filterDiscipline}
+                  onChange={(e) => setFilterDiscipline(e.target.value)}
+                >
+                  <option value="">All Disciplines</option>
+                  {(context?.disciplines ?? []).map((d) => (
+                    <option key={d.id} value={d.id}>
+                      {d.code ? `${d.code} - ` : ''}
+                      {d.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="cde-filter-group">
+                <label htmlFor="filter-doc-type">Document Type</label>
+                <select
+                  id="filter-doc-type"
+                  value={filterDocType}
+                  onChange={(e) => setFilterDocType(e.target.value)}
+                >
+                  <option value="">All Types</option>
+                  <option value="drawing">Drawing</option>
+                  <option value="procedure">Procedure</option>
+                  <option value="report">Report</option>
+                  <option value="specification">Specification</option>
+                </select>
+              </div>
+            </div>
             <label className="checkbox-row" htmlFor="include-archived">
               <input
                 checked={includeArchived}
@@ -195,7 +314,24 @@ export function DocumentControlScreen({ client, project, members }: Props) {
               />
               Include archived
             </label>
-            <button type="submit">Apply filters</button>
+            <div className="action-row">
+              <button type="submit">Apply filters</button>
+              {filterLocation || filterDiscipline || filterWork || filterDocType || search ? (
+                <button
+                  className="secondary-button"
+                  type="button"
+                  onClick={() => {
+                    setFilterLocation('');
+                    setFilterDiscipline('');
+                    setFilterWork('');
+                    setFilterDocType('');
+                    setSearch('');
+                  }}
+                >
+                  Reset
+                </button>
+              ) : null}
+            </div>
           </form>
 
           <DocumentIndex
@@ -207,6 +343,7 @@ export function DocumentControlScreen({ client, project, members }: Props) {
 
           <CreateDocumentForm
             busy={busy}
+            context={context}
             onCreate={(input) =>
               perform(async () => {
                 const created = await client.createDocument({ projectId: project.id, ...input });
@@ -302,6 +439,11 @@ export function DocumentControlScreen({ client, project, members }: Props) {
                 detail={detail}
                 selectedRevision={selectedRevision}
                 onOpen={(revisionId) => void openDocument(detail.id, revisionId)}
+              />
+
+              <RevisionDiffViewer
+                revisions={detail.revisions}
+                selectedRevision={selectedRevision}
               />
 
               <CreateRevisionForm
@@ -417,6 +559,8 @@ export function DocumentControlScreen({ client, project, members }: Props) {
                   })
                 }
               />
+
+              <DrawingQrVerifierCard client={client} busy={busy} />
             </>
           ) : null}
         </div>
@@ -459,43 +603,87 @@ function DocumentIndex({
     return <StateCard title="No documents" body="No matching visible documents were returned." />;
   return (
     <ul className="document-list" aria-label="Document list">
-      {documents.map((document) => (
-        <li key={document.id}>
-          <button
-            className={selectedId === document.id ? 'document-row is-selected' : 'document-row'}
-            type="button"
-            onClick={() => onOpen(document.id)}
-          >
-            <strong>{document.code}</strong>
-            <span>{document.title}</span>
-            <small>
-              {document.archivedAt === undefined ? 'Active' : 'Archived'} · Current:{' '}
-              {document.currentRevision?.revisionCode ?? 'None'}
-            </small>
-          </button>
-        </li>
-      ))}
+      {documents.map((document) => {
+        const currentRev = document.currentRevision;
+        const iso = isoState(currentRev?.status ?? 'Draft');
+        return (
+          <li key={document.id}>
+            <button
+              className={selectedId === document.id ? 'document-row is-selected' : 'document-row'}
+              type="button"
+              onClick={() => onOpen(document.id)}
+            >
+              <div
+                style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
+              >
+                <strong>{document.code}</strong>
+                <span className={iso.className}>{iso.label}</span>
+              </div>
+              <span>{document.title}</span>
+              <div
+                style={{
+                  display: 'flex',
+                  gap: '0.4rem',
+                  alignItems: 'center',
+                  marginTop: '0.2rem',
+                  flexWrap: 'wrap',
+                }}
+              >
+                <small>
+                  {document.archivedAt === undefined ? 'Active' : 'Archived'} ·{' '}
+                  {document.documentType}
+                </small>
+                {currentRev ? (
+                  <span className="badge-current">CURRENT {currentRev.revisionCode}</span>
+                ) : (
+                  <small className="muted-copy">· No current</small>
+                )}
+              </div>
+            </button>
+          </li>
+        );
+      })}
     </ul>
   );
 }
 
 function CreateDocumentForm({
   busy,
+  context,
   onCreate,
 }: {
   busy: boolean;
-  onCreate: (input: { code: string; title: string; documentType: string }) => Promise<void>;
+  context: ProjectContext | null;
+  onCreate: (input: {
+    code: string;
+    title: string;
+    documentType: string;
+    locationId?: string | undefined;
+    disciplineId?: string | undefined;
+    workId?: string | undefined;
+  }) => Promise<void>;
 }) {
   const [code, setCode] = useState('');
   const [title, setTitle] = useState('');
   const [documentType, setDocumentType] = useState('drawing');
+  const [locationId, setLocationId] = useState('');
+  const [disciplineId, setDisciplineId] = useState('');
+  const [workId, setWorkId] = useState('');
+
   return (
     <form
       className="content-card"
       onSubmit={(event) => {
         event.preventDefault();
         if (code.trim() !== '' && title.trim() !== '')
-          void onCreate({ code: code.trim(), title: title.trim(), documentType });
+          void onCreate({
+            code: code.trim(),
+            title: title.trim(),
+            documentType,
+            locationId: locationId || undefined,
+            disciplineId: disciplineId || undefined,
+            workId: workId || undefined,
+          });
       }}
     >
       <h3>Create document</h3>
@@ -527,12 +715,213 @@ function CreateDocumentForm({
           <option value="drawing">Drawing</option>
           <option value="procedure">Procedure</option>
           <option value="report">Report</option>
+          <option value="specification">Specification</option>
         </select>
       </label>
+      {context?.locationNodes && context.locationNodes.length > 0 ? (
+        <label htmlFor="new-document-location">
+          Location (LBS)
+          <select
+            id="new-document-location"
+            value={locationId}
+            onChange={(e) => setLocationId(e.target.value)}
+          >
+            <option value="">None (Project Root)</option>
+            {context.locationNodes.map((loc) => (
+              <option key={loc.id} value={loc.id}>
+                {loc.code ? `${loc.code} - ` : ''}
+                {loc.name}
+              </option>
+            ))}
+          </select>
+        </label>
+      ) : null}
+      {context?.disciplines && context.disciplines.length > 0 ? (
+        <label htmlFor="new-document-discipline">
+          Discipline
+          <select
+            id="new-document-discipline"
+            value={disciplineId}
+            onChange={(e) => setDisciplineId(e.target.value)}
+          >
+            <option value="">None</option>
+            {context.disciplines.map((d) => (
+              <option key={d.id} value={d.id}>
+                {d.code ? `${d.code} - ` : ''}
+                {d.name}
+              </option>
+            ))}
+          </select>
+        </label>
+      ) : null}
+      {context?.workNodes && context.workNodes.length > 0 ? (
+        <label htmlFor="new-document-work">
+          Work Package (WBS)
+          <select id="new-document-work" value={workId} onChange={(e) => setWorkId(e.target.value)}>
+            <option value="">None</option>
+            {context.workNodes.map((w) => (
+              <option key={w.id} value={w.id}>
+                {w.code ? `${w.code} - ` : ''}
+                {w.name}
+              </option>
+            ))}
+          </select>
+        </label>
+      ) : null}
       <button disabled={busy} type="submit">
         Create controlled container
       </button>
     </form>
+  );
+}
+
+function RevisionDiffViewer({
+  revisions,
+  selectedRevision,
+}: {
+  revisions: readonly DocumentRevision[];
+  selectedRevision: DocumentRevision | null;
+}) {
+  const [baseId, setBaseId] = useState<string>('');
+  const [targetId, setTargetId] = useState<string>('');
+
+  useEffect(() => {
+    const rev0 = revisions[0];
+    const rev1 = revisions[1];
+    if (rev1 !== undefined) {
+      if (!baseId) setBaseId(rev1.id);
+      if (!targetId) setTargetId(selectedRevision?.id ?? rev0?.id ?? '');
+    } else if (rev0 !== undefined) {
+      if (!baseId) setBaseId(rev0.id);
+      if (!targetId) setTargetId(rev0.id);
+    }
+  }, [revisions, selectedRevision, baseId, targetId]);
+
+  if (revisions.length < 2) return null;
+
+  const baseRev = revisions.find((r) => r.id === baseId) ?? revisions[1] ?? revisions[0];
+  const targetRev = revisions.find((r) => r.id === targetId) ?? revisions[0];
+  if (baseRev === undefined || targetRev === undefined) return null;
+
+  const baseIso = isoState(baseRev.status);
+  const targetIso = isoState(targetRev.status);
+  const hashMatches = baseRev.file.sha256 === targetRev.file.sha256;
+
+  return (
+    <article className="content-card">
+      <h3>Approval Workbench: Revision Diff (Side-by-Side)</h3>
+      <p className="muted-copy">
+        Compare metadata, file integrity checksums, and lifecycle states.
+      </p>
+      <div className="form-grid">
+        <label htmlFor="diff-base-select">
+          Base revision
+          <select
+            id="diff-base-select"
+            value={baseRev.id}
+            onChange={(e) => setBaseId(e.target.value)}
+          >
+            {revisions.map((r) => (
+              <option key={r.id} value={r.id}>
+                {r.revisionCode} ({r.status})
+              </option>
+            ))}
+          </select>
+        </label>
+        <label htmlFor="diff-target-select">
+          Compare revision
+          <select
+            id="diff-target-select"
+            value={targetRev.id}
+            onChange={(e) => setTargetId(e.target.value)}
+          >
+            {revisions.map((r) => (
+              <option key={r.id} value={r.id}>
+                {r.revisionCode} ({r.status})
+              </option>
+            ))}
+          </select>
+        </label>
+      </div>
+
+      <div className="side-by-side-diff">
+        <div className="diff-panel">
+          <h4>Base: {baseRev.revisionCode}</h4>
+          <div className="diff-field">
+            <span className="diff-field-label">ISO 19650:</span>
+            <span className={baseIso.className}>
+              {baseIso.label} ({baseRev.status})
+            </span>
+          </div>
+          <div className="diff-field">
+            <span className="diff-field-label">Purpose / Suitability:</span>
+            <span>
+              {baseRev.purpose} / {baseRev.suitabilityCode ?? 'None'}
+            </span>
+          </div>
+          <div className="diff-field">
+            <span className="diff-field-label">Created At:</span>
+            <span>{new Date(baseRev.createdAt).toLocaleString()}</span>
+          </div>
+          <div className="diff-field">
+            <span className="diff-field-label">Filename:</span>
+            <span>{baseRev.file.filename}</span>
+          </div>
+          <div className="diff-field">
+            <span className="diff-field-label">Size:</span>
+            <span>{baseRev.file.sizeBytes} bytes</span>
+          </div>
+          <div className="diff-field">
+            <span className="diff-field-label">SHA-256 Checksum:</span>
+            <span className={`diff-field-value ${hashMatches ? 'diff-same' : 'diff-changed'}`}>
+              {baseRev.file.sha256}
+            </span>
+          </div>
+        </div>
+
+        <div className="diff-panel">
+          <h4>Compare: {targetRev.revisionCode}</h4>
+          <div className="diff-field">
+            <span className="diff-field-label">ISO 19650:</span>
+            <span className={targetIso.className}>
+              {targetIso.label} ({targetRev.status})
+            </span>
+          </div>
+          <div className="diff-field">
+            <span className="diff-field-label">Purpose / Suitability:</span>
+            <span>
+              {targetRev.purpose} / {targetRev.suitabilityCode ?? 'None'}
+            </span>
+          </div>
+          <div className="diff-field">
+            <span className="diff-field-label">Created At:</span>
+            <span>{new Date(targetRev.createdAt).toLocaleString()}</span>
+          </div>
+          <div className="diff-field">
+            <span className="diff-field-label">Filename:</span>
+            <span
+              className={targetRev.file.filename !== baseRev.file.filename ? 'diff-changed' : ''}
+            >
+              {targetRev.file.filename}
+            </span>
+          </div>
+          <div className="diff-field">
+            <span className="diff-field-label">Size:</span>
+            <span
+              className={targetRev.file.sizeBytes !== baseRev.file.sizeBytes ? 'diff-changed' : ''}
+            >
+              {targetRev.file.sizeBytes} bytes
+            </span>
+          </div>
+          <div className="diff-field">
+            <span className="diff-field-label">SHA-256 Checksum:</span>
+            <span className={`diff-field-value ${hashMatches ? 'diff-same' : 'diff-changed'}`}>
+              {targetRev.file.sha256}
+            </span>
+          </div>
+        </div>
+      </div>
+    </article>
   );
 }
 
@@ -869,11 +1258,37 @@ function ReviewInbox({
           </label>
           {item === undefined || item.decision !== undefined ? null : (
             <>
+              <label htmlFor="review-reason-preset">
+                ISO 19650 Reason Code Preset
+                <select
+                  id="review-reason-preset"
+                  defaultValue=""
+                  onChange={(event) => {
+                    if (event.target.value) setReason(event.target.value);
+                  }}
+                >
+                  <option value="">Choose standard preset (or type below)</option>
+                  <option value="APPROVED_FOR_CONSTRUCTION">
+                    APPROVED_FOR_CONSTRUCTION (Approved for Use)
+                  </option>
+                  <option value="APPROVED_AS_NOTED">APPROVED_AS_NOTED (Approved with notes)</option>
+                  <option value="REJECTED_DESIGN_INCOMPLETE">
+                    REJECTED_DESIGN_INCOMPLETE (Design incomplete)
+                  </option>
+                  <option value="REJECTED_COORDINATION_CLASH">
+                    REJECTED_COORDINATION_CLASH (Clash detected)
+                  </option>
+                  <option value="REJECTED_NON_COMPLIANT">
+                    REJECTED_NON_COMPLIANT (Standards non-compliance)
+                  </option>
+                </select>
+              </label>
               <label htmlFor="review-reason">
                 Decision reason
                 <input
                   id="review-reason"
                   value={reason}
+                  placeholder="e.g. APPROVED_FOR_CONSTRUCTION"
                   onChange={(event) => setReason(event.target.value)}
                 />
               </label>
@@ -1227,8 +1642,172 @@ function TransmittalForm({
         Issue immutable snapshot
       </button>
       {snapshot === null ? null : (
-        <pre className="snapshot-output">{JSON.stringify(snapshot, null, 2)}</pre>
+        <div className="transmittal-verify-box">
+          <h4>Transmittal Verification Package</h4>
+          <p>
+            <strong>HMAC Digital Signature:</strong>{' '}
+            <code>
+              {typeof snapshot.signature === 'string'
+                ? snapshot.signature
+                : typeof snapshot.package_signature === 'string'
+                  ? snapshot.package_signature
+                  : 'Verified'}
+            </code>
+          </p>
+          <button
+            type="button"
+            className="secondary-btn"
+            style={{ marginBottom: '0.75rem' }}
+            onClick={() => {
+              const blob = new Blob([JSON.stringify(snapshot, null, 2)], {
+                type: 'application/json',
+              });
+              const url = URL.createObjectURL(blob);
+              const a = document.createElement('a');
+              const packageCode = typeof snapshot.code === 'string' ? snapshot.code : 'package';
+              a.href = url;
+              a.download = `transmittal-manifest-${packageCode}.json`;
+              a.click();
+              URL.revokeObjectURL(url);
+            }}
+          >
+            Download Package Manifest (.json)
+          </button>
+          {Array.isArray(snapshot.items) && (
+            <div>
+              <table className="document-table">
+                <thead>
+                  <tr>
+                    <th>Drawing / Document</th>
+                    <th>Revision</th>
+                    <th>SHA-256</th>
+                    <th>QR / Verification Payload</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {(snapshot.items as readonly Record<string, string | undefined>[]).map(
+                    (item, idx) => {
+                      const drawing =
+                        item.drawing_code ?? item.document_code ?? item.document_id ?? '';
+                      const revision = item.revision_code ?? item.revision_id ?? '';
+                      const sha = item.sha256 ?? '';
+                      const qr = item.qr_payload ?? item.verification_url ?? 'N/A';
+                      return (
+                        <tr key={idx}>
+                          <td>{drawing}</td>
+                          <td>{revision}</td>
+                          <td>
+                            <code>{sha.slice(0, 16)}…</code>
+                          </td>
+                          <td>
+                            <code>{qr}</code>
+                          </td>
+                        </tr>
+                      );
+                    },
+                  )}
+                </tbody>
+              </table>
+            </div>
+          )}
+          <details style={{ marginTop: '0.75rem' }}>
+            <summary>Raw Snapshot JSON</summary>
+            <pre className="snapshot-output">{JSON.stringify(snapshot, null, 2)}</pre>
+          </details>
+        </div>
       )}
     </form>
+  );
+}
+
+type DrawingVerifyResult = {
+  valid?: boolean;
+  legal_status?: string;
+  status?: string;
+  message?: string;
+  document_code?: string;
+  document_title?: string;
+  revision_code?: string;
+  revision_status?: string;
+  is_current?: boolean;
+};
+
+function DrawingQrVerifierCard({ client, busy }: { client: VinopsApiClient; busy: boolean }) {
+  const [tokenInput, setTokenInput] = useState('');
+  const [result, setResult] = useState<DrawingVerifyResult | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  async function handleVerify(e: FormEvent) {
+    e.preventDefault();
+    if (!tokenInput.trim()) return;
+    setLoading(true);
+    setError(null);
+    setResult(null);
+    try {
+      const res = (await client.verifyDrawingToken(tokenInput.trim())) as DrawingVerifyResult;
+      setResult(res);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Verification request failed');
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return (
+    <article className="content-card drawing-verifier-card">
+      <h3>Field QR Drawing Legality Verifier</h3>
+      <p className="muted-copy">
+        Scan or paste the drawing QR verification payload to confirm live validity before
+        construction.
+      </p>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          void handleVerify(e);
+        }}
+        className="action-row"
+      >
+        <input
+          placeholder="Paste QR payload token (base64url)..."
+          value={tokenInput}
+          onChange={(e) => setTokenInput(e.target.value)}
+          style={{ flex: 1 }}
+        />
+        <button type="submit" disabled={busy || loading || !tokenInput.trim()}>
+          {loading ? 'Verifying…' : 'Verify Legality'}
+        </button>
+      </form>
+      {error && <p className="operation-message">{error}</p>}
+      {result && (
+        <div className="verifier-result-box" style={{ marginTop: '1rem' }}>
+          <h4>Verification Result</h4>
+          <p>
+            <strong>Status:</strong>{' '}
+            <span
+              className={
+                result.legal_status === 'VALID_FOR_CONSTRUCTION'
+                  ? 'badge-iso badge-iso-published'
+                  : 'badge-iso badge-iso-archived'
+              }
+            >
+              {result.legal_status ?? result.status ?? 'UNKNOWN'}
+            </span>
+          </p>
+          {result.document_code && (
+            <p>
+              <strong>Document:</strong> {result.document_code} — {result.document_title ?? ''}
+            </p>
+          )}
+          {result.revision_code && (
+            <p>
+              <strong>Revision:</strong> {result.revision_code} ({result.revision_status ?? ''})
+              {result.is_current ? ' [CURRENT]' : ' [NOT CURRENT / OUTDATED]'}
+            </p>
+          )}
+          {result.message && <p className="muted-copy">{result.message}</p>}
+        </div>
+      )}
+    </article>
   );
 }

@@ -12,6 +12,7 @@ export default defineConfig({
       // JavaScript artifacts that may exist beside the TypeScript source.
       '@vinops/database': `${root}packages/database/src/database.ts`,
       '@vinops/domain': `${root}packages/domain/src/index.ts`,
+      '@vinops/file': `${root}packages/file/src/index.ts`,
       '@vinops/observability': `${root}packages/observability/src/index.ts`,
     },
   },

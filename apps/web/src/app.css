@@ -443,3 +443,166 @@ dd {
     grid-template-columns: 1fr;
   }
 }
+
+/* CDE Explorer & ISO 19650 Badges */
+.badge-current {
+  display: inline-block;
+  background: #059669;
+  color: #ffffff;
+  font-weight: 700;
+  border-radius: 4px;
+  padding: 0.15rem 0.45rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.badge-iso {
+  display: inline-block;
+  border-radius: 4px;
+  padding: 0.15rem 0.4rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.badge-iso-wip {
+  background: #e5e7eb;
+  color: #374151;
+}
+
+.badge-iso-shared {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+.badge-iso-published {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.badge-iso-archived {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.cde-tree-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.cde-filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.cde-filter-group label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #4b5563;
+}
+
+.cde-filter-group select {
+  font-size: 0.85rem;
+  padding: 0.35rem 0.5rem;
+  border-radius: 4px;
+  border: 1px solid #d1d5db;
+}
+
+.document-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+}
+
+.document-table th,
+.document-table td {
+  padding: 0.5rem 0.6rem;
+  text-align: left;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.document-table th {
+  background: #f9fafb;
+  font-weight: 600;
+  color: #374151;
+}
+
+.document-table tr:hover {
+  background: #f3f4f6;
+  cursor: pointer;
+}
+
+.document-table tr.is-selected {
+  background: #eff6ff;
+  border-left: 3px solid #2563eb;
+}
+
+/* Side-by-Side Diff Workbench */
+.side-by-side-diff {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.diff-panel {
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  padding: 0.75rem;
+  background: #fafafa;
+}
+
+.diff-panel h4 {
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+  color: #1f2937;
+}
+
+.diff-field {
+  margin-bottom: 0.5rem;
+  font-size: 0.82rem;
+}
+
+.diff-field-label {
+  font-weight: 600;
+  color: #6b7280;
+  display: block;
+}
+
+.diff-field-value {
+  font-family: monospace;
+  word-break: break-all;
+}
+
+.diff-changed {
+  background: #fef3c7;
+  color: #92400e;
+  padding: 0.1rem 0.3rem;
+  border-radius: 2px;
+}
+
+.diff-same {
+  color: #374151;
+}
+
+/* Transmittal QR & Verification */
+.transmittal-verify-box {
+  margin-top: 0.75rem;
+  padding: 0.75rem;
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-radius: 6px;
+}
+
+.transmittal-verify-box code {
+  font-size: 0.78rem;
+  word-break: break-all;
+  display: block;
+  margin-top: 0.25rem;
+}

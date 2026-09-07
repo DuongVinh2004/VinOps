@@ -14,6 +14,10 @@ import {
   normalizeDocumentCode,
   parseExpectedVersion,
   revisionTransitionTarget,
+  buildDrawingQrPayload,
+  buildTransmittalPackageManifest,
+  generateTransmittalSignature,
+  parseDrawingQrPayload,
   type FileStatus,
   type ReviewAssignmentSnapshot,
   type ReviewDecision,
@@ -48,6 +52,7 @@ type DocumentRow = {
   discipline_id: string | null;
   classification_id: string | null;
   work_id: string | null;
+  location_id: string | null;
   confidentiality: string;
   created_by: string;
   version: string;
@@ -105,6 +110,7 @@ export type CreateDocumentInput = {
   disciplineId?: string | undefined;
   classificationId?: string | undefined;
   workId?: string | undefined;
+  locationId?: string | undefined;
   confidentiality?: 'internal' | 'restricted' | 'project' | undefined;
 };
 
@@ -242,6 +248,12 @@ export class DocumentService implements OnModuleDestroy {
     search: string | undefined,
     includeArchived: boolean,
     correlationId: string,
+    filters?: {
+      locationId?: string | undefined;
+      disciplineId?: string | undefined;
+      workId?: string | undefined;
+      documentType?: string | undefined;
+    },
   ): Promise<readonly JsonRecord[]> {
     return this.transaction(identity, correlationId, async (transaction) => {
       await this.requireProjectMember(transaction, projectId, identity.userId);
@@ -249,14 +261,26 @@ export class DocumentService implements OnModuleDestroy {
       const rows = await transaction.query<DocumentRow>(
         `SELECT document.id, document.organization_id, document.project_id, document.numbering_context,
                 document.code, document.title, document.document_type, document.discipline_id,
-                document.classification_id, document.work_id, document.confidentiality,
+                document.classification_id, document.work_id, document.location_id, document.confidentiality,
                 document.created_by, document.version::text, document.archived_at
            FROM vinops.documents document
           WHERE document.project_id = $1::uuid
             AND ($2::boolean OR document.archived_at IS NULL)
             AND ($3 = '' OR document.code ILIKE '%' || $3 || '%' OR document.title ILIKE '%' || $3 || '%')
+            AND ($4::uuid IS NULL OR document.location_id = $4::uuid)
+            AND ($5::uuid IS NULL OR document.discipline_id = $5::uuid)
+            AND ($6::uuid IS NULL OR document.work_id = $6::uuid)
+            AND ($7::text IS NULL OR document.document_type = $7::text)
           ORDER BY document.code, document.id LIMIT 200`,
-        [projectId, includeArchived, normalizedSearch],
+        [
+          projectId,
+          includeArchived,
+          normalizedSearch,
+          filters?.locationId ?? null,
+          filters?.disciplineId ?? null,
+          filters?.workId ?? null,
+          filters?.documentType ?? null,
+        ],
       );
       const result: JsonRecord[] = [];
       for (const document of rows) {
@@ -304,12 +328,12 @@ export class DocumentService implements OnModuleDestroy {
           const rows = await transaction.query<DocumentRow>(
             `INSERT INTO vinops.documents (
               id, organization_id, project_id, numbering_context, code, title, document_type,
-              discipline_id, classification_id, work_id, confidentiality, created_by
+              discipline_id, classification_id, work_id, location_id, confidentiality, created_by
             ) VALUES (
               $1::uuid, $2::uuid, $3::uuid, $4, $5, $6, $7,
-              $8::uuid, $9::uuid, $10::uuid, $11, $12::uuid
+              $8::uuid, $9::uuid, $10::uuid, $11::uuid, $12, $13::uuid
             ) RETURNING id, organization_id, project_id, numbering_context, code, title,
-              document_type, discipline_id, classification_id, work_id, confidentiality,
+              document_type, discipline_id, classification_id, work_id, location_id, confidentiality,
               created_by, version::text, archived_at`,
             [
               id,
@@ -322,6 +346,7 @@ export class DocumentService implements OnModuleDestroy {
               input.disciplineId ?? null,
               input.classificationId ?? null,
               input.workId ?? null,
+              input.locationId ?? null,
               input.confidentiality ?? 'project',
               identity.userId,
             ],
@@ -1135,6 +1160,7 @@ export class DocumentService implements OnModuleDestroy {
               file_sha256: revision.sha256,
             });
           }
+          const id = randomUUID();
           const issuedAt = new Date();
           const snapshotSha256 = hash(
             stableJson({
@@ -1143,7 +1169,20 @@ export class DocumentService implements OnModuleDestroy {
               issuedAt: issuedAt.toISOString(),
             }),
           );
-          const id = randomUUID();
+          const signature = generateTransmittalSignature(snapshotSha256, policy.organization_id);
+          for (const snapshot of snapshots) {
+            const qrPayload = buildDrawingQrPayload({
+              transmittalId: id,
+              documentCode: snapshot.document_code as string,
+              revisionCode: snapshot.revision_code as string,
+              fileSha256: snapshot.file_sha256 as string,
+              signature,
+              issuedAt: issuedAt.toISOString(),
+            });
+            snapshot.signature = signature;
+            snapshot.qr_payload = qrPayload;
+            snapshot.verification_url = `/verify/drawings/${String(snapshot.document_id)}?transmittal=${id}&rev=${String(snapshot.revision_code)}&sig=${signature.slice(0, 16)}`;
+          }
           await transaction.execute(
             `INSERT INTO vinops.transmittals (
               id, organization_id, project_id, code, purpose, status, created_by,
@@ -1218,6 +1257,7 @@ export class DocumentService implements OnModuleDestroy {
             status: 'Issued',
             issued_at: issuedAt.toISOString(),
             snapshot_sha256: snapshotSha256,
+            signature,
             items: snapshots,
             recipients: input.recipients,
           };
@@ -1264,6 +1304,112 @@ export class DocumentService implements OnModuleDestroy {
       }
       throw error;
     }
+  }
+
+  async getTransmittalManifest(
+    identity: RequestIdentity,
+    transmittalId: string,
+    correlationId: string,
+  ): Promise<JsonRecord> {
+    const detail = await this.transmittalDetail(identity, transmittalId, correlationId);
+    const items = ((detail.items as JsonRecord[]) ?? []).map((item) => ({
+      documentId: String(item.document_id),
+      documentCode: String(item.document_code_snapshot),
+      documentTitle: String(item.document_title_snapshot),
+      revisionId: String(item.revision_id),
+      revisionCode: String(item.revision_code_snapshot),
+      fileSha256: String(item.file_sha256_snapshot),
+      filename: `${String(item.document_code_snapshot)}_${String(item.revision_code_snapshot)}.pdf`,
+    }));
+    return buildTransmittalPackageManifest({
+      transmittalId: String(detail.id),
+      transmittalNumber: String(detail.code),
+      title: String(detail.purpose),
+      projectId: String(detail.project_id),
+      issuedAt: String(detail.issued_at),
+      signature: String(detail.snapshot_sha256),
+      items,
+    });
+  }
+
+  async verifyDrawingToken(token: string): Promise<JsonRecord> {
+    const parsed = parseDrawingQrPayload(token);
+    if (!parsed.valid) {
+      return {
+        valid: false,
+        status: 'INVALID_TOKEN',
+        message: 'QR code payload could not be decoded or is structurally malformed.',
+        error: parsed.error,
+      };
+    }
+    const rows = await this.requireDatabase().withTransaction(
+      { actorUserId: '00000000-0000-0000-0000-000000000000', correlationId: randomUUID() },
+      async (transaction) => {
+        return transaction.query<{
+          doc_id: string;
+          doc_code: string;
+          doc_title: string;
+          rev_id: string;
+          rev_code: string;
+          rev_status: string;
+          is_current: boolean;
+          file_sha256: string | null;
+        }>(
+          `SELECT d.id AS doc_id,
+                  d.code AS doc_code,
+                  d.title AS doc_title,
+                  r.id AS rev_id,
+                  r.revision_code AS rev_code,
+                  r.status AS rev_status,
+                  (cr.revision_id = r.id) AS is_current,
+                  f.sha256 AS file_sha256
+             FROM vinops.documents d
+             JOIN vinops.document_revisions r ON r.document_id = d.id
+        LEFT JOIN vinops.document_current_revisions cr ON cr.document_id = d.id
+        LEFT JOIN vinops.document_revision_current_files rf ON rf.revision_id = r.id
+        LEFT JOIN vinops.revision_file_versions f ON f.id = rf.revision_file_version_id
+            WHERE d.code = $1 AND r.revision_code = $2
+            LIMIT 1`,
+          [parsed.documentCode, parsed.revisionCode],
+        );
+      },
+    );
+    if (rows.length === 0) {
+      return {
+        valid: false,
+        status: 'NOT_FOUND',
+        message: 'Document revision referenced by QR code does not exist.',
+        parsed,
+      };
+    }
+    const record = rows[0]!;
+    let legalStatus:
+      'VALID_FOR_CONSTRUCTION' | 'SUPERSEDED_DO_NOT_USE' | 'WITHDRAWN_REVOKED' | 'UNAPPROVED_WIP';
+    if (record.rev_status === 'Withdrawn') {
+      legalStatus = 'WITHDRAWN_REVOKED';
+    } else if (record.is_current && record.rev_status === 'Published') {
+      legalStatus = 'VALID_FOR_CONSTRUCTION';
+    } else if (record.rev_status === 'Superseded' || !record.is_current) {
+      legalStatus = 'SUPERSEDED_DO_NOT_USE';
+    } else {
+      legalStatus = 'UNAPPROVED_WIP';
+    }
+    return {
+      valid: legalStatus === 'VALID_FOR_CONSTRUCTION',
+      legal_status: legalStatus,
+      document_id: record.doc_id,
+      document_code: record.doc_code,
+      document_title: record.doc_title,
+      revision_id: record.rev_id,
+      revision_code: record.rev_code,
+      revision_status: record.rev_status,
+      is_current: record.is_current,
+      sha_prefix_match: record.file_sha256
+        ? record.file_sha256.startsWith(parsed.shaPrefix ?? '')
+        : false,
+      transmittal_id: parsed.transmittalId,
+      issued_at: parsed.issuedAt,
+    };
   }
 
   async setDocumentArchived(
@@ -1787,7 +1933,7 @@ export class DocumentService implements OnModuleDestroy {
     return this.one(
       await transaction.query<DocumentRow>(
         `SELECT id, organization_id, project_id, numbering_context, code, title, document_type,
-                discipline_id, classification_id, work_id, confidentiality, created_by,
+                discipline_id, classification_id, work_id, location_id, confidentiality, created_by,
                 version::text, archived_at
            FROM vinops.documents WHERE id = $1::uuid${forUpdate ? ' FOR UPDATE' : ''}`,
         [documentId],
@@ -1879,6 +2025,7 @@ export class DocumentService implements OnModuleDestroy {
       discipline_id: document.discipline_id,
       classification_id: document.classification_id,
       work_id: document.work_id,
+      location_id: document.location_id,
       confidentiality: document.confidentiality,
       version: document.version,
       archived_at: document.archived_at?.toISOString() ?? null,
@@ -2019,7 +2166,7 @@ export class DocumentService implements OnModuleDestroy {
     }
     const scope = await transaction.query<{ allowed: boolean }>(
       `SELECT vinops.can_access_document_scope(
-        $1::uuid, $2::uuid, $3::uuid, $4::uuid, 'document.create', $5::uuid
+        $1::uuid, $2::uuid, $3::uuid, $4::uuid, 'document.create', $5::uuid, $6::uuid
       ) AS allowed`,
       [
         projectId,
@@ -2027,6 +2174,7 @@ export class DocumentService implements OnModuleDestroy {
         input.classificationId ?? null,
         input.workId ?? null,
         userId,
+        input.locationId ?? null,
       ],
     );
     if (scope[0]?.allowed !== true) {

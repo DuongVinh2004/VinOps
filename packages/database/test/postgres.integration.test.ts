@@ -28,9 +28,9 @@ describePostgres(
         return;
       }
       const database = new URL(connectionString).pathname.replace(/^\//u, '');
-      if (!/^vinops_mega001_test$/u.test(database)) {
+      if (!/^(vinops_mega001_test|vinops_chat1_test)$/u.test(database)) {
         throw new Error(
-          'VINOPS_TEST_DATABASE_URL must name the task-owned vinops_mega001_test database.',
+          'VINOPS_TEST_DATABASE_URL must name the task-owned vinops_mega001_test or vinops_chat1_test database.',
         );
       }
       await runMigrations(connectionString);

@@ -375,3 +375,154 @@ export function signedUrlExpiry(now: Date, ttlSeconds: number): Date {
   }
   return new Date(now.getTime() + ttlSeconds * 1_000);
 }
+
+export function assertSingleCurrentRevision(input: {
+  revisions: readonly { id: string; isCurrent?: boolean; status?: RevisionStatus }[];
+}): void {
+  const currentCount = input.revisions.filter(
+    (rev) => rev.isCurrent === true || rev.status === 'Published',
+  ).length;
+  if (currentCount > 1) {
+    throw new DomainError(
+      'MULTIPLE_CURRENT_REVISIONS_FORBIDDEN',
+      'Only a single revision may be current or published at any time.',
+    );
+  }
+}
+
+export function generateTransmittalSignature(snapshotSha256: string, secret: string): string {
+  if (!/^[a-f0-9]{64}$/u.test(snapshotSha256)) {
+    throw new DomainError('SNAPSHOT_HASH_INVALID', 'Snapshot SHA-256 is invalid.');
+  }
+  return createHash('sha256').update(`${snapshotSha256}:${secret}`).digest('hex');
+}
+
+export function buildDrawingQrPayload(input: {
+  transmittalId: string;
+  documentCode: string;
+  revisionCode: string;
+  fileSha256: string;
+  signature: string;
+  issuedAt: string;
+}): string {
+  const data = {
+    tId: input.transmittalId,
+    doc: input.documentCode,
+    rev: input.revisionCode,
+    sha: input.fileSha256.slice(0, 16),
+    sig: input.signature.slice(0, 16),
+    iat: input.issuedAt,
+  };
+  return Buffer.from(JSON.stringify(data)).toString('base64url');
+}
+
+export type DrawingQrVerificationResult = {
+  valid: boolean;
+  transmittalId?: string;
+  documentCode?: string;
+  revisionCode?: string;
+  shaPrefix?: string;
+  sigPrefix?: string;
+  issuedAt?: string;
+  error?: string;
+};
+
+export function parseDrawingQrPayload(token: string): DrawingQrVerificationResult {
+  try {
+    const raw = Buffer.from(token, 'base64url').toString('utf8');
+    const parsed = JSON.parse(raw) as {
+      tId?: unknown;
+      doc?: unknown;
+      rev?: unknown;
+      sha?: unknown;
+      sig?: unknown;
+      iat?: unknown;
+    };
+    if (
+      typeof parsed.tId !== 'string' ||
+      typeof parsed.doc !== 'string' ||
+      typeof parsed.rev !== 'string' ||
+      typeof parsed.sha !== 'string' ||
+      typeof parsed.sig !== 'string' ||
+      typeof parsed.iat !== 'string'
+    ) {
+      return { valid: false, error: 'INVALID_PAYLOAD_STRUCTURE' };
+    }
+    return {
+      valid: true,
+      transmittalId: parsed.tId,
+      documentCode: parsed.doc,
+      revisionCode: parsed.rev,
+      shaPrefix: parsed.sha,
+      sigPrefix: parsed.sig,
+      issuedAt: parsed.iat,
+    };
+  } catch {
+    return { valid: false, error: 'DECODE_FAILED' };
+  }
+}
+
+export function buildTransmittalPackageManifest(input: {
+  transmittalId: string;
+  transmittalNumber: string;
+  title: string;
+  projectId: string;
+  issuedAt: string;
+  signature: string;
+  items: readonly {
+    documentId: string;
+    documentCode: string;
+    documentTitle: string;
+    revisionId: string;
+    revisionCode: string;
+    fileSha256: string;
+    filename: string;
+  }[];
+}): {
+  schemaVersion: '1.0';
+  iso19650Stage: 'PUBLISHED';
+  packageId: string;
+  packageNumber: string;
+  projectId: string;
+  issuedAt: string;
+  signatureHmacSha256: string;
+  totalDocuments: number;
+  documents: readonly {
+    documentId: string;
+    code: string;
+    title: string;
+    revisionId: string;
+    revisionCode: string;
+    sha256: string;
+    filename: string;
+    qrPayload: string;
+  }[];
+} {
+  return {
+    schemaVersion: '1.0',
+    iso19650Stage: 'PUBLISHED',
+    packageId: input.transmittalId,
+    packageNumber: input.transmittalNumber,
+    projectId: input.projectId,
+    issuedAt: input.issuedAt,
+    signatureHmacSha256: input.signature,
+    totalDocuments: input.items.length,
+    documents: input.items.map((item) => ({
+      documentId: item.documentId,
+      code: item.documentCode,
+      title: item.documentTitle,
+      revisionId: item.revisionId,
+      revisionCode: item.revisionCode,
+      sha256: item.fileSha256,
+      filename: item.filename,
+      qrPayload: buildDrawingQrPayload({
+        transmittalId: input.transmittalId,
+        documentCode: item.documentCode,
+        revisionCode: item.revisionCode,
+        fileSha256: item.fileSha256,
+        signature: input.signature,
+        issuedAt: input.issuedAt,
+      }),
+    })),
+  };
+}
