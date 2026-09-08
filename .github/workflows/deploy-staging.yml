@@ -153,7 +153,7 @@ jobs:
           fetch-depth: 1
 
       - name: Validate Docker Compose Configuration
-        run: docker compose -f docker-compose.prod.yml config
+        run: docker compose -f docker-compose.prod.yml config --no-interpolate
 
       - name: Execute Staging Rollout Hook
         run: |
