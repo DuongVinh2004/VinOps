@@ -19,7 +19,7 @@ const dbs = [
 const host = process.env.PGHOST ?? '127.0.0.1';
 const port = process.env.PGPORT ?? '5432';
 const user = process.env.PGUSER ?? 'postgres';
-const pass = process.env.PGPASSWORD ?? 'postgres';
+const pass = process.env.PGPASSWORD ?? 'fixture-postgres-password';
 
 for (const db of dbs) {
   const url = `postgresql://${user}:${pass}@${host}:${port}/${db}`;

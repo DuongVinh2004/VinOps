@@ -3,7 +3,7 @@
     "framework": "VinOps Gate C Pilot UAT Acceptance Matrix",
     "baselineReference": "docs/control/UAT_ACCEPTANCE_MATRIX_AND_BA_VALIDATION.md",
     "securityPolicy": "POL-SEC-GPS-001 (Luật BV Dữ liệu Cá nhân & NĐ 207/2026/NĐ-CP)",
-    "executedAt": "2026-09-07T15:55:27.098Z",
+    "executedAt": "2026-09-08T16:09:27.683Z",
     "totalScenarios": 10,
     "passedScenarios": 10,
     "failedScenarios": 0,
@@ -22,7 +22,7 @@
         "connectivity": "4G LTE Field"
       },
       "passed": true,
-      "durationMs": 4,
+      "durationMs": 3,
       "evidenceDetails": {
         "validTokenVerification": {
           "valid": true,
@@ -44,7 +44,7 @@
           "is_current": false,
           "message": "CẢNH BÁO: Bản vẽ giấy đã bị thay thế bởi REV-02! Nghiêm cấm thi công."
         },
-        "responseTimeMs": 4
+        "responseTimeMs": 3
       }
     },
     {
@@ -59,7 +59,7 @@
         "connectivity": "Wi-Fi Mesh Công trường"
       },
       "passed": true,
-      "durationMs": 119,
+      "durationMs": 118,
       "evidenceDetails": {
         "issueCreated": {
           "id": "iss-pilot-1",
@@ -96,7 +96,7 @@
         "connectivity": "Offline (No Carrier/Basement)"
       },
       "passed": true,
-      "durationMs": 404,
+      "durationMs": 499,
       "evidenceDetails": {
         "offlineStorageConfirmed": true,
         "checklistPassedItems": [
@@ -140,7 +140,7 @@
         "connectivity": "Internal Bus"
       },
       "passed": true,
-      "durationMs": 2,
+      "durationMs": 3,
       "evidenceDetails": {
         "piiStripped": [
           "CameraOwnerName",
@@ -168,7 +168,7 @@
         "connectivity": "Local"
       },
       "passed": true,
-      "durationMs": 206,
+      "durationMs": 229,
       "evidenceDetails": {
         "signatureFormat": "data:image/png;base64",
         "signedByRole": "Site Manager (Chỉ huy trưởng)",
@@ -225,7 +225,7 @@
         "connectivity": "Online"
       },
       "passed": true,
-      "durationMs": 72,
+      "durationMs": 91,
       "evidenceDetails": {
         "uiControlsDisabled": true,
         "modificationBlocked": true,
@@ -244,14 +244,14 @@
         "connectivity": "Internal ClamAV / MinIO Storage Bus"
       },
       "passed": true,
-      "durationMs": 1,
+      "durationMs": 0,
       "evidenceDetails": {
         "computedSha256": "6bc49b03d97e9374b0d4fd0348e2b5e6111a440d508e5a6ec8f946e37aec101b",
         "clamavStatus": "Clean",
         "transmittalManifest": {
           "transmittal_code": "TR-VINOPS-2026-PHASE-1",
           "project_code": "VINOPS-OCEAN-PARK",
-          "created_at": "2026-09-07T15:55:27.097Z",
+          "created_at": "2026-09-08T16:09:27.682Z",
           "package_hash_algorithm": "SHA-256",
           "items": [
             {
@@ -269,5 +269,15 @@
         }
       }
     }
-  ]
+  ],
+  "provenance": {
+    "commitSha": "f650630755fb180f96a3355ed84c25d0d25bc5ab",
+    "command": "pnpm verify:full",
+    "exitCode": 0,
+    "nodeVersion": "v26.5.1",
+    "pnpmVersion": "11.15.1",
+    "os": "win32-x64",
+    "timestamp": "2026-09-08T16:12:20.489Z",
+    "artifactHash": "sha256:744eedd2b350f4cda3731cf997ee45638ba8dcfe211a7073ed7e3a820c854527"
+  }
 }

@@ -1,0 +1,45 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.5",
+  "serialNumber": "urn:uuid:vinops-sbom-redis",
+  "version": 1,
+  "metadata": {
+    "timestamp": "2026-09-08T15:48:43.271Z",
+    "tools": [
+      {
+        "vendor": "VinOps Engineering",
+        "name": "vinops-sbom-generator",
+        "version": "1.0.0"
+      }
+    ],
+    "component": {
+      "type": "container",
+      "name": "redis",
+      "version": "7.4-alpine",
+      "purl": "pkg:docker/library/redis@7.4-alpine",
+      "description": "VinOps Production Base Image - redis:7.4-alpine@sha256:398c8c5a452ef9c1df5c338423f6688f76fa0060933930ea341498b2c4516ff9",
+      "supplier": {
+        "name": "Redis Ltd."
+      }
+    }
+  },
+  "components": [
+    {
+      "type": "operating-system",
+      "name": "linux",
+      "description": "Base OS Layer"
+    },
+    {
+      "type": "application",
+      "name": "redis",
+      "version": "7.4-alpine",
+      "purl": "pkg:docker/library/redis@7.4-alpine",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "398c8c5a452ef9c1df5c338423f6688f76fa0060933930ea341498b2c4516ff9"
+        }
+      ]
+    }
+  ]
+}

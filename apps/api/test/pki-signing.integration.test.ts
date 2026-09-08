@@ -39,9 +39,11 @@ beforeAll(async () => {
 
   // Apply migration 017 if not already applied
   const { readFile } = await import('node:fs/promises');
-  const path = await import('node:path');
   const migrationSql = await readFile(
-    path.resolve(process.cwd(), 'packages/database/migrations/017_pki_digital_signatures.sql'),
+    new URL(
+      '../../../packages/database/migrations/017_pki_digital_signatures.sql',
+      import.meta.url,
+    ),
     'utf8',
   );
   try {

@@ -8,6 +8,8 @@ export interface ApnsConfig {
   privateKey?: string | undefined;
   bundleId?: string | undefined;
   production?: boolean | undefined;
+  maxRetries?: number | undefined;
+  retryBaseDelayMs?: number | undefined;
 }
 
 export interface SendApnsNotificationOptions {
@@ -26,6 +28,25 @@ export interface ApnsSendResult {
   apnsId?: string | undefined;
   error?: string | undefined;
   statusCode?: number | undefined;
+  deliveryStatus?: 'provider_accepted' | 'simulated' | 'failed' | undefined;
+}
+
+export function isTransientApnsStatus(statusCode?: number, error?: string): boolean {
+  if (statusCode === 429 || statusCode === 500 || statusCode === 502 || statusCode === 503) {
+    return true;
+  }
+  if (!statusCode && error) {
+    const lower = error.toLowerCase();
+    return (
+      lower.includes('econnreset') ||
+      lower.includes('etimedout') ||
+      lower.includes('goaway') ||
+      lower.includes('stream error') ||
+      lower.includes('connection error') ||
+      lower.includes('network')
+    );
+  }
+  return false;
 }
 
 @Injectable()
@@ -67,26 +88,12 @@ export class ApnsPushService {
     return token;
   }
 
-  async send(options: SendApnsNotificationOptions): Promise<ApnsSendResult> {
-    const bundleId = this.config?.bundleId ?? process.env['APNS_BUNDLE_ID'] ?? 'com.vinops.field';
-    const isProduction = this.config?.production ?? process.env['NODE_ENV'] === 'production';
-    const host = isProduction ? 'api.push.apple.com' : 'api.sandbox.push.apple.com';
-
-    const token = this.generateAuthToken();
-
-    // Mock / fallback if no Apple credentials configured
-    if (!token) {
-      const mockId = `mock-apns-${randomUUID()}`;
-      this.logger.log(
-        `[MOCK APNS] Push sent to token=${options.deviceToken.slice(0, 12)}... title=${options.title ?? 'none'}`,
-      );
-      return {
-        success: true,
-        apnsId: mockId,
-        statusCode: 200,
-      };
-    }
-
+  private executeHttp2Request(
+    host: string,
+    bundleId: string,
+    token: string,
+    options: SendApnsNotificationOptions,
+  ): Promise<ApnsSendResult> {
     const payload: Record<string, unknown> = {
       aps: {
         sound: options.sound ?? (options.isCritical ? 'critical.caf' : 'default'),
@@ -124,6 +131,7 @@ export class ApnsPushService {
         resolve({
           success: false,
           error: errorMsg,
+          deliveryStatus: 'failed',
         });
       });
 
@@ -162,6 +170,7 @@ export class ApnsPushService {
             success: true,
             apnsId: apnsId || randomUUID(),
             statusCode,
+            deliveryStatus: 'provider_accepted',
           });
         } else {
           this.logger.warn(`APNs request failed HTTP ${statusCode}: ${responseBody}`);
@@ -169,6 +178,7 @@ export class ApnsPushService {
             success: false,
             statusCode,
             error: responseBody || `HTTP ${statusCode}`,
+            deliveryStatus: 'failed',
           });
         }
       });
@@ -180,11 +190,77 @@ export class ApnsPushService {
         resolve({
           success: false,
           error: errorMsg,
+          deliveryStatus: 'failed',
         });
       });
 
       req.write(jsonPayload);
       req.end();
     });
+  }
+
+  async send(options: SendApnsNotificationOptions): Promise<ApnsSendResult> {
+    const bundleId = this.config?.bundleId ?? process.env['APNS_BUNDLE_ID'] ?? 'com.vinops.field';
+    const isProduction = this.config?.production ?? process.env['NODE_ENV'] === 'production';
+    const host = isProduction ? 'api.push.apple.com' : 'api.sandbox.push.apple.com';
+
+    const token = this.generateAuthToken();
+
+    // Mock / fallback if no Apple credentials configured
+    if (!token) {
+      if (isProduction) {
+        this.logger.error('APNs credentials missing in production environment');
+        return {
+          success: false,
+          error: 'APNS_CREDENTIALS_MISSING',
+          deliveryStatus: 'failed',
+          statusCode: 500,
+        };
+      }
+
+      const mockId = `mock-apns-${randomUUID()}`;
+      this.logger.log(
+        `[MOCK APNS] Push sent to token=${options.deviceToken.slice(0, 12)}... title=${options.title ?? 'none'}`,
+      );
+      return {
+        success: true,
+        apnsId: mockId,
+        deliveryStatus: 'simulated',
+        statusCode: 200,
+      };
+    }
+
+    const maxRetries = this.config?.maxRetries ?? 3;
+    const baseDelayMs = this.config?.retryBaseDelayMs ?? 100;
+
+    let lastResult: ApnsSendResult = {
+      success: false,
+      error: 'UNKNOWN_ERROR',
+      deliveryStatus: 'failed',
+    };
+
+    for (let attempt = 0; attempt <= maxRetries; attempt++) {
+      lastResult = await this.executeHttp2Request(host, bundleId, token, options);
+
+      if (lastResult.success) {
+        return lastResult;
+      }
+
+      const isTransient = isTransientApnsStatus(lastResult.statusCode, lastResult.error);
+      if (!isTransient || attempt >= maxRetries) {
+        if (lastResult.statusCode === 400) {
+          this.logger.warn(`APNs client error HTTP 400: ${lastResult.error}. Will not retry.`);
+        }
+        return lastResult;
+      }
+
+      const delayMs = Math.min(baseDelayMs * Math.pow(2, attempt), 5000);
+      this.logger.warn(
+        `APNs send transient failure (status=${lastResult.statusCode}, error=${lastResult.error}). Retrying in ${delayMs}ms (attempt ${attempt + 1}/${maxRetries})...`,
+      );
+      await new Promise((resolve) => setTimeout(resolve, delayMs));
+    }
+
+    return lastResult;
   }
 }

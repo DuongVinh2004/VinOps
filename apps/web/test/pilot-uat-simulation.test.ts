@@ -15,10 +15,9 @@ import type { DailyLog, FieldIssue, Inspection, VinopsApiClient } from '../src/a
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const evidenceFilePath = path.resolve(
-  __dirname,
-  '../../../evidence/PILOT_UAT_EXECUTION_EVIDENCE.json',
-);
+const evidenceFilePath =
+  process.env['UAT_EVIDENCE_OUTPUT_PATH'] ??
+  path.resolve(__dirname, '../../../.tmp/test-evidence/PILOT_UAT_EXECUTION_EVIDENCE.json');
 
 afterEach(cleanup);
 

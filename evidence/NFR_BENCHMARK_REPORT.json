@@ -1,19 +1,19 @@
 {
-  "timestamp": "2026-09-07T15:55:26.349Z",
+  "timestamp": "2026-09-08T16:09:26.748Z",
   "batchSync50Mutations": {
     "mutationCount": 50,
-    "elapsedMs": 29.88,
+    "elapsedMs": 24.38,
     "targetMs": 500,
     "pass": true
   },
   "kanbanRender50Issues": {
     "issueCount": 50,
-    "elapsedMs": 132.16,
+    "elapsedMs": 129.24,
     "targetMs": 500,
     "pass": true
   },
   "dailyLogRender": {
-    "elapsedMs": 95.64,
+    "elapsedMs": 95.58,
     "targetMs": 500,
     "pass": true
   },
@@ -23,5 +23,15 @@
     "js": "378.41 kB (gzip: 107.49 kB)",
     "jsTargetKb": 1000,
     "pass": true
+  },
+  "provenance": {
+    "commitSha": "f650630755fb180f96a3355ed84c25d0d25bc5ab",
+    "command": "pnpm verify:full",
+    "exitCode": 0,
+    "nodeVersion": "v26.5.1",
+    "pnpmVersion": "11.15.1",
+    "os": "win32-x64",
+    "timestamp": "2026-09-08T16:12:20.489Z",
+    "artifactHash": "sha256:e496c7370348c4d19df8b59159d01071626adb45eb3b04afca8860178d75c5b9"
   }
 }

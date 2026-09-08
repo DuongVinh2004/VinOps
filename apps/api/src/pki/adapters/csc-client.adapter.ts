@@ -1,63 +1,17 @@
-import { createHash, randomUUID } from 'node:crypto';
+import { randomUUID } from 'node:crypto';
+import { parseCmsSignedData } from '../crypto/cms-signed-data.js';
+import type {
+  CscAuthorizeRequest,
+  CscAuthorizeResponse,
+  CscCredentialInfo,
+  CscProvider,
+  CscProviderConfig,
+  CscSignHashRequest,
+  CscSignHashResponse,
+} from './csc-types.js';
 
-export type CscCertificateDetails = {
-  subjectDN: string;
-  issuerDN: string;
-  serialNumber: string;
-  notBefore: string;
-  notAfter: string;
-};
-
-export type CscCredentialInfo = {
-  credentialID: string;
-  description: string;
-  keyAlgorithm: string;
-  keyLength: number;
-  cert: CscCertificateDetails;
-  status: 'active' | 'expired' | 'revoked' | 'suspended';
-};
-
-export type CscAuthorizeRequest = {
-  credentialID: string;
-  numSignatures?: number;
-  hashes: string[];
-  authMode?: 'push_notification' | 'otp' | 'pin';
-  clientData?: string;
-};
-
-export type CscAuthorizeResponse = {
-  transactionID: string;
-  challengeType: 'push_app' | 'otp';
-  expiresInSeconds: number;
-  message: string;
-};
-
-export type CscSignHashRequest = {
-  credentialID: string;
-  transactionID: string;
-  sad?: string; // Signature Activation Data (OTP / PIN)
-  hashes: string[];
-  signAlgo?: string;
-};
-
-export type CscSignHashResponse = {
-  signatures: string[]; // Base64 encoded CAdES / CMS signatures
-};
-
-export interface CscProvider {
-  readonly providerCode: string;
-  listCredentials(userId: string): Promise<CscCredentialInfo[]>;
-  getCredentialInfo(credentialID: string): Promise<CscCredentialInfo>;
-  authorize(request: CscAuthorizeRequest): Promise<CscAuthorizeResponse>;
-  signHash(request: CscSignHashRequest): Promise<CscSignHashResponse>;
-}
-
-export type CscProviderConfig = {
-  apiBaseUrl: string;
-  clientId?: string;
-  clientSecret?: string;
-  isMock?: boolean;
-};
+export * from './csc-types.js';
+import { MockCscAdapter } from './mock-csc.adapter.js';
 
 /**
  * Base abstract CSC adapter supporting standard Cloud Signature Consortium v1.0.4 API
@@ -68,10 +22,6 @@ export abstract class BaseCscAdapter implements CscProvider {
   constructor(protected readonly config: CscProviderConfig) {}
 
   async listCredentials(userId: string): Promise<CscCredentialInfo[]> {
-    if (this.config.isMock || this.config.apiBaseUrl.includes('mock')) {
-      return [this.createMockCredential(userId)];
-    }
-
     const response = await fetch(`${this.config.apiBaseUrl}/csc/v1/credentials/list`, {
       method: 'POST',
       headers: {
@@ -91,10 +41,6 @@ export abstract class BaseCscAdapter implements CscProvider {
   }
 
   async getCredentialInfo(credentialID: string): Promise<CscCredentialInfo> {
-    if (this.config.isMock || this.config.apiBaseUrl.includes('mock')) {
-      return this.createMockCredential(credentialID);
-    }
-
     const response = await fetch(`${this.config.apiBaseUrl}/csc/v1/credentials/info`, {
       method: 'POST',
       headers: {
@@ -112,16 +58,6 @@ export abstract class BaseCscAdapter implements CscProvider {
   }
 
   async authorize(request: CscAuthorizeRequest): Promise<CscAuthorizeResponse> {
-    if (this.config.isMock || this.config.apiBaseUrl.includes('mock')) {
-      const txnId = `${this.providerCode.toUpperCase()}-TXN-${randomUUID().slice(0, 8)}`;
-      return {
-        transactionID: txnId,
-        challengeType: request.authMode === 'push_notification' ? 'push_app' : 'otp',
-        expiresInSeconds: 180,
-        message: `Yêu cầu ký số gửi tới ứng dụng ${this.providerCode}. Vui lòng xác thực giao dịch.`,
-      };
-    }
-
     const response = await fetch(`${this.config.apiBaseUrl}/csc/v1/credentials/authorize`, {
       method: 'POST',
       headers: {
@@ -150,15 +86,6 @@ export abstract class BaseCscAdapter implements CscProvider {
   }
 
   async signHash(request: CscSignHashRequest): Promise<CscSignHashResponse> {
-    if (this.config.isMock || this.config.apiBaseUrl.includes('mock')) {
-      // Deterministic mock signature generation
-      const signatures = request.hashes.map((hash) => {
-        const mockSigPayload = `SIGNED[${this.providerCode}]:${request.credentialID}:${hash}:${request.sad ?? 'PIN_APPROVED'}`;
-        return Buffer.from(createHash('sha256').update(mockSigPayload).digest()).toString('base64');
-      });
-      return { signatures };
-    }
-
     const response = await fetch(`${this.config.apiBaseUrl}/csc/v1/signatures/signHash`, {
       method: 'POST',
       headers: {
@@ -178,35 +105,52 @@ export abstract class BaseCscAdapter implements CscProvider {
     }
 
     const data = (await response.json()) as { signatures?: string[] };
+    const signatures = data.signatures ?? [];
+    if (signatures.length === 0) {
+      throw new Error('CSC signatures/signHash returned empty signatures array');
+    }
+
+    // Validate CMS SignedData DER structure for every signature
+    for (const sigB64 of signatures) {
+      this.validateCmsSignature(sigB64);
+    }
+
     return {
-      signatures: data.signatures ?? [],
+      signatures,
     };
   }
 
-  protected createMockCredential(idOrUser: string): CscCredentialInfo {
-    const serial = createHash('sha256')
-      .update(`${this.providerCode}:${idOrUser}`)
-      .digest('hex')
-      .slice(0, 32)
-      .toUpperCase();
+  protected validateCmsSignature(sigB64: string): void {
+    if (!sigB64 || typeof sigB64 !== 'string') {
+      throw new Error('Invalid CSC signature response: expected non-empty base64 string');
+    }
 
-    const notBefore = new Date(Date.now() - 30 * 24 * 3600 * 1000).toISOString();
-    const notAfter = new Date(Date.now() + 365 * 24 * 3600 * 1000).toISOString();
+    const derBuffer = Buffer.from(sigB64, 'base64');
+    if (derBuffer.length < 16) {
+      throw new Error('Invalid CSC signature response: DER buffer too short');
+    }
 
-    return {
-      credentialID: idOrUser,
-      description: `Chứng thư số Cloud CA - ${this.providerCode}`,
-      keyAlgorithm: 'RSA',
-      keyLength: 2048,
-      status: 'active',
-      cert: {
-        subjectDN: `CN=KY SU XAY DUNG, O=NHA THAU VINOPS, C=VN`,
-        issuerDN: `CN=${this.providerCode.toUpperCase()} Root CA, O=NHA MANG CA, C=VN`,
-        serialNumber: serial,
-        notBefore,
-        notAfter,
-      },
-    };
+    // Reject fake text markers
+    const textPrefix = derBuffer.subarray(0, 32).toString('utf8');
+    if (
+      textPrefix.includes('SIGNED[') ||
+      textPrefix.includes('MOCK') ||
+      textPrefix.includes('TSA_')
+    ) {
+      throw new Error('Invalid CSC signature response: fake text marker rejected');
+    }
+
+    try {
+      const parsed = parseCmsSignedData(derBuffer);
+      if (parsed.signerInfos.length === 0) {
+        throw new Error('Invalid CSC signature response: no signerInfos found in CMS SignedData');
+      }
+    } catch (err) {
+      throw new Error(
+        `Invalid CSC signature response: invalid CMS SignedData DER: ${err instanceof Error ? err.message : String(err)}`,
+        { cause: err },
+      );
+    }
   }
 }
 
@@ -224,6 +168,15 @@ export class TrustCaAdapter extends BaseCscAdapter {
 
 export class CscAdapterFactory {
   static create(providerCode: string, config: CscProviderConfig): CscProvider {
+    const isMock = config.isMock || config.apiBaseUrl.includes('mock');
+
+    if (isMock) {
+      if (process.env['NODE_ENV'] === 'production') {
+        throw new Error('Mock CSC signing provider is strictly prohibited in production.');
+      }
+      return new MockCscAdapter(providerCode, config);
+    }
+
     switch (providerCode) {
       case 'vnpt_smartca':
         return new VnptSmartCaAdapter(config);

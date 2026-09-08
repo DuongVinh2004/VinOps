@@ -1,0 +1,45 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.5",
+  "serialNumber": "urn:uuid:vinops-sbom-postgres",
+  "version": 1,
+  "metadata": {
+    "timestamp": "2026-09-08T15:48:43.271Z",
+    "tools": [
+      {
+        "vendor": "VinOps Engineering",
+        "name": "vinops-sbom-generator",
+        "version": "1.0.0"
+      }
+    ],
+    "component": {
+      "type": "container",
+      "name": "postgres",
+      "version": "17-vector-0.8.0",
+      "purl": "pkg:docker/pgvector/pgvector@17",
+      "description": "VinOps Production Base Image - pgvector/pgvector:pg17@sha256:7f4ec7759c5d1ae62b9a7c645b206be73bbab5a297fcadad23267d35ba4927f9",
+      "supplier": {
+        "name": "pgvector"
+      }
+    }
+  },
+  "components": [
+    {
+      "type": "operating-system",
+      "name": "linux",
+      "description": "Base OS Layer"
+    },
+    {
+      "type": "application",
+      "name": "postgres",
+      "version": "17-vector-0.8.0",
+      "purl": "pkg:docker/pgvector/pgvector@17",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "7f4ec7759c5d1ae62b9a7c645b206be73bbab5a297fcadad23267d35ba4927f9"
+        }
+      ]
+    }
+  ]
+}

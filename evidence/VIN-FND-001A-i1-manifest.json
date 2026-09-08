@@ -56,5 +56,15 @@
   "blockers": [
     "Registry-backed High/Critical advisory audit is not verified because egress of dependency-graph metadata was denied.",
     "Task-created clean-room source copy passed, but package-manager hardlinks prevent safe deletion under workspace boundary policy."
-  ]
+  ],
+  "provenance": {
+    "commitSha": "f650630755fb180f96a3355ed84c25d0d25bc5ab",
+    "command": "pnpm verify:full",
+    "exitCode": 0,
+    "nodeVersion": "v26.5.1",
+    "pnpmVersion": "11.15.1",
+    "os": "win32-x64",
+    "timestamp": "2026-09-08T16:12:20.489Z",
+    "artifactHash": "sha256:3d3ad9bae0c5f0b880d6c0e65728aa5dca2b54b2899e3784dd019df1cdc99d99"
+  }
 }

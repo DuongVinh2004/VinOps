@@ -1,5 +1,6 @@
 import { randomUUID } from 'node:crypto';
 import { Pool, type PoolClient, type QueryResultRow } from 'pg';
+export { Pool };
 
 export type DatabaseConnectionOptions = {
   connectionString: string;

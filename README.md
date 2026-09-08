@@ -9,7 +9,8 @@
 [![pnpm Version](https://img.shields.io/badge/pnpm-11.15.1-orange.svg)](https://pnpm.io)
 [![TypeScript](https://img.shields.io/badge/typescript-5.9.3-blue.svg)](https://www.typescriptlang.org/)
 [![PostgreSQL](https://img.shields.io/badge/postgresql-17.0-336791.svg)](https://www.postgresql.org/)
-[![Tests](https://img.shields.io/badge/tests-286%20passed-success.svg)](https://vitest.dev)
+[![Red-Team Audit](https://img.shields.io/badge/red--team%20audit-NOT%20PRODUCTION%20READY-red.svg)](#audit-status)
+[![Tests](https://img.shields.io/badge/tests-232%20passed%20%7C%2052%20skipped%20%7C%202%20failed-orange.svg)](https://vitest.dev)
 [![Code Style: Prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg)](https://prettier.io)
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
 

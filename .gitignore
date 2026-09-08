@@ -4,6 +4,7 @@ coverage/
 .cache/
 .pnpm-store/
 .tmp/
+.tmp/test-evidence/
 *.tsbuildinfo
 *.log
 .env

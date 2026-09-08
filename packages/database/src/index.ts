@@ -1,4 +1,5 @@
 export {
+  Pool,
   VinopsDatabase,
   type AcceptedInvitation,
   type DatabaseConnectionOptions,

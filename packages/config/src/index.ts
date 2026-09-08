@@ -31,6 +31,11 @@ const apiSchema = sharedServerSchema
     VINOPS_S3_ACCESS_KEY_ID: z.string().min(3).optional(),
     VINOPS_S3_SECRET_ACCESS_KEY: z.string().min(8).optional(),
     VINOPS_SIGNED_URL_TTL_SECONDS: z.coerce.number().int().min(15).max(300).default(60),
+    VINOPS_CSC_API_URL: z.string().url().optional(),
+    VINOPS_CSC_CLIENT_ID: z.string().min(1).optional(),
+    VINOPS_CSC_CLIENT_SECRET: z.string().min(8).optional(),
+    VINOPS_CSC_IS_MOCK: booleanEnvironment,
+    VINOPS_TSA_URL: z.string().url().optional(),
   })
   .superRefine((value, context) => {
     if (value.NODE_ENV !== 'production') {
@@ -68,6 +73,20 @@ const apiSchema = sharedServerSchema
         code: 'custom',
         path: ['VINOPS_REFRESH_COOKIE_SECURE'],
         message: 'Production refresh cookies must be Secure.',
+      });
+    }
+    if (value.VINOPS_CSC_IS_MOCK) {
+      context.addIssue({
+        code: 'custom',
+        path: ['VINOPS_CSC_IS_MOCK'],
+        message: 'Mock signing is prohibited in production.',
+      });
+    }
+    if (value.VINOPS_CSC_API_URL && value.VINOPS_CSC_API_URL.includes('mock')) {
+      context.addIssue({
+        code: 'custom',
+        path: ['VINOPS_CSC_API_URL'],
+        message: 'Mock CSC API URL is prohibited in production.',
       });
     }
   });

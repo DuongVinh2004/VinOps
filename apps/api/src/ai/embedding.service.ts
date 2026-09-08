@@ -2,6 +2,7 @@ import { randomUUID } from 'node:crypto';
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import type { PoolClient } from 'pg';
 import { API_CONFIG, type ApiRuntimeConfig } from '../api-runtime.js';
+import { PlatformError } from '../platform-error.js';
 
 export type StoreChunksInput = {
   organizationId: string;
@@ -21,10 +22,12 @@ export class EmbeddingService {
   private readonly logger = new Logger(EmbeddingService.name);
   private readonly openaiApiKey: string | undefined;
   private readonly embeddingModel: string;
+  private readonly isProduction: boolean;
 
   constructor(@Inject(API_CONFIG) config: ApiRuntimeConfig) {
     this.openaiApiKey = (config as unknown as Record<string, string>)['OPENAI_API_KEY'];
     this.embeddingModel = 'text-embedding-3-small';
+    this.isProduction = config.NODE_ENV === 'production';
   }
 
   /**
@@ -32,7 +35,49 @@ export class EmbeddingService {
    */
   async generateEmbedding(text: string): Promise<number[]> {
     const results = await this.generateEmbeddingsBatch([text]);
-    return results[0] ?? this.generateSimulatedEmbedding(text);
+    const vector = results[0];
+    if (!vector) {
+      if (this.isProduction) {
+        throw new PlatformError(
+          'EMBEDDING_FAILED',
+          'Failed to generate embedding vector in production.',
+          500,
+          true,
+        );
+      }
+      return this.generateSimulatedEmbedding(text);
+    }
+    return vector;
+  }
+
+  private consecutiveFailures = 0;
+  private circuitOpenUntil = 0;
+  private readonly maxFailuresBeforeOpen = 5;
+  private readonly openDurationMs = 60_000;
+
+  getCircuitBreakerStatus(): { isOpen: boolean; failures: number } {
+    const isOpen =
+      this.consecutiveFailures >= this.maxFailuresBeforeOpen && Date.now() < this.circuitOpenUntil;
+    return { isOpen, failures: this.consecutiveFailures };
+  }
+
+  resetCircuitBreaker(): void {
+    this.consecutiveFailures = 0;
+    this.circuitOpenUntil = 0;
+  }
+
+  recordFailureForTest(): void {
+    this.recordFailure();
+  }
+
+  private recordFailure(): void {
+    this.consecutiveFailures++;
+    if (this.consecutiveFailures >= this.maxFailuresBeforeOpen) {
+      this.circuitOpenUntil = Date.now() + this.openDurationMs;
+      this.logger.error(
+        `OpenAI embedding circuit breaker TRIP OPEN for ${this.openDurationMs / 1000}s after ${this.consecutiveFailures} consecutive failures.`,
+      );
+    }
   }
 
   /**
@@ -46,37 +91,101 @@ export class EmbeddingService {
 
     for (let i = 0; i < texts.length; i += batchSize) {
       const batch = texts.slice(i, i + batchSize);
-      if (this.openaiApiKey) {
-        try {
-          const response = await fetch('https://api.openai.com/v1/embeddings', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: `Bearer ${this.openaiApiKey}`,
-            },
-            body: JSON.stringify({
-              input: batch,
-              model: this.embeddingModel,
-              dimensions: 1536,
-            }),
-          });
 
-          if (response.ok) {
-            const data = (await response.json()) as {
-              data: Array<{ embedding: number[] }>;
-            };
-            for (const item of data.data) {
-              allEmbeddings.push(item.embedding);
-            }
-            continue;
-          }
-          this.logger.warn(`OpenAI embedding API failed with status ${response.status}`);
-        } catch (err) {
-          this.logger.warn(`OpenAI embedding fetch error: ${String(err)}`);
+      if (this.openaiApiKey) {
+        const now = Date.now();
+        if (this.consecutiveFailures >= this.maxFailuresBeforeOpen && now < this.circuitOpenUntil) {
+          throw new PlatformError(
+            'EMBEDDING_PROVIDER_UNAVAILABLE',
+            `OpenAI embedding circuit breaker is OPEN until ${new Date(this.circuitOpenUntil).toISOString()}`,
+            503,
+            true,
+          );
         }
+
+        let batchSuccess = false;
+        for (let attempt = 1; attempt <= 3; attempt++) {
+          try {
+            const response = await fetch('https://api.openai.com/v1/embeddings', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${this.openaiApiKey}`,
+              },
+              body: JSON.stringify({
+                input: batch,
+                model: this.embeddingModel,
+                dimensions: 1536,
+              }),
+            });
+
+            if (response.ok) {
+              this.consecutiveFailures = 0;
+              const data = (await response.json()) as {
+                data: Array<{ embedding: number[] }>;
+              };
+              for (const item of data.data) {
+                allEmbeddings.push(item.embedding);
+              }
+              batchSuccess = true;
+              break;
+            }
+
+            const isTransient = [429, 500, 502, 503, 504].includes(response.status);
+            if (!isTransient || attempt === 3) {
+              this.recordFailure();
+              if (this.isProduction) {
+                throw new PlatformError(
+                  'EMBEDDING_PROVIDER_UNAVAILABLE',
+                  `OpenAI embedding API failed with status ${response.status}`,
+                  503,
+                  true,
+                );
+              }
+              this.logger.warn(`OpenAI embedding API failed with status ${response.status}`);
+              break;
+            }
+
+            const delay = Math.min(100 * Math.pow(2, attempt - 1), 2000);
+            this.logger.warn(
+              `OpenAI embedding failed with ${response.status}. Retrying attempt ${attempt}/3 after ${delay}ms...`,
+            );
+            await new Promise((r) => setTimeout(r, delay));
+          } catch (err) {
+            if (err instanceof PlatformError) {
+              throw err;
+            }
+            if (attempt === 3) {
+              this.recordFailure();
+              if (this.isProduction) {
+                throw new PlatformError(
+                  'EMBEDDING_PROVIDER_UNAVAILABLE',
+                  `OpenAI embedding fetch error: ${String(err)}`,
+                  503,
+                  true,
+                );
+              }
+              this.logger.warn(`OpenAI embedding fetch error: ${String(err)}`);
+              break;
+            }
+            const delay = Math.min(100 * Math.pow(2, attempt - 1), 2000);
+            await new Promise((r) => setTimeout(r, delay));
+          }
+        }
+
+        if (batchSuccess) {
+          continue;
+        }
+      } else if (this.isProduction) {
+        throw new PlatformError(
+          'EMBEDDING_PROVIDER_UNAVAILABLE',
+          'OpenAI API key is missing in production; simulated embeddings are strictly prohibited.',
+          503,
+          true,
+        );
       }
 
-      // Fallback: deterministic simulated dense embedding (1536 dimensions)
+      // Fallback: deterministic simulated dense embedding (1536 dimensions) in dev/test only
       for (const text of batch) {
         allEmbeddings.push(this.generateSimulatedEmbedding(text));
       }

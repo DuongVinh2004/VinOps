@@ -1,0 +1,76 @@
+name: vinops-test
+
+services:
+  postgres:
+    image: pgvector/pgvector:pg17
+    container_name: vinops-test-postgres
+    restart: unless-stopped
+    ports:
+      - '${PGPORT:-5432}:5432'
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: fixture-postgres-password
+    volumes:
+      - ./docker/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+      - vinops-test-postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U postgres']
+      interval: 3s
+      timeout: 3s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: vinops-test-redis
+    restart: unless-stopped
+    ports:
+      - '${REDIS_PORT:-6379}:6379'
+    volumes:
+      - vinops-test-redis-data:/data
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 3s
+      timeout: 3s
+      retries: 5
+
+  clamav:
+    image: clamav/clamav:stable_base
+    container_name: vinops-test-clamav
+    restart: unless-stopped
+    ports:
+      - '3310:3310'
+    environment:
+      CLAMAV_NO_FRESHCLAMD: 'true'
+    healthcheck:
+      test: ['CMD-SHELL', 'clamdscan --version || exit 1']
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  minio:
+    image: minio/minio:latest
+    container_name: vinops-test-minio
+    restart: unless-stopped
+    ports:
+      - '9000:9000'
+      - '9001:9001'
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    volumes:
+      - vinops-test-minio-data:/data
+    healthcheck:
+      test:
+        [
+          'CMD-SHELL',
+          'mc alias set local http://127.0.0.1:9000 minioadmin minioadmin > /dev/null 2>&1 && mc mb --ignore-existing local/vinops-files > /dev/null 2>&1 && mc ready local || exit 1',
+        ]
+      interval: 3s
+      timeout: 3s
+      retries: 5
+
+volumes:
+  vinops-test-postgres-data:
+  vinops-test-redis-data:
+  vinops-test-minio-data:

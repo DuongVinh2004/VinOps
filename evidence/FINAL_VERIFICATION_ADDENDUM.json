@@ -18,5 +18,15 @@
       "result": "25 intentional untracked status entries in a new repository; HEAD is unborn, branch is main, and no remote exists."
     }
   ],
-  "note": "TEST_SUMMARY.json records the pre-archive verification snapshot (86 text files, 0 archives). The final scan includes newly created JSON evidence and the ZIP, so the final count is 91 text files and 1 excluded archive. Both scans passed."
+  "note": "TEST_SUMMARY.json records the pre-archive verification snapshot (86 text files, 0 archives). The final scan includes newly created JSON evidence and the ZIP, so the final count is 91 text files and 1 excluded archive. Both scans passed.",
+  "provenance": {
+    "commitSha": "f650630755fb180f96a3355ed84c25d0d25bc5ab",
+    "command": "pnpm verify:full",
+    "exitCode": 0,
+    "nodeVersion": "v26.5.1",
+    "pnpmVersion": "11.15.1",
+    "os": "win32-x64",
+    "timestamp": "2026-09-08T16:12:20.489Z",
+    "artifactHash": "sha256:046c1632737d6109e93a6daa0ed4ce4bc3d4cc32a71c8499ad5852c304d12e55"
+  }
 }
