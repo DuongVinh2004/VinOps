@@ -41,6 +41,13 @@ function loadReport(reportPath: string): Record<string, unknown> {
   }
 }
 
+function getReportPath(): string {
+  return (
+    process.env['NFR_REPORT_OUTPUT_PATH'] ??
+    path.resolve(process.cwd(), '.tmp/test-evidence/NFR_BENCHMARK_REPORT.json')
+  );
+}
+
 function saveReport(reportPath: string, data: Record<string, unknown>): void {
   fs.mkdirSync(path.dirname(reportPath), { recursive: true });
   fs.writeFileSync(reportPath, JSON.stringify(data, null, 2), 'utf8');
@@ -121,7 +128,7 @@ describe('NFR Performance Benchmark (PRSS NFR-PERF & Gate C)', () => {
     expect(elapsedMs).toBeLessThan(500);
 
     // Ghi lại chỉ số đo lường
-    const reportPath = path.resolve(process.cwd(), 'evidence/NFR_BENCHMARK_REPORT.json');
+    const reportPath = getReportPath();
     const existing = loadReport(reportPath);
 
     const updated: Record<string, unknown> = {
@@ -196,7 +203,7 @@ describe('NFR Performance Benchmark (PRSS NFR-PERF & Gate C)', () => {
 
     expect(renderElapsedMs).toBeLessThan(1000);
 
-    const reportPath = path.resolve(process.cwd(), 'evidence/NFR_BENCHMARK_REPORT.json');
+    const reportPath = getReportPath();
     const existing = loadReport(reportPath);
 
     const updated: Record<string, unknown> = {
@@ -250,7 +257,7 @@ describe('NFR Performance Benchmark (PRSS NFR-PERF & Gate C)', () => {
 
     expect(renderElapsedMs).toBeLessThan(1000);
 
-    const reportPath = path.resolve(process.cwd(), 'evidence/NFR_BENCHMARK_REPORT.json');
+    const reportPath = getReportPath();
     const existing = loadReport(reportPath);
 
     const updated: Record<string, unknown> = {

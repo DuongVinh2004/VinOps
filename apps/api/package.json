@@ -4,6 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "test": "vitest run --root ../.. apps/api/test/realtime-multi-instance.test.ts apps/api/test/room-dispatcher.test.ts apps/api/test/push-notifications.test.ts apps/api/test/push-notification-guards.test.ts apps/api/test/api.test.ts apps/api/test/bim.e2e-spec.ts apps/api/test/csc-adapter-factory.test.ts apps/api/test/embedding-service.test.ts apps/api/test/gis-drone.e2e-spec.ts apps/api/test/pki-signing.integration.test.ts apps/api/test/production-config-guard.test.ts apps/api/test/quality-acceptance.integration.test.ts apps/api/test/security.test.ts apps/api/test/pdf-tamper-detection.test.ts apps/api/test/tsa-rfc3161-parser.test.ts apps/api/test/certificate-chain.test.ts",
     "typecheck": "tsc -p tsconfig.json",
     "build": "tsc -p tsconfig.build.json",
     "start": "node dist/main.js"
@@ -17,6 +18,7 @@
     "@vinops/domain": "workspace:*",
     "@vinops/file": "workspace:*",
     "@vinops/observability": "workspace:*",
+    "ioredis": "6.0.0",
     "reflect-metadata": "0.2.2",
     "rxjs": "7.8.2"
   },

@@ -8,7 +8,9 @@
     "strict_peers": "enabled and passed",
     "engine_strict": "enabled",
     "minimum_release_age_minutes": 1440,
-    "build_script_allowlist": ["esbuild"]
+    "build_script_allowlist": [
+      "esbuild"
+    ]
   },
   "selected_toolchain": {
     "node_exact_pin": "24.18.0",
@@ -18,7 +20,16 @@
   "license_check": {
     "status": "PASS",
     "direct_dependency_declarations": 41,
-    "allowlist": ["MIT", "Apache-2.0", "BSD-2-Clause", "BSD-3-Clause", "ISC", "MPL-2.0", "PostgreSQL", "Zlib"],
+    "allowlist": [
+      "MIT",
+      "Apache-2.0",
+      "BSD-2-Clause",
+      "BSD-3-Clause",
+      "ISC",
+      "MPL-2.0",
+      "PostgreSQL",
+      "Zlib"
+    ],
     "blocked_or_exception_licenses": []
   },
   "advisory_scan": {
@@ -26,6 +37,23 @@
     "status": "UNVERIFIED_POLICY_DENIED",
     "reason": "Environment policy denied registry egress of dependency-graph metadata. No High/Critical result can be claimed and no exception is recorded."
   },
-  "deferred_provider_dependencies": ["PostgreSQL", "Redis/Valkey", "object storage", "queue provider", "observability sink", "Docker image"],
-  "deferred_gate": "ER-GATE-B/C"
+  "deferred_provider_dependencies": [
+    "PostgreSQL",
+    "Redis/Valkey",
+    "object storage",
+    "queue provider",
+    "observability sink",
+    "Docker image"
+  ],
+  "deferred_gate": "ER-GATE-B/C",
+  "provenance": {
+    "commitSha": "f650630755fb180f96a3355ed84c25d0d25bc5ab",
+    "command": "pnpm verify:full",
+    "exitCode": 0,
+    "nodeVersion": "v26.5.1",
+    "pnpmVersion": "11.15.1",
+    "os": "win32-x64",
+    "timestamp": "2026-09-08T16:12:20.489Z",
+    "artifactHash": "sha256:8e777798ff810e60a98ff070c1b5438cfa1accbe9ecc1ac7bc097d1249f43c72"
+  }
 }

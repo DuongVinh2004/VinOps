@@ -4,6 +4,7 @@ coverage/
 .cache/
 .pnpm-store/
 .tmp/
+.tmp/test-evidence/
 *.tsbuildinfo
 *.log
 .env
@@ -11,3 +12,4 @@ coverage/
 !.env.example
 evidence/*.zip
 evidence/*.patch
+test-report.xml

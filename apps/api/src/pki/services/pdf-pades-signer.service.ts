@@ -1,5 +1,11 @@
 import { createHash } from 'node:crypto';
 import type { PadesLevel } from '@vinops/domain';
+import { parseDer, parseGeneralizedTime } from '../crypto/asn1-der.js';
+import {
+  injectTsaTokenIntoCms,
+  parseCmsSignedData,
+  verifyCmsSignedData,
+} from '../crypto/cms-signed-data.js';
 
 export type VisualSignatureOptions = {
   signerName: string;
@@ -29,13 +35,23 @@ export type SignatureVerificationResult = {
   padesLevel: PadesLevel;
   signerName: string;
   certificateSerial: string;
-  signingTime?: string;
-  tsaTimestamp?: string;
+  caIssuer?: string | undefined;
+  signingTime?: string | undefined;
+  tsaTimestamp?: string | undefined;
   hashAlgorithm: string;
   computedHash: string;
+  certificate?:
+    | {
+        subject: string;
+        issuer: string;
+        serial: string;
+        validFrom: string;
+        validTo: string;
+      }
+    | undefined;
 };
 
-const PLACEHOLDER_SIZE = 8192; // 8KB for hex signature container
+export const PLACEHOLDER_SIZE = 16384; // 16KB hex container for standard CMS SignedData
 
 export class PdfPadesSignerService {
   /**
@@ -130,7 +146,7 @@ endobj
   }
 
   /**
-   * Embeds signature value, TSA token, and validation data into prepared PDF.
+   * Embeds CMS SignedData DER bytes (hex) into prepared PDF.
    */
   embedSignature(
     preparedPdf: Buffer,
@@ -138,17 +154,32 @@ endobj
     tsaTokenB64?: string,
     ocspResponseB64?: string,
   ): Buffer {
+    void ocspResponseB64;
     const finalBuffer = Buffer.from(preparedPdf);
 
-    // Form CMS package or raw signature hex
-    const sigPayload = JSON.stringify({
-      sig: signatureValueB64,
-      tsa: tsaTokenB64 ?? null,
-      ocsp: ocspResponseB64 ?? null,
-    });
-    const sigBytes = Buffer.from(sigPayload, 'utf8');
-    const hexSignature = sigBytes.toString('hex').toLowerCase();
+    let cmsDer = Buffer.from(signatureValueB64, 'base64');
 
+    // If TSA token is provided and not already injected, inject into unsignedAttrs
+    if (tsaTokenB64) {
+      try {
+        const rawTsa = Buffer.from(tsaTokenB64, 'base64');
+        let tokenToInject = rawTsa;
+        // If rawTsa is TimeStampResp, extract timeStampToken
+        try {
+          const tsaAst = parseDer(rawTsa);
+          if (tsaAst.children && tsaAst.children.length >= 2) {
+            tokenToInject = Buffer.from(tsaAst.children[1]!.raw);
+          }
+        } catch {
+          // Keep rawTsa if already TimeStampToken
+        }
+        cmsDer = Buffer.from(injectTsaTokenIntoCms(cmsDer, tokenToInject));
+      } catch {
+        // Keep original cmsDer if injection fails
+      }
+    }
+
+    const hexSignature = cmsDer.toString('hex').toLowerCase();
     if (hexSignature.length > PLACEHOLDER_SIZE) {
       throw new Error(
         `Signature payload (${hexSignature.length} hex chars) exceeds placeholder size (${PLACEHOLDER_SIZE})`,
@@ -194,7 +225,8 @@ endobj
   }
 
   /**
-   * Independent cryptographic verification of signed PDF.
+   * Cryptographic verification of signed PDF.
+   * Validates ByteRange integrity and CMS SignedData DER against document hash.
    */
   verifyPdfSignature(pdfBuffer: Buffer): SignatureVerificationResult {
     const content = pdfBuffer.toString('utf8');
@@ -218,19 +250,26 @@ endobj
     const offset2 = parseInt(byteRangeMatch[3]!, 10);
     const len2 = parseInt(byteRangeMatch[4]!, 10);
 
-    // Check bounds
-    if (offset1 + len1 > pdfBuffer.length || offset2 + len2 > pdfBuffer.length) {
+    // Bounds & structure checks
+    if (
+      offset1 !== 0 ||
+      len1 <= 0 ||
+      offset2 <= offset1 + len1 ||
+      offset2 + len2 > pdfBuffer.length
+    ) {
       return {
         isValid: false,
         isIntegrityIntact: false,
         documentModifiedSinceSigning: true,
         padesLevel: 'B-B',
-        signerName: 'Invalid Offset',
+        signerName: 'Corrupted ByteRange',
         certificateSerial: '',
         hashAlgorithm: 'SHA-256',
         computedHash: '',
       };
     }
+
+    const documentModifiedSinceSigning = offset2 + len2 !== pdfBuffer.length;
 
     const partA = pdfBuffer.subarray(offset1, offset1 + len1);
     const partB = pdfBuffer.subarray(offset2, offset2 + len2);
@@ -241,29 +280,125 @@ endobj
       .digest('hex')
       .toLowerCase();
 
-    // Check if extra bytes appended after byte range
-    const documentModifiedSinceSigning = offset2 + len2 < pdfBuffer.length;
+    // Extract Contents hex between offset1 + len1 and offset2
+    const gap = pdfBuffer.subarray(offset1 + len1, offset2).toString('ascii');
+    const hexMatch = gap.match(/<([0-9a-fA-F]+)>/);
+    if (!hexMatch) {
+      return {
+        isValid: false,
+        isIntegrityIntact: false,
+        documentModifiedSinceSigning,
+        padesLevel: 'B-B',
+        signerName: 'Missing Contents',
+        certificateSerial: '',
+        hashAlgorithm: 'SHA-256',
+        computedHash,
+      };
+    }
 
-    // Extract Name
-    const nameMatch = content.match(/\/Name\s*\(([^)]+)\)/);
-    const signerName = nameMatch ? nameMatch[1]! : 'Ky Su VinOps';
+    const hexString = hexMatch[1]!;
+    const rawBytes = Buffer.from(hexString, 'hex');
 
-    // Extract stamp info if present
-    const stampMatch = content.match(/PADES:\s*(B-[A-Z]+)/);
-    const padesLevel = (stampMatch ? stampMatch[1] : 'B-LT') as PadesLevel;
+    // Parse root ASN.1 DER to discard trailing '0' padding accurately
+    let cmsDer: Buffer;
+    try {
+      const rootNode = parseDer(rawBytes);
+      cmsDer = rawBytes.subarray(0, rootNode.totalLength);
+    } catch {
+      return {
+        isValid: false,
+        isIntegrityIntact: false,
+        documentModifiedSinceSigning,
+        padesLevel: 'B-B',
+        signerName: 'Invalid DER',
+        certificateSerial: '',
+        hashAlgorithm: 'SHA-256',
+        computedHash,
+      };
+    }
 
-    const certMatch = content.match(/CA:[^[]*\[([0-9A-Fa-f]+)/);
-    const certificateSerial = certMatch ? certMatch[1]! : '5401829381726481';
+    // Parse and verify CMS SignedData
+    let cms;
+    try {
+      cms = parseCmsSignedData(cmsDer);
+    } catch {
+      return {
+        isValid: false,
+        isIntegrityIntact: false,
+        documentModifiedSinceSigning,
+        padesLevel: 'B-B',
+        signerName: 'Invalid CMS',
+        certificateSerial: '',
+        hashAlgorithm: 'SHA-256',
+        computedHash,
+      };
+    }
+
+    const cmsVerify = verifyCmsSignedData(cms, computedHash);
+
+    // Extract TSA timestamp if present
+    let tsaTimestamp: string | undefined;
+    if (cmsVerify.hasTimeStampToken && cmsVerify.timeStampTokenDer) {
+      try {
+        const tokenAst = parseDer(cmsVerify.timeStampTokenDer);
+        let tokenCmsDer = cmsVerify.timeStampTokenDer;
+        // If wrapped in TimeStampResp SEQUENCE
+        if (
+          tokenAst.children &&
+          tokenAst.children.length >= 2 &&
+          tokenAst.children[0]?.children?.[0]?.tag === 0x02
+        ) {
+          tokenCmsDer = tokenAst.children[1]!.raw;
+        }
+        const tsaCms = parseCmsSignedData(tokenCmsDer);
+        if (tsaCms.encapContentBytes) {
+          const tstAst = parseDer(tsaCms.encapContentBytes);
+          const genTimeNode = tstAst.children?.[4];
+          if (genTimeNode) {
+            tsaTimestamp = parseGeneralizedTime(genTimeNode.value).toISOString();
+          }
+        }
+      } catch {
+        // TSA parsing fallback
+      }
+    }
+
+    // Extract metadata
+    const cert = cmsVerify.signerCertificate;
+    let signerName = 'Unknown';
+    if (cert) {
+      const cnMatch = cert.subject.match(/CN=([^,\n/]+)/);
+      signerName = cnMatch ? cnMatch[1]!.trim() : cert.subject;
+    }
+
+    const padesLevel: PadesLevel = tsaTimestamp ? 'B-LT' : 'B-B';
+    const isIntegrityIntact = !documentModifiedSinceSigning && cmsVerify.isValid;
+    const isValid = isIntegrityIntact;
 
     return {
-      isValid: !documentModifiedSinceSigning,
-      isIntegrityIntact: true,
+      isValid,
+      isIntegrityIntact,
       documentModifiedSinceSigning,
       padesLevel,
       signerName,
-      certificateSerial,
+      certificateSerial: cert ? cert.serialNumber : '',
+      caIssuer: cert ? cert.issuer : undefined,
+      signingTime:
+        cmsVerify.signingTime && !isNaN(cmsVerify.signingTime.getTime())
+          ? cmsVerify.signingTime.toISOString()
+          : undefined,
+      tsaTimestamp,
       hashAlgorithm: 'SHA-256',
       computedHash,
+      certificate: cert
+        ? {
+            subject: cert.subject,
+            issuer: cert.issuer,
+            serial: cert.serialNumber,
+            validFrom: cert.validFrom,
+            validTo: cert.validTo,
+          }
+        : undefined,
     };
   }
 

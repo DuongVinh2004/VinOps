@@ -1,0 +1,45 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.5",
+  "serialNumber": "urn:uuid:vinops-sbom-minio",
+  "version": 1,
+  "metadata": {
+    "timestamp": "2026-09-08T15:48:43.271Z",
+    "tools": [
+      {
+        "vendor": "VinOps Engineering",
+        "name": "vinops-sbom-generator",
+        "version": "1.0.0"
+      }
+    ],
+    "component": {
+      "type": "container",
+      "name": "minio",
+      "version": "RELEASE.2024-05-28T07-16-04Z",
+      "purl": "pkg:docker/minio/minio@RELEASE.2024-05-28T07-16-04Z",
+      "description": "VinOps Production Base Image - minio/minio:RELEASE.2024-05-28T07-16-04Z@sha256:69b6dbecb460dbe40e4f20253cb484c208c9096fb0081d9f041fb82ec2971ae4",
+      "supplier": {
+        "name": "MinIO, Inc."
+      }
+    }
+  },
+  "components": [
+    {
+      "type": "operating-system",
+      "name": "linux",
+      "description": "Base OS Layer"
+    },
+    {
+      "type": "application",
+      "name": "minio",
+      "version": "RELEASE.2024-05-28T07-16-04Z",
+      "purl": "pkg:docker/minio/minio@RELEASE.2024-05-28T07-16-04Z",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "69b6dbecb460dbe40e4f20253cb484c208c9096fb0081d9f041fb82ec2971ae4"
+        }
+      ]
+    }
+  ]
+}

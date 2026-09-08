@@ -9,5 +9,15 @@
     "A read-only fsutil hardlink inspection was also denied, so an external hardlink target is an unconfirmed hypothesis rather than a recorded fact."
   ],
   "safety_action": "No alternate delete tool, ACL/attribute change, or other bypass was used. The directory is ignored by Git and must be removed only after an authorized environment-level cleanup method is available.",
-  "status": "BLOCKED_EXTERNAL_PERMISSION"
+  "status": "BLOCKED_EXTERNAL_PERMISSION",
+  "provenance": {
+    "commitSha": "f650630755fb180f96a3355ed84c25d0d25bc5ab",
+    "command": "pnpm verify:full",
+    "exitCode": 0,
+    "nodeVersion": "v26.5.1",
+    "pnpmVersion": "11.15.1",
+    "os": "win32-x64",
+    "timestamp": "2026-09-08T16:12:20.489Z",
+    "artifactHash": "sha256:8e12878afddcdde91f26a1b0c20cd549a08bf31b0fc53bc912b317369b3a32e4"
+  }
 }

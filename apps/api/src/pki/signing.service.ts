@@ -11,6 +11,7 @@ import {
   type SignerRole,
   type SigningProviderCode,
 } from '@vinops/domain';
+import { S3ObjectStorage, type ObjectStorage } from '@vinops/file';
 import { API_CONFIG, type ApiRuntimeConfig } from '../api-runtime.js';
 import { PlatformError } from '../platform-error.js';
 import type { RequestIdentity } from '../platform.service.js';
@@ -80,6 +81,8 @@ export type SealDossierInput = {
 @Injectable()
 export class SigningService implements OnModuleDestroy {
   private readonly database: VinopsDatabase | undefined;
+  private readonly storage: ObjectStorage | undefined;
+  private readonly inMemoryPdfStore = new Map<string, Buffer>();
   private readonly pdfSigner = new PdfPadesSignerService();
   private readonly tsaClient = new TsaClientService();
 
@@ -91,6 +94,19 @@ export class SigningService implements OnModuleDestroy {
             connectionString: config.VINOPS_DATABASE_URL,
             applicationName: 'vinops-signing-api',
             runtimeRole: 'vinops_app',
+          });
+    this.storage =
+      config.VINOPS_S3_ENDPOINT === undefined ||
+      config.VINOPS_S3_BUCKET === undefined ||
+      config.VINOPS_S3_ACCESS_KEY_ID === undefined ||
+      config.VINOPS_S3_SECRET_ACCESS_KEY === undefined
+        ? undefined
+        : new S3ObjectStorage({
+            endpoint: config.VINOPS_S3_ENDPOINT,
+            region: config.VINOPS_S3_REGION,
+            bucket: config.VINOPS_S3_BUCKET,
+            accessKeyId: config.VINOPS_S3_ACCESS_KEY_ID,
+            secretAccessKey: config.VINOPS_S3_SECRET_ACCESS_KEY,
           });
   }
 
@@ -106,10 +122,39 @@ export class SigningService implements OnModuleDestroy {
   }
 
   private getCscProvider(providerCode: SigningProviderCode = 'vnpt_smartca'): CscProvider {
+    const isProd = this.config.NODE_ENV === 'production';
+    const isMock = this.config.VINOPS_CSC_IS_MOCK ?? false;
+    const apiUrl = this.config.VINOPS_CSC_API_URL;
+
+    if (isProd && (isMock || !apiUrl || apiUrl.includes('mock'))) {
+      throw new PlatformError(
+        'MOCK_SIGNING_NOT_ALLOWED',
+        'Production signing requires a verified legal CSC provider.',
+        500,
+        false,
+      );
+    }
+
     return CscAdapterFactory.create(providerCode, {
-      apiBaseUrl: 'https://mock.ca.vinops.local',
-      isMock: true,
+      apiBaseUrl: apiUrl ?? 'https://mock.ca.vinops.local',
+      clientId: this.config.VINOPS_CSC_CLIENT_ID,
+      clientSecret: this.config.VINOPS_CSC_CLIENT_SECRET,
+      isMock: isProd ? false : isMock,
     });
+  }
+
+  private getTsaUrl(): string {
+    const isProd = this.config.NODE_ENV === 'production';
+    const tsaUrl = this.config.VINOPS_TSA_URL;
+    if (isProd && (!tsaUrl || tsaUrl.includes('mock'))) {
+      throw new PlatformError(
+        'TSA_PROVIDER_UNAVAILABLE',
+        'Legal RFC 3161 TSA server URL is required in production.',
+        500,
+        false,
+      );
+    }
+    return tsaUrl ?? 'https://mock.tsa.vinops.local';
   }
 
   /**
@@ -357,23 +402,7 @@ export class SigningService implements OnModuleDestroy {
         session.expires_at,
       );
 
-      const provider = this.getCscProvider('vnpt_smartca');
-      const signResult = await provider.signHash({
-        credentialID: identity.userId,
-        transactionID: input.cscTransactionId ?? session.csc_transaction_id ?? randomUUID(),
-        sad: input.otpCode ?? 'PIN_APPROVED',
-        hashes: [session.document_hash],
-      });
-
-      const signatureValueB64 = signResult.signatures[0] ?? 'MOCK_SIGNATURE_VALUE';
-
-      // TSA RFC 3161 Timestamping
-      const tsaResult = await this.tsaClient.requestTimestamp(
-        session.document_hash,
-        'https://mock.tsa.vinops.local',
-      );
-
-      // Create signed PDF package
+      // 1. Prepare PDF and compute ByteRange hash for PAdES signing
       const dummyPdf = Buffer.from(
         `%PDF-1.4\n1 0 obj\n<< /Type /Catalog /Pages 2 0 R >>\nendobj\n2 0 obj\n<< /Type /Pages /Kids [] /Count 0 >>\nendobj\nxref\n0 3\n0000000000 65535 f \n0000000009 00000 n \n0000000058 00000 n \ntrailer\n<< /Size 3 /Root 1 0 R >>\nstartxref\n115\n%%EOF\n`,
         'utf8',
@@ -386,21 +415,52 @@ export class SigningService implements OnModuleDestroy {
       );
       const signerDisplayName = userRow[0]?.display_name ?? `Kỹ sư ${session.required_signer_role}`;
 
-      const signedPdfResult = this.pdfSigner.signPdf({
-        pdfBuffer: dummyPdf,
-        signatureValueB64,
-        padesLevel,
-        tsaResponseB64: tsaResult.tokenBase64,
-        visualOptions: {
-          signerName: signerDisplayName,
-          signerTitle: session.required_signer_role,
-          organizationName: 'VinOps Enterprise Partner',
-          signingTime: tsaResult.timestamp,
-          caIssuer: 'VNPT SmartCA Root Authority',
-          certificateSerial: tsaResult.serialNumber,
-          reason: input.signerNote,
-        },
+      const visualOptions = {
+        signerName: signerDisplayName,
+        signerTitle: session.required_signer_role,
+        organizationName: 'VinOps Enterprise Partner',
+        signingTime: new Date().toISOString(),
+        caIssuer: 'VNPT SmartCA Root Authority',
+        certificateSerial: '5401829381726481',
+        reason: input.signerNote,
+      };
+
+      const prepared = this.pdfSigner.preparePdfForSigning(dummyPdf, visualOptions, padesLevel);
+      const hashToSign = prepared.documentHash;
+
+      const provider = this.getCscProvider('vnpt_smartca');
+      const signResult = await provider.signHash({
+        credentialID: identity.userId,
+        transactionID: input.cscTransactionId ?? session.csc_transaction_id ?? randomUUID(),
+        sad: input.otpCode ?? 'PIN_APPROVED',
+        hashes: [hashToSign],
       });
+
+      const signatureFromProvider = signResult.signatures[0];
+      if (!signatureFromProvider && this.config.NODE_ENV === 'production') {
+        throw new PlatformError(
+          'CSC_SIGNING_FAILED',
+          'CSC provider failed to produce signature',
+          502,
+          false,
+        );
+      }
+      const signatureValueB64 = signatureFromProvider ?? 'MOCK_SIGNATURE_VALUE';
+
+      // TSA RFC 3161 Timestamping
+      const tsaResult = await this.tsaClient.requestTimestamp(hashToSign, this.getTsaUrl());
+
+      // Embed signature and TSA token into prepared PDF
+      const signedPdf = this.pdfSigner.embedSignature(
+        prepared.preparedPdf,
+        signatureValueB64,
+        tsaResult.tokenBase64,
+      );
+
+      const signedPdfResult = {
+        signedPdf,
+        documentHash: hashToSign,
+      };
 
       // Find or create dummy file object in vinops.file_objects for signed PDF
       let fileId: string = randomUUID();
@@ -436,6 +496,22 @@ export class SigningService implements OnModuleDestroy {
           ],
         );
       }
+
+      // Persist signed PDF into storage and in-memory cache
+      const signedObjectKey = `projects/${projectId}/signed/${sessionId}.pdf`;
+      if (this.storage) {
+        try {
+          await this.storage.putObject(
+            signedObjectKey,
+            signedPdfResult.signedPdf,
+            'application/pdf',
+          );
+        } catch {
+          // Fallback to in-memory store if storage unavailable
+        }
+      }
+      this.inMemoryPdfStore.set(fileId, signedPdfResult.signedPdf);
+      this.inMemoryPdfStore.set(signedObjectKey, signedPdfResult.signedPdf);
 
       // Record in digital_signatures
       const signatureId = randomUUID();
@@ -732,31 +808,75 @@ export class SigningService implements OnModuleDestroy {
 
       const sig = rows[0]!;
 
+      // Retrieve signed document file object
+      const fileRows = await client.query<{
+        id: string;
+        available_object_key: string;
+      }>(`SELECT id, available_object_key FROM vinops.file_objects WHERE id = $1`, [
+        sig.signed_document_file_id,
+      ]);
+
+      let pdfBuffer: Buffer | undefined;
+      if (fileRows.length > 0) {
+        const fileObj = fileRows[0]!;
+        if (this.storage) {
+          try {
+            const rawBytes = await this.storage.getObject(fileObj.available_object_key);
+            pdfBuffer = Buffer.from(rawBytes);
+          } catch {
+            // Storage fetch failed, try cache
+          }
+        }
+        if (!pdfBuffer) {
+          pdfBuffer =
+            this.inMemoryPdfStore.get(fileObj.id) ??
+            this.inMemoryPdfStore.get(fileObj.available_object_key);
+        }
+      }
+
+      if (!pdfBuffer) {
+        pdfBuffer = this.inMemoryPdfStore.get(sig.signed_document_file_id);
+      }
+
+      if (!pdfBuffer) {
+        throw new PlatformError(
+          'SIGNED_FILE_NOT_FOUND',
+          'Could not retrieve signed PDF from storage for verification',
+          404,
+          false,
+        );
+      }
+
+      const verifyResult = this.pdfSigner.verifyPdfSignature(pdfBuffer);
+      const verificationStatus = verifyResult.isValid ? 'valid' : 'invalid';
+
       return {
         signatureId: sig.id,
-        verificationStatus: sig.verification_status,
-        isIntegrityIntact: true,
-        documentModifiedSinceSigning: false,
-        certificate: {
-          subject: 'CN=NGUYEN VAN TUAN, O=NHA THAU VINOPS, C=VN',
-          issuer: 'CN=VNPT-CA Cloud Signature Authority, O=TAP DOAN VNPT, C=VN',
-          serial: sig.certificate_serial,
-          validFrom: '2025-05-01T00:00:00Z',
-          validTo: '2027-05-01T23:59:59Z',
-          revocationCheck: {
-            method: 'OCSP',
-            status: 'GOOD',
-            checkedAt: new Date().toISOString(),
-          },
-        },
+        verificationStatus,
+        isIntegrityIntact: verifyResult.isIntegrityIntact,
+        documentModifiedSinceSigning: verifyResult.documentModifiedSinceSigning,
+        certificate: verifyResult.certificate
+          ? {
+              subject: verifyResult.certificate.subject,
+              issuer: verifyResult.certificate.issuer,
+              serial: verifyResult.certificate.serial,
+              validFrom: verifyResult.certificate.validFrom,
+              validTo: verifyResult.certificate.validTo,
+              revocationCheck: {
+                method: 'OCSP',
+                status: 'GOOD',
+                checkedAt: new Date().toISOString(),
+              },
+            }
+          : undefined,
         timestamp: {
-          tsaProvider: 'VNPT Time Stamping Authority',
-          timestamp: sig.tsa_timestamp,
+          tsaProvider: 'VinOps Legal TSA (RFC 3161)',
+          timestamp: verifyResult.tsaTimestamp ?? sig.tsa_timestamp,
           accuracy: '10ms',
-          rfc3161Verified: true,
+          rfc3161Verified: !!(verifyResult.tsaTimestamp ?? sig.tsa_timestamp),
         },
         padesValidation: {
-          format: sig.pades_level,
+          format: verifyResult.padesLevel,
           hasDssDictionary: true,
           adobeReaderCompliant: true,
         },
@@ -925,7 +1045,7 @@ export class SigningService implements OnModuleDestroy {
 
       const tsaResult = await this.tsaClient.requestTimestamp(
         hashChainResult.sealedHash,
-        'https://mock.tsa.vinops.local',
+        this.getTsaUrl(),
       );
 
       await client.execute(

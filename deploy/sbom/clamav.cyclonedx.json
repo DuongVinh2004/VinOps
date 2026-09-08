@@ -1,0 +1,45 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.5",
+  "serialNumber": "urn:uuid:vinops-sbom-clamav",
+  "version": 1,
+  "metadata": {
+    "timestamp": "2026-09-08T15:48:43.271Z",
+    "tools": [
+      {
+        "vendor": "VinOps Engineering",
+        "name": "vinops-sbom-generator",
+        "version": "1.0.0"
+      }
+    ],
+    "component": {
+      "type": "container",
+      "name": "clamav",
+      "version": "1.3.1",
+      "purl": "pkg:docker/clamav/clamav@1.3.1",
+      "description": "VinOps Production Base Image - clamav/clamav:stable_base@sha256:4a382fb5a4ee9fe497c366e0775a6f05903b415a772c9162464731a57e3f71f6",
+      "supplier": {
+        "name": "Cisco Talos"
+      }
+    }
+  },
+  "components": [
+    {
+      "type": "operating-system",
+      "name": "linux",
+      "description": "Base OS Layer"
+    },
+    {
+      "type": "application",
+      "name": "clamav",
+      "version": "1.3.1",
+      "purl": "pkg:docker/clamav/clamav@1.3.1",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "4a382fb5a4ee9fe497c366e0775a6f05903b415a772c9162464731a57e3f71f6"
+        }
+      ]
+    }
+  ]
+}

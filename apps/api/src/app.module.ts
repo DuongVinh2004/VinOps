@@ -38,6 +38,7 @@ import { BimService } from './bim/bim.service.js';
 import { RealtimeGateway } from './realtime/realtime.gateway.js';
 import { RoomDispatcher } from './realtime/room-dispatcher.js';
 import { WsAuthGuard } from './realtime/guards/ws-auth.guard.js';
+import { RedisSubscriberService } from './realtime/redis-subscriber.service.js';
 import { DeviceAndNotificationController } from './notifications/device-and-notification.controller.js';
 import { NotificationService } from './notifications/notification.service.js';
 import { FcmPushService } from './notifications/fcm-push.service.js';
@@ -78,6 +79,7 @@ export class AppModule implements NestModule {
         SigningService,
         BimService,
         RoomDispatcher,
+        RedisSubscriberService,
         RealtimeGateway,
         WsAuthGuard,
         NotificationService,

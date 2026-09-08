@@ -7,6 +7,25 @@ export interface FcmConfig {
   clientEmail?: string | undefined;
   privateKey?: string | undefined;
   dailyQuota?: number | undefined;
+  maxRetries?: number | undefined;
+  retryBaseDelayMs?: number | undefined;
+}
+
+export function isTransientFcmStatus(status?: number, error?: string): boolean {
+  if (status === 429 || status === 500 || status === 502 || status === 503) {
+    return true;
+  }
+  if (!status && error) {
+    const lower = error.toLowerCase();
+    return (
+      lower.includes('fetch failed') ||
+      lower.includes('econnreset') ||
+      lower.includes('etimedout') ||
+      lower.includes('network') ||
+      lower.includes('timeout')
+    );
+  }
+  return false;
 }
 
 export interface SendPushNotificationOptions {
@@ -26,6 +45,7 @@ export interface FcmSendResult {
   messageId?: string | undefined;
   error?: string | undefined;
   tokenInvalidated?: boolean | undefined;
+  deliveryStatus?: 'provider_accepted' | 'simulated' | 'failed' | undefined;
 }
 
 @Injectable()
@@ -124,13 +144,24 @@ export class FcmPushService {
       return {
         success: false,
         error: 'FCM_DAILY_QUOTA_EXCEEDED',
+        deliveryStatus: 'failed',
       };
     }
 
     const projectId = this.config?.projectId ?? process.env['FCM_PROJECT_ID'];
+    const isProduction = process.env['NODE_ENV'] === 'production';
 
     // In test/mock environment without external credentials
     if (!projectId) {
+      if (isProduction) {
+        this.logger.error('FCM_PROJECT_ID is missing in production environment');
+        return {
+          success: false,
+          error: 'FCM_PROJECT_ID_MISSING',
+          deliveryStatus: 'failed',
+        };
+      }
+
       const mockId = `projects/vinops-mock/messages/mock-fcm-${randomUUID()}`;
       this.logger.log(
         `[MOCK FCM] Sent push to deviceToken=${options.deviceToken.slice(0, 12)}... title=${options.title ?? 'none'}`,
@@ -138,16 +169,27 @@ export class FcmPushService {
       return {
         success: true,
         messageId: mockId,
+        deliveryStatus: 'simulated',
       };
     }
 
     try {
       const accessToken = await this.getOAuth2AccessToken();
       if (!accessToken) {
-        // Fallback to simulated delivery if no key provided
+        if (isProduction) {
+          this.logger.error('FCM OAuth2 credentials missing in production environment');
+          return {
+            success: false,
+            error: 'FCM_CREDENTIALS_MISSING',
+            deliveryStatus: 'failed',
+          };
+        }
+
+        // Fallback to simulated delivery only if not production
         return {
           success: true,
           messageId: `projects/${projectId}/messages/simulated-${randomUUID()}`,
+          deliveryStatus: 'simulated',
         };
       }
 
@@ -185,52 +227,94 @@ export class FcmPushService {
         };
       }
 
-      const response = await fetch(
-        `https://fcm.googleapis.com/v1/projects/${projectId}/messages:send`,
-        {
-          method: 'POST',
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(fcmPayload),
-        },
-      );
+      const maxRetries = this.config?.maxRetries ?? 3;
+      const baseDelayMs = this.config?.retryBaseDelayMs ?? 100;
 
-      if (response.ok) {
-        const resBody = (await response.json()) as { name?: string };
-        return {
-          success: true,
-          messageId: resBody.name,
-        };
-      }
-
-      const errorText = await response.text();
-      let isTokenExpired = false;
-
-      // Check if token expired or unregistered
-      if (
-        response.status === 404 ||
-        errorText.includes('UNREGISTERED') ||
-        errorText.includes('INVALID_ARGUMENT')
-      ) {
-        isTokenExpired = true;
-        await this.handleExpiredDeviceToken(options.deviceToken);
-      }
-
-      this.logger.warn(`FCM send failed HTTP ${response.status}: ${errorText}`);
-
-      return {
+      let lastResult: FcmSendResult = {
         success: false,
-        error: errorText,
-        tokenInvalidated: isTokenExpired,
+        error: 'UNKNOWN_ERROR',
+        deliveryStatus: 'failed',
       };
-    } catch (error) {
-      const errorMsg = error instanceof Error ? error.message : String(error);
-      this.logger.error(`FCM send unexpected error: ${errorMsg}`);
+
+      for (let attempt = 0; attempt <= maxRetries; attempt++) {
+        try {
+          const response = await fetch(
+            `https://fcm.googleapis.com/v1/projects/${projectId}/messages:send`,
+            {
+              method: 'POST',
+              headers: {
+                Authorization: `Bearer ${accessToken}`,
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(fcmPayload),
+            },
+          );
+
+          if (response.ok) {
+            const resBody = (await response.json()) as { name?: string };
+            return {
+              success: true,
+              messageId: resBody.name,
+              deliveryStatus: 'provider_accepted',
+            };
+          }
+
+          const errorText = await response.text();
+          let isTokenExpired = false;
+
+          // Check if token expired or unregistered
+          if (
+            response.status === 404 ||
+            errorText.includes('UNREGISTERED') ||
+            errorText.includes('INVALID_ARGUMENT')
+          ) {
+            isTokenExpired = true;
+            await this.handleExpiredDeviceToken(options.deviceToken);
+          }
+
+          this.logger.warn(`FCM send failed HTTP ${response.status}: ${errorText}`);
+
+          lastResult = {
+            success: false,
+            error: errorText,
+            tokenInvalidated: isTokenExpired,
+            deliveryStatus: 'failed',
+          };
+
+          const isTransient = isTransientFcmStatus(response.status, errorText);
+          if (!isTransient || isTokenExpired || response.status === 400 || attempt >= maxRetries) {
+            return lastResult;
+          }
+        } catch (error) {
+          const errorMsg = error instanceof Error ? error.message : String(error);
+          this.logger.error(`FCM send unexpected error: ${errorMsg}`);
+          lastResult = {
+            success: false,
+            error: errorMsg,
+            deliveryStatus: 'failed',
+          };
+
+          const isTransient = isTransientFcmStatus(undefined, errorMsg);
+          if (!isTransient || attempt >= maxRetries) {
+            return lastResult;
+          }
+        }
+
+        const delayMs = Math.min(baseDelayMs * Math.pow(2, attempt), 5000);
+        this.logger.warn(
+          `FCM send transient failure. Retrying in ${delayMs}ms (attempt ${attempt + 1}/${maxRetries})...`,
+        );
+        await new Promise((resolve) => setTimeout(resolve, delayMs));
+      }
+
+      return lastResult;
+    } catch (outerError) {
+      const errorMsg = outerError instanceof Error ? outerError.message : String(outerError);
+      this.logger.error(`FCM send unexpected outer error: ${errorMsg}`);
       return {
         success: false,
         error: errorMsg,
+        deliveryStatus: 'failed',
       };
     }
   }

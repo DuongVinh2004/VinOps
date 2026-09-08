@@ -1,10 +1,18 @@
-import { Inject, Injectable, Logger, type OnModuleDestroy, Optional } from '@nestjs/common';
+import {
+  Inject,
+  Injectable,
+  Logger,
+  type OnModuleDestroy,
+  type OnModuleInit,
+  Optional,
+} from '@nestjs/common';
 import type { IncomingMessage, Server as HttpServer } from 'node:http';
 import { createHash, randomUUID } from 'node:crypto';
 import type { Socket } from 'node:net';
 import type { ApiConfig } from '@vinops/config';
 import {
   formatProjectRoom,
+  parseProjectRoom,
   realtimeChannels,
   type RealtimeChannel,
   type RealtimeEvent,
@@ -17,6 +25,7 @@ import {
   WsUnauthorizedException,
   type WsClientIdentity,
 } from './guards/ws-auth.guard.js';
+import { RedisSubscriberService, type RedisSubscriber } from './redis-subscriber.service.js';
 
 export interface WebSocketLike {
   id: string;
@@ -28,24 +37,68 @@ export interface WebSocketLike {
   ping?(): void;
 }
 
-export interface RedisSubscriber {
-  subscribe(channel: string, callback: (message: string) => void): Promise<void> | void;
-  unsubscribe(channel: string): Promise<void> | void;
-}
+export type { RedisSubscriber };
 
 @Injectable()
-export class RealtimeGateway implements OnModuleDestroy {
+export class RealtimeGateway implements OnModuleInit, OnModuleDestroy {
   private readonly logger = new Logger(RealtimeGateway.name);
   private heartbeatInterval: NodeJS.Timeout | null = null;
   private readonly clientHeartbeats = new Map<string, number>();
   private readonly clientSockets = new Map<string, WebSocketLike>();
+  private readonly processedEventIds = new Set<string>();
+  private readonly eventIdQueue: string[] = [];
+  private static readonly MAX_DEDUP_SIZE = 5000;
 
   constructor(
     @Inject(RoomDispatcher) private readonly roomDispatcher: RoomDispatcher,
     @Inject(API_CONFIG) private readonly config: ApiConfig,
-    @Optional() private readonly redisSubscriber?: RedisSubscriber,
+    @Optional()
+    @Inject(RedisSubscriberService)
+    private readonly redisSubscriber?: RedisSubscriberService,
   ) {
     this.startHeartbeatMonitor();
+  }
+
+  async onModuleInit(): Promise<void> {
+    const isProduction = process.env['NODE_ENV'] === 'production';
+    if (isProduction && !this.redisSubscriber) {
+      throw new Error(
+        'REDIS_PUBSUB_REQUIRED: RealtimeGateway requires RedisSubscriberService in production.',
+      );
+    }
+
+    if (this.redisSubscriber) {
+      const prefix =
+        typeof this.redisSubscriber.getKeyPrefix === 'function'
+          ? this.redisSubscriber.getKeyPrefix()
+          : 'vinops:';
+      const pattern = `${prefix}realtime:*`;
+
+      if (typeof this.redisSubscriber.psubscribe === 'function') {
+        await this.redisSubscriber.psubscribe(pattern, (channel, message) => {
+          this.handleRedisMessage(channel, message);
+        });
+        this.logger.log(`Subscribed to Redis realtime pattern: ${pattern}`);
+      }
+    }
+  }
+
+  isDuplicate(eventId?: string): boolean {
+    if (!eventId) {
+      return false;
+    }
+    if (this.processedEventIds.has(eventId)) {
+      return true;
+    }
+    this.processedEventIds.add(eventId);
+    this.eventIdQueue.push(eventId);
+    if (this.eventIdQueue.length > RealtimeGateway.MAX_DEDUP_SIZE) {
+      const oldest = this.eventIdQueue.shift();
+      if (oldest) {
+        this.processedEventIds.delete(oldest);
+      }
+    }
+    return false;
   }
 
   onModuleDestroy(): void {
@@ -227,10 +280,30 @@ export class RealtimeGateway implements OnModuleDestroy {
   }
 
   broadcastToRoom(room: string, event: RealtimeEvent): { delivered: number; recipients: string[] } {
+    if (event.eventId) {
+      this.isDuplicate(event.eventId);
+    }
+
     const result = this.roomDispatcher.dispatch(room, event);
     this.logger.debug(
       `Broadcasted event=${event.type} to room=${room} (recipients=${result.delivered})`,
     );
+
+    // Publish to Redis Pub/Sub for multi-instance distribution
+    if (this.redisSubscriber && typeof this.redisSubscriber.publish === 'function') {
+      const parsed = parseProjectRoom(room);
+      if (parsed) {
+        const prefix =
+          typeof this.redisSubscriber.getKeyPrefix === 'function'
+            ? this.redisSubscriber.getKeyPrefix()
+            : 'vinops:';
+        const redisChannel = `${prefix}realtime:${parsed.projectId}:${parsed.channel}`;
+        this.redisSubscriber.publish(redisChannel, JSON.stringify(event)).catch((err) => {
+          this.logger.warn(`Failed to publish event to Redis Pub/Sub: ${String(err)}`);
+        });
+      }
+    }
+
     return { delivered: result.delivered, recipients: result.recipientSocketIds };
   }
 
@@ -243,16 +316,26 @@ export class RealtimeGateway implements OnModuleDestroy {
     return this.broadcastToRoom(room, event);
   }
 
-  // Handle incoming Redis Pub/Sub message from worker
+  // Handle incoming Redis Pub/Sub message from other instances or worker
   handleRedisMessage(redisChannel: string, messageString: string): void {
     try {
       const event = JSON.parse(messageString) as RealtimeEvent;
-      // Channel pattern: vinops:realtime:{projectId}:{channel}
+
+      // Deduplication: drop if this event was already delivered by this instance
+      if (event.eventId && this.isDuplicate(event.eventId)) {
+        this.logger.debug(`Dropped duplicate realtime event: eventId=${event.eventId}`);
+        return;
+      }
+
+      // Channel pattern: [prefix:]realtime:{projectId}:{channel}
+      // e.g. "vinops:realtime:proj-1:issues" or "realtime:proj-1:issues"
       const parts = redisChannel.split(':');
-      if (parts.length >= 4) {
-        const projectId = parts[2]!;
-        const channel = parts[3]! as RealtimeChannel;
-        this.broadcastToProject(projectId, channel, event);
+      if (parts.length >= 3) {
+        const channel = parts[parts.length - 1] as RealtimeChannel;
+        const projectId = parts[parts.length - 2]!;
+        const room = formatProjectRoom(projectId, channel);
+        this.roomDispatcher.dispatch(room, event);
+        this.logger.debug(`Dispatched Redis event=${event.type} to local room=${room}`);
       }
     } catch (error) {
       this.logger.error(

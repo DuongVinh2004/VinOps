@@ -1,0 +1,67 @@
+{
+  "sealedAt": "2026-09-08T16:12:20.489Z",
+  "commitSha": "f650630755fb180f96a3355ed84c25d0d25bc5ab",
+  "totalArtifacts": 10,
+  "artifacts": [
+    {
+      "file": "CHANGED_FILES_MANIFEST.json",
+      "contentSha256": "a61aca1cf40ff95aac5dfe52de106748bb9bdda989566e6b377fa91a53fb35ce",
+      "sealedSha256": "f353ab0325e575b5dbceccc95576f37e40fd279c9f325d9cf935f54c088f668b",
+      "sizeBytes": 3827
+    },
+    {
+      "file": "CLEANROOM_CLEANUP_ADDENDUM.json",
+      "contentSha256": "8e12878afddcdde91f26a1b0c20cd549a08bf31b0fc53bc912b317369b3a32e4",
+      "sealedSha256": "7316aa4d44082b21cfa89e552667dc06a1152adc61a70416d9c9732dfc4173c3",
+      "sizeBytes": 1376
+    },
+    {
+      "file": "COMMAND_EVIDENCE.json",
+      "contentSha256": "9c3d27f1310c83a4deae33ce0c67d3be98cd05b1d72f0f7b0c41145ec7e8f6d0",
+      "sealedSha256": "63a31fb99281fee48becb135ad563763b673112d822bac9c2b5fefa484a964f2",
+      "sizeBytes": 2597
+    },
+    {
+      "file": "DEPENDENCY_LICENSE_SUMMARY.json",
+      "contentSha256": "8e777798ff810e60a98ff070c1b5438cfa1accbe9ecc1ac7bc097d1249f43c72",
+      "sealedSha256": "487930021bf45044dcc5e2e0f3304343b85c0c612ad9606a49457dab848c6405",
+      "sizeBytes": 1649
+    },
+    {
+      "file": "FINAL_VERIFICATION_ADDENDUM.json",
+      "contentSha256": "046c1632737d6109e93a6daa0ed4ce4bc3d4cc32a71c8499ad5852c304d12e55",
+      "sealedSha256": "ea9b8ec05049d4b86d6b42638663c8897b15a93f468b9ee4ad1cce40e198e8c8",
+      "sizeBytes": 1300
+    },
+    {
+      "file": "NFR_BENCHMARK_REPORT.json",
+      "contentSha256": "e496c7370348c4d19df8b59159d01071626adb45eb3b04afca8860178d75c5b9",
+      "sealedSha256": "7e4906e1f3851964a7c58c5f1d504e95a7aca3f96d77b5df9feaad493fb8bcdc",
+      "sizeBytes": 919
+    },
+    {
+      "file": "PILOT_UAT_EXECUTION_EVIDENCE.json",
+      "contentSha256": "744eedd2b350f4cda3731cf997ee45638ba8dcfe211a7073ed7e3a820c854527",
+      "sealedSha256": "fc8b74a9d30d81515ea390f2d0e2afa9de4c72a1456a49502d0fabc4062ebcb4",
+      "sizeBytes": 10237
+    },
+    {
+      "file": "SEALED_EVIDENCE_MANIFEST.json",
+      "contentSha256": "6d5fac881b291fda8f120eaec5a700860f3c2d250847d88b67710f3b808d726e",
+      "sealedSha256": "2465527ec839ce78eaea516380f9379f7ef6ee8055fef81425c60d65017e5e03",
+      "sizeBytes": 3144
+    },
+    {
+      "file": "TEST_SUMMARY.json",
+      "contentSha256": "532df2708cd80c76b34d0a42d6e1eb817eb31e35bfb566867e4393bc0de63792",
+      "sealedSha256": "6eda665435330bf7232548e585f3b24797442b365178f15a808eb0009c8a1795",
+      "sizeBytes": 1614
+    },
+    {
+      "file": "VIN-FND-001A-i1-manifest.json",
+      "contentSha256": "3d3ad9bae0c5f0b880d6c0e65728aa5dca2b54b2899e3784dd019df1cdc99d99",
+      "sealedSha256": "946434a00997a8e6e2809cc17fe988df84c3e987361635ecf28a006e5674cabe",
+      "sizeBytes": 2490
+    }
+  ]
+}

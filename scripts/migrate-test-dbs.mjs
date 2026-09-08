@@ -19,14 +19,27 @@ const dbs = [
 const host = process.env.PGHOST ?? '127.0.0.1';
 const port = process.env.PGPORT ?? '5432';
 const user = process.env.PGUSER ?? 'postgres';
-const pass = process.env.PGPASSWORD ?? 'postgres';
+let pass = process.env.PGPASSWORD ?? 'postgres';
 
-for (const db of dbs) {
-  const url = `postgresql://${user}:${pass}@${host}:${port}/${db}`;
-  console.log(`Migrating database ${db}...`);
+function runMigration(db, password) {
+  const url = `postgresql://${user}:${password}@${host}:${port}/${db}`;
   execFileSync(process.execPath, [migrateScript], {
     env: { ...process.env, VINOPS_DATABASE_URL: url },
     stdio: 'inherit',
   });
+}
+
+for (const db of dbs) {
+  console.log(`Migrating database ${db}...`);
+  try {
+    runMigration(db, pass);
+  } catch (err) {
+    if (!process.env.PGPASSWORD && pass === 'postgres') {
+      pass = 'fixture-postgres-password';
+      runMigration(db, pass);
+    } else {
+      throw err;
+    }
+  }
 }
 console.log('All test databases successfully migrated.');

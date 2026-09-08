@@ -45,7 +45,7 @@ jobs:
 
       - name: Start integration test services
         run: |
-          docker compose up -d --wait --wait-timeout 120 postgres clamav
+          docker compose up -d --wait --wait-timeout 120 postgres redis clamav
           docker compose up -d minio
           docker compose up minio-init
           docker compose ps
