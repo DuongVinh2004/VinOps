@@ -12,3 +12,4 @@ coverage/
 !.env.example
 evidence/*.zip
 evidence/*.patch
+test-report.xml
