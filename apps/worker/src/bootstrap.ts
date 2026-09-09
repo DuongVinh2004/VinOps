@@ -46,6 +46,7 @@ function createOptionalWorkerRuntime(
 ):
   | {
       database: VinopsDatabase;
+      appDatabase: VinopsDatabase;
       outboxPoller: OutboxPoller;
       slaPoller: SlaPoller;
       weatherPoller: WeatherPoller;
@@ -63,6 +64,11 @@ function createOptionalWorkerRuntime(
     connectionString,
     applicationName: `vinops-worker:${config.VINOPS_WORKER_NAME}`,
     runtimeRole: 'vinops_worker',
+  });
+  const appDatabase = new VinopsDatabase({
+    connectionString,
+    applicationName: `vinops-worker-app:${config.VINOPS_WORKER_NAME}`,
+    runtimeRole: 'vinops_app',
   });
   const documentHandlers = createDocumentEventHandlers(logger);
   const bimHandlers = createBimEventHandlers(database, undefined, logger);
@@ -99,7 +105,7 @@ function createOptionalWorkerRuntime(
     : undefined;
   const slaPoller = createSlaPoller(
     new SlaMonitorWorker(
-      new PostgresSlaMonitorStore(database),
+      new PostgresSlaMonitorStore(appDatabase),
       new EscalationNotifier(new LoggingEscalationSink(logger)),
       logger,
     ),
@@ -107,12 +113,13 @@ function createOptionalWorkerRuntime(
     60_000,
   );
 
-  const weatherWorker = new WeatherIngestionWorker(database, logger);
+  const weatherWorker = new WeatherIngestionWorker(appDatabase, logger);
   const weatherPoller = createWeatherPoller(weatherWorker, logger, 300_000);
-  const dossierBundler = new AsBuiltDossierBundler(database, logger);
+  const dossierBundler = new AsBuiltDossierBundler(appDatabase, logger);
 
   return {
     database,
+    appDatabase,
     outboxPoller: createOutboxPoller(worker, logger, config.VINOPS_OUTBOX_POLL_INTERVAL_MS),
     slaPoller,
     weatherPoller,
@@ -168,6 +175,7 @@ export async function createWorkerApplication(
       await workerRuntime?.slaPoller?.stop();
       await workerRuntime?.outboxPoller.stop();
       await workerRuntime?.database.close();
+      await workerRuntime?.appDatabase.close();
       await app.close();
     },
   };

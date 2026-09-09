@@ -64,6 +64,7 @@ export function IssueKanban({ projectId, client, issues, onRefresh }: IssueKanba
       setNewLng('');
       await onRefresh();
     } catch (err: unknown) {
+      console.error('handleCreate error:', err);
       setError(err instanceof Error ? err.message : 'Failed to create issue');
     } finally {
       setLoading(false);
@@ -236,6 +237,19 @@ export function IssueKanban({ projectId, client, issues, onRefresh }: IssueKanba
         <div className="modal-overlay" data-testid="quick-create-modal">
           <div className="modal-card">
             <h3>Quick Create Issue (GPS Enabled)</h3>
+            {error && (
+              <div
+                style={{
+                  color: '#d9534f',
+                  background: '#fdf7f7',
+                  padding: '8px 12px',
+                  borderRadius: 4,
+                  marginBottom: 12,
+                }}
+              >
+                {error}
+              </div>
+            )}
             <form onSubmit={(e) => void handleCreate(e)}>
               <div className="form-group">
                 <label>Title *</label>

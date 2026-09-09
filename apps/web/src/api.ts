@@ -498,7 +498,7 @@ function toFieldIssue(value: unknown): FieldIssue {
     id: requiredString(row.id, 'issue_id'),
     organizationId: requiredString(row.organization_id, 'organization_id'),
     projectId: requiredString(row.project_id, 'project_id'),
-    issueNumber: requiredString(row.issue_number, 'issue_number'),
+    issueNumber: requiredString(row.issue_number ?? row.code, 'issue_number'),
     title: requiredString(row.title, 'title'),
     description: requiredString(row.description, 'description'),
     status: (row.status as FieldIssue['status']) ?? 'Open',
@@ -531,7 +531,7 @@ function toRfiRequest(value: unknown): RfiRequest {
     id: requiredString(row.id, 'rfi_id'),
     organizationId: requiredString(row.organization_id, 'organization_id'),
     projectId: requiredString(row.project_id, 'project_id'),
-    rfiNumber: requiredString(row.rfi_number, 'rfi_number'),
+    rfiNumber: requiredString(row.rfi_number ?? row.code, 'rfi_number'),
     title: requiredString(row.title, 'title'),
     question: requiredString(row.question, 'question'),
     status: (row.status as RfiRequest['status']) ?? 'Draft',
@@ -568,7 +568,7 @@ function toSubmittal(value: unknown): Submittal {
     id: requiredString(row.id, 'submittal_id'),
     organizationId: requiredString(row.organization_id, 'organization_id'),
     projectId: requiredString(row.project_id, 'project_id'),
-    submittalNumber: requiredString(row.submittal_number, 'submittal_number'),
+    submittalNumber: requiredString(row.submittal_number ?? row.code, 'submittal_number'),
     title: requiredString(row.title, 'title'),
     submittalType: requiredString(row.submittal_type, 'submittal_type'),
     status: (row.status as Submittal['status']) ?? 'Draft',
@@ -1209,8 +1209,10 @@ export class VinopsApiClient {
   async quickCreateIssue(
     projectId: string,
     input: {
+      code?: string;
       title: string;
       description: string;
+      category?: string;
       severity?: string;
       location_node_id?: string;
       work_node_id?: string;
@@ -1221,6 +1223,24 @@ export class VinopsApiClient {
       photo_file_ids?: readonly string[];
     },
   ): Promise<FieldIssue> {
+    const payload: Record<string, unknown> = {
+      code: input.code ?? `ISS-${Date.now().toString().slice(-6)}`,
+      title: input.title,
+      description: input.description,
+      category: input.category ?? 'Quality',
+      severity: (input.severity ?? 'medium').toLowerCase(),
+      location_node_id: input.location_node_id,
+      work_node_id: input.work_node_id,
+      contractor_organization_id:
+        input.contractor_organization_id ?? '00000000-0000-4000-8000-000000001001',
+    };
+    if (input.gps_lat !== undefined && input.gps_lng !== undefined) {
+      payload.gps = {
+        latitude: input.gps_lat,
+        longitude: input.gps_lng,
+        accuracy_meters: input.gps_accuracy_meters ?? 5,
+      };
+    }
     const response = asRecord(
       await this.request<unknown>(`projects/${encodeURIComponent(projectId)}/issues`, {
         method: 'POST',
@@ -1228,7 +1248,7 @@ export class VinopsApiClient {
           'content-type': 'application/json',
           'idempotency-key': createIdempotencyKey(),
         },
-        body: JSON.stringify(input),
+        body: JSON.stringify(payload),
       }),
     );
     return toFieldIssue(response);
@@ -1237,19 +1257,41 @@ export class VinopsApiClient {
   async transitionIssue(
     projectId: string,
     issueId: string,
-    status: string,
+    statusOrAction: string,
     comment?: string,
   ): Promise<FieldIssue> {
+    let action = statusOrAction;
+    switch (statusOrAction) {
+      case 'Under Triage':
+        action = 'triage';
+        break;
+      case 'Assigned':
+        action = 'assign';
+        break;
+      case 'In Progress':
+        action = 'start_progress';
+        break;
+      case 'Resolved':
+        action = 'resolve';
+        break;
+      case 'Closed':
+        action = 'close';
+        break;
+    }
     const response = asRecord(
       await this.request<unknown>(
-        `projects/${encodeURIComponent(projectId)}/issues/${encodeURIComponent(issueId)}/transition`,
+        `projects/${encodeURIComponent(projectId)}/issues/${encodeURIComponent(issueId)}/transitions`,
         {
           method: 'POST',
           headers: {
             'content-type': 'application/json',
             'idempotency-key': createIdempotencyKey(),
           },
-          body: JSON.stringify({ status, ...(comment ? { comment } : {}) }),
+          body: JSON.stringify({
+            action,
+            ...(comment ? { comment } : {}),
+            contractor_organization_id: '00000000-0000-4000-8000-000000001001',
+          }),
         },
       ),
     );
@@ -1294,10 +1336,12 @@ export class VinopsApiClient {
   async createRfi(
     projectId: string,
     input: {
+      code?: string;
       title: string;
       question: string;
       priority?: string;
       due_date?: string;
+      requesting_partner_organization_id?: string;
       lead_contractor_partner_organization_id?: string;
       consultant_partner_organization_id?: string;
       location_node_id?: string;
@@ -1306,6 +1350,17 @@ export class VinopsApiClient {
       schedule_impact?: boolean;
     },
   ): Promise<RfiRequest> {
+    const payload = {
+      code: input.code ?? `RFI-${Date.now().toString().slice(-6)}`,
+      title: input.title,
+      question: input.question,
+      priority: (input.priority ?? 'normal').toLowerCase(),
+      requesting_partner_organization_id:
+        input.requesting_partner_organization_id ?? '00000000-0000-4000-8000-000000001001',
+      responding_partner_organization_id:
+        input.consultant_partner_organization_id ?? '00000000-0000-4000-8000-000000001002',
+      ...(input.due_date ? { due_date: input.due_date } : {}),
+    };
     const response = asRecord(
       await this.request<unknown>(`projects/${encodeURIComponent(projectId)}/rfis`, {
         method: 'POST',
@@ -1313,7 +1368,7 @@ export class VinopsApiClient {
           'content-type': 'application/json',
           'idempotency-key': createIdempotencyKey(),
         },
-        body: JSON.stringify(input),
+        body: JSON.stringify(payload),
       }),
     );
     return toRfiRequest(response);
@@ -1323,11 +1378,11 @@ export class VinopsApiClient {
     projectId: string,
     rfiId: string,
     action: string,
-    ballInCourtOrganizationId?: string,
+    comment?: string,
   ): Promise<RfiRequest> {
     const response = asRecord(
       await this.request<unknown>(
-        `projects/${encodeURIComponent(projectId)}/rfis/${encodeURIComponent(rfiId)}/transition`,
+        `projects/${encodeURIComponent(projectId)}/rfis/${encodeURIComponent(rfiId)}/transitions`,
         {
           method: 'POST',
           headers: {
@@ -1336,9 +1391,7 @@ export class VinopsApiClient {
           },
           body: JSON.stringify({
             action,
-            ...(ballInCourtOrganizationId
-              ? { ball_in_court_organization_id: ballInCourtOrganizationId }
-              : {}),
+            ...(comment ? { comment } : {}),
           }),
         },
       ),
@@ -1379,9 +1432,10 @@ export class VinopsApiClient {
   async createSubmittal(
     projectId: string,
     input: {
+      code?: string;
       title: string;
       submittal_type: string;
-      maker_partner_organization_id: string;
+      maker_partner_organization_id?: string;
       description?: string;
       lead_contractor_partner_organization_id?: string;
       consultant_partner_organization_id?: string;
@@ -1395,6 +1449,31 @@ export class VinopsApiClient {
       }>;
     },
   ): Promise<Submittal> {
+    let normalizedType = input.submittal_type.toLowerCase().replace(/\s+/g, '_');
+    if (
+      !['material_sample', 'shop_drawing', 'method_statement', 'product_data', 'other'].includes(
+        normalizedType,
+      )
+    ) {
+      normalizedType = 'material_sample';
+    }
+    const payload = {
+      code: input.code ?? `SUB-${Date.now().toString().slice(-6)}`,
+      title: input.title,
+      submittal_type: normalizedType,
+      maker_partner_organization_id:
+        input.maker_partner_organization_id &&
+        input.maker_partner_organization_id !== '00000000-0000-0000-0000-000000000001'
+          ? input.maker_partner_organization_id
+          : '00000000-0000-4000-8000-000000001001',
+      description: input.description,
+      items: (input.items ?? [{ item_number: 1, description: input.title }]).map((it, idx) => ({
+        item_number: it.item_number ?? idx + 1,
+        description: it.description || input.title,
+        manufacturer: it.manufacturer_name,
+        model_or_grade: it.model_or_grade,
+      })),
+    };
     const response = asRecord(
       await this.request<unknown>(`projects/${encodeURIComponent(projectId)}/submittals`, {
         method: 'POST',
@@ -1402,7 +1481,7 @@ export class VinopsApiClient {
           'content-type': 'application/json',
           'idempotency-key': createIdempotencyKey(),
         },
-        body: JSON.stringify(input),
+        body: JSON.stringify(payload),
       }),
     );
     return toSubmittal(response);
@@ -1411,19 +1490,19 @@ export class VinopsApiClient {
   async transitionSubmittal(
     projectId: string,
     submittalId: string,
-    status: string,
-    notes?: string,
+    action: string,
+    comment?: string,
   ): Promise<Submittal> {
     const response = asRecord(
       await this.request<unknown>(
-        `projects/${encodeURIComponent(projectId)}/submittals/${encodeURIComponent(submittalId)}/transition`,
+        `projects/${encodeURIComponent(projectId)}/submittals/${encodeURIComponent(submittalId)}/transitions`,
         {
           method: 'POST',
           headers: {
             'content-type': 'application/json',
             'idempotency-key': createIdempotencyKey(),
           },
-          body: JSON.stringify({ status, ...(notes ? { notes } : {}) }),
+          body: JSON.stringify({ action, ...(comment ? { comment } : {}) }),
         },
       ),
     );
@@ -1472,11 +1551,21 @@ export class VinopsApiClient {
     inspectionId: string,
     results: readonly Record<string, unknown>[],
   ): Promise<unknown> {
-    return this.request<unknown>(`inspections/${encodeURIComponent(inspectionId)}/results`, {
-      method: 'POST',
-      headers: { 'content-type': 'application/json', 'idempotency-key': createIdempotencyKey() },
-      body: JSON.stringify({ results }),
-    });
+    for (const r of results) {
+      const itemKey = (r.item_key as string) ?? 'rebar_diameter';
+      await this.request<unknown>(
+        `inspections/${encodeURIComponent(inspectionId)}/results/${encodeURIComponent(itemKey)}`,
+        {
+          method: 'PUT',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({
+            result: r.result ?? 'Pass',
+            notes: (r.notes as string) ?? undefined,
+          }),
+        },
+      );
+    }
+    return { ok: true };
   }
 
   // Acceptance Records

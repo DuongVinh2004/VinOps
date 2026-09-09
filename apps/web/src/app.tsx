@@ -394,6 +394,7 @@ export function App({
               projectContext={projectContext}
               screen={screen}
               client={client}
+              onNavigate={setScreen}
               onCreateInvitation={handleCreateInvitation}
             />
           ) : (
@@ -554,6 +555,7 @@ type ScreenContentProps = {
   projectContext: ProjectContext | null;
   members: readonly ProjectMember[];
   screen: Screen;
+  onNavigate?: (screen: Screen) => void;
   onCreateInvitation: (input: {
     email: string;
     roles: readonly string[];
@@ -569,6 +571,7 @@ function ScreenContent({
   project,
   projectContext,
   screen,
+  onNavigate,
   onCreateInvitation,
 }: ScreenContentProps) {
   switch (screen) {
@@ -611,7 +614,15 @@ function ScreenContent({
     case 'wbs':
       return <WbsScreen project={project} nodes={projectContext?.workNodes ?? []} />;
     case 'overview':
-      return <OverviewScreen organization={organization} project={project} />;
+      return (
+        <OverviewScreen
+          client={client}
+          organization={organization}
+          project={project}
+          projectContext={projectContext}
+          onNavigate={onNavigate}
+        />
+      );
   }
 }
 
@@ -812,9 +823,60 @@ function DailyLogsScreenWrapper({
 }
 
 function OverviewScreen({
+  client,
   organization,
   project,
-}: Pick<ScreenContentProps, 'organization' | 'project'>) {
+  projectContext,
+  onNavigate,
+}: {
+  client?: VinopsApiClient | undefined;
+  organization: Organization;
+  project: Project;
+  projectContext?: ProjectContext | null | undefined;
+  onNavigate?: ((screen: Screen) => void) | undefined;
+}) {
+  const [counts, setCounts] = useState<{
+    issues: number | null;
+    rfis: number | null;
+    submittals: number | null;
+    documents: number | null;
+    inspections: number | null;
+    dailyLogs: number | null;
+  }>({
+    issues: null,
+    rfis: null,
+    submittals: null,
+    documents: null,
+    inspections: null,
+    dailyLogs: null,
+  });
+
+  useEffect(() => {
+    if (!client || !project?.id) return;
+    let disposed = false;
+    void Promise.allSettled([
+      client.listIssues(project.id),
+      client.listRfis(project.id),
+      client.listSubmittals(project.id),
+      client.listDocuments(project.id),
+      client.listInspections(project.id),
+      client.listDailyLogs(project.id),
+    ]).then(([issuesRes, rfisRes, submittalsRes, docsRes, inspectionsRes, dailyLogsRes]) => {
+      if (disposed) return;
+      setCounts({
+        issues: issuesRes.status === 'fulfilled' ? issuesRes.value.length : 0,
+        rfis: rfisRes.status === 'fulfilled' ? rfisRes.value.length : 0,
+        submittals: submittalsRes.status === 'fulfilled' ? submittalsRes.value.length : 0,
+        documents: docsRes.status === 'fulfilled' ? docsRes.value.length : 0,
+        inspections: inspectionsRes.status === 'fulfilled' ? inspectionsRes.value.length : 0,
+        dailyLogs: dailyLogsRes.status === 'fulfilled' ? dailyLogsRes.value.length : 0,
+      });
+    });
+    return () => {
+      disposed = true;
+    };
+  }, [client, project?.id]);
+
   return (
     <section aria-labelledby="overview-title">
       <p className="eyebrow">Current project context</p>
@@ -839,6 +901,144 @@ function OverviewScreen({
           <p>Role changes, lifecycle transitions, and scoped access require server validation.</p>
         </article>
       </div>
+
+      <div style={{ marginTop: '2rem' }}>
+        <p className="eyebrow">Dữ liệu vận hành thực tế công trường</p>
+        <h3 style={{ marginTop: '0.25rem' }}>
+          Bảng điều khiển hoạt động dự án (Operational Dashboard)
+        </h3>
+        <div className="card-grid" style={{ marginTop: '1rem' }}>
+          <article className="content-card" style={{ borderTop: '4px solid #d9534f' }}>
+            <h4>Field Issues</h4>
+            <p style={{ fontSize: '2rem', fontWeight: 800, margin: '0.25rem 0', color: '#d9534f' }}>
+              {counts.issues !== null ? `${counts.issues} vấn đề` : '…'}
+            </p>
+            <p className="muted-copy">
+              Các vấn đề an toàn, chất lượng đang phân loại & khắc phục theo quy trình.
+            </p>
+            {onNavigate && (
+              <button type="button" onClick={() => onNavigate('issues')}>
+                Xem Kanban Issues &rarr;
+              </button>
+            )}
+          </article>
+
+          <article className="content-card" style={{ borderTop: '4px solid #f0ad4e' }}>
+            <h4>RFIs</h4>
+            <p style={{ fontSize: '2rem', fontWeight: 800, margin: '0.25rem 0', color: '#f0ad4e' }}>
+              {counts.rfis !== null ? `${counts.rfis} yêu cầu` : '…'}
+            </p>
+            <p className="muted-copy">
+              Yêu cầu thông tin kỹ thuật làm rõ bản vẽ, chỉ dẫn và biện pháp thi công.
+            </p>
+            {onNavigate && (
+              <button type="button" onClick={() => onNavigate('rfi')}>
+                Xem RFIs Hub &rarr;
+              </button>
+            )}
+          </article>
+
+          <article className="content-card" style={{ borderTop: '4px solid #0275d8' }}>
+            <h4>Submittals</h4>
+            <p style={{ fontSize: '2rem', fontWeight: 800, margin: '0.25rem 0', color: '#0275d8' }}>
+              {counts.submittals !== null ? `${counts.submittals} hồ sơ` : '…'}
+            </p>
+            <p className="muted-copy">
+              Hồ sơ trình duyệt vật tư, thiết bị MEP và biện pháp thi công các hạng mục.
+            </p>
+            {onNavigate && (
+              <button type="button" onClick={() => onNavigate('submittals')}>
+                Xem Submittals &rarr;
+              </button>
+            )}
+          </article>
+
+          <article className="content-card" style={{ borderTop: '4px solid #5bc0de' }}>
+            <h4>Documents</h4>
+            <p style={{ fontSize: '2rem', fontWeight: 800, margin: '0.25rem 0', color: '#5bc0de' }}>
+              {counts.documents !== null ? `${counts.documents} tài liệu` : '…'}
+            </p>
+            <p className="muted-copy">
+              Kho bản vẽ thiết kế Shop Drawings và hồ sơ pháp lý dự án có versioning.
+            </p>
+            {onNavigate && (
+              <button type="button" onClick={() => onNavigate('documents')}>
+                Xem Documents &rarr;
+              </button>
+            )}
+          </article>
+
+          <article className="content-card" style={{ borderTop: '4px solid #5cb85c' }}>
+            <h4>Quality Inspections</h4>
+            <p style={{ fontSize: '2rem', fontWeight: 800, margin: '0.25rem 0', color: '#5cb85c' }}>
+              {counts.inspections !== null ? `${counts.inspections} biên bản` : '…'}
+            </p>
+            <p className="muted-copy">
+              Kiểm tra hiện trường & Nghiệm thu công việc xây dựng theo NĐ 207/2026/NĐ-CP.
+            </p>
+            {onNavigate && (
+              <button type="button" onClick={() => onNavigate('quality')}>
+                Xem Quality & Nghiệm thu &rarr;
+              </button>
+            )}
+          </article>
+
+          <article className="content-card" style={{ borderTop: '4px solid #6f42c1' }}>
+            <h4>Daily Logs</h4>
+            <p style={{ fontSize: '2rem', fontWeight: 800, margin: '0.25rem 0', color: '#6f42c1' }}>
+              {counts.dailyLogs !== null ? `${counts.dailyLogs} nhật ký` : '…'}
+            </p>
+            <p className="muted-copy">
+              Nhật ký thi công hàng ngày: Thời tiết 2 ca, quân số nhà thầu và máy móc thiết bị.
+            </p>
+            {onNavigate && (
+              <button type="button" onClick={() => onNavigate('daily_logs')}>
+                Xem Nhật ký thi công &rarr;
+              </button>
+            )}
+          </article>
+        </div>
+      </div>
+
+      {projectContext && (
+        <div style={{ marginTop: '2rem' }}>
+          <p className="eyebrow">Cấu trúc công trình & Đối tác dự án</p>
+          <div className="card-grid" style={{ marginTop: '0.5rem' }}>
+            <article className="content-card">
+              <h4>Đối tác tham gia ({projectContext.partners.length})</h4>
+              <ul style={{ paddingLeft: '1.25rem', margin: '0.5rem 0' }}>
+                {projectContext.partners.map((p) => (
+                  <li key={p.id}>
+                    <strong>{p.code}</strong>: {p.name}
+                  </li>
+                ))}
+              </ul>
+            </article>
+
+            <article className="content-card">
+              <h4>Phân khu LBS ({projectContext.locationNodes.length} vị trí)</h4>
+              <ul style={{ paddingLeft: '1.25rem', margin: '0.5rem 0' }}>
+                {projectContext.locationNodes.map((l) => (
+                  <li key={l.id}>
+                    <strong>{l.code}</strong>: {l.name}
+                  </li>
+                ))}
+              </ul>
+            </article>
+
+            <article className="content-card">
+              <h4>Gói thầu WBS ({projectContext.workNodes.length} hạng mục)</h4>
+              <ul style={{ paddingLeft: '1.25rem', margin: '0.5rem 0' }}>
+                {projectContext.workNodes.map((w) => (
+                  <li key={w.id}>
+                    <strong>{w.code}</strong>: {w.name}
+                  </li>
+                ))}
+              </ul>
+            </article>
+          </div>
+        </div>
+      )}
     </section>
   );
 }
