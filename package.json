@@ -9,6 +9,9 @@
     "pnpm": ">=11.0.0 <12.0.0"
   },
   "scripts": {
+    "dev": "pnpm --filter @vinops/web dev",
+    "dev:web": "pnpm --filter @vinops/web dev",
+    "dev:api": "pnpm --filter @vinops/api start",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "lint": "eslint apps packages scripts tests --max-warnings=0",
@@ -36,8 +39,8 @@
     "@redocly/cli": "2.51.1",
     "@testing-library/jest-dom": "7.0.1",
     "@testing-library/react": "16.3.3",
-    "@types/node": "24.13.3",
     "@types/express": "5.0.6",
+    "@types/node": "24.13.3",
     "@types/pg": "8.20.0",
     "@types/react": "19.2.18",
     "@types/react-dom": "19.2.7",
@@ -47,6 +50,7 @@
     "globals": "17.12.0",
     "jsdom": "30.0.1",
     "openapi-typescript": "7.13.0",
+    "playwright": "1.63.0",
     "prettier": "3.9.6",
     "supertest": "7.2.2",
     "typescript": "5.9.3",

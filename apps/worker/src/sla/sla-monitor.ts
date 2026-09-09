@@ -28,9 +28,9 @@ export class PostgresSlaMonitorStore implements SlaMonitorStore {
   async getActiveRfis(): Promise<readonly ActiveSlaCandidate[]> {
     return this.database.withTransaction({ actorUserId: this.systemUserId }, async (client) => {
       return client.query<ActiveSlaCandidate>(
-        `SELECT id, organization_id, project_id, rfi_number AS reference_number, title, due_date, status, ball_in_court_organization_id
+        `SELECT id, organization_id, project_id, code AS reference_number, title, due_at AS due_date, status, ball_in_court_organization_id
            FROM vinops.rfi_requests
-          WHERE due_date IS NOT NULL
+          WHERE due_at IS NOT NULL
             AND status NOT IN ('Official Answered', 'Closed')`,
       );
     });
@@ -39,9 +39,9 @@ export class PostgresSlaMonitorStore implements SlaMonitorStore {
   async getActiveSubmittals(): Promise<readonly ActiveSlaCandidate[]> {
     return this.database.withTransaction({ actorUserId: this.systemUserId }, async (client) => {
       return client.query<ActiveSlaCandidate>(
-        `SELECT id, organization_id, project_id, submittal_number AS reference_number, title, due_date, status, ball_in_court_organization_id
+        `SELECT id, organization_id, project_id, code AS reference_number, title, due_at AS due_date, status, ball_in_court_organization_id
            FROM vinops.submittals
-          WHERE due_date IS NOT NULL
+          WHERE due_at IS NOT NULL
             AND status NOT IN ('Approved', 'Approved as Noted', 'Rejected')`,
       );
     });
