@@ -3,7 +3,6 @@ message: 'If you use this software in your research or engineering workflows, pl
 authors:
   - family-names: 'Duong'
     given-names: 'Vinh'
-    orcid: 'https://orcid.org/0009-0000-0000-0000'
 title: 'VinOps: Enterprise Digital Engineering & Common Data Environment (CDE) Platform'
 version: 1.0.0
 date-released: 2026-09-07

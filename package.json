@@ -1,6 +1,7 @@
 {
   "name": "vinops",
   "version": "0.0.0",
+  "description": "Enterprise Digital Engineering & Common Data Environment (CDE) Platform for Capital Infrastructure Projects",
   "private": true,
   "type": "module",
   "packageManager": "pnpm@11.15.1",

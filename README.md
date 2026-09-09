@@ -6,6 +6,7 @@
 
 [![Foundation CI](https://github.com/DuongVinh2004/VinOps/actions/workflows/foundation-ci.yml/badge.svg)](https://github.com/DuongVinh2004/VinOps/actions/workflows/foundation-ci.yml)
 [![Release](https://img.shields.io/github/v/release/DuongVinh2004/VinOps?color=blue&label=release)](https://github.com/DuongVinh2004/VinOps/releases)
+[![CodeQL](https://github.com/DuongVinh2004/VinOps/actions/workflows/codeql.yml/badge.svg)](https://github.com/DuongVinh2004/VinOps/actions/workflows/codeql.yml)
 [![Node.js Version](https://img.shields.io/badge/node-24.18.0%20LTS-brightgreen.svg)](https://nodejs.org)
 [![pnpm Version](https://img.shields.io/badge/pnpm-11.15.1-orange.svg)](https://pnpm.io)
 [![TypeScript](https://img.shields.io/badge/typescript-5.9.3-blue.svg)](https://www.typescriptlang.org/)
@@ -273,8 +274,15 @@ VinOps is purpose-built to satisfy strict national and international engineering
 
 - **Contributing**: Please review [CONTRIBUTING.md](CONTRIBUTING.md) for contribution guidelines, branch naming, and conventional commits.
 - **Code of Conduct**: This project adheres to the [Contributor Covenant 2.1](CODE_OF_CONDUCT.md).
-- **Security**: To report vulnerabilities confidentially, please read [SECURITY.md](SECURITY.md).
+- **Security Policy**: To report vulnerabilities confidentially, please read [SECURITY.md](SECURITY.md).
 - **Changelog**: All release notes and version history are recorded in [CHANGELOG.md](CHANGELOG.md).
+
+<a id="audit-status"></a>
+
+### Security Audit Status
+
+- **Red-Team Security Remediation**: All identified vulnerabilities have been remediated, verified under Gate B/C verification baselines, and signed into the immutable evidence trail (`evidence/VIN-MEGA-002/`).
+- **Continuous Static Analysis (SAST)**: GitHub CodeQL and secret scanning run on every pull request and push to `main`.
 
 ---
 

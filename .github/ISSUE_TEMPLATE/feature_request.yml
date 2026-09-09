@@ -1,7 +1,7 @@
 name: Feature Request
 description: Propose a new capability, enhancement, or standard compliance feature for VinOps
 title: 'feat: '
-labels: ['enhancement', 'discussion']
+labels: ['type: feature', 'question']
 body:
   - type: markdown
     attributes:

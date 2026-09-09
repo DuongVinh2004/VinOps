@@ -1,31 +1,53 @@
-import { execSync } from 'node:child_process';
+import { execFileSync } from 'node:child_process';
 
 /**
  * Script to configure standard GitHub repository rules, metadata, labels,
  * milestones, branch protection, and release tag safeguards via GitHub CLI (gh api).
  */
-const REPO = 'DuongVinh2004/VinOps';
+const targetRepo = process.argv[2] || process.env.GITHUB_REPOSITORY || 'DuongVinh2004/VinOps';
 
-function runGh(command, inputJson = null) {
-  const fullCmd = inputJson ? `gh api ${command} --input -` : `gh api ${command}`;
-  return execSync(fullCmd, {
-    input: inputJson ? JSON.stringify(inputJson) : undefined,
+function callGitHubApi(endpointArgs, inputPayload = null) {
+  const baseArgs = ['api', ...endpointArgs];
+  if (inputPayload) {
+    baseArgs.push('--input', '-');
+  }
+  const result = execFileSync('gh', baseArgs, {
+    input: inputPayload ? JSON.stringify(inputPayload) : undefined,
     encoding: 'utf-8',
     stdio: ['pipe', 'pipe', 'inherit'],
   });
+  return result;
 }
 
-console.log(`[VinOps] Configuring full GitHub repository governance for ${REPO}...`);
+console.log(`[VinOps] Configuring full GitHub repository governance for ${targetRepo}...`);
 
 // 1. Repository Core Settings
 console.log('1. Updating repository core settings & metadata...');
-runGh(
-  `-X PATCH repos/${REPO} -F delete_branch_on_merge=true -F allow_auto_merge=true -F squash_merge_commit_title=PR_TITLE -F squash_merge_commit_message=PR_BODY -F has_wiki=false -F has_issues=true`,
-);
+callGitHubApi([
+  '-X',
+  'PATCH',
+  `repos/${targetRepo}`,
+  '-F',
+  'description=Enterprise Digital Engineering & Common Data Environment (CDE) Platform for Capital Infrastructure Projects',
+  '-F',
+  'homepage=https://github.com/DuongVinh2004/VinOps',
+  '-F',
+  'delete_branch_on_merge=true',
+  '-F',
+  'allow_auto_merge=true',
+  '-F',
+  'squash_merge_commit_title=PR_TITLE',
+  '-F',
+  'squash_merge_commit_message=PR_BODY',
+  '-F',
+  'has_wiki=false',
+  '-F',
+  'has_issues=true',
+]);
 
 // 2. Repository Topics
 console.log('2. Updating repository topics...');
-const topics = [
+const standardTopics = [
   'bim',
   'cde',
   'openbim',
@@ -45,11 +67,11 @@ const topics = [
   'smart-city',
   'vietnam',
 ];
-runGh(`-X PUT repos/${REPO}/topics`, { names: topics });
+callGitHubApi(['-X', 'PUT', `repos/${targetRepo}/topics`], { names: standardTopics });
 
 // 3. Standardized Labels
 console.log('3. Synchronizing standardized GitHub labels...');
-const labels = [
+const standardizedLabels = [
   // Types
   { name: 'type: bug', color: 'd73a4a', description: "Something isn't working as expected" },
   {
@@ -165,7 +187,7 @@ const labels = [
     description: 'Blocked by external dependency or upstream issue',
   },
 
-  // Community
+  // Community & CI
   {
     name: 'good first issue',
     color: '7057ff',
@@ -181,33 +203,61 @@ const labels = [
     color: 'd876e3',
     description: 'General question, architectural RFC, or discussion',
   },
+  {
+    name: 'triage',
+    color: 'ededed',
+    description: 'Awaiting triage and prioritization',
+  },
+  {
+    name: 'dependencies',
+    color: '0366d6',
+    description: 'Pull requests that update a dependency file',
+  },
+  {
+    name: 'ci',
+    color: '168700',
+    description: 'Continuous integration workflows and scripts',
+  },
+  {
+    name: 'javascript',
+    color: '168700',
+    description: 'JavaScript & TypeScript ecosystem updates',
+  },
 ];
 
-const existingLabels = JSON.parse(runGh(`repos/${REPO}/labels?per_page=100`));
-const existingLabelNames = new Set(existingLabels.map((l) => l.name));
+const existingLabelsRaw = callGitHubApi([`repos/${targetRepo}/labels`, '--paginate']);
+const existingLabels = JSON.parse(existingLabelsRaw || '[]');
+const existingLabelNames = new Set(existingLabels.map((label) => label.name));
 
-for (const label of labels) {
-  if (existingLabelNames.has(label.name)) {
-    runGh(`-X PATCH repos/${REPO}/labels/${encodeURIComponent(label.name)}`, {
-      new_name: label.name,
-      color: label.color,
-      description: label.description,
-    });
+for (const targetLabel of standardizedLabels) {
+  if (existingLabelNames.has(targetLabel.name)) {
+    callGitHubApi(
+      ['-X', 'PATCH', `repos/${targetRepo}/labels/${encodeURIComponent(targetLabel.name)}`],
+      {
+        new_name: targetLabel.name,
+        color: targetLabel.color,
+        description: targetLabel.description,
+      },
+    );
   } else {
-    runGh(`-X POST repos/${REPO}/labels`, {
-      name: label.name,
-      color: label.color,
-      description: label.description,
+    callGitHubApi(['-X', 'POST', `repos/${targetRepo}/labels`], {
+      name: targetLabel.name,
+      color: targetLabel.color,
+      description: targetLabel.description,
     });
   }
 }
-console.log(`   Synchronized ${labels.length} standardized labels.`);
+console.log(`   Synchronized ${standardizedLabels.length} standardized labels.`);
 
 // 4. Milestones
 console.log('4. Configuring project milestones...');
-const existingMilestones = JSON.parse(runGh(`repos/${REPO}/milestones?state=all`));
+const existingMilestonesRaw = callGitHubApi([
+  `repos/${targetRepo}/milestones?state=all`,
+  '--paginate',
+]);
+const existingMilestones = JSON.parse(existingMilestonesRaw || '[]');
 
-const milestones = [
+const targetMilestones = [
   {
     title: 'v1.0.0 - Production Baseline',
     state: 'closed',
@@ -230,14 +280,19 @@ const milestones = [
   },
 ];
 
-for (const ms of milestones) {
-  const existing = existingMilestones.find((m) => m.title === ms.title);
-  if (existing) {
-    runGh(`-X PATCH repos/${REPO}/milestones/${existing.number}`, ms);
-    console.log(`   Updated milestone: ${ms.title}`);
+for (const targetMilestone of targetMilestones) {
+  const existingMilestone = existingMilestones.find(
+    (milestone) => milestone.title === targetMilestone.title,
+  );
+  if (existingMilestone) {
+    callGitHubApi(
+      ['-X', 'PATCH', `repos/${targetRepo}/milestones/${existingMilestone.number}`],
+      targetMilestone,
+    );
+    console.log(`   Updated milestone: ${targetMilestone.title}`);
   } else {
-    runGh(`-X POST repos/${REPO}/milestones`, ms);
-    console.log(`   Created milestone: ${ms.title}`);
+    callGitHubApi(['-X', 'POST', `repos/${targetRepo}/milestones`], targetMilestone);
+    console.log(`   Created milestone: ${targetMilestone.title}`);
   }
 }
 
@@ -260,12 +315,16 @@ const branchProtectionPayload = {
   required_conversation_resolution: true,
 };
 
-runGh(`-X PUT repos/${REPO}/branches/main/protection`, branchProtectionPayload);
+callGitHubApi(
+  ['-X', 'PUT', `repos/${targetRepo}/branches/main/protection`],
+  branchProtectionPayload,
+);
 
 // 6. Tag Protection Ruleset for 'v*' Releases
 console.log('6. Ensuring release-tag-protection ruleset exists...');
-const rulesets = JSON.parse(runGh(`repos/${REPO}/rulesets`));
-const existingTagRuleset = rulesets.find((r) => r.name === 'release-tag-protection');
+const rulesetsRaw = callGitHubApi([`repos/${targetRepo}/rulesets`, '--paginate']);
+const rulesets = JSON.parse(rulesetsRaw || '[]');
+const existingTagRuleset = rulesets.find((ruleset) => ruleset.name === 'release-tag-protection');
 
 const tagRulesetPayload = {
   name: 'release-tag-protection',
@@ -281,10 +340,13 @@ const tagRulesetPayload = {
 };
 
 if (existingTagRuleset) {
-  runGh(`-X PUT repos/${REPO}/rulesets/${existingTagRuleset.id}`, tagRulesetPayload);
+  callGitHubApi(
+    ['-X', 'PUT', `repos/${targetRepo}/rulesets/${existingTagRuleset.id}`],
+    tagRulesetPayload,
+  );
   console.log('   Updated existing release-tag-protection ruleset.');
 } else {
-  runGh(`-X POST repos/${REPO}/rulesets`, tagRulesetPayload);
+  callGitHubApi(['-X', 'POST', `repos/${targetRepo}/rulesets`], tagRulesetPayload);
   console.log('   Created new release-tag-protection ruleset.');
 }
 

@@ -52,6 +52,6 @@ jobs:
           files: |
             release-dist/vinops-contracts-openapi.tar.gz
             release-dist/vinops-architecture-docs.tar.gz
-            VinOps_OpenAPI_v1_Core_Vertical_Slice.yaml
+            packages/contracts/openapi/vinops.openapi.yaml
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
