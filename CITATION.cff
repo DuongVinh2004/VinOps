@@ -1,0 +1,23 @@
+cff-version: 1.2.0
+message: 'If you use this software in your research or engineering workflows, please cite it as below.'
+authors:
+  - family-names: 'Duong'
+    given-names: 'Vinh'
+    orcid: 'https://orcid.org/0009-0000-0000-0000'
+title: 'VinOps: Enterprise Digital Engineering & Common Data Environment (CDE) Platform'
+version: 1.0.0
+date-released: 2026-09-07
+url: 'https://github.com/DuongVinh2004/VinOps'
+repository-code: 'https://github.com/DuongVinh2004/VinOps'
+license: Apache-2.0
+keywords:
+  - openBIM
+  - IFC 4.3
+  - BCF 3.0
+  - Common Data Environment
+  - Digital Twin
+  - Construction Tech
+  - PAdES-LTA
+  - Remote Digital Signatures
+  - GIS Drone Survey
+  - VN-2000

@@ -1,0 +1,35 @@
+name: Architectural RFC / Question
+description: Propose an architectural improvement, ask a technical design question, or start an RFC.
+title: '[RFC]: '
+labels: ['question', 'type: docs']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for contributing to VinOps platform discussions! Please check existing [ADRs](https://github.com/DuongVinh2004/VinOps/tree/main/docs/adr) before submitting a new RFC.
+  - type: textarea
+    id: problem-or-context
+    attributes:
+      label: Context & Problem Statement
+      description: What challenge, engineering bottleneck, or architectural requirement are you addressing?
+      placeholder: Provide detailed context or reference existing modules...
+    validations:
+      required: true
+  - type: textarea
+    id: proposed-solution
+    attributes:
+      label: Proposed Architecture / Solution
+      description: Detailed description of the proposed design, data model, or API changes.
+      placeholder: Describe the technical approach, trade-offs, and affected components...
+    validations:
+      required: true
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Standards Compliance
+      description: Acknowledge project engineering requirements
+      options:
+        - label: I have reviewed existing ADRs and verified this does not duplicate active architecture.
+          required: true
+        - label: I will preserve zero-trust RLS tenant boundaries and transactional outbox guarantees.
+          required: true
