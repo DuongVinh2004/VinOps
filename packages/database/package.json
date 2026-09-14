@@ -17,6 +17,6 @@
   "dependencies": {
     "@vinops/domain": "workspace:*",
     "@vinops/observability": "workspace:*",
-    "pg": "8.22.0"
+    "pg": "8.23.0"
   }
 }
